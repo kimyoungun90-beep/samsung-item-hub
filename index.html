@@ -423,7 +423,7 @@
 
     <section class="card search-card">
       <label class="label" for="itemInput">아이템번호</label>
-      <input id="itemInput" inputmode="numeric" maxlength="6" placeholder="예: 689291" autocomplete="off" />
+      <input id="itemInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="예: 689291" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" data-form-type="other" />
 
       <div class="query-buttons">
         <button id="productSearchBtn" class="query-btn" type="button">아이템번호<br />상품 조회</button>
