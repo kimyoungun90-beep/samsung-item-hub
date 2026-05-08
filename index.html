@@ -17,14 +17,18 @@
       --muted: #6b7280;
       --line: #e5e7eb;
       --primary: #111827;
-      --danger: #ef4444;
+      --primary2: #0f172a;
       --success: #16a34a;
+      --danger: #ef4444;
       --warning: #f59e0b;
-      --radius: 20px;
-      --shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+      --radius: 22px;
+      --shadow: 0 14px 34px rgba(17, 24, 39, 0.08);
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     body {
       margin: 0;
@@ -38,13 +42,13 @@
       max-width: 520px;
       margin: 0 auto;
       min-height: 100vh;
-      padding: 18px 14px 28px;
+      padding: 18px 14px 30px;
     }
 
     .hero {
-      background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #374151 100%);
+      background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #334155 100%);
       color: #fff;
-      border-radius: 26px;
+      border-radius: 28px;
       padding: 24px 20px;
       box-shadow: var(--shadow);
       margin-bottom: 16px;
@@ -53,13 +57,14 @@
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
       padding: 7px 11px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.12);
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.86);
+      color: rgba(255, 255, 255, 0.88);
       margin-bottom: 14px;
+      font-weight: 700;
     }
 
     .hero h1 {
@@ -71,61 +76,48 @@
 
     .hero p {
       margin: 10px 0 0;
-      color: rgba(255, 255, 255, 0.78);
+      color: rgba(255, 255, 255, 0.8);
       font-size: 14px;
       line-height: 1.5;
     }
 
-    .search-card, .card {
+    .card {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
 
-    .search-card { padding: 16px; margin-bottom: 14px; }
-
-    .mode-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+    .search-card {
+      padding: 16px;
       margin-bottom: 14px;
-    }
-
-    .mode-tab {
-      min-height: 46px;
-      border: 1px solid var(--line);
-      background: #f9fafb;
-      color: #374151;
-      box-shadow: none;
-      font-size: 14px;
-    }
-
-    .mode-tab.active {
-      background: #111827;
-      color: #fff;
-      border-color: #111827;
     }
 
     .label {
       display: block;
       margin-bottom: 8px;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       color: #374151;
     }
-
-    .search-row { display: flex; gap: 8px; }
 
     input {
       width: 100%;
       border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 15px 14px;
-      font-size: 16px;
+      border-radius: 17px;
+      padding: 16px 14px;
+      font-size: 17px;
+      font-weight: 800;
       outline: none;
       background: #fff;
       color: var(--text);
+      letter-spacing: 0.4px;
+    }
+
+    input::placeholder {
+      color: #9ca3af;
+      font-weight: 600;
+      letter-spacing: 0;
     }
 
     input:focus {
@@ -134,19 +126,36 @@
     }
 
     button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.985);
+    }
+
+    .query-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .query-btn {
+      min-height: 56px;
       border: 0;
-      border-radius: 16px;
-      padding: 0 18px;
+      border-radius: 17px;
       background: var(--primary);
       color: #fff;
       font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      white-space: nowrap;
-      min-height: 52px;
+      font-weight: 950;
+      line-height: 1.25;
+      padding: 0 12px;
     }
 
-    button:active { transform: scale(0.98); }
+    .query-btn.secondary {
+      background: #243044;
+    }
 
     .sub-actions {
       display: grid;
@@ -156,11 +165,13 @@
     }
 
     .ghost-btn {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
       background: #f9fafb;
       color: #111827;
-      border: 1px solid var(--line);
-      min-height: 46px;
       font-size: 14px;
+      font-weight: 850;
     }
 
     .hint {
@@ -179,6 +190,7 @@
       line-height: 1.45;
       border: 1px solid var(--line);
       background: #fff;
+      font-weight: 700;
     }
 
     .status.show { display: block; }
@@ -186,13 +198,26 @@
     .status.success { border-color: rgba(22, 163, 74, 0.25); background: #f0fdf4; color: #166534; }
     .status.warn { border-color: rgba(245, 158, 11, 0.25); background: #fffbeb; color: #92400e; }
 
-    .result-wrap { display: none; gap: 12px; }
-    .result-wrap.show { display: grid; }
+    .result-wrap {
+      display: none;
+      gap: 12px;
+    }
 
-    .section-wrap { display: none; gap: 12px; }
-    .section-wrap.show { display: grid; }
+    .result-wrap.show {
+      display: grid;
+    }
 
-    .card { padding: 16px; }
+    .result-section {
+      display: none;
+    }
+
+    .result-section.show {
+      display: block;
+    }
+
+    .card-inner {
+      padding: 16px;
+    }
 
     .card-title {
       display: flex;
@@ -204,8 +229,8 @@
 
     .card-title h2 {
       margin: 0;
-      font-size: 17px;
-      letter-spacing: -0.3px;
+      font-size: 18px;
+      letter-spacing: -0.35px;
     }
 
     .pill {
@@ -217,75 +242,86 @@
       background: #f3f4f6;
       color: #374151;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       white-space: nowrap;
     }
 
-    .pill.live { background: #dcfce7; color: #166534; }
-    .pill.end { background: #f3f4f6; color: #4b5563; }
-    .pill.soon { background: #fffbeb; color: #92400e; }
+    .pill.active {
+      background: #dcfce7;
+      color: #166534;
+    }
 
-    .kv { display: grid; gap: 10px; }
+    .kv {
+      display: grid;
+      gap: 10px;
+    }
 
     .kv-row {
       display: grid;
-      grid-template-columns: 108px 1fr;
+      grid-template-columns: 112px 1fr;
       gap: 10px;
       align-items: start;
       padding-bottom: 10px;
       border-bottom: 1px dashed var(--line);
     }
 
-    .kv-row:last-child { border-bottom: 0; padding-bottom: 0; }
+    .kv-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
 
     .key {
       color: var(--muted);
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 850;
     }
 
     .value {
       font-size: 14px;
-      line-height: 1.45;
-      font-weight: 700;
+      line-height: 1.5;
+      font-weight: 800;
       word-break: keep-all;
     }
 
     .big-value {
       font-size: 20px;
-      font-weight: 900;
-      letter-spacing: -0.4px;
+      font-weight: 950;
+      letter-spacing: -0.35px;
     }
 
-    .summary-box {
-      background: #f9fafb;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      color: #374151;
-      line-height: 1.55;
-      font-size: 14px;
-      font-weight: 650;
+    .cost-list {
+      display: grid;
+      gap: 10px;
     }
-
-    .cost-list { display: grid; gap: 8px; }
 
     .cost-item {
       border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 13px;
+      border-radius: 18px;
+      padding: 14px;
       background: #fff;
     }
 
     .cost-top {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
       gap: 8px;
-      align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
-    .cost-name { font-weight: 900; font-size: 15px; }
+    .cost-name {
+      font-size: 17px;
+      font-weight: 950;
+      line-height: 1.35;
+      letter-spacing: -0.25px;
+    }
+
+    .cost-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
 
     .money-grid {
       display: grid;
@@ -297,21 +333,45 @@
     .money-box {
       background: #f9fafb;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 10px;
+      border-radius: 15px;
+      padding: 12px;
     }
 
     .money-label {
       color: var(--muted);
       font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 5px;
+      font-weight: 900;
+      margin-bottom: 6px;
     }
 
     .money-value {
       font-size: 16px;
       font-weight: 950;
-      letter-spacing: -0.3px;
+      line-height: 1.45;
+      letter-spacing: -0.2px;
+    }
+
+    .note-box {
+      margin-top: 8px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 800;
+      color: #374151;
+    }
+
+    .empty-box {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.5;
     }
 
     .bottom-nav {
@@ -325,8 +385,13 @@
     }
 
     .nav-btn {
-      min-height: 48px;
+      min-height: 49px;
       border-radius: 18px;
+      background: #0f172a;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 950;
+      border: 0;
       box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
     }
 
@@ -340,8 +405,7 @@
 
     @media (max-width: 390px) {
       .hero h1 { font-size: 23px; }
-      .search-row { flex-direction: column; }
-      button { width: 100%; }
+      .query-buttons { grid-template-columns: 1fr; }
       .kv-row { grid-template-columns: 94px 1fr; }
       .money-grid { grid-template-columns: 1fr; }
     }
@@ -352,84 +416,89 @@
     <section class="hero">
       <div class="hero-badge">Costco Item Search</div>
       <h1>코스트코<br />아이템 조회 HUB</h1>
-      <p>아이템번호 6자리를 입력하면 상품DB와 이전설치비용DB를 분리해서 확인할 수 있습니다.</p>
+      <p>아이템번호 6자리를 입력하고, 원하는 조회 버튼을 눌러 상품DB 또는 이전설치비용DB를 따로 확인합니다.</p>
     </section>
 
-    <section class="search-card">
-      <div class="mode-tabs">
-        <button id="productModeBtn" class="mode-tab active" type="button">상품DB 조회</button>
-        <button id="installModeBtn" class="mode-tab" type="button">이전설치비용DB 조회</button>
+    <section class="card search-card">
+      <label class="label" for="itemInput">아이템번호</label>
+      <input id="itemInput" inputmode="numeric" maxlength="6" placeholder="예: 689291" autocomplete="off" />
+
+      <div class="query-buttons">
+        <button id="productSearchBtn" class="query-btn" type="button">아이템번호<br />상품 조회</button>
+        <button id="installSearchBtn" class="query-btn secondary" type="button">이전설치비용<br />조회</button>
       </div>
 
-      <label class="label" for="itemInput">아이템번호</label>
-      <div class="search-row">
-        <input id="itemInput" inputmode="numeric" maxlength="6" placeholder="예: 689291" autocomplete="off" />
-        <button id="searchBtn" type="button">검색</button>
-      </div>
       <div class="sub-actions">
         <button class="ghost-btn" id="resetBtn" type="button">초기화</button>
         <button class="ghost-btn" id="sampleBtn" type="button">샘플번호</button>
       </div>
-      <p id="modeHint" class="hint">※ 상품DB 조회: 판매가격, 행사 일정, 할인 금액, 배송 가능 일자를 확인합니다.</p>
+
+      <p id="modeHint" class="hint">※ 원하는 조회 버튼을 눌러 상품DB와 이전설치비용DB를 따로 확인하세요.</p>
     </section>
 
     <div id="status" class="status"></div>
 
     <section id="resultWrap" class="result-wrap">
-      <div id="productSection" class="section-wrap show">
+      <div id="productSection" class="result-section">
         <article class="card">
-          <div class="card-title">
-            <h2>상품DB</h2>
-            <span id="categoryPill" class="pill">품목</span>
-          </div>
-          <div class="kv">
-            <div class="kv-row">
-              <div class="key">아이템번호</div>
-              <div id="rItemNo" class="value big-value">-</div>
+          <div class="card-inner">
+            <div class="card-title">
+              <h2>상품DB 조회 결과</h2>
+              <span id="categoryPill" class="pill">품목</span>
             </div>
-            <div class="kv-row">
-              <div class="key">모델명</div>
-              <div id="rModel" class="value">-</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">품목</div>
-              <div id="rCategory" class="value">-</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">상품명</div>
-              <div id="rProduct" class="value">-</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">브랜드</div>
-              <div id="rBrand" class="value">-</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">판매가격</div>
-              <div id="rPrice" class="value big-value">-</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">행사 일정</div>
-              <div id="rPromoDate" class="value">-</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">할인 금액</div>
-              <div id="rDiscount" class="value big-value">-</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">배송 가능</div>
-              <div id="rDelivery" class="value">-</div>
+
+            <div class="kv">
+              <div class="kv-row">
+                <div class="key">아이템번호</div>
+                <div id="rItemNo" class="value big-value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">모델명</div>
+                <div id="rModel" class="value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">품목</div>
+                <div id="rCategory" class="value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">상품명</div>
+                <div id="rProduct" class="value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">브랜드</div>
+                <div id="rBrand" class="value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">판매가격</div>
+                <div id="rPrice" class="value big-value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">행사 일정</div>
+                <div id="rPromoDate" class="value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">할인금액</div>
+                <div id="rDiscount" class="value big-value">-</div>
+              </div>
+              <div class="kv-row">
+                <div class="key">배송 가능</div>
+                <div id="rDelivery" class="value">-</div>
+              </div>
             </div>
           </div>
         </article>
       </div>
 
-      <div id="installSection" class="section-wrap">
+      <div id="installSection" class="result-section">
         <article class="card">
-          <div class="card-title">
-            <h2>이전설치비용DB</h2>
-            <span id="costPill" class="pill">비용</span>
+          <div class="card-inner">
+            <div class="card-title">
+              <h2>이전설치비용DB 조회 결과</h2>
+              <span id="costPill" class="pill">비용</span>
+            </div>
+
+            <div id="costList" class="cost-list"></div>
           </div>
-          <div id="costList" class="cost-list"></div>
         </article>
       </div>
     </section>
@@ -446,88 +515,46 @@
   </main>
 
   <script>
-    /*****************************************************************
-     * Apps Script 배포 URL을 여기에 넣으세요.
-     * 예: https://script.google.com/macros/s/AKfycbxxxx/exec
-     *****************************************************************/
     const CONFIG = {
       APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec"
     };
 
-    const SAMPLE_ITEMS = [
-      {
-        itemNo: "689291",
-        modelName: "KU43UF8570FXKR",
-        category: "TV",
-        productName: "43인치 UHD",
-        brand: "SAMSUNG",
-        price: "599000",
-        promoStart: "2026-04-16",
-        promoEnd: "2026-05-10",
-        discountAmount: "90000",
-        deliveryAvailableDate: "핸드캐리"
-      }
-    ];
-
-    const SAMPLE_COSTS = [
-      {
-        itemNo: "689291",
-        modelName: "KU43UF8570FXKR",
-        category: "TV",
-        productName: "43인치 UHD",
-        installCost: "스탠드: 99000\n벽걸이: 161000",
-        removalCost: "스탠드: 38000\n벽걸이: 60000",
-        note: "벽걸이 자재 삼성전자 정품인 경우만 철거 가능"
-      }
-    ];
-
+    let currentMode = "";
     let currentResult = null;
-    let currentMode = "product";
+    let lastItemNo = "";
 
     const $ = (id) => document.getElementById(id);
+
     const itemInput = $("itemInput");
-    const searchBtn = $("searchBtn");
+    const productSearchBtn = $("productSearchBtn");
+    const installSearchBtn = $("installSearchBtn");
     const resetBtn = $("resetBtn");
     const sampleBtn = $("sampleBtn");
     const statusBox = $("status");
     const resultWrap = $("resultWrap");
-    const productModeBtn = $("productModeBtn");
-    const installModeBtn = $("installModeBtn");
+    const productSection = $("productSection");
+    const installSection = $("installSection");
+    const modeHint = $("modeHint");
 
-    searchBtn.addEventListener("click", handleSearch);
+    productSearchBtn.addEventListener("click", () => searchByMode("product"));
+    installSearchBtn.addEventListener("click", () => searchByMode("install"));
     resetBtn.addEventListener("click", resetView);
     sampleBtn.addEventListener("click", () => {
       itemInput.value = "689291";
-      handleSearch();
+      searchByMode("product");
     });
     $("copyBtn").addEventListener("click", copyResult);
     $("shareBtn").addEventListener("click", shareResult);
-
-    productModeBtn.addEventListener("click", () => setMode("product"));
-    installModeBtn.addEventListener("click", () => setMode("install"));
 
     itemInput.addEventListener("input", () => {
       itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6);
     });
 
     itemInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") handleSearch();
-    });
-
-    function setMode(mode) {
-      currentMode = mode;
-      productModeBtn.classList.toggle("active", mode === "product");
-      installModeBtn.classList.toggle("active", mode === "install");
-      $("productSection").classList.toggle("show", mode === "product");
-      $("installSection").classList.toggle("show", mode === "install");
-      $("modeHint").textContent = mode === "product"
-        ? "※ 상품DB 조회: 판매가격, 행사 일정, 할인 금액, 배송 가능 일자를 확인합니다."
-        : "※ 이전설치비용DB 조회: 이전설치비용, 철거비용, 비고를 확인합니다.";
-
-      if (currentResult) {
-        resultWrap.classList.add("show");
+      if (event.key === "Enter") {
+        searchByMode(currentMode || "product");
       }
-    }
+    });
 
     function showStatus(message, type = "warn") {
       statusBox.textContent = message;
@@ -541,13 +568,20 @@
 
     function resetView() {
       itemInput.value = "";
+      currentMode = "";
       currentResult = null;
+      lastItemNo = "";
+      productSection.classList.remove("show");
+      installSection.classList.remove("show");
       resultWrap.classList.remove("show");
+      productSearchBtn.classList.remove("active");
+      installSearchBtn.classList.remove("active");
+      modeHint.textContent = "※ 원하는 조회 버튼을 눌러 상품DB와 이전설치비용DB를 따로 확인하세요.";
       hideStatus();
       itemInput.focus();
     }
 
-    async function handleSearch() {
+    async function searchByMode(mode) {
       const itemNo = itemInput.value.trim();
       hideStatus();
 
@@ -557,43 +591,53 @@
         return;
       }
 
+      currentMode = mode;
+      lastItemNo = itemNo;
+      setActiveMode(mode);
+
       try {
-        showStatus("아이템 정보를 조회 중입니다.", "warn");
-        const data = await findItem(itemNo);
+        showStatus(mode === "product" ? "상품DB를 조회 중입니다." : "이전설치비용DB를 조회 중입니다.", "warn");
+        const data = await fetchItem(itemNo);
+        currentResult = data || { item: null, costs: [] };
 
-        if (!data || (!data.item && !(data.costs || []).length)) {
-          showStatus("조회된 정보가 없습니다. 아이템번호를 다시 확인해 주세요.", "error");
-          resultWrap.classList.remove("show");
-          return;
+        renderProduct(currentResult.item, itemNo);
+        renderCosts(currentResult.costs || [], currentResult.item, itemNo);
+
+        resultWrap.classList.add("show");
+
+        if (mode === "product") {
+          productSection.classList.add("show");
+          installSection.classList.remove("show");
+          showStatus(currentResult.item ? "상품DB 조회가 완료되었습니다." : "상품DB에 등록된 상품 정보가 없습니다.", currentResult.item ? "success" : "error");
+        } else {
+          productSection.classList.remove("show");
+          installSection.classList.add("show");
+          showStatus((currentResult.costs || []).length ? "이전설치비용DB 조회가 완료되었습니다." : "이전설치비용DB에 등록된 비용 정보가 없습니다.", (currentResult.costs || []).length ? "success" : "error");
         }
-
-        currentResult = data;
-        renderResult(data.item, data.costs || [], itemNo);
-        showStatus(currentMode === "product" ? "상품DB 정보가 조회되었습니다." : "이전설치비용DB 정보가 조회되었습니다.", "success");
       } catch (error) {
         console.error(error);
         showStatus("조회 중 오류가 발생했습니다. Apps Script 배포 URL 또는 권한을 확인해 주세요.", "error");
+        resultWrap.classList.remove("show");
       }
     }
 
-    async function findItem(itemNo) {
-      if (CONFIG.APPS_SCRIPT_URL) {
-        const url = `${CONFIG.APPS_SCRIPT_URL}?action=search&itemNo=${encodeURIComponent(itemNo)}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("API response error");
-        return await response.json();
-      }
-
-      const item = SAMPLE_ITEMS.find((row) => String(row.itemNo) === itemNo);
-      const costs = SAMPLE_COSTS.filter((row) => String(row.itemNo) === itemNo);
-      return { ok: true, item: item || null, costs };
+    function setActiveMode(mode) {
+      productSearchBtn.classList.toggle("active", mode === "product");
+      installSearchBtn.classList.toggle("active", mode === "install");
+      modeHint.textContent = mode === "product"
+        ? "※ 상품DB 조회 결과만 표시합니다."
+        : "※ 이전설치비용DB 조회 결과만 표시합니다.";
     }
 
-    function renderResult(item, costs, searchedItemNo) {
-      renderProduct(item, searchedItemNo);
-      renderCosts(costs, item, searchedItemNo);
-      resultWrap.classList.add("show");
-      setMode(currentMode);
+    async function fetchItem(itemNo) {
+      const url = `${CONFIG.APPS_SCRIPT_URL}?action=search&itemNo=${encodeURIComponent(itemNo)}`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("API response error");
+      }
+
+      return await response.json();
     }
 
     function renderProduct(item, searchedItemNo) {
@@ -608,19 +652,21 @@
         $("rDiscount").textContent = "-";
         $("rDelivery").textContent = "-";
         $("categoryPill").textContent = "미등록";
+        $("categoryPill").classList.remove("active");
         return;
       }
 
-      $("rItemNo").textContent = item.itemNo || "-";
-      $("rModel").textContent = item.modelName || "-";
-      $("rCategory").textContent = item.category || "-";
-      $("rProduct").textContent = item.productName || "-";
-      $("rBrand").textContent = item.brand || "-";
+      $("rItemNo").textContent = safe(item.itemNo);
+      $("rModel").textContent = safe(item.modelName);
+      $("rCategory").textContent = safe(item.category);
+      $("rProduct").textContent = safe(item.productName);
+      $("rBrand").textContent = safe(item.brand);
       $("rPrice").textContent = formatMoney(item.price);
       $("rPromoDate").textContent = formatPromoDate(item.promoStart, item.promoEnd);
       $("rDiscount").textContent = formatMoney(item.discountAmount);
-      $("rDelivery").textContent = formatDateText(item.deliveryAvailableDate);
-      $("categoryPill").textContent = item.category || "품목";
+      $("rDelivery").textContent = safe(item.deliveryAvailableDate);
+      $("categoryPill").textContent = safe(item.category, "품목");
+      $("categoryPill").classList.add("active");
     }
 
     function renderCosts(costs, item, searchedItemNo) {
@@ -629,11 +675,13 @@
 
       if (!costs.length) {
         $("costPill").textContent = "미등록";
-        box.innerHTML = `<div class="summary-box">${escapeHtml(searchedItemNo)} 아이템번호로 등록된 이전설치/철거 비용이 없습니다.</div>`;
+        $("costPill").classList.remove("active");
+        box.innerHTML = `<div class="empty-box">${escapeHtml(searchedItemNo)} 아이템번호로 등록된 이전설치/철거 비용이 없습니다.</div>`;
         return;
       }
 
       $("costPill").textContent = `${costs.length}건`;
+      $("costPill").classList.add("active");
 
       costs.forEach((cost) => {
         const div = document.createElement("div");
@@ -641,55 +689,54 @@
         div.innerHTML = `
           <div class="cost-top">
             <div>
-              <div class="cost-name">${escapeHtml(cost.productName || item?.productName || cost.modelName || "이전설치 비용")}</div>
-              <div class="value" style="font-size:13px;color:#6b7280;">${escapeHtml(cost.modelName || item?.modelName || "-")}</div>
+              <div class="cost-name">${escapeHtml(cost.productName || item?.productName || "-")}</div>
+              <div class="cost-sub">${escapeHtml(cost.modelName || item?.modelName || "-")}</div>
             </div>
             <span class="pill">${escapeHtml(cost.category || item?.category || "-")}</span>
           </div>
+
           <div class="money-grid">
             <div class="money-box">
               <div class="money-label">이전설치비용</div>
-              <div class="money-value">${formatMultilineCost(cost.installCost)}</div>
+              <div class="money-value">${formatMultiline(cost.installCost)}</div>
             </div>
             <div class="money-box">
               <div class="money-label">철거비용</div>
-              <div class="money-value">${formatMultilineCost(cost.removalCost)}</div>
+              <div class="money-value">${formatMultiline(cost.removalCost)}</div>
             </div>
           </div>
-          ${cost.note ? `<div class="summary-box" style="margin-top:8px;">${escapeHtml(cost.note)}</div>` : ""}
+
+          <div class="note-box">${escapeHtml(cost.note || "-")}</div>
         `;
         box.appendChild(div);
       });
     }
 
     function formatPromoDate(start, end) {
-      if (!start && !end) return "-";
-      return `${formatDateText(start)} ~ ${formatDateText(end)}`;
-    }
-
-    function formatDateText(value) {
-      if (!value) return "-";
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return String(value);
-      const [y, m, d] = value.split("-");
-      return `${y}.${m}.${d}`;
+      const s = safe(start);
+      const e = safe(end);
+      if (s === "-" && e === "-") return "-";
+      return `${s} ~ ${e}`;
     }
 
     function formatMoney(value) {
       if (value === undefined || value === null || value === "") return "-";
       const text = String(value).trim();
+      if (!text) return "-";
       if (text.includes("원")) return text;
       const number = Number(text.replace(/[^0-9.-]/g, ""));
       if (Number.isNaN(number)) return text;
       return `${number.toLocaleString("ko-KR")}원`;
     }
 
-    function formatMultilineCost(value) {
+    function formatMultiline(value) {
       if (value === undefined || value === null || value === "") return "-";
-      const text = String(value);
-      if (text.includes(":")) {
-        return escapeHtml(text).replace(/\n/g, "<br>");
-      }
-      return escapeHtml(formatMoney(text)).replace(/\n/g, "<br>");
+      return escapeHtml(String(value)).replace(/\n/g, "<br>");
+    }
+
+    function safe(value, fallback = "-") {
+      if (value === undefined || value === null || String(value).trim() === "") return fallback;
+      return String(value).trim();
     }
 
     async function copyResult() {
@@ -697,7 +744,9 @@
         showStatus("복사할 조회 결과가 없습니다.", "error");
         return;
       }
-      const text = resultToText(currentResult.item, currentResult.costs || []);
+
+      const text = makeResultText(currentResult.item, currentResult.costs || []);
+
       try {
         await navigator.clipboard.writeText(text);
         showStatus("조회 결과가 복사되었습니다.", "success");
@@ -711,7 +760,9 @@
         showStatus("공유할 조회 결과가 없습니다.", "error");
         return;
       }
-      const text = resultToText(currentResult.item, currentResult.costs || []);
+
+      const text = makeResultText(currentResult.item, currentResult.costs || []);
+
       if (navigator.share) {
         try {
           await navigator.share({ title: "코스트코 아이템 조회", text });
@@ -729,25 +780,30 @@
       }
     }
 
-    function resultToText(item, costs) {
-      const productText = item ?
-        `[상품DB]\n` +
-        `아이템번호: ${item.itemNo}\n` +
-        `모델명: ${item.modelName}\n` +
-        `품목: ${item.category}\n` +
-        `상품명: ${item.productName}\n` +
-        `브랜드: ${item.brand}\n` +
-        `판매가격: ${formatMoney(item.price)}\n` +
-        `행사 일정: ${formatPromoDate(item.promoStart, item.promoEnd)}\n` +
-        `할인 금액: ${formatMoney(item.discountAmount)}\n` +
-        `배송 가능 일자: ${formatDateText(item.deliveryAvailableDate)}`
-        : `[상품DB]\n등록된 상품 정보 없음`;
+    function makeResultText(item, costs) {
+      if (currentMode === "product") {
+        if (!item) return `[상품DB]\n${lastItemNo || "-"} 등록된 상품 정보 없음`;
+        return `[상품DB]\n` +
+          `아이템번호: ${safe(item.itemNo)}\n` +
+          `모델명: ${safe(item.modelName)}\n` +
+          `품목: ${safe(item.category)}\n` +
+          `상품명: ${safe(item.productName)}\n` +
+          `브랜드: ${safe(item.brand)}\n` +
+          `판매가격: ${formatMoney(item.price)}\n` +
+          `행사 일정: ${formatPromoDate(item.promoStart, item.promoEnd)}\n` +
+          `할인금액: ${formatMoney(item.discountAmount)}\n` +
+          `배송 가능: ${safe(item.deliveryAvailableDate)}`;
+      }
 
-      const costText = costs.map((c, idx) => {
-        return `${idx + 1}) ${c.productName || c.modelName || "이전설치 비용"}\n- 이전설치비용: ${c.installCost || "-"}\n- 철거비용: ${c.removalCost || "-"}\n- 비고: ${c.note || "-"}`;
-      }).join("\n");
-
-      return `${productText}\n\n[이전설치비용DB]\n${costText || "등록된 비용 없음"}`;
+      if (!costs.length) return `[이전설치비용DB]\n${lastItemNo || "-"} 등록된 비용 정보 없음`;
+      return `[이전설치비용DB]\n` + costs.map((c, idx) => {
+        return `${idx + 1}) ${safe(c.productName || c.modelName)}\n` +
+          `모델명: ${safe(c.modelName)}\n` +
+          `품목: ${safe(c.category)}\n` +
+          `이전설치비용: ${safe(c.installCost)}\n` +
+          `철거비용: ${safe(c.removalCost)}\n` +
+          `비고: ${safe(c.note)}`;
+      }).join("\n\n");
     }
 
     function escapeHtml(value) {
