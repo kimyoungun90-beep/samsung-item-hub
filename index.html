@@ -1,1 +1,874 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Item HUB" />
+  <title>코스트코 아이템 조회 HUB</title>
 
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #111827;
+      --primary-soft: #eef2ff;
+      --danger: #ef4444;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --radius: 20px;
+      --shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 18px 14px 28px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #374151 100%);
+      color: #fff;
+      border-radius: 26px;
+      padding: 24px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.86);
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.18;
+      letter-spacing: -0.7px;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .search-card,
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .search-card {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #374151;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 15px 14px;
+      font-size: 16px;
+      outline: none;
+      background: #fff;
+      color: var(--text);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #111827;
+      box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 0 18px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 52px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .sub-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .ghost-btn {
+      background: #f9fafb;
+      color: #111827;
+      border: 1px solid var(--line);
+      min-height: 46px;
+      font-size: 14px;
+    }
+
+    .hint {
+      margin: 10px 2px 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .status {
+      display: none;
+      margin: 12px 0;
+      padding: 13px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.45;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .status.show { display: block; }
+    .status.error { border-color: rgba(239, 68, 68, 0.25); background: #fef2f2; color: #991b1b; }
+    .status.success { border-color: rgba(22, 163, 74, 0.25); background: #f0fdf4; color: #166534; }
+    .status.warn { border-color: rgba(245, 158, 11, 0.25); background: #fffbeb; color: #92400e; }
+
+    .result-wrap {
+      display: none;
+      gap: 12px;
+    }
+
+    .result-wrap.show {
+      display: grid;
+    }
+
+    .card {
+      padding: 16px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .card-title h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.3px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .pill.live { background: #dcfce7; color: #166534; }
+    .pill.ready { background: #dbeafe; color: #1e40af; }
+    .pill.end { background: #f3f4f6; color: #4b5563; }
+    .pill.soon { background: #fffbeb; color: #92400e; }
+
+    .kv {
+      display: grid;
+      gap: 10px;
+    }
+
+    .kv-row {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .kv-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .key {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .value {
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 700;
+      word-break: keep-all;
+    }
+
+    .big-value {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+    }
+
+    .summary-box {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      color: #374151;
+      line-height: 1.55;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .contact-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px;
+      background: #fff;
+    }
+
+    .contact-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .contact-name {
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .contact-role {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .contact-phone {
+      display: inline-flex;
+      margin-top: 4px;
+      color: #111827;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .bottom-nav {
+      position: sticky;
+      bottom: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      min-height: 48px;
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
+    }
+
+    .admin-panel {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .admin-panel.show {
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .admin-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    textarea {
+      min-height: 84px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 390px) {
+      .hero h1 { font-size: 23px; }
+      .search-row { flex-direction: column; }
+      button { width: 100%; }
+      .kv-row { grid-template-columns: 94px 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="hero-badge">Costco Item Search</div>
+      <h1>코스트코<br />아이템 조회 HUB</h1>
+      <p>아이템번호 6자리를 입력하면 모델명, 행사 일정, 할인 금액, 배송 가능 일자, 현장 문의처를 확인할 수 있습니다.</p>
+    </section>
+
+    <section class="search-card">
+      <label class="label" for="itemInput">아이템번호</label>
+      <div class="search-row">
+        <input id="itemInput" inputmode="numeric" maxlength="6" placeholder="예: 123456" autocomplete="off" />
+        <button id="searchBtn" type="button">검색</button>
+      </div>
+      <div class="sub-actions">
+        <button class="ghost-btn" id="resetBtn" type="button">초기화</button>
+        <button class="ghost-btn" id="adminOpenBtn" type="button">관리자</button>
+      </div>
+      <p class="hint">※ 현재 버전은 샘플 DB 기준입니다. 추후 Google Sheets DB와 연결하면 실데이터로 조회됩니다.</p>
+    </section>
+
+    <div id="status" class="status"></div>
+
+    <section id="resultWrap" class="result-wrap">
+      <article class="card">
+        <div class="card-title">
+          <h2>상품 정보</h2>
+          <span id="categoryPill" class="pill">품목</span>
+        </div>
+        <div class="kv">
+          <div class="kv-row">
+            <div class="key">아이템번호</div>
+            <div id="rItemNo" class="value big-value">-</div>
+          </div>
+          <div class="kv-row">
+            <div class="key">모델명</div>
+            <div id="rModel" class="value">-</div>
+          </div>
+          <div class="kv-row">
+            <div class="key">상품명</div>
+            <div id="rProduct" class="value">-</div>
+          </div>
+          <div class="kv-row">
+            <div class="key">브랜드</div>
+            <div id="rBrand" class="value">-</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-title">
+          <h2>행사 / 배송 정보</h2>
+          <span id="promoStatus" class="pill">확인</span>
+        </div>
+        <div class="kv">
+          <div class="kv-row">
+            <div class="key">행사 일정</div>
+            <div id="rPromoDate" class="value">-</div>
+          </div>
+          <div class="kv-row">
+            <div class="key">할인 금액</div>
+            <div id="rDiscount" class="value big-value">-</div>
+          </div>
+          <div class="kv-row">
+            <div class="key">배송 가능</div>
+            <div id="rDelivery" class="value">-</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-title">
+          <h2>현장 응대 요약</h2>
+        </div>
+        <div id="summaryBox" class="summary-box">-</div>
+      </article>
+
+      <article class="card">
+        <div class="card-title">
+          <h2>현장 문의처</h2>
+          <span id="contactPill" class="pill">문의</span>
+        </div>
+        <div id="contactList" class="contact-list"></div>
+      </article>
+    </section>
+
+    <section id="adminPanel" class="admin-panel">
+      <article class="card">
+        <div class="card-title">
+          <h2>관리자 샘플 등록</h2>
+          <span class="pill soon">Front Only</span>
+        </div>
+        <p class="hint" style="margin-top:0;">현재는 브라우저 임시 저장 방식입니다. 나중에 Apps Script 연결 시 Google Sheets에 저장되도록 바꾸면 됩니다.</p>
+        <div class="admin-grid">
+          <input id="aItemNo" inputmode="numeric" maxlength="6" placeholder="아이템번호 6자리" />
+          <input id="aModel" placeholder="모델명" />
+          <input id="aCategory" placeholder="품목 예: TV, 냉장고, 모바일" />
+          <input id="aProduct" placeholder="상품명" />
+          <input id="aBrand" placeholder="브랜드" />
+          <div class="admin-two">
+            <input id="aPromoStart" type="date" />
+            <input id="aPromoEnd" type="date" />
+          </div>
+          <input id="aDiscount" inputmode="numeric" placeholder="할인금액 예: 200000" />
+          <input id="aDelivery" type="date" />
+          <button id="saveSampleBtn" type="button">샘플 DB에 저장</button>
+        </div>
+      </article>
+    </section>
+
+    <div class="bottom-nav">
+      <button class="nav-btn" id="copyBtn" type="button">결과 복사</button>
+      <button class="nav-btn" id="shareBtn" type="button">공유</button>
+    </div>
+
+    <footer class="footer">
+      Costco Item Search HUB · GitHub Pages Version<br />
+      DB 연결 전 샘플 화면입니다.
+    </footer>
+  </main>
+
+  <script>
+    /*****************************************************************
+     * 1) 설정 영역
+     * 추후 Google Apps Script Web App URL을 넣으면 실DB 연결 가능
+     *****************************************************************/
+    const CONFIG = {
+      APPS_SCRIPT_URL: "", // 예: "https://script.google.com/macros/s/XXXX/exec"
+      USE_SAMPLE_WHEN_EMPTY: true
+    };
+
+    /*****************************************************************
+     * 2) 샘플 DB
+     * 실제 운영 시 Google Sheets의 '상품DB', '문의처DB'로 대체 예정
+     *****************************************************************/
+    const SAMPLE_ITEMS = [
+      {
+        itemNo: "123456",
+        modelName: "KQ75QF7SAFXKR",
+        category: "TV",
+        productName: "75형 QLED TV",
+        brand: "SAMSONG",
+        promoStart: "2026-06-15",
+        promoEnd: "2026-06-28",
+        discountAmount: 200000,
+        deliveryAvailableDate: "2026-06-20"
+      },
+      {
+        itemNo: "234567",
+        modelName: "RF90DG9111S9",
+        category: "냉장고",
+        productName: "900L 4도어 냉장고",
+        brand: "SAMSONG",
+        promoStart: "2026-06-15",
+        promoEnd: "2026-06-28",
+        discountAmount: 300000,
+        deliveryAvailableDate: "2026-06-22"
+      },
+      {
+        itemNo: "345678",
+        modelName: "SM-S999NZKAKOO",
+        category: "모바일",
+        productName: "Galoxy S 시리즈",
+        brand: "SAMSONG",
+        promoStart: "2026-06-01",
+        promoEnd: "2026-06-14",
+        discountAmount: 100000,
+        deliveryAvailableDate: "당일 수령 가능 여부 현장 확인"
+      }
+    ];
+
+    const SAMPLE_CONTACTS = [
+      {
+        category: "TV",
+        name: "CE 담당자",
+        role: "TV / 행사 / 배송 문의",
+        phone: "010-0000-0000",
+        note: "행사 일정 및 배송 가능 일자 확인"
+      },
+      {
+        category: "냉장고",
+        name: "CE 담당자",
+        role: "냉장고 / 배송 문의",
+        phone: "010-1111-1111",
+        note: "설치 일정 및 고객 안내 사항 확인"
+      },
+      {
+        category: "모바일",
+        name: "MX 담당자",
+        role: "모바일 / 행사 문의",
+        phone: "010-2222-2222",
+        note: "행사 조건 및 현장 응대 확인"
+      },
+      {
+        category: "공통",
+        name: "현장 관리자",
+        role: "공통 문의",
+        phone: "010-3333-3333",
+        note: "품목별 담당자 연결 불가 시 문의"
+      }
+    ];
+
+    let currentResult = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    const itemInput = $("itemInput");
+    const searchBtn = $("searchBtn");
+    const resetBtn = $("resetBtn");
+    const adminOpenBtn = $("adminOpenBtn");
+    const statusBox = $("status");
+    const resultWrap = $("resultWrap");
+    const adminPanel = $("adminPanel");
+
+    searchBtn.addEventListener("click", handleSearch);
+    resetBtn.addEventListener("click", resetView);
+    adminOpenBtn.addEventListener("click", toggleAdmin);
+    $("saveSampleBtn").addEventListener("click", saveSampleItem);
+    $("copyBtn").addEventListener("click", copyResult);
+    $("shareBtn").addEventListener("click", shareResult);
+
+    itemInput.addEventListener("input", () => {
+      itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6);
+    });
+
+    itemInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") handleSearch();
+    });
+
+    function showStatus(message, type = "warn") {
+      statusBox.textContent = message;
+      statusBox.className = `status show ${type}`;
+    }
+
+    function hideStatus() {
+      statusBox.textContent = "";
+      statusBox.className = "status";
+    }
+
+    function resetView() {
+      itemInput.value = "";
+      currentResult = null;
+      resultWrap.classList.remove("show");
+      hideStatus();
+      itemInput.focus();
+    }
+
+    function toggleAdmin() {
+      const password = prompt("관리자 비밀번호를 입력하세요.");
+      if (password !== "1234") {
+        showStatus("관리자 비밀번호가 일치하지 않습니다.", "error");
+        return;
+      }
+      adminPanel.classList.toggle("show");
+      showStatus("관리자 샘플 등록 화면이 열렸습니다. 현재는 테스트용입니다.", "success");
+    }
+
+    async function handleSearch() {
+      const itemNo = itemInput.value.trim();
+      hideStatus();
+
+      if (!/^\d{6}$/.test(itemNo)) {
+        showStatus("아이템번호 6자리 숫자를 입력해 주세요.", "error");
+        resultWrap.classList.remove("show");
+        return;
+      }
+
+      try {
+        showStatus("아이템 정보를 조회 중입니다.", "warn");
+        const data = await findItem(itemNo);
+
+        if (!data || !data.item) {
+          showStatus("조회된 아이템 정보가 없습니다. 아이템번호를 다시 확인해 주세요.", "error");
+          resultWrap.classList.remove("show");
+          return;
+        }
+
+        currentResult = data;
+        renderResult(data.item, data.contacts || []);
+        showStatus("아이템 정보가 조회되었습니다.", "success");
+      } catch (error) {
+        console.error(error);
+        showStatus("조회 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.", "error");
+      }
+    }
+
+    async function findItem(itemNo) {
+      if (CONFIG.APPS_SCRIPT_URL) {
+        // Apps Script 연결 시 사용할 JSON API 예시
+        const url = `${CONFIG.APPS_SCRIPT_URL}?action=search&itemNo=${encodeURIComponent(itemNo)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("API response error");
+        return await response.json();
+      }
+
+      const localItems = getLocalItems();
+      const item = [...localItems, ...SAMPLE_ITEMS].find((row) => String(row.itemNo) === itemNo);
+      if (!item) return { item: null, contacts: [] };
+
+      const contacts = SAMPLE_CONTACTS.filter((c) => c.category === item.category || c.category === "공통");
+      return { item, contacts };
+    }
+
+    function renderResult(item, contacts) {
+      $("rItemNo").textContent = item.itemNo || "-";
+      $("rModel").textContent = item.modelName || "-";
+      $("rProduct").textContent = item.productName || "-";
+      $("rBrand").textContent = item.brand || "-";
+      $("categoryPill").textContent = item.category || "품목";
+
+      $("rPromoDate").textContent = formatPromoDate(item.promoStart, item.promoEnd);
+      $("rDiscount").textContent = formatMoney(item.discountAmount);
+      $("rDelivery").textContent = formatDateText(item.deliveryAvailableDate);
+
+      const promo = getPromoStatus(item.promoStart, item.promoEnd);
+      const promoStatus = $("promoStatus");
+      promoStatus.textContent = promo.label;
+      promoStatus.className = `pill ${promo.className}`;
+
+      $("summaryBox").textContent = makeSummary(item, promo.label);
+      renderContacts(contacts);
+
+      resultWrap.classList.add("show");
+    }
+
+    function renderContacts(contacts) {
+      const box = $("contactList");
+      box.innerHTML = "";
+
+      if (!contacts.length) {
+        box.innerHTML = `<div class="summary-box">등록된 문의처가 없습니다.</div>`;
+        $("contactPill").textContent = "미등록";
+        return;
+      }
+
+      $("contactPill").textContent = `${contacts.length}건`;
+
+      contacts.forEach((contact) => {
+        const div = document.createElement("div");
+        div.className = "contact-item";
+        div.innerHTML = `
+          <div class="contact-top">
+            <div>
+              <div class="contact-name">${escapeHtml(contact.name)}</div>
+              <div class="contact-role">${escapeHtml(contact.role || "")}</div>
+            </div>
+            <span class="pill">${escapeHtml(contact.category)}</span>
+          </div>
+          <div class="value">${escapeHtml(contact.note || "")}</div>
+          <a class="contact-phone" href="tel:${escapeHtml(contact.phone)}">${escapeHtml(contact.phone)}</a>
+        `;
+        box.appendChild(div);
+      });
+    }
+
+    function makeSummary(item, promoLabel) {
+      const discount = formatMoney(item.discountAmount);
+      const promoDate = formatPromoDate(item.promoStart, item.promoEnd);
+      const delivery = formatDateText(item.deliveryAvailableDate);
+
+      return `${item.productName}(${item.modelName})은 ${item.category} 품목으로, 현재 행사 상태는 '${promoLabel}'입니다. 행사 일정은 ${promoDate}, 할인 금액은 ${discount}, 배송 가능 일자는 ${delivery} 기준으로 안내하면 됩니다. 추가 확인이 필요한 경우 하단 현장 문의처로 확인해 주세요.`;
+    }
+
+    function getPromoStatus(start, end) {
+      if (!start || !end) return { label: "행사 미등록", className: "end" };
+
+      const today = new Date();
+      const s = new Date(start + "T00:00:00");
+      const e = new Date(end + "T23:59:59");
+
+      if (today < s) return { label: "행사 예정", className: "soon" };
+      if (today >= s && today <= e) return { label: "행사 진행중", className: "live" };
+      return { label: "행사 종료", className: "end" };
+    }
+
+    function formatPromoDate(start, end) {
+      if (!start && !end) return "-";
+      return `${formatDateText(start)} ~ ${formatDateText(end)}`;
+    }
+
+    function formatDateText(value) {
+      if (!value) return "-";
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return String(value);
+      const [y, m, d] = value.split("-");
+      return `${y}.${m}.${d}`;
+    }
+
+    function formatMoney(value) {
+      if (value === undefined || value === null || value === "") return "-";
+      const number = Number(String(value).replace(/[^0-9.-]/g, ""));
+      if (Number.isNaN(number)) return String(value);
+      return `${number.toLocaleString("ko-KR")}원`;
+    }
+
+    function saveSampleItem() {
+      const item = {
+        itemNo: $("aItemNo").value.trim(),
+        modelName: $("aModel").value.trim(),
+        category: $("aCategory").value.trim(),
+        productName: $("aProduct").value.trim(),
+        brand: $("aBrand").value.trim(),
+        promoStart: $("aPromoStart").value,
+        promoEnd: $("aPromoEnd").value,
+        discountAmount: $("aDiscount").value.trim(),
+        deliveryAvailableDate: $("aDelivery").value
+      };
+
+      if (!/^\d{6}$/.test(item.itemNo)) {
+        showStatus("등록할 아이템번호 6자리를 입력해 주세요.", "error");
+        return;
+      }
+
+      if (!item.modelName || !item.category || !item.productName) {
+        showStatus("모델명, 품목, 상품명은 필수입니다.", "error");
+        return;
+      }
+
+      const items = getLocalItems().filter((row) => row.itemNo !== item.itemNo);
+      items.unshift(item);
+      localStorage.setItem("costco_sample_items", JSON.stringify(items));
+
+      showStatus("브라우저 샘플 DB에 저장되었습니다. 해당 아이템번호로 검색해 보세요.", "success");
+      itemInput.value = item.itemNo;
+    }
+
+    function getLocalItems() {
+      try {
+        return JSON.parse(localStorage.getItem("costco_sample_items") || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    async function copyResult() {
+      if (!currentResult?.item) {
+        showStatus("복사할 조회 결과가 없습니다.", "error");
+        return;
+      }
+
+      const text = resultToText(currentResult.item, currentResult.contacts || []);
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showStatus("조회 결과가 복사되었습니다.", "success");
+      } catch {
+        showStatus("복사 기능을 사용할 수 없습니다. 브라우저 권한을 확인해 주세요.", "error");
+      }
+    }
+
+    async function shareResult() {
+      if (!currentResult?.item) {
+        showStatus("공유할 조회 결과가 없습니다.", "error");
+        return;
+      }
+
+      const text = resultToText(currentResult.item, currentResult.contacts || []);
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: "코스트코 아이템 조회", text });
+          showStatus("공유가 완료되었습니다.", "success");
+        } catch {
+          showStatus("공유가 취소되었습니다.", "warn");
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(text);
+          showStatus("공유 기능이 없어 결과를 복사했습니다.", "success");
+        } catch {
+          showStatus("현재 브라우저에서는 공유 기능을 사용할 수 없습니다.", "error");
+        }
+      }
+    }
+
+    function resultToText(item, contacts) {
+      const contactText = contacts.map((c) => `- ${c.name} / ${c.role} / ${c.phone}`).join("\n");
+      return `[코스트코 아이템 조회]\n` +
+        `아이템번호: ${item.itemNo}\n` +
+        `모델명: ${item.modelName}\n` +
+        `품목: ${item.category}\n` +
+        `상품명: ${item.productName}\n` +
+        `브랜드: ${item.brand}\n` +
+        `행사 일정: ${formatPromoDate(item.promoStart, item.promoEnd)}\n` +
+        `할인 금액: ${formatMoney(item.discountAmount)}\n` +
+        `배송 가능 일자: ${formatDateText(item.deliveryAvailableDate)}\n\n` +
+        `[현장 문의처]\n${contactText || "등록된 문의처 없음"}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
