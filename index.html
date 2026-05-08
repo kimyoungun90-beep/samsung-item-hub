@@ -85,6 +85,28 @@
 
     .search-card { padding: 16px; margin-bottom: 14px; }
 
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .mode-tab {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      background: #f9fafb;
+      color: #374151;
+      box-shadow: none;
+      font-size: 14px;
+    }
+
+    .mode-tab.active {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
     .label {
       display: block;
       margin-bottom: 8px;
@@ -166,6 +188,9 @@
 
     .result-wrap { display: none; gap: 12px; }
     .result-wrap.show { display: grid; }
+
+    .section-wrap { display: none; gap: 12px; }
+    .section-wrap.show { display: grid; }
 
     .card { padding: 16px; }
 
@@ -327,10 +352,15 @@
     <section class="hero">
       <div class="hero-badge">Costco Item Search</div>
       <h1>코스트코<br />아이템 조회 HUB</h1>
-      <p>아이템번호 6자리를 입력하면 상품 정보, 행사 일정, 할인 금액, 배송 가능 일자, 이전설치/철거 비용을 확인할 수 있습니다.</p>
+      <p>아이템번호 6자리를 입력하면 상품DB와 이전설치비용DB를 분리해서 확인할 수 있습니다.</p>
     </section>
 
     <section class="search-card">
+      <div class="mode-tabs">
+        <button id="productModeBtn" class="mode-tab active" type="button">상품DB 조회</button>
+        <button id="installModeBtn" class="mode-tab" type="button">이전설치비용DB 조회</button>
+      </div>
+
       <label class="label" for="itemInput">아이템번호</label>
       <div class="search-row">
         <input id="itemInput" inputmode="numeric" maxlength="6" placeholder="예: 689291" autocomplete="off" />
@@ -340,76 +370,68 @@
         <button class="ghost-btn" id="resetBtn" type="button">초기화</button>
         <button class="ghost-btn" id="sampleBtn" type="button">샘플번호</button>
       </div>
-      <p class="hint">※ Google Sheets DB 연결 후 실시간 조회됩니다. 아이템번호는 6자리 숫자만 입력하세요.</p>
+      <p id="modeHint" class="hint">※ 상품DB 조회: 판매가격, 행사 일정, 할인 금액, 배송 가능 일자를 확인합니다.</p>
     </section>
 
     <div id="status" class="status"></div>
 
     <section id="resultWrap" class="result-wrap">
-      <article class="card">
-        <div class="card-title">
-          <h2>상품 정보</h2>
-          <span id="categoryPill" class="pill">품목</span>
-        </div>
-        <div class="kv">
-          <div class="kv-row">
-            <div class="key">아이템번호</div>
-            <div id="rItemNo" class="value big-value">-</div>
+      <div id="productSection" class="section-wrap show">
+        <article class="card">
+          <div class="card-title">
+            <h2>상품DB</h2>
+            <span id="categoryPill" class="pill">품목</span>
           </div>
-          <div class="kv-row">
-            <div class="key">모델명</div>
-            <div id="rModel" class="value">-</div>
+          <div class="kv">
+            <div class="kv-row">
+              <div class="key">아이템번호</div>
+              <div id="rItemNo" class="value big-value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">모델명</div>
+              <div id="rModel" class="value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">품목</div>
+              <div id="rCategory" class="value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">상품명</div>
+              <div id="rProduct" class="value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">브랜드</div>
+              <div id="rBrand" class="value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">판매가격</div>
+              <div id="rPrice" class="value big-value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">행사 일정</div>
+              <div id="rPromoDate" class="value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">할인 금액</div>
+              <div id="rDiscount" class="value big-value">-</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">배송 가능</div>
+              <div id="rDelivery" class="value">-</div>
+            </div>
           </div>
-          <div class="kv-row">
-            <div class="key">상품명</div>
-            <div id="rProduct" class="value">-</div>
-          </div>
-          <div class="kv-row">
-            <div class="key">브랜드</div>
-            <div id="rBrand" class="value">-</div>
-          </div>
-          <div class="kv-row">
-            <div class="key">판매가격</div>
-            <div id="rPrice" class="value big-value">-</div>
-          </div>
-        </div>
-      </article>
+        </article>
+      </div>
 
-      <article class="card">
-        <div class="card-title">
-          <h2>행사 / 배송 정보</h2>
-          <span id="promoStatus" class="pill">확인</span>
-        </div>
-        <div class="kv">
-          <div class="kv-row">
-            <div class="key">행사 일정</div>
-            <div id="rPromoDate" class="value">-</div>
+      <div id="installSection" class="section-wrap">
+        <article class="card">
+          <div class="card-title">
+            <h2>이전설치비용DB</h2>
+            <span id="costPill" class="pill">비용</span>
           </div>
-          <div class="kv-row">
-            <div class="key">할인 금액</div>
-            <div id="rDiscount" class="value big-value">-</div>
-          </div>
-          <div class="kv-row">
-            <div class="key">배송 가능</div>
-            <div id="rDelivery" class="value">-</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-title">
-          <h2>이전설치 / 철거 비용</h2>
-          <span id="costPill" class="pill">비용</span>
-        </div>
-        <div id="costList" class="cost-list"></div>
-      </article>
-
-      <article class="card">
-        <div class="card-title">
-          <h2>현장 응대 요약</h2>
-        </div>
-        <div id="summaryBox" class="summary-box">-</div>
-      </article>
+          <div id="costList" class="cost-list"></div>
+        </article>
+      </div>
     </section>
 
     <div class="bottom-nav">
@@ -443,7 +465,7 @@
         promoStart: "2026-04-16",
         promoEnd: "2026-05-10",
         discountAmount: "90000",
-        deliveryAvailableDate: "현대캐리어"
+        deliveryAvailableDate: "핸드캐리"
       }
     ];
 
@@ -460,6 +482,7 @@
     ];
 
     let currentResult = null;
+    let currentMode = "product";
 
     const $ = (id) => document.getElementById(id);
     const itemInput = $("itemInput");
@@ -468,6 +491,8 @@
     const sampleBtn = $("sampleBtn");
     const statusBox = $("status");
     const resultWrap = $("resultWrap");
+    const productModeBtn = $("productModeBtn");
+    const installModeBtn = $("installModeBtn");
 
     searchBtn.addEventListener("click", handleSearch);
     resetBtn.addEventListener("click", resetView);
@@ -478,6 +503,9 @@
     $("copyBtn").addEventListener("click", copyResult);
     $("shareBtn").addEventListener("click", shareResult);
 
+    productModeBtn.addEventListener("click", () => setMode("product"));
+    installModeBtn.addEventListener("click", () => setMode("install"));
+
     itemInput.addEventListener("input", () => {
       itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6);
     });
@@ -485,6 +513,21 @@
     itemInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") handleSearch();
     });
+
+    function setMode(mode) {
+      currentMode = mode;
+      productModeBtn.classList.toggle("active", mode === "product");
+      installModeBtn.classList.toggle("active", mode === "install");
+      $("productSection").classList.toggle("show", mode === "product");
+      $("installSection").classList.toggle("show", mode === "install");
+      $("modeHint").textContent = mode === "product"
+        ? "※ 상품DB 조회: 판매가격, 행사 일정, 할인 금액, 배송 가능 일자를 확인합니다."
+        : "※ 이전설치비용DB 조회: 이전설치비용, 철거비용, 비고를 확인합니다.";
+
+      if (currentResult) {
+        resultWrap.classList.add("show");
+      }
+    }
 
     function showStatus(message, type = "warn") {
       statusBox.textContent = message;
@@ -518,15 +561,15 @@
         showStatus("아이템 정보를 조회 중입니다.", "warn");
         const data = await findItem(itemNo);
 
-        if (!data || !data.item) {
-          showStatus("조회된 아이템 정보가 없습니다. 아이템번호를 다시 확인해 주세요.", "error");
+        if (!data || (!data.item && !(data.costs || []).length)) {
+          showStatus("조회된 정보가 없습니다. 아이템번호를 다시 확인해 주세요.", "error");
           resultWrap.classList.remove("show");
           return;
         }
 
         currentResult = data;
-        renderResult(data.item, data.costs || []);
-        showStatus("아이템 정보가 조회되었습니다.", "success");
+        renderResult(data.item, data.costs || [], itemNo);
+        showStatus(currentMode === "product" ? "상품DB 정보가 조회되었습니다." : "이전설치비용DB 정보가 조회되었습니다.", "success");
       } catch (error) {
         console.error(error);
         showStatus("조회 중 오류가 발생했습니다. Apps Script 배포 URL 또는 권한을 확인해 주세요.", "error");
@@ -546,35 +589,47 @@
       return { ok: true, item: item || null, costs };
     }
 
-    function renderResult(item, costs) {
+    function renderResult(item, costs, searchedItemNo) {
+      renderProduct(item, searchedItemNo);
+      renderCosts(costs, item, searchedItemNo);
+      resultWrap.classList.add("show");
+      setMode(currentMode);
+    }
+
+    function renderProduct(item, searchedItemNo) {
+      if (!item) {
+        $("rItemNo").textContent = searchedItemNo || "-";
+        $("rModel").textContent = "상품DB 미등록";
+        $("rCategory").textContent = "-";
+        $("rProduct").textContent = "-";
+        $("rBrand").textContent = "-";
+        $("rPrice").textContent = "-";
+        $("rPromoDate").textContent = "-";
+        $("rDiscount").textContent = "-";
+        $("rDelivery").textContent = "-";
+        $("categoryPill").textContent = "미등록";
+        return;
+      }
+
       $("rItemNo").textContent = item.itemNo || "-";
       $("rModel").textContent = item.modelName || "-";
+      $("rCategory").textContent = item.category || "-";
       $("rProduct").textContent = item.productName || "-";
       $("rBrand").textContent = item.brand || "-";
       $("rPrice").textContent = formatMoney(item.price);
-      $("categoryPill").textContent = item.category || "품목";
-
       $("rPromoDate").textContent = formatPromoDate(item.promoStart, item.promoEnd);
       $("rDiscount").textContent = formatMoney(item.discountAmount);
       $("rDelivery").textContent = formatDateText(item.deliveryAvailableDate);
-
-      const promo = getPromoStatus(item.promoStart, item.promoEnd);
-      const promoStatus = $("promoStatus");
-      promoStatus.textContent = promo.label;
-      promoStatus.className = `pill ${promo.className}`;
-
-      renderCosts(costs);
-      $("summaryBox").textContent = makeSummary(item, costs, promo.label);
-      resultWrap.classList.add("show");
+      $("categoryPill").textContent = item.category || "품목";
     }
 
-    function renderCosts(costs) {
+    function renderCosts(costs, item, searchedItemNo) {
       const box = $("costList");
       box.innerHTML = "";
 
       if (!costs.length) {
         $("costPill").textContent = "미등록";
-        box.innerHTML = `<div class="summary-box">등록된 이전설치/철거 비용이 없습니다.</div>`;
+        box.innerHTML = `<div class="summary-box">${escapeHtml(searchedItemNo)} 아이템번호로 등록된 이전설치/철거 비용이 없습니다.</div>`;
         return;
       }
 
@@ -585,8 +640,11 @@
         div.className = "cost-item";
         div.innerHTML = `
           <div class="cost-top">
-            <div class="cost-name">${escapeHtml(cost.productName || cost.modelName || "이전설치 비용")}</div>
-            <span class="pill">${escapeHtml(cost.category || "-")}</span>
+            <div>
+              <div class="cost-name">${escapeHtml(cost.productName || item?.productName || cost.modelName || "이전설치 비용")}</div>
+              <div class="value" style="font-size:13px;color:#6b7280;">${escapeHtml(cost.modelName || item?.modelName || "-")}</div>
+            </div>
+            <span class="pill">${escapeHtml(cost.category || item?.category || "-")}</span>
           </div>
           <div class="money-grid">
             <div class="money-box">
@@ -602,28 +660,6 @@
         `;
         box.appendChild(div);
       });
-    }
-
-    function makeSummary(item, costs, promoLabel) {
-      const discount = formatMoney(item.discountAmount);
-      const promoDate = formatPromoDate(item.promoStart, item.promoEnd);
-      const delivery = formatDateText(item.deliveryAvailableDate);
-      const costText = costs.length ? "이전설치/철거 비용이 함께 등록되어 있습니다." : "이전설치/철거 비용은 미등록 상태입니다.";
-
-      return `${item.productName}(${item.modelName})은 ${item.category} 품목입니다. 행사 상태는 '${promoLabel}'이며, 행사 일정은 ${promoDate}, 할인 금액은 ${discount}, 배송 가능 일자는 ${delivery} 기준으로 안내하면 됩니다. ${costText}`;
-    }
-
-    function getPromoStatus(start, end) {
-      if (!start || !end) return { label: "행사 미등록", className: "end" };
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(String(start)) || !/^\d{4}-\d{2}-\d{2}$/.test(String(end))) {
-        return { label: "행사 확인", className: "soon" };
-      }
-      const today = new Date();
-      const s = new Date(start + "T00:00:00");
-      const e = new Date(end + "T23:59:59");
-      if (today < s) return { label: "행사 예정", className: "soon" };
-      if (today >= s && today <= e) return { label: "행사 진행중", className: "live" };
-      return { label: "행사 종료", className: "end" };
     }
 
     function formatPromoDate(start, end) {
@@ -657,7 +693,7 @@
     }
 
     async function copyResult() {
-      if (!currentResult?.item) {
+      if (!currentResult) {
         showStatus("복사할 조회 결과가 없습니다.", "error");
         return;
       }
@@ -671,7 +707,7 @@
     }
 
     async function shareResult() {
-      if (!currentResult?.item) {
+      if (!currentResult) {
         showStatus("공유할 조회 결과가 없습니다.", "error");
         return;
       }
@@ -694,11 +730,8 @@
     }
 
     function resultToText(item, costs) {
-      const costText = costs.map((c, idx) => {
-        return `${idx + 1}) ${c.productName || c.modelName || "이전설치 비용"}\n- 이전설치비용: ${c.installCost || "-"}\n- 철거비용: ${c.removalCost || "-"}\n- 비고: ${c.note || "-"}`;
-      }).join("\n");
-
-      return `[코스트코 아이템 조회]\n` +
+      const productText = item ?
+        `[상품DB]\n` +
         `아이템번호: ${item.itemNo}\n` +
         `모델명: ${item.modelName}\n` +
         `품목: ${item.category}\n` +
@@ -707,8 +740,14 @@
         `판매가격: ${formatMoney(item.price)}\n` +
         `행사 일정: ${formatPromoDate(item.promoStart, item.promoEnd)}\n` +
         `할인 금액: ${formatMoney(item.discountAmount)}\n` +
-        `배송 가능 일자: ${formatDateText(item.deliveryAvailableDate)}\n\n` +
-        `[이전설치/철거 비용]\n${costText || "등록된 비용 없음"}`;
+        `배송 가능 일자: ${formatDateText(item.deliveryAvailableDate)}`
+        : `[상품DB]\n등록된 상품 정보 없음`;
+
+      const costText = costs.map((c, idx) => {
+        return `${idx + 1}) ${c.productName || c.modelName || "이전설치 비용"}\n- 이전설치비용: ${c.installCost || "-"}\n- 철거비용: ${c.removalCost || "-"}\n- 비고: ${c.note || "-"}`;
+      }).join("\n");
+
+      return `${productText}\n\n[이전설치비용DB]\n${costText || "등록된 비용 없음"}`;
     }
 
     function escapeHtml(value) {
