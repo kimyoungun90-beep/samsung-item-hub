@@ -475,8 +475,8 @@
             </div>
 
             <div class="selector-box">
-              <label class="selector-label" for="logisticsSelect">물류 TC 선택</label>
-              <select id="logisticsSelect"><option value="">물류 TC를 선택하세요</option></select>
+              <label class="selector-label" for="logisticsSelect">물류 지역 선택</label>
+              <select id="logisticsSelect"><option value="">지역을 선택하세요</option></select>
             </div>
 
             <div id="deptList" class="dept-list"></div>
@@ -617,7 +617,7 @@
       currentMode = "department";
       productSearchBtn.classList.remove("active");
       installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 점포와 물류 TC를 각각 선택해 업무 지원 연락처를 확인합니다.";
+      modeHint.textContent = "※ 점포와 물류 지역을 각각 선택해 업무 지원 연락처를 확인합니다.";
 
       try {
         showStatus("업무지원실 정보를 불러오는 중입니다.", "warn");
@@ -630,7 +630,7 @@
         resultWrap.classList.add("show");
         hideAllSections();
         deptSection.classList.add("show");
-        showStatus("점포와 물류 TC를 선택해 주세요.", "success");
+        showStatus("점포와 물류 지역을 선택해 주세요.", "success");
       } catch (error) {
         console.error(error);
         showStatus("업무지원실 정보를 불러오지 못했습니다. Apps Script 코드와 부서DB/물류DB 시트를 확인해 주세요.", "error");
@@ -726,7 +726,7 @@
 
     function renderDepartmentSelectors() {
       deptSelect.innerHTML = `<option value="">점포를 선택하세요</option>`;
-      logisticsSelect.innerHTML = `<option value="">물류 TC를 선택하세요</option>`;
+      logisticsSelect.innerHTML = `<option value="">지역을 선택하세요</option>`;
       selectedStoreIndex = "";
       selectedTcIndex = "";
 
@@ -738,15 +738,17 @@
         deptSelect.appendChild(option);
       });
 
-      currentLogistics.forEach((tc, index) => {
-        if (!safe(tc.tcName, "")) return;
-        const option = document.createElement("option");
-        option.value = String(index);
-        option.textContent = tc.tcName;
-        logisticsSelect.appendChild(option);
-      });
+      currentLogistics
+        .filter((tc) => safe(tc.region, "") !== "")
+        .sort((a, b) => safe(a.region, "").localeCompare(safe(b.region, ""), "ko"))
+        .forEach((tc, index) => {
+          const option = document.createElement("option");
+          option.value = String(index);
+          option.textContent = `${tc.region} (${tc.tcName})`;
+          logisticsSelect.appendChild(option);
+        });
 
-      $("deptPill").textContent = `${currentDepartments.length}개 점포 / ${currentLogistics.length}개 TC`;
+      $("deptPill").textContent = `${currentDepartments.length}개 점포 / ${currentLogistics.length}개 지역`; 
       $("deptPill").classList.toggle("active", currentDepartments.length > 0 || currentLogistics.length > 0);
       renderDepartmentResult();
     }
@@ -757,19 +759,19 @@
       const tc = selectedTcIndex !== "" ? currentLogistics[Number(selectedTcIndex)] : null;
 
       if (!dept && !tc) {
-        box.innerHTML = `<div class="empty-box">점포와 물류 TC를 각각 선택하면 업무지원실, 물류, 삼성 가전/모바일 담당자 연락처가 표시됩니다.</div>`;
+        box.innerHTML = `<div class="empty-box">점포와 물류 지역을 각각 선택하면 업무지원실, 물류, 삼성 가전/모바일 담당자 연락처가 표시됩니다.</div>`;
         return;
       }
 
       const storeTitle = dept?.store || "점포 미선택";
-      const tcTitle = tc?.tcName || "물류 TC 미선택";
+      const tcTitle = tc ? `${tc.region} (${tc.tcName})` : "물류 지역 미선택";
 
       box.innerHTML = `
         <div class="dept-item">
           <div class="dept-top">
             <div>
               <div class="dept-name">${escapeHtml(storeTitle)}</div>
-              <div class="dept-sub">물류 TC: ${escapeHtml(tcTitle)}</div>
+              <div class="dept-sub">물류 지역: ${escapeHtml(tcTitle)}</div>
             </div>
             <span class="pill">업무지원</span>
           </div>
