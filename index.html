@@ -525,7 +525,8 @@
     const modeHint = $("modeHint");
     const lastUpdatedText = $("lastUpdatedText");
 
-    lastUpdatedText.textContent = `최근 업데이트 일: ${formatToday()}`;
+    lastUpdatedText.textContent = "최근 업데이트 일: 불러오는 중";
+    loadInitialUpdatedAt();
 
     productSearchBtn.addEventListener("click", () => searchByMode("product"));
     installSearchBtn.addEventListener("click", () => searchByMode("install"));
@@ -649,6 +650,15 @@
       $("deptList").innerHTML = `<div class="empty-box">수정 요청 기능은 다음 단계에서 연결하면 좋습니다.<br />추천 구조: 구글시트에 <b>수정요청DB</b>를 만들고, 아이템번호·요청내용·요청자·처리상태를 저장하는 방식입니다.</div>`;
       modeHint.textContent = "※ 상품 정보나 비용 정보가 틀렸을 때 수정 요청을 남기는 기능으로 확장 예정입니다.";
       showStatus("수정 요청 기능은 다음 단계에서 추가 예정입니다.", "warn");
+    }
+
+    async function loadInitialUpdatedAt() {
+      try {
+        const data = await fetchApi("action=config");
+        updateLastUpdated(data);
+      } catch (error) {
+        lastUpdatedText.textContent = `최근 업데이트 일: ${formatToday()}`;
+      }
     }
 
     async function fetchApi(queryString) {
@@ -790,19 +800,13 @@
           phone: regionRow?.phone,
           note: regionRow?.coverage
         })}
-        ${makeDeptContactCard({
-          title: "삼성 가전 담당자",
-          help: "제품, VOC 처리 방향, 단순 배송 요청 등",
-          manager: dept?.ceManager,
-          phone: dept?.cePhone,
-          note: dept?.ceNote
-        })}
-        ${makeDeptContactCard({
-          title: "삼성 모바일 담당자",
-          help: "제품, VOC 처리 방향, 단순 배송 요청 등",
-          manager: dept?.mxManager,
-          phone: dept?.mxPhone,
-          note: dept?.mxNote
+        ${makeSamsungContactCard({
+          ceManager: dept?.ceManager,
+          cePhone: dept?.cePhone,
+          ceNote: dept?.ceNote,
+          mxManager: dept?.mxManager,
+          mxPhone: dept?.mxPhone,
+          mxNote: dept?.mxNote
         })}
       `;
     }
@@ -812,6 +816,33 @@
         .filter((row) => safe(row.region, "") !== "")
         .sort((a, b) => safe(a.region, "").localeCompare(safe(b.region, ""), "ko"));
       return sorted[Number(selectedRegionIndex)] || null;
+    }
+
+    function makeSamsungContactCard({ ceManager, cePhone, ceNote, mxManager, mxPhone, mxNote }) {
+      const cleanCePhone = safe(cePhone, "");
+      const cleanMxPhone = safe(mxPhone, "");
+      const ceTelHref = cleanCePhone ? `tel:${cleanCePhone.replace(/[^0-9+]/g, "")}` : "#";
+      const mxTelHref = cleanMxPhone ? `tel:${cleanMxPhone.replace(/[^0-9+]/g, "")}` : "#";
+      const noteText = [ceNote ? `가전: ${ceNote}` : "", mxNote ? `모바일: ${mxNote}` : ""].filter(Boolean).join(" / ");
+
+      return `
+        <div class="dept-item">
+          <div class="dept-top">
+            <div class="dept-title-line">
+              <span class="dept-name">삼성 담당자</span>
+              <span class="dept-help">(제품, VOC 처리 방향, 단순 배송 요청 등)</span>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="kv-row"><div class="key">가전 담당자</div><div class="value">${escapeHtml(ceManager || "-")}</div></div>
+            <div class="kv-row"><div class="key">가전 연락처</div><div class="value">${escapeHtml(cleanCePhone || "-")}</div></div>
+            <div class="kv-row"><div class="key">모바일 담당자</div><div class="value">${escapeHtml(mxManager || "-")}</div></div>
+            <div class="kv-row"><div class="key">모바일 연락처</div><div class="value">${escapeHtml(cleanMxPhone || "-")}</div></div>
+            ${noteText ? `<div class="kv-row"><div class="key">비고</div><div class="value">${escapeHtml(noteText)}</div></div>` : ""}
+          </div>
+          ${cleanCePhone ? `<a class="phone-link" href="${ceTelHref}">가전 전화 연결</a>` : ""}
+          ${cleanMxPhone ? `<a class="phone-link" href="${mxTelHref}" style="margin-left:6px;">모바일 전화 연결</a>` : ""}
+        </div>`;
     }
 
     function makeDeptContactCard({ title, help, manager, phone, note }) {
