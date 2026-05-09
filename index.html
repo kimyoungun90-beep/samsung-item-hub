@@ -57,9 +57,9 @@
       display: inline-flex;
       padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(255,255,255,.12);
+      background: rgba(255, 255, 255, 0.12);
       font-size: 12px;
-      color: rgba(255,255,255,.88);
+      color: rgba(255, 255, 255, 0.88);
       margin-bottom: 14px;
       font-weight: 700;
     }
@@ -73,7 +73,7 @@
 
     .hero p {
       margin: 10px 0 0;
-      color: rgba(255,255,255,.82);
+      color: rgba(255, 255, 255, 0.82);
       font-size: 14px;
       line-height: 1.55;
       word-break: keep-all;
@@ -120,7 +120,7 @@
       outline: none;
       background: #fff;
       color: var(--text);
-      letter-spacing: .2px;
+      letter-spacing: 0.2px;
     }
 
     select {
@@ -133,10 +133,10 @@
     }
 
     input::placeholder { color: #9ca3af; font-weight: 600; letter-spacing: 0; }
-    input:focus, select:focus { border-color: #111827; box-shadow: 0 0 0 4px rgba(17,24,39,.08); }
+    input:focus, select:focus { border-color: #111827; box-shadow: 0 0 0 4px rgba(17,24,39,0.08); }
 
     button { font-family: inherit; cursor: pointer; }
-    button:active { transform: scale(.985); }
+    button:active { transform: scale(0.985); }
 
     .query-buttons {
       display: grid;
@@ -158,7 +158,7 @@
     }
 
     .query-btn.secondary { background: var(--primary2); }
-    .query-btn.active { outline: 3px solid rgba(22,163,74,.22); }
+    .query-btn.active { outline: 3px solid rgba(22, 163, 74, 0.22); }
 
     .sub-actions {
       display: grid;
@@ -228,7 +228,7 @@
       margin-bottom: 12px;
     }
 
-    .card-title h2 { margin: 0; font-size: 18px; letter-spacing: -.35px; }
+    .card-title h2 { margin: 0; font-size: 18px; letter-spacing: -0.35px; }
 
     .pill {
       display: inline-flex;
@@ -260,7 +260,7 @@
 
     .key { color: var(--muted); font-size: 13px; font-weight: 850; }
     .value { font-size: 14px; line-height: 1.5; font-weight: 800; word-break: keep-all; }
-    .big-value { font-size: 20px; font-weight: 950; letter-spacing: -.35px; }
+    .big-value { font-size: 20px; font-weight: 950; letter-spacing: -0.35px; }
 
     .cost-list, .dept-list { display: grid; gap: 10px; }
 
@@ -283,7 +283,7 @@
       font-size: 17px;
       font-weight: 950;
       line-height: 1.35;
-      letter-spacing: -.25px;
+      letter-spacing: -0.25px;
     }
 
     .cost-sub, .dept-sub { margin-top: 4px; color: var(--muted); font-size: 13px; font-weight: 750; line-height: 1.45; }
@@ -309,7 +309,7 @@
     }
 
     .money-label { color: var(--muted); font-size: 12px; font-weight: 900; margin-bottom: 6px; }
-    .money-value { font-size: 16px; font-weight: 950; line-height: 1.45; letter-spacing: -.2px; }
+    .money-value { font-size: 16px; font-weight: 950; line-height: 1.45; letter-spacing: -0.2px; }
 
     .note-box, .empty-box {
       margin-top: 8px;
@@ -503,7 +503,7 @@
     let currentDepartments = [];
     let currentLogistics = [];
     let selectedStoreIndex = "";
-    let selectedTcIndex = "";
+    let selectedRegionIndex = "";
     let lastItemNo = "";
 
     const $ = (id) => document.getElementById(id);
@@ -534,7 +534,7 @@
     resetBtn.addEventListener("click", resetView);
     sampleBtn.addEventListener("click", () => { itemInput.value = "689291"; searchByMode("product"); });
     deptSelect.addEventListener("change", () => { selectedStoreIndex = deptSelect.value; renderDepartmentResult(); });
-    logisticsSelect.addEventListener("change", () => { selectedTcIndex = logisticsSelect.value; renderDepartmentResult(); });
+    logisticsSelect.addEventListener("change", () => { selectedRegionIndex = logisticsSelect.value; renderDepartmentResult(); });
 
     itemInput.addEventListener("input", () => { itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6); });
     itemInput.addEventListener("keydown", (event) => { if (event.key === "Enter") searchByMode(currentMode === "install" ? "install" : "product"); });
@@ -549,7 +549,7 @@
       currentDepartments = [];
       currentLogistics = [];
       selectedStoreIndex = "";
-      selectedTcIndex = "";
+      selectedRegionIndex = "";
       lastItemNo = "";
       hideAllSections();
       resultWrap.classList.remove("show");
@@ -728,7 +728,7 @@
       deptSelect.innerHTML = `<option value="">점포를 선택하세요</option>`;
       logisticsSelect.innerHTML = `<option value="">지역을 선택하세요</option>`;
       selectedStoreIndex = "";
-      selectedTcIndex = "";
+      selectedRegionIndex = "";
 
       currentDepartments.forEach((dept, index) => {
         if (!safe(dept.store, "")) return;
@@ -739,16 +739,16 @@
       });
 
       currentLogistics
-        .filter((tc) => safe(tc.region, "") !== "")
+        .filter((row) => safe(row.region, "") !== "")
         .sort((a, b) => safe(a.region, "").localeCompare(safe(b.region, ""), "ko"))
-        .forEach((tc, index) => {
+        .forEach((row, index) => {
           const option = document.createElement("option");
           option.value = String(index);
-          option.textContent = `${tc.region} (${tc.tcName})`;
+          option.textContent = `${row.region} (${row.tcName})`;
           logisticsSelect.appendChild(option);
         });
 
-      $("deptPill").textContent = `${currentDepartments.length}개 점포 / ${currentLogistics.length}개 지역`; 
+      $("deptPill").textContent = `${currentDepartments.length}개 점포 / ${currentLogistics.length}개 지역`;
       $("deptPill").classList.toggle("active", currentDepartments.length > 0 || currentLogistics.length > 0);
       renderDepartmentResult();
     }
@@ -756,22 +756,22 @@
     function renderDepartmentResult() {
       const box = $("deptList");
       const dept = selectedStoreIndex !== "" ? currentDepartments[Number(selectedStoreIndex)] : null;
-      const tc = selectedTcIndex !== "" ? currentLogistics[Number(selectedTcIndex)] : null;
+      const regionRow = selectedRegionIndex !== "" ? getSelectedLogisticsRow() : null;
 
-      if (!dept && !tc) {
+      if (!dept && !regionRow) {
         box.innerHTML = `<div class="empty-box">점포와 물류 지역을 각각 선택하면 업무지원실, 물류, 삼성 가전/모바일 담당자 연락처가 표시됩니다.</div>`;
         return;
       }
 
       const storeTitle = dept?.store || "점포 미선택";
-      const tcTitle = tc ? `${tc.region} (${tc.tcName})` : "물류 지역 미선택";
+      const logisticsTitle = regionRow ? `${regionRow.region} (${regionRow.tcName})` : "물류 지역 미선택";
 
       box.innerHTML = `
         <div class="dept-item">
           <div class="dept-top">
             <div>
               <div class="dept-name">${escapeHtml(storeTitle)}</div>
-              <div class="dept-sub">물류 지역: ${escapeHtml(tcTitle)}</div>
+              <div class="dept-sub">물류 지역: ${escapeHtml(logisticsTitle)}</div>
             </div>
             <span class="pill">업무지원</span>
           </div>
@@ -786,9 +786,9 @@
         ${makeDeptContactCard({
           title: "물류 연락처",
           help: "제품 물류 이관 후 배송 확인, 기사 정보, 일정 변경",
-          manager: tc?.manager,
-          phone: tc?.phone,
-          note: tc?.note
+          manager: regionRow?.manager,
+          phone: regionRow?.phone,
+          note: regionRow?.coverage
         })}
         ${makeDeptContactCard({
           title: "삼성 가전 담당자",
@@ -805,6 +805,13 @@
           note: dept?.mxNote
         })}
       `;
+    }
+
+    function getSelectedLogisticsRow() {
+      const sorted = currentLogistics
+        .filter((row) => safe(row.region, "") !== "")
+        .sort((a, b) => safe(a.region, "").localeCompare(safe(b.region, ""), "ko"));
+      return sorted[Number(selectedRegionIndex)] || null;
     }
 
     function makeDeptContactCard({ title, help, manager, phone, note }) {
@@ -829,7 +836,7 @@
 
     function updateLastUpdated(data) {
       const value = data?.updatedAt || data?.lastUpdated || "";
-      lastUpdatedText.textContent = `최근 업데이트 일: "2026.05.09"
+      lastUpdatedText.textContent = `최근 업데이트 일: ${value ? safe(value) : formatToday()}`;
     }
 
     function setProductNotes(item) {
@@ -848,20 +855,16 @@
       const isCarry = deliveryText.includes("핸드캐리") || deliveryText.includes("핸디캐리");
       deliveryNote.classList.toggle("show", !!deliveryText && !isCarry);
 
-      const showPromoWarning = shouldShowPromoWarning(item.promoStart, item.promoEnd);
+      const showPromoWarning = shouldShowPromoWarning(item.promoStart);
       promoNote.classList.toggle("show", showPromoWarning);
       discountNote.classList.toggle("show", showPromoWarning && safe(item.discountAmount, "") !== "");
     }
 
-    function shouldShowPromoWarning(start, end) {
+    function shouldShowPromoWarning(start) {
       const startDate = parseDateText(start);
       if (!startDate) return false;
-
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-
-      // 행사 시작일이 오늘보다 이후인 '예정 행사'에만 표시합니다.
-      // 이미 시작된 행사나 종료된 행사는 표시하지 않습니다.
       return startDate.getTime() > today.getTime();
     }
 
