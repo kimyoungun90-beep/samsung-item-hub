@@ -467,15 +467,15 @@
       <div id="deptSection" class="result-section">
         <article class="card">
           <div class="card-inner">
-            <div class="card-title"><h2>업무지원실</h2><span id="deptPill" class="pill">선택</span></div>
+            <div class="card-title"><h2>해당 부서 연락처</h2><span id="deptPill" class="pill">선택</span></div>
 
             <div class="selector-box">
-              <label class="selector-label" for="deptSelect">점포 선택</label>
+              <label class="selector-label" for="deptSelect">업무지원실, 담당자 연락처(점포별 상이)</label>
               <select id="deptSelect"><option value="">점포를 선택하세요</option></select>
             </div>
 
             <div class="selector-box">
-              <label class="selector-label" for="logisticsSelect">물류 지역 선택</label>
+              <label class="selector-label" for="logisticsSelect">회원 배송 지역 선택</label>
               <select id="logisticsSelect"><option value="">지역을 선택하세요</option></select>
             </div>
 
@@ -618,7 +618,7 @@
       currentMode = "department";
       productSearchBtn.classList.remove("active");
       installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 점포와 물류 지역을 각각 선택해 업무 지원 연락처를 확인합니다.";
+      modeHint.textContent = "※ 업무지원실/담당자 연락처와 회원 배송 지역을 각각 선택해 확인합니다.";
 
       try {
         showStatus("업무지원실 정보를 불러오는 중입니다.", "warn");
@@ -631,7 +631,7 @@
         resultWrap.classList.add("show");
         hideAllSections();
         deptSection.classList.add("show");
-        showStatus("점포와 물류 지역을 선택해 주세요.", "success");
+        showStatus("업무지원실/담당자 연락처와 회원 배송 지역을 선택해 주세요.", "success");
       } catch (error) {
         console.error(error);
         showStatus("업무지원실 정보를 불러오지 못했습니다. Apps Script 코드와 부서DB/물류DB 시트를 확인해 주세요.", "error");
@@ -769,23 +769,10 @@
       const regionRow = selectedRegionIndex !== "" ? getSelectedLogisticsRow() : null;
 
       if (!dept && !regionRow) {
-        box.innerHTML = `<div class="empty-box">점포와 물류 지역을 각각 선택하면 업무지원실, 물류, 삼성 가전/모바일 담당자 연락처가 표시됩니다.</div>`;
+        box.innerHTML = `<div class="empty-box">업무지원실/담당자 연락처와 회원 배송 지역을 각각 선택하면 해당 부서 연락처가 표시됩니다.</div>`;
         return;
       }
-
-      const storeTitle = dept?.store || "점포 미선택";
-      const logisticsTitle = regionRow ? `${regionRow.region} (${regionRow.tcName})` : "물류 지역 미선택";
-
       box.innerHTML = `
-        <div class="dept-item">
-          <div class="dept-top">
-            <div>
-              <div class="dept-name">${escapeHtml(storeTitle)}</div>
-              <div class="dept-sub">물류 지역: ${escapeHtml(logisticsTitle)}</div>
-            </div>
-            <span class="pill">업무지원</span>
-          </div>
-        </div>
         ${makeDeptContactCard({
           title: "업무지원실",
           help: "제품 물류 이관 전/후 배송 확인, 주소 변경, 일정 변경, 재고 문의",
