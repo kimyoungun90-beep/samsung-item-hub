@@ -342,6 +342,22 @@
       line-height: 1.45;
     }
 
+    .dept-help {
+      margin-left: 6px;
+      color: #6b7280;
+      font-size: 11px;
+      font-weight: 750;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+
+    .dept-title-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+
     .money-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -855,12 +871,12 @@
 
       const uniqueDepartments = departments
         .map((dept, index) => ({ ...dept, originalIndex: index }))
-        .filter((dept) => safe(dept.department, "") !== "");
+        .filter((dept) => safe(dept.store || dept.department, "") !== "");
 
       uniqueDepartments.forEach((dept) => {
         const option = document.createElement("option");
         option.value = String(dept.originalIndex);
-        option.textContent = dept.department;
+        option.textContent = dept.store || dept.department;
         deptSelect.appendChild(option);
       });
 
@@ -885,38 +901,89 @@
         return;
       }
 
-      const phone = safe(dept.phone, "");
-      const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, "")}` : "#";
+      const storeName = dept.store || dept.department || "선택 점포";
+      const supportPhone = safe(dept.supportPhone || dept.phone, "");
+      const logisticsPhone = safe(dept.logisticsPhone, "");
+      const cePhone = safe(dept.cePhone, "");
+      const mxPhone = safe(dept.mxPhone, "");
 
-      const div = document.createElement("div");
-      div.className = "dept-item";
-      div.innerHTML = `
-        <div class="dept-top">
-          <div>
-            <div class="dept-name">${escapeHtml(dept.department || "업무지원실")}</div>
-            <div class="dept-sub">${escapeHtml(dept.work || "-")}</div>
-          </div>
-          <span class="pill">${escapeHtml(dept.type || "공통")}</span>
-        </div>
-
-        <div class="kv">
-          <div class="kv-row">
-            <div class="key">담당자</div>
-            <div class="value">${escapeHtml(dept.manager || "-")}</div>
-          </div>
-          <div class="kv-row">
-            <div class="key">연락처</div>
-            <div class="value">${escapeHtml(phone || "-")}</div>
-          </div>
-          <div class="kv-row">
-            <div class="key">운영시간</div>
-            <div class="value">${escapeHtml(dept.note || "-")}</div>
+      box.innerHTML = `
+        <div class="dept-item">
+          <div class="dept-top">
+            <div>
+              <div class="dept-name">${escapeHtml(storeName)}</div>
+              <div class="dept-sub">선택 점포별 업무 지원 연락처</div>
+            </div>
+            <span class="pill">점포</span>
           </div>
         </div>
 
-        ${phone ? `<a class="phone-link" href="${telHref}">전화 연결</a>` : ""}
+        ${makeDeptContactCard({
+          title: "업무지원실",
+          help: "제품 물류 이관 전/후 배송 확인, 주소 변경, 일정 변경, 재고 문의",
+          manager: dept.supportManager || dept.manager,
+          phone: supportPhone,
+          note: dept.supportNote || dept.note
+        })}
+
+        ${makeDeptContactCard({
+          title: "물류 연락처",
+          help: "제품 물류 이관 후 배송 확인, 기사 정보, 일정 변경",
+          manager: dept.logisticsManager,
+          phone: logisticsPhone,
+          note: dept.logisticsNote
+        })}
+
+        ${makeDeptContactCard({
+          title: "삼성 가전 담당자",
+          help: "제품, VOC 처리 방향, 단순 배송 요청 등",
+          manager: dept.ceManager,
+          phone: cePhone,
+          note: dept.ceNote
+        })}
+
+        ${makeDeptContactCard({
+          title: "삼성 모바일 담당자",
+          help: "제품, VOC 처리 방향, 단순 배송 요청 등",
+          manager: dept.mxManager,
+          phone: mxPhone,
+          note: dept.mxNote
+        })}
       `;
-      box.appendChild(div);
+    }
+
+    function makeDeptContactCard({ title, help, manager, phone, note }) {
+      const cleanPhone = safe(phone, "");
+      const telHref = cleanPhone ? `tel:${cleanPhone.replace(/[^0-9+]/g, "")}` : "#";
+
+      return `
+        <div class="dept-item">
+          <div class="dept-top">
+            <div>
+              <div class="dept-title-line">
+                <span class="dept-name">${escapeHtml(title)}</span>
+                <span class="dept-help">(${escapeHtml(help)})</span>
+              </div>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="kv-row">
+              <div class="key">담당자</div>
+              <div class="value">${escapeHtml(manager || "-")}</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">연락처</div>
+              <div class="value">${escapeHtml(cleanPhone || "-")}</div>
+            </div>
+            ${note ? `
+            <div class="kv-row">
+              <div class="key">비고</div>
+              <div class="value">${escapeHtml(note)}</div>
+            </div>` : ""}
+          </div>
+          ${cleanPhone ? `<a class="phone-link" href="${telHref}">전화 연결</a>` : ""}
+        </div>
+      `;
     }
 
     function formatPromoDate(start, end) {
