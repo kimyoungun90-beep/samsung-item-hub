@@ -104,7 +104,7 @@
       color: #374151;
     }
 
-    input {
+    input, select {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 17px;
@@ -114,7 +114,16 @@
       outline: none;
       background: #fff;
       color: var(--text);
-      letter-spacing: 0.4px;
+      letter-spacing: 0.2px;
+    }
+
+    select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #6b7280 50%), linear-gradient(135deg, #6b7280 50%, transparent 50%);
+      background-position: calc(100% - 21px) calc(50% - 3px), calc(100% - 15px) calc(50% - 3px);
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      padding-right: 42px;
     }
 
     input::placeholder {
@@ -123,7 +132,7 @@
       letter-spacing: 0;
     }
 
-    input:focus {
+    input:focus, select:focus {
       border-color: #111827;
       box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
     }
@@ -158,6 +167,10 @@
 
     .query-btn.secondary {
       background: var(--primary2);
+    }
+
+    .query-btn.active {
+      outline: 3px solid rgba(22, 163, 74, 0.22);
     }
 
     .sub-actions {
@@ -382,6 +395,22 @@
       word-break: keep-all;
     }
 
+    .selector-box {
+      margin-bottom: 12px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    .selector-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #374151;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
     .phone-link {
       display: inline-flex;
       align-items: center;
@@ -532,9 +561,17 @@
         <article class="card">
           <div class="card-inner">
             <div class="card-title">
-              <h2>업무 지원 부서</h2>
-              <span id="deptPill" class="pill">부서</span>
+              <h2>업무지원실</h2>
+              <span id="deptPill" class="pill">점포 선택</span>
             </div>
+
+            <div id="deptSelectorWrap" class="selector-box">
+              <label class="selector-label" for="deptSelect">점포 선택</label>
+              <select id="deptSelect">
+                <option value="">점포를 선택하세요</option>
+              </select>
+            </div>
+
             <div id="deptList" class="dept-list"></div>
           </div>
         </article>
@@ -576,6 +613,7 @@
     const productSection = $("productSection");
     const installSection = $("installSection");
     const deptSection = $("deptSection");
+    const deptSelect = $("deptSelect");
     const modeHint = $("modeHint");
 
     productSearchBtn.addEventListener("click", () => searchByMode("product"));
@@ -586,6 +624,9 @@
     sampleBtn.addEventListener("click", () => {
       itemInput.value = "689291";
       searchByMode("product");
+    });
+    deptSelect.addEventListener("change", () => {
+      renderSelectedDepartment(deptSelect.value);
     });
 
     itemInput.addEventListener("input", () => {
@@ -681,21 +722,21 @@
       currentMode = "department";
       productSearchBtn.classList.remove("active");
       installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 업무 지원 부서 연락처를 확인합니다.";
+      modeHint.textContent = "※ 업무지원실 점포를 선택하면 담당자와 연락처가 표시됩니다.";
 
       try {
-        showStatus("업무 지원 부서를 불러오는 중입니다.", "warn");
+        showStatus("업무지원실 정보를 불러오는 중입니다.", "warn");
         const data = await fetchApi("action=departments");
         currentDepartments = data.departments || [];
-        renderDepartments(currentDepartments);
+        renderDepartmentSelector(currentDepartments);
 
         resultWrap.classList.add("show");
         hideAllSections();
         deptSection.classList.add("show");
-        showStatus(currentDepartments.length ? "업무 지원 부서 조회가 완료되었습니다." : "등록된 업무 지원 부서가 없습니다.", currentDepartments.length ? "success" : "error");
+        showStatus(currentDepartments.length ? "업무지원실 정보를 불러왔습니다. 점포를 선택해 주세요." : "등록된 업무지원실 정보가 없습니다.", currentDepartments.length ? "success" : "error");
       } catch (error) {
         console.error(error);
-        showStatus("부서DB를 불러오지 못했습니다. Apps Script 코드에 departments 기능을 추가해야 합니다.", "error");
+        showStatus("업무지원실 정보를 불러오지 못했습니다. Apps Script 코드와 부서DB 시트를 확인해 주세요.", "error");
       }
     }
 
@@ -706,6 +747,7 @@
       deptSection.classList.add("show");
       $("deptPill").textContent = "준비중";
       $("deptPill").classList.remove("active");
+      deptSelect.innerHTML = `<option value="">수정 요청 기능 준비중</option>`;
       $("deptList").innerHTML = `
         <div class="empty-box">
           수정 요청 기능은 다음 단계에서 연결하면 좋습니다.<br />
@@ -799,48 +841,82 @@
       });
     }
 
-    function renderDepartments(departments) {
+    function renderDepartmentSelector(departments) {
       const box = $("deptList");
       box.innerHTML = "";
+      deptSelect.innerHTML = `<option value="">점포를 선택하세요</option>`;
 
       if (!departments.length) {
         $("deptPill").textContent = "미등록";
         $("deptPill").classList.remove("active");
-        box.innerHTML = `<div class="empty-box">부서DB에 등록된 업무 지원 부서가 없습니다.</div>`;
+        box.innerHTML = `<div class="empty-box">부서DB에 등록된 업무지원실 정보가 없습니다.</div>`;
         return;
       }
 
-      $("deptPill").textContent = `${departments.length}건`;
-      $("deptPill").classList.add("active");
+      const uniqueDepartments = departments
+        .map((dept, index) => ({ ...dept, originalIndex: index }))
+        .filter((dept) => safe(dept.department, "") !== "");
 
-      departments.forEach((dept) => {
-        const phone = safe(dept.phone, "");
-        const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, "")}` : "#";
-        const div = document.createElement("div");
-        div.className = "dept-item";
-        div.innerHTML = `
-          <div class="dept-top">
-            <div>
-              <div class="dept-name">${escapeHtml(dept.department || "업무 지원 부서")}</div>
-              <div class="dept-sub">${escapeHtml(dept.work || "-")}</div>
-            </div>
-            <span class="pill">${escapeHtml(dept.type || "공통")}</span>
-          </div>
-          <div class="kv">
-            <div class="kv-row">
-              <div class="key">담당자</div>
-              <div class="value">${escapeHtml(dept.manager || "-")}</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">연락처</div>
-              <div class="value">${escapeHtml(phone || "-")}</div>
-            </div>
-          </div>
-          ${dept.note ? `<div class="note-box">${escapeHtml(dept.note)}</div>` : ""}
-          ${phone ? `<a class="phone-link" href="${telHref}">전화 연결</a>` : ""}
-        `;
-        box.appendChild(div);
+      uniqueDepartments.forEach((dept) => {
+        const option = document.createElement("option");
+        option.value = String(dept.originalIndex);
+        option.textContent = dept.department;
+        deptSelect.appendChild(option);
       });
+
+      $("deptPill").textContent = `${uniqueDepartments.length}개 점포`;
+      $("deptPill").classList.add("active");
+      box.innerHTML = `<div class="empty-box">위 선택란에서 점포를 선택하면 업무지원실 담당자와 연락처가 표시됩니다.</div>`;
+    }
+
+    function renderSelectedDepartment(selectedIndex) {
+      const box = $("deptList");
+      box.innerHTML = "";
+
+      if (selectedIndex === "") {
+        box.innerHTML = `<div class="empty-box">위 선택란에서 점포를 선택하면 업무지원실 담당자와 연락처가 표시됩니다.</div>`;
+        return;
+      }
+
+      const dept = currentDepartments[Number(selectedIndex)];
+
+      if (!dept) {
+        box.innerHTML = `<div class="empty-box">선택한 점포 정보를 찾을 수 없습니다.</div>`;
+        return;
+      }
+
+      const phone = safe(dept.phone, "");
+      const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, "")}` : "#";
+
+      const div = document.createElement("div");
+      div.className = "dept-item";
+      div.innerHTML = `
+        <div class="dept-top">
+          <div>
+            <div class="dept-name">${escapeHtml(dept.department || "업무지원실")}</div>
+            <div class="dept-sub">${escapeHtml(dept.work || "-")}</div>
+          </div>
+          <span class="pill">${escapeHtml(dept.type || "공통")}</span>
+        </div>
+
+        <div class="kv">
+          <div class="kv-row">
+            <div class="key">담당자</div>
+            <div class="value">${escapeHtml(dept.manager || "-")}</div>
+          </div>
+          <div class="kv-row">
+            <div class="key">연락처</div>
+            <div class="value">${escapeHtml(phone || "-")}</div>
+          </div>
+          <div class="kv-row">
+            <div class="key">운영시간</div>
+            <div class="value">${escapeHtml(dept.note || "-")}</div>
+          </div>
+        </div>
+
+        ${phone ? `<a class="phone-link" href="${telHref}">전화 연결</a>` : ""}
+      `;
+      box.appendChild(div);
     }
 
     function formatPromoDate(start, end) {
