@@ -27,10 +27,7 @@
       --shadow: 0 14px 34px rgba(17, 24, 39, 0.08);
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
@@ -58,13 +55,11 @@
 
     .hero-badge {
       display: inline-flex;
-      align-items: center;
-      justify-content: center;
       padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255,255,255,.12);
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255,255,255,.88);
       margin-bottom: 14px;
       font-weight: 700;
     }
@@ -78,7 +73,7 @@
 
     .hero p {
       margin: 10px 0 0;
-      color: rgba(255, 255, 255, 0.82);
+      color: rgba(255,255,255,.82);
       font-size: 14px;
       line-height: 1.55;
       word-break: keep-all;
@@ -91,17 +86,28 @@
       box-shadow: var(--shadow);
     }
 
-    .search-card {
-      padding: 16px;
-      margin-bottom: 14px;
+    .search-card { padding: 16px; margin-bottom: 14px; }
+
+    .label-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .label {
       display: block;
-      margin-bottom: 8px;
       font-size: 13px;
       font-weight: 900;
       color: #374151;
+    }
+
+    .update-date {
+      color: #6b7280;
+      font-size: 11px;
+      font-weight: 850;
+      white-space: nowrap;
     }
 
     input, select {
@@ -114,7 +120,7 @@
       outline: none;
       background: #fff;
       color: var(--text);
-      letter-spacing: 0.2px;
+      letter-spacing: .2px;
     }
 
     select {
@@ -126,25 +132,11 @@
       padding-right: 42px;
     }
 
-    input::placeholder {
-      color: #9ca3af;
-      font-weight: 600;
-      letter-spacing: 0;
-    }
+    input::placeholder { color: #9ca3af; font-weight: 600; letter-spacing: 0; }
+    input:focus, select:focus { border-color: #111827; box-shadow: 0 0 0 4px rgba(17,24,39,.08); }
 
-    input:focus, select:focus {
-      border-color: #111827;
-      box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
-    }
-
-    button {
-      font-family: inherit;
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(0.985);
-    }
+    button { font-family: inherit; cursor: pointer; }
+    button:active { transform: scale(.985); }
 
     .query-buttons {
       display: grid;
@@ -165,13 +157,8 @@
       padding: 0 12px;
     }
 
-    .query-btn.secondary {
-      background: var(--primary2);
-    }
-
-    .query-btn.active {
-      outline: 3px solid rgba(22, 163, 74, 0.22);
-    }
+    .query-btn.secondary { background: var(--primary2); }
+    .query-btn.active { outline: 3px solid rgba(22,163,74,.22); }
 
     .sub-actions {
       display: grid;
@@ -190,13 +177,23 @@
       font-weight: 850;
     }
 
-    .hint {
-      margin: 10px 2px 0;
+    .hint, .field-note {
       color: var(--muted);
       font-size: 12px;
       line-height: 1.45;
       word-break: keep-all;
     }
+
+    .hint { margin: 10px 2px 0; }
+
+    .field-note {
+      display: none;
+      margin-top: 5px;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .field-note.show { display: block; }
 
     .status {
       display: none;
@@ -212,30 +209,16 @@
     }
 
     .status.show { display: block; }
-    .status.error { border-color: rgba(239, 68, 68, 0.25); background: #fef2f2; color: #991b1b; }
-    .status.success { border-color: rgba(22, 163, 74, 0.25); background: #f0fdf4; color: #166534; }
-    .status.warn { border-color: rgba(245, 158, 11, 0.25); background: #fffbeb; color: #92400e; }
+    .status.error { border-color: rgba(239,68,68,.25); background: #fef2f2; color: #991b1b; }
+    .status.success { border-color: rgba(22,163,74,.25); background: #f0fdf4; color: #166534; }
+    .status.warn { border-color: rgba(245,158,11,.25); background: #fffbeb; color: #92400e; }
 
-    .result-wrap {
-      display: none;
-      gap: 12px;
-    }
+    .result-wrap { display: none; gap: 12px; }
+    .result-wrap.show { display: grid; }
+    .result-section { display: none; }
+    .result-section.show { display: block; }
 
-    .result-wrap.show {
-      display: grid;
-    }
-
-    .result-section {
-      display: none;
-    }
-
-    .result-section.show {
-      display: block;
-    }
-
-    .card-inner {
-      padding: 16px;
-    }
+    .card-inner { padding: 16px; }
 
     .card-title {
       display: flex;
@@ -245,11 +228,7 @@
       margin-bottom: 12px;
     }
 
-    .card-title h2 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: -0.35px;
-    }
+    .card-title h2 { margin: 0; font-size: 18px; letter-spacing: -.35px; }
 
     .pill {
       display: inline-flex;
@@ -264,15 +243,9 @@
       white-space: nowrap;
     }
 
-    .pill.active {
-      background: #dcfce7;
-      color: #166534;
-    }
+    .pill.active { background: #dcfce7; color: #166534; }
 
-    .kv {
-      display: grid;
-      gap: 10px;
-    }
+    .kv { display: grid; gap: 10px; }
 
     .kv-row {
       display: grid;
@@ -283,34 +256,13 @@
       border-bottom: 1px dashed var(--line);
     }
 
-    .kv-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
+    .kv-row:last-child { border-bottom: 0; padding-bottom: 0; }
 
-    .key {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 850;
-    }
+    .key { color: var(--muted); font-size: 13px; font-weight: 850; }
+    .value { font-size: 14px; line-height: 1.5; font-weight: 800; word-break: keep-all; }
+    .big-value { font-size: 20px; font-weight: 950; letter-spacing: -.35px; }
 
-    .value {
-      font-size: 14px;
-      line-height: 1.5;
-      font-weight: 800;
-      word-break: keep-all;
-    }
-
-    .big-value {
-      font-size: 20px;
-      font-weight: 950;
-      letter-spacing: -0.35px;
-    }
-
-    .cost-list, .dept-list {
-      display: grid;
-      gap: 10px;
-    }
+    .cost-list, .dept-list { display: grid; gap: 10px; }
 
     .cost-item, .dept-item {
       border: 1px solid var(--line);
@@ -331,16 +283,10 @@
       font-size: 17px;
       font-weight: 950;
       line-height: 1.35;
-      letter-spacing: -0.25px;
+      letter-spacing: -.25px;
     }
 
-    .cost-sub, .dept-sub {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 750;
-      line-height: 1.45;
-    }
+    .cost-sub, .dept-sub { margin-top: 4px; color: var(--muted); font-size: 13px; font-weight: 750; line-height: 1.45; }
 
     .dept-help {
       margin-left: 6px;
@@ -351,19 +297,9 @@
       word-break: keep-all;
     }
 
-    .dept-title-line {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 2px;
-    }
+    .dept-title-line { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
 
-    .money-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 8px;
-    }
+    .money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
 
     .money-box {
       background: #f9fafb;
@@ -372,21 +308,10 @@
       padding: 12px;
     }
 
-    .money-label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
+    .money-label { color: var(--muted); font-size: 12px; font-weight: 900; margin-bottom: 6px; }
+    .money-value { font-size: 16px; font-weight: 950; line-height: 1.45; letter-spacing: -.2px; }
 
-    .money-value {
-      font-size: 16px;
-      font-weight: 950;
-      line-height: 1.45;
-      letter-spacing: -0.2px;
-    }
-
-    .note-box {
+    .note-box, .empty-box {
       margin-top: 8px;
       background: #f9fafb;
       border: 1px solid var(--line);
@@ -399,17 +324,7 @@
       word-break: keep-all;
     }
 
-    .empty-box {
-      background: #f9fafb;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-      color: #6b7280;
-      font-size: 14px;
-      font-weight: 800;
-      line-height: 1.5;
-      word-break: keep-all;
-    }
+    .empty-box { margin-top: 0; color: #6b7280; }
 
     .selector-box {
       margin-bottom: 12px;
@@ -419,13 +334,7 @@
       padding: 12px;
     }
 
-    .selector-label {
-      display: block;
-      margin-bottom: 8px;
-      color: #374151;
-      font-size: 13px;
-      font-weight: 950;
-    }
+    .selector-label { display: block; margin-bottom: 8px; color: #374151; font-size: 13px; font-weight: 950; }
 
     .phone-link {
       display: inline-flex;
@@ -459,20 +368,12 @@
       font-size: 15px;
       font-weight: 950;
       border: 0;
-      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
+      box-shadow: 0 10px 24px rgba(17,24,39,.16);
     }
 
-    .nav-btn.secondary {
-      background: #243044;
-    }
+    .nav-btn.secondary { background: #243044; }
 
-    .footer {
-      margin-top: 18px;
-      text-align: center;
-      color: #9ca3af;
-      font-size: 12px;
-      line-height: 1.5;
-    }
+    .footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; line-height: 1.5; }
 
     @media (max-width: 390px) {
       .hero h1 { font-size: 23px; }
@@ -491,7 +392,10 @@
     </section>
 
     <section class="card search-card">
-      <label class="label" for="itemInput">아이템번호</label>
+      <div class="label-line">
+        <label class="label" for="itemInput">아이템번호</label>
+        <span id="lastUpdatedText" class="update-date">최근 업데이트 일: -</span>
+      </div>
       <input id="itemInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="예: 689291" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" data-form-type="other" />
 
       <div class="query-buttons">
@@ -519,41 +423,32 @@
             </div>
 
             <div class="kv">
-              <div class="kv-row">
-                <div class="key">아이템번호</div>
-                <div id="rItemNo" class="value big-value">-</div>
-              </div>
-              <div class="kv-row">
-                <div class="key">모델명</div>
-                <div id="rModel" class="value">-</div>
-              </div>
-              <div class="kv-row">
-                <div class="key">품목</div>
-                <div id="rCategory" class="value">-</div>
-              </div>
-              <div class="kv-row">
-                <div class="key">상품명</div>
-                <div id="rProduct" class="value">-</div>
-              </div>
-              <div class="kv-row">
-                <div class="key">브랜드</div>
-                <div id="rBrand" class="value">-</div>
-              </div>
-              <div class="kv-row">
-                <div class="key">판매가격</div>
-                <div id="rPrice" class="value big-value">-</div>
-              </div>
+              <div class="kv-row"><div class="key">아이템번호</div><div id="rItemNo" class="value big-value">-</div></div>
+              <div class="kv-row"><div class="key">모델명</div><div id="rModel" class="value">-</div></div>
+              <div class="kv-row"><div class="key">품목</div><div id="rCategory" class="value">-</div></div>
+              <div class="kv-row"><div class="key">상품명</div><div id="rProduct" class="value">-</div></div>
+              <div class="kv-row"><div class="key">브랜드</div><div id="rBrand" class="value">-</div></div>
+              <div class="kv-row"><div class="key">판매가격</div><div id="rPrice" class="value big-value">-</div></div>
               <div class="kv-row">
                 <div class="key">행사 일정</div>
-                <div id="rPromoDate" class="value">-</div>
+                <div class="value">
+                  <div id="rPromoDate">-</div>
+                  <div id="rPromoNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
+                </div>
               </div>
               <div class="kv-row">
                 <div class="key">할인금액</div>
-                <div id="rDiscount" class="value big-value">-</div>
+                <div class="value">
+                  <div id="rDiscount" class="big-value">-</div>
+                  <div id="rDiscountNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
+                </div>
               </div>
               <div class="kv-row">
                 <div class="key">배송 가능</div>
-                <div id="rDelivery" class="value">-</div>
+                <div class="value">
+                  <div id="rDelivery">-</div>
+                  <div id="rDeliveryNote" class="field-note">배송 가능 일자는 참조용입니다. 회원 응대 시 2주 안내는 필히 해주세요.</div>
+                </div>
               </div>
             </div>
           </div>
@@ -563,11 +458,7 @@
       <div id="installSection" class="result-section">
         <article class="card">
           <div class="card-inner">
-            <div class="card-title">
-              <h2>이전설치비용DB 조회 결과</h2>
-              <span id="costPill" class="pill">비용</span>
-            </div>
-
+            <div class="card-title"><h2>이전설치비용DB 조회 결과</h2><span id="costPill" class="pill">비용</span></div>
             <div id="costList" class="cost-list"></div>
           </div>
         </article>
@@ -576,16 +467,16 @@
       <div id="deptSection" class="result-section">
         <article class="card">
           <div class="card-inner">
-            <div class="card-title">
-              <h2>업무지원실</h2>
-              <span id="deptPill" class="pill">점포 선택</span>
+            <div class="card-title"><h2>업무지원실</h2><span id="deptPill" class="pill">선택</span></div>
+
+            <div class="selector-box">
+              <label class="selector-label" for="deptSelect">점포 선택</label>
+              <select id="deptSelect"><option value="">점포를 선택하세요</option></select>
             </div>
 
-            <div id="deptSelectorWrap" class="selector-box">
-              <label class="selector-label" for="deptSelect">점포 선택</label>
-              <select id="deptSelect">
-                <option value="">점포를 선택하세요</option>
-              </select>
+            <div class="selector-box">
+              <label class="selector-label" for="logisticsSelect">물류 TC 선택</label>
+              <select id="logisticsSelect"><option value="">물류 TC를 선택하세요</option></select>
             </div>
 
             <div id="deptList" class="dept-list"></div>
@@ -599,10 +490,7 @@
       <button class="nav-btn secondary" id="requestBtn" type="button">수정 요청</button>
     </div>
 
-    <footer class="footer">
-      Costco Item Search HUB · GitHub Pages Version<br />
-      Google Sheets DB 연결형
-    </footer>
+    <footer class="footer">Costco Item Search HUB · GitHub Pages Version<br />Google Sheets DB 연결형</footer>
   </main>
 
   <script>
@@ -613,6 +501,9 @@
     let currentMode = "";
     let currentResult = null;
     let currentDepartments = [];
+    let currentLogistics = [];
+    let selectedStoreIndex = "";
+    let selectedTcIndex = "";
     let lastItemNo = "";
 
     const $ = (id) => document.getElementById(id);
@@ -630,46 +521,35 @@
     const installSection = $("installSection");
     const deptSection = $("deptSection");
     const deptSelect = $("deptSelect");
+    const logisticsSelect = $("logisticsSelect");
     const modeHint = $("modeHint");
+    const lastUpdatedText = $("lastUpdatedText");
+
+    lastUpdatedText.textContent = `최근 업데이트 일: ${formatToday()}`;
 
     productSearchBtn.addEventListener("click", () => searchByMode("product"));
     installSearchBtn.addEventListener("click", () => searchByMode("install"));
     deptBtn.addEventListener("click", showDepartments);
     requestBtn.addEventListener("click", showRequestGuide);
     resetBtn.addEventListener("click", resetView);
-    sampleBtn.addEventListener("click", () => {
-      itemInput.value = "689291";
-      searchByMode("product");
-    });
-    deptSelect.addEventListener("change", () => {
-      renderSelectedDepartment(deptSelect.value);
-    });
+    sampleBtn.addEventListener("click", () => { itemInput.value = "689291"; searchByMode("product"); });
+    deptSelect.addEventListener("change", () => { selectedStoreIndex = deptSelect.value; renderDepartmentResult(); });
+    logisticsSelect.addEventListener("change", () => { selectedTcIndex = logisticsSelect.value; renderDepartmentResult(); });
 
-    itemInput.addEventListener("input", () => {
-      itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6);
-    });
+    itemInput.addEventListener("input", () => { itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6); });
+    itemInput.addEventListener("keydown", (event) => { if (event.key === "Enter") searchByMode(currentMode === "install" ? "install" : "product"); });
 
-    itemInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        searchByMode(currentMode === "install" ? "install" : "product");
-      }
-    });
-
-    function showStatus(message, type = "warn") {
-      statusBox.textContent = message;
-      statusBox.className = `status show ${type}`;
-    }
-
-    function hideStatus() {
-      statusBox.textContent = "";
-      statusBox.className = "status";
-    }
+    function showStatus(message, type = "warn") { statusBox.textContent = message; statusBox.className = `status show ${type}`; }
+    function hideStatus() { statusBox.textContent = ""; statusBox.className = "status"; }
 
     function resetView() {
       itemInput.value = "";
       currentMode = "";
       currentResult = null;
       currentDepartments = [];
+      currentLogistics = [];
+      selectedStoreIndex = "";
+      selectedTcIndex = "";
       lastItemNo = "";
       hideAllSections();
       resultWrap.classList.remove("show");
@@ -704,6 +584,7 @@
         showStatus(mode === "product" ? "상품DB를 조회 중입니다." : "이전설치비용DB를 조회 중입니다.", "warn");
         const data = await fetchApi(`action=search&itemNo=${encodeURIComponent(itemNo)}`);
         currentResult = data || { item: null, costs: [] };
+        updateLastUpdated(data);
 
         renderProduct(currentResult.item, itemNo);
         renderCosts(currentResult.costs || [], currentResult.item, itemNo);
@@ -728,9 +609,7 @@
     function setActiveMode(mode) {
       productSearchBtn.classList.toggle("active", mode === "product");
       installSearchBtn.classList.toggle("active", mode === "install");
-      modeHint.textContent = mode === "product"
-        ? "※ 상품 조회 결과만 표시합니다."
-        : "※ 이전설치비용 조회 결과만 표시합니다.";
+      modeHint.textContent = mode === "product" ? "※ 상품 조회 결과만 표시합니다." : "※ 이전설치비용 조회 결과만 표시합니다.";
     }
 
     async function showDepartments() {
@@ -738,21 +617,23 @@
       currentMode = "department";
       productSearchBtn.classList.remove("active");
       installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 업무지원실 점포를 선택하면 담당자와 연락처가 표시됩니다.";
+      modeHint.textContent = "※ 점포와 물류 TC를 각각 선택해 업무 지원 연락처를 확인합니다.";
 
       try {
         showStatus("업무지원실 정보를 불러오는 중입니다.", "warn");
         const data = await fetchApi("action=departments");
+        updateLastUpdated(data);
         currentDepartments = data.departments || [];
-        renderDepartmentSelector(currentDepartments);
+        currentLogistics = data.logistics || [];
+        renderDepartmentSelectors();
 
         resultWrap.classList.add("show");
         hideAllSections();
         deptSection.classList.add("show");
-        showStatus(currentDepartments.length ? "업무지원실 정보를 불러왔습니다. 점포를 선택해 주세요." : "등록된 업무지원실 정보가 없습니다.", currentDepartments.length ? "success" : "error");
+        showStatus("점포와 물류 TC를 선택해 주세요.", "success");
       } catch (error) {
         console.error(error);
-        showStatus("업무지원실 정보를 불러오지 못했습니다. Apps Script 코드와 부서DB 시트를 확인해 주세요.", "error");
+        showStatus("업무지원실 정보를 불러오지 못했습니다. Apps Script 코드와 부서DB/물류DB 시트를 확인해 주세요.", "error");
       }
     }
 
@@ -764,12 +645,8 @@
       $("deptPill").textContent = "준비중";
       $("deptPill").classList.remove("active");
       deptSelect.innerHTML = `<option value="">수정 요청 기능 준비중</option>`;
-      $("deptList").innerHTML = `
-        <div class="empty-box">
-          수정 요청 기능은 다음 단계에서 연결하면 좋습니다.<br />
-          추천 구조: 구글시트에 <b>수정요청DB</b>를 만들고, 아이템번호·요청내용·요청자·처리상태를 저장하는 방식입니다.
-        </div>
-      `;
+      logisticsSelect.innerHTML = `<option value="">수정 요청 기능 준비중</option>`;
+      $("deptList").innerHTML = `<div class="empty-box">수정 요청 기능은 다음 단계에서 연결하면 좋습니다.<br />추천 구조: 구글시트에 <b>수정요청DB</b>를 만들고, 아이템번호·요청내용·요청자·처리상태를 저장하는 방식입니다.</div>`;
       modeHint.textContent = "※ 상품 정보나 비용 정보가 틀렸을 때 수정 요청을 남기는 기능으로 확장 예정입니다.";
       showStatus("수정 요청 기능은 다음 단계에서 추가 예정입니다.", "warn");
     }
@@ -777,11 +654,7 @@
     async function fetchApi(queryString) {
       const url = `${CONFIG.APPS_SCRIPT_URL}?${queryString}`;
       const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error("API response error");
-      }
-
+      if (!response.ok) throw new Error("API response error");
       return await response.json();
     }
 
@@ -798,6 +671,7 @@
         $("rDelivery").textContent = "-";
         $("categoryPill").textContent = "미등록";
         $("categoryPill").classList.remove("active");
+        setProductNotes(null);
         return;
       }
 
@@ -812,6 +686,7 @@
       $("rDelivery").textContent = safe(item.deliveryAvailableDate);
       $("categoryPill").textContent = safe(item.category, "품목");
       $("categoryPill").classList.add("active");
+      setProductNotes(item);
     }
 
     function renderCosts(costs, item, searchedItemNo) {
@@ -839,115 +714,93 @@
             </div>
             <span class="pill">${escapeHtml(cost.category || item?.category || "-")}</span>
           </div>
-
           <div class="money-grid">
-            <div class="money-box">
-              <div class="money-label">이전설치비용</div>
-              <div class="money-value">${formatMultiline(cost.installCost)}</div>
-            </div>
-            <div class="money-box">
-              <div class="money-label">철거비용</div>
-              <div class="money-value">${formatMultiline(cost.removalCost)}</div>
-            </div>
+            <div class="money-box"><div class="money-label">이전설치비용</div><div class="money-value">${formatMultiline(cost.installCost)}</div></div>
+            <div class="money-box"><div class="money-label">철거비용</div><div class="money-value">${formatMultiline(cost.removalCost)}</div></div>
           </div>
-
           <div class="note-box">${escapeHtml(cost.note || "-")}</div>
         `;
         box.appendChild(div);
       });
     }
 
-    function renderDepartmentSelector(departments) {
-      const box = $("deptList");
-      box.innerHTML = "";
+    function renderDepartmentSelectors() {
       deptSelect.innerHTML = `<option value="">점포를 선택하세요</option>`;
+      logisticsSelect.innerHTML = `<option value="">물류 TC를 선택하세요</option>`;
+      selectedStoreIndex = "";
+      selectedTcIndex = "";
 
-      if (!departments.length) {
-        $("deptPill").textContent = "미등록";
-        $("deptPill").classList.remove("active");
-        box.innerHTML = `<div class="empty-box">부서DB에 등록된 업무지원실 정보가 없습니다.</div>`;
-        return;
-      }
-
-      const uniqueDepartments = departments
-        .map((dept, index) => ({ ...dept, originalIndex: index }))
-        .filter((dept) => safe(dept.store || dept.department, "") !== "");
-
-      uniqueDepartments.forEach((dept) => {
+      currentDepartments.forEach((dept, index) => {
+        if (!safe(dept.store, "")) return;
         const option = document.createElement("option");
-        option.value = String(dept.originalIndex);
-        option.textContent = dept.store || dept.department;
+        option.value = String(index);
+        option.textContent = dept.store;
         deptSelect.appendChild(option);
       });
 
-      $("deptPill").textContent = `${uniqueDepartments.length}개 점포`;
-      $("deptPill").classList.add("active");
-      box.innerHTML = `<div class="empty-box">위 선택란에서 점포를 선택하면 업무지원실 담당자와 연락처가 표시됩니다.</div>`;
+      currentLogistics.forEach((tc, index) => {
+        if (!safe(tc.tcName, "")) return;
+        const option = document.createElement("option");
+        option.value = String(index);
+        option.textContent = tc.tcName;
+        logisticsSelect.appendChild(option);
+      });
+
+      $("deptPill").textContent = `${currentDepartments.length}개 점포 / ${currentLogistics.length}개 TC`;
+      $("deptPill").classList.toggle("active", currentDepartments.length > 0 || currentLogistics.length > 0);
+      renderDepartmentResult();
     }
 
-    function renderSelectedDepartment(selectedIndex) {
+    function renderDepartmentResult() {
       const box = $("deptList");
-      box.innerHTML = "";
+      const dept = selectedStoreIndex !== "" ? currentDepartments[Number(selectedStoreIndex)] : null;
+      const tc = selectedTcIndex !== "" ? currentLogistics[Number(selectedTcIndex)] : null;
 
-      if (selectedIndex === "") {
-        box.innerHTML = `<div class="empty-box">위 선택란에서 점포를 선택하면 업무지원실 담당자와 연락처가 표시됩니다.</div>`;
+      if (!dept && !tc) {
+        box.innerHTML = `<div class="empty-box">점포와 물류 TC를 각각 선택하면 업무지원실, 물류, 삼성 가전/모바일 담당자 연락처가 표시됩니다.</div>`;
         return;
       }
 
-      const dept = currentDepartments[Number(selectedIndex)];
-
-      if (!dept) {
-        box.innerHTML = `<div class="empty-box">선택한 점포 정보를 찾을 수 없습니다.</div>`;
-        return;
-      }
-
-      const storeName = dept.store || dept.department || "선택 점포";
-      const supportPhone = safe(dept.supportPhone || dept.phone, "");
-      const logisticsPhone = safe(dept.logisticsPhone, "");
-      const cePhone = safe(dept.cePhone, "");
-      const mxPhone = safe(dept.mxPhone, "");
+      const storeTitle = dept?.store || "점포 미선택";
+      const tcTitle = tc?.tcName || "물류 TC 미선택";
 
       box.innerHTML = `
         <div class="dept-item">
           <div class="dept-top">
             <div>
-              <div class="dept-name">${escapeHtml(storeName)}</div>
-              <div class="dept-sub">선택 점포별 업무 지원 연락처</div>
+              <div class="dept-name">${escapeHtml(storeTitle)}</div>
+              <div class="dept-sub">물류 TC: ${escapeHtml(tcTitle)}</div>
             </div>
-            <span class="pill">점포</span>
+            <span class="pill">업무지원</span>
           </div>
         </div>
-
         ${makeDeptContactCard({
           title: "업무지원실",
           help: "제품 물류 이관 전/후 배송 확인, 주소 변경, 일정 변경, 재고 문의",
-          manager: dept.supportManager || dept.manager,
-          phone: supportPhone,
-          note: dept.supportNote || dept.note
+          manager: dept?.supportManager,
+          phone: dept?.supportPhone,
+          note: dept?.supportNote
         })}
-
         ${makeDeptContactCard({
           title: "물류 연락처",
           help: "제품 물류 이관 후 배송 확인, 기사 정보, 일정 변경",
-          manager: dept.logisticsManager,
-          phone: logisticsPhone,
-          note: dept.logisticsNote
+          manager: tc?.manager,
+          phone: tc?.phone,
+          note: tc?.note
         })}
-
         ${makeDeptContactCard({
           title: "삼성 가전 담당자",
           help: "제품, VOC 처리 방향, 단순 배송 요청 등",
-          manager: dept.ceManager,
-          phone: cePhone,
-          note: dept.ceNote
+          manager: dept?.ceManager,
+          phone: dept?.cePhone,
+          note: dept?.ceNote
         })}
-
         ${makeDeptContactCard({
           title: "삼성 모바일 담당자",
           help: "제품, VOC 처리 방향, 단순 배송 요청 등",
-          manager: dept.mxManager,
-          phone: mxPhone,
-          note: dept.mxNote
+          manager: dept?.mxManager,
+          phone: dept?.mxPhone,
+          note: dept?.mxNote
         })}
       `;
     }
@@ -955,35 +808,67 @@
     function makeDeptContactCard({ title, help, manager, phone, note }) {
       const cleanPhone = safe(phone, "");
       const telHref = cleanPhone ? `tel:${cleanPhone.replace(/[^0-9+]/g, "")}` : "#";
-
       return `
         <div class="dept-item">
           <div class="dept-top">
-            <div>
-              <div class="dept-title-line">
-                <span class="dept-name">${escapeHtml(title)}</span>
-                <span class="dept-help">(${escapeHtml(help)})</span>
-              </div>
+            <div class="dept-title-line">
+              <span class="dept-name">${escapeHtml(title)}</span>
+              <span class="dept-help">(${escapeHtml(help)})</span>
             </div>
           </div>
           <div class="kv">
-            <div class="kv-row">
-              <div class="key">담당자</div>
-              <div class="value">${escapeHtml(manager || "-")}</div>
-            </div>
-            <div class="kv-row">
-              <div class="key">연락처</div>
-              <div class="value">${escapeHtml(cleanPhone || "-")}</div>
-            </div>
-            ${note ? `
-            <div class="kv-row">
-              <div class="key">비고</div>
-              <div class="value">${escapeHtml(note)}</div>
-            </div>` : ""}
+            <div class="kv-row"><div class="key">담당자</div><div class="value">${escapeHtml(manager || "-")}</div></div>
+            <div class="kv-row"><div class="key">연락처</div><div class="value">${escapeHtml(cleanPhone || "-")}</div></div>
+            ${note ? `<div class="kv-row"><div class="key">비고</div><div class="value">${escapeHtml(note)}</div></div>` : ""}
           </div>
           ${cleanPhone ? `<a class="phone-link" href="${telHref}">전화 연결</a>` : ""}
-        </div>
-      `;
+        </div>`;
+    }
+
+    function updateLastUpdated(data) {
+      const value = data?.updatedAt || data?.lastUpdated || "";
+      lastUpdatedText.textContent = `최근 업데이트 일: ${value ? safe(value) : formatToday()}`;
+    }
+
+    function setProductNotes(item) {
+      const deliveryNote = $("rDeliveryNote");
+      const promoNote = $("rPromoNote");
+      const discountNote = $("rDiscountNote");
+
+      if (!item) {
+        deliveryNote.classList.remove("show");
+        promoNote.classList.remove("show");
+        discountNote.classList.remove("show");
+        return;
+      }
+
+      const deliveryText = safe(item.deliveryAvailableDate, "");
+      const isCarry = deliveryText.includes("핸드캐리") || deliveryText.includes("핸디캐리");
+      deliveryNote.classList.toggle("show", !!deliveryText && !isCarry);
+
+      const showPromoWarning = shouldShowPromoWarning(item.promoStart, item.promoEnd);
+      promoNote.classList.toggle("show", showPromoWarning);
+      discountNote.classList.toggle("show", showPromoWarning && safe(item.discountAmount, "") !== "");
+    }
+
+    function shouldShowPromoWarning(start, end) {
+      const startDate = parseDateText(start);
+      const endDate = parseDateText(end);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (endDate) return endDate.getTime() >= today.getTime();
+      if (startDate) return startDate.getTime() >= today.getTime();
+      return false;
+    }
+
+    function parseDateText(value) {
+      if (!value) return null;
+      const text = String(value).trim();
+      const match = text.match(/(\d{4})[.\-\/\s년]+(\d{1,2})[.\-\/\s월]+(\d{1,2})/);
+      if (!match) return null;
+      const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+      date.setHours(0, 0, 0, 0);
+      return Number.isNaN(date.getTime()) ? null : date;
     }
 
     function formatPromoDate(start, end) {
@@ -1008,6 +893,14 @@
       return escapeHtml(String(value)).replace(/\n/g, "<br>");
     }
 
+    function formatToday() {
+      const today = new Date();
+      const y = today.getFullYear();
+      const m = String(today.getMonth() + 1).padStart(2, "0");
+      const d = String(today.getDate()).padStart(2, "0");
+      return `${y}.${m}.${d}`;
+    }
+
     function safe(value, fallback = "-") {
       if (value === undefined || value === null || String(value).trim() === "") return fallback;
       return String(value).trim();
@@ -1024,9 +917,7 @@
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./sw.js")
-          .catch((error) => console.log("Service Worker registration failed:", error));
+        navigator.serviceWorker.register("./sw.js").catch((error) => console.log("Service Worker registration failed:", error));
       });
     }
   </script>
