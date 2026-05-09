@@ -19,7 +19,7 @@
       --muted: #6b7280;
       --line: #e5e7eb;
       --primary: #111827;
-      --primary2: #0f172a;
+      --primary2: #243044;
       --success: #16a34a;
       --danger: #ef4444;
       --warning: #f59e0b;
@@ -78,9 +78,10 @@
 
     .hero p {
       margin: 10px 0 0;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.82);
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.55;
+      word-break: keep-all;
     }
 
     .card {
@@ -156,7 +157,7 @@
     }
 
     .query-btn.secondary {
-      background: #243044;
+      background: var(--primary2);
     }
 
     .sub-actions {
@@ -181,6 +182,7 @@
       color: var(--muted);
       font-size: 12px;
       line-height: 1.45;
+      word-break: keep-all;
     }
 
     .status {
@@ -193,6 +195,7 @@
       border: 1px solid var(--line);
       background: #fff;
       font-weight: 700;
+      word-break: keep-all;
     }
 
     .status.show { display: block; }
@@ -291,19 +294,19 @@
       letter-spacing: -0.35px;
     }
 
-    .cost-list {
+    .cost-list, .dept-list {
       display: grid;
       gap: 10px;
     }
 
-    .cost-item {
+    .cost-item, .dept-item {
       border: 1px solid var(--line);
       border-radius: 18px;
       padding: 14px;
       background: #fff;
     }
 
-    .cost-top {
+    .cost-top, .dept-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -311,18 +314,19 @@
       margin-bottom: 10px;
     }
 
-    .cost-name {
+    .cost-name, .dept-name {
       font-size: 17px;
       font-weight: 950;
       line-height: 1.35;
       letter-spacing: -0.25px;
     }
 
-    .cost-sub {
+    .cost-sub, .dept-sub {
       margin-top: 4px;
       color: var(--muted);
       font-size: 13px;
       font-weight: 750;
+      line-height: 1.45;
     }
 
     .money-grid {
@@ -363,6 +367,7 @@
       line-height: 1.5;
       font-weight: 800;
       color: #374151;
+      word-break: keep-all;
     }
 
     .empty-box {
@@ -374,6 +379,21 @@
       font-size: 14px;
       font-weight: 800;
       line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    .phone-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #111827;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 950;
     }
 
     .bottom-nav {
@@ -397,6 +417,10 @@
       box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
     }
 
+    .nav-btn.secondary {
+      background: #243044;
+    }
+
     .footer {
       margin-top: 18px;
       text-align: center;
@@ -418,7 +442,7 @@
     <section class="hero">
       <div class="hero-badge">Costco Item Search</div>
       <h1>코스트코<br />아이템 조회 HUB</h1>
-      <p>아이템번호 6자리를 입력하고, 원하는 조회 버튼을 눌러 상품DB 또는 이전설치비용DB를 따로 확인합니다.</p>
+      <p>아이템번호 6자리를 입력하고, 원하는 조회 버튼을 눌러 행사 및 배송 일정 또는 이전설치비용을 확인하실 수 있습니다.</p>
     </section>
 
     <section class="card search-card">
@@ -435,7 +459,7 @@
         <button class="ghost-btn" id="sampleBtn" type="button">샘플번호</button>
       </div>
 
-      <p id="modeHint" class="hint">※ 원하는 조회 버튼을 눌러 상품DB와 이전설치비용DB를 따로 확인하세요.</p>
+      <p id="modeHint" class="hint">※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.</p>
     </section>
 
     <div id="status" class="status"></div>
@@ -503,11 +527,23 @@
           </div>
         </article>
       </div>
+
+      <div id="deptSection" class="result-section">
+        <article class="card">
+          <div class="card-inner">
+            <div class="card-title">
+              <h2>업무 지원 부서</h2>
+              <span id="deptPill" class="pill">부서</span>
+            </div>
+            <div id="deptList" class="dept-list"></div>
+          </div>
+        </article>
+      </div>
     </section>
 
     <div class="bottom-nav">
-      <button class="nav-btn" id="copyBtn" type="button">결과 복사</button>
-      <button class="nav-btn" id="shareBtn" type="button">공유</button>
+      <button class="nav-btn" id="deptBtn" type="button">업무 지원 부서</button>
+      <button class="nav-btn secondary" id="requestBtn" type="button">수정 요청</button>
     </div>
 
     <footer class="footer">
@@ -523,6 +559,7 @@
 
     let currentMode = "";
     let currentResult = null;
+    let currentDepartments = [];
     let lastItemNo = "";
 
     const $ = (id) => document.getElementById(id);
@@ -532,21 +569,24 @@
     const installSearchBtn = $("installSearchBtn");
     const resetBtn = $("resetBtn");
     const sampleBtn = $("sampleBtn");
+    const deptBtn = $("deptBtn");
+    const requestBtn = $("requestBtn");
     const statusBox = $("status");
     const resultWrap = $("resultWrap");
     const productSection = $("productSection");
     const installSection = $("installSection");
+    const deptSection = $("deptSection");
     const modeHint = $("modeHint");
 
     productSearchBtn.addEventListener("click", () => searchByMode("product"));
     installSearchBtn.addEventListener("click", () => searchByMode("install"));
+    deptBtn.addEventListener("click", showDepartments);
+    requestBtn.addEventListener("click", showRequestGuide);
     resetBtn.addEventListener("click", resetView);
     sampleBtn.addEventListener("click", () => {
       itemInput.value = "689291";
       searchByMode("product");
     });
-    $("copyBtn").addEventListener("click", copyResult);
-    $("shareBtn").addEventListener("click", shareResult);
 
     itemInput.addEventListener("input", () => {
       itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6);
@@ -554,7 +594,7 @@
 
     itemInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
-        searchByMode(currentMode || "product");
+        searchByMode(currentMode === "install" ? "install" : "product");
       }
     });
 
@@ -572,15 +612,21 @@
       itemInput.value = "";
       currentMode = "";
       currentResult = null;
+      currentDepartments = [];
       lastItemNo = "";
-      productSection.classList.remove("show");
-      installSection.classList.remove("show");
+      hideAllSections();
       resultWrap.classList.remove("show");
       productSearchBtn.classList.remove("active");
       installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 원하는 조회 버튼을 눌러 상품DB와 이전설치비용DB를 따로 확인하세요.";
+      modeHint.textContent = "※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.";
       hideStatus();
       itemInput.focus();
+    }
+
+    function hideAllSections() {
+      productSection.classList.remove("show");
+      installSection.classList.remove("show");
+      deptSection.classList.remove("show");
     }
 
     async function searchByMode(mode) {
@@ -599,20 +645,19 @@
 
       try {
         showStatus(mode === "product" ? "상품DB를 조회 중입니다." : "이전설치비용DB를 조회 중입니다.", "warn");
-        const data = await fetchItem(itemNo);
+        const data = await fetchApi(`action=search&itemNo=${encodeURIComponent(itemNo)}`);
         currentResult = data || { item: null, costs: [] };
 
         renderProduct(currentResult.item, itemNo);
         renderCosts(currentResult.costs || [], currentResult.item, itemNo);
 
         resultWrap.classList.add("show");
+        hideAllSections();
 
         if (mode === "product") {
           productSection.classList.add("show");
-          installSection.classList.remove("show");
           showStatus(currentResult.item ? "상품DB 조회가 완료되었습니다." : "상품DB에 등록된 상품 정보가 없습니다.", currentResult.item ? "success" : "error");
         } else {
-          productSection.classList.remove("show");
           installSection.classList.add("show");
           showStatus((currentResult.costs || []).length ? "이전설치비용DB 조회가 완료되었습니다." : "이전설치비용DB에 등록된 비용 정보가 없습니다.", (currentResult.costs || []).length ? "success" : "error");
         }
@@ -627,12 +672,52 @@
       productSearchBtn.classList.toggle("active", mode === "product");
       installSearchBtn.classList.toggle("active", mode === "install");
       modeHint.textContent = mode === "product"
-        ? "※ 상품DB 조회 결과만 표시합니다."
-        : "※ 이전설치비용DB 조회 결과만 표시합니다.";
+        ? "※ 상품 조회 결과만 표시합니다."
+        : "※ 이전설치비용 조회 결과만 표시합니다.";
     }
 
-    async function fetchItem(itemNo) {
-      const url = `${CONFIG.APPS_SCRIPT_URL}?action=search&itemNo=${encodeURIComponent(itemNo)}`;
+    async function showDepartments() {
+      hideStatus();
+      currentMode = "department";
+      productSearchBtn.classList.remove("active");
+      installSearchBtn.classList.remove("active");
+      modeHint.textContent = "※ 업무 지원 부서 연락처를 확인합니다.";
+
+      try {
+        showStatus("업무 지원 부서를 불러오는 중입니다.", "warn");
+        const data = await fetchApi("action=departments");
+        currentDepartments = data.departments || [];
+        renderDepartments(currentDepartments);
+
+        resultWrap.classList.add("show");
+        hideAllSections();
+        deptSection.classList.add("show");
+        showStatus(currentDepartments.length ? "업무 지원 부서 조회가 완료되었습니다." : "등록된 업무 지원 부서가 없습니다.", currentDepartments.length ? "success" : "error");
+      } catch (error) {
+        console.error(error);
+        showStatus("부서DB를 불러오지 못했습니다. Apps Script 코드에 departments 기능을 추가해야 합니다.", "error");
+      }
+    }
+
+    function showRequestGuide() {
+      currentMode = "request";
+      resultWrap.classList.add("show");
+      hideAllSections();
+      deptSection.classList.add("show");
+      $("deptPill").textContent = "준비중";
+      $("deptPill").classList.remove("active");
+      $("deptList").innerHTML = `
+        <div class="empty-box">
+          수정 요청 기능은 다음 단계에서 연결하면 좋습니다.<br />
+          추천 구조: 구글시트에 <b>수정요청DB</b>를 만들고, 아이템번호·요청내용·요청자·처리상태를 저장하는 방식입니다.
+        </div>
+      `;
+      modeHint.textContent = "※ 상품 정보나 비용 정보가 틀렸을 때 수정 요청을 남기는 기능으로 확장 예정입니다.";
+      showStatus("수정 요청 기능은 다음 단계에서 추가 예정입니다.", "warn");
+    }
+
+    async function fetchApi(queryString) {
+      const url = `${CONFIG.APPS_SCRIPT_URL}?${queryString}`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -714,6 +799,50 @@
       });
     }
 
+    function renderDepartments(departments) {
+      const box = $("deptList");
+      box.innerHTML = "";
+
+      if (!departments.length) {
+        $("deptPill").textContent = "미등록";
+        $("deptPill").classList.remove("active");
+        box.innerHTML = `<div class="empty-box">부서DB에 등록된 업무 지원 부서가 없습니다.</div>`;
+        return;
+      }
+
+      $("deptPill").textContent = `${departments.length}건`;
+      $("deptPill").classList.add("active");
+
+      departments.forEach((dept) => {
+        const phone = safe(dept.phone, "");
+        const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, "")}` : "#";
+        const div = document.createElement("div");
+        div.className = "dept-item";
+        div.innerHTML = `
+          <div class="dept-top">
+            <div>
+              <div class="dept-name">${escapeHtml(dept.department || "업무 지원 부서")}</div>
+              <div class="dept-sub">${escapeHtml(dept.work || "-")}</div>
+            </div>
+            <span class="pill">${escapeHtml(dept.type || "공통")}</span>
+          </div>
+          <div class="kv">
+            <div class="kv-row">
+              <div class="key">담당자</div>
+              <div class="value">${escapeHtml(dept.manager || "-")}</div>
+            </div>
+            <div class="kv-row">
+              <div class="key">연락처</div>
+              <div class="value">${escapeHtml(phone || "-")}</div>
+            </div>
+          </div>
+          ${dept.note ? `<div class="note-box">${escapeHtml(dept.note)}</div>` : ""}
+          ${phone ? `<a class="phone-link" href="${telHref}">전화 연결</a>` : ""}
+        `;
+        box.appendChild(div);
+      });
+    }
+
     function formatPromoDate(start, end) {
       const s = safe(start);
       const e = safe(end);
@@ -741,73 +870,6 @@
       return String(value).trim();
     }
 
-    async function copyResult() {
-      if (!currentResult) {
-        showStatus("복사할 조회 결과가 없습니다.", "error");
-        return;
-      }
-
-      const text = makeResultText(currentResult.item, currentResult.costs || []);
-
-      try {
-        await navigator.clipboard.writeText(text);
-        showStatus("조회 결과가 복사되었습니다.", "success");
-      } catch {
-        showStatus("복사 기능을 사용할 수 없습니다. 브라우저 권한을 확인해 주세요.", "error");
-      }
-    }
-
-    async function shareResult() {
-      if (!currentResult) {
-        showStatus("공유할 조회 결과가 없습니다.", "error");
-        return;
-      }
-
-      const text = makeResultText(currentResult.item, currentResult.costs || []);
-
-      if (navigator.share) {
-        try {
-          await navigator.share({ title: "코스트코 아이템 조회", text });
-          showStatus("공유가 완료되었습니다.", "success");
-        } catch {
-          showStatus("공유가 취소되었습니다.", "warn");
-        }
-      } else {
-        try {
-          await navigator.clipboard.writeText(text);
-          showStatus("공유 기능이 없어 결과를 복사했습니다.", "success");
-        } catch {
-          showStatus("현재 브라우저에서는 공유 기능을 사용할 수 없습니다.", "error");
-        }
-      }
-    }
-
-    function makeResultText(item, costs) {
-      if (currentMode === "product") {
-        if (!item) return `[상품DB]\n${lastItemNo || "-"} 등록된 상품 정보 없음`;
-        return `[상품DB]\n` +
-          `아이템번호: ${safe(item.itemNo)}\n` +
-          `모델명: ${safe(item.modelName)}\n` +
-          `품목: ${safe(item.category)}\n` +
-          `상품명: ${safe(item.productName)}\n` +
-          `브랜드: ${safe(item.brand)}\n` +
-          `판매가격: ${formatMoney(item.price)}\n` +
-          `행사 일정: ${formatPromoDate(item.promoStart, item.promoEnd)}\n` +
-          `할인금액: ${formatMoney(item.discountAmount)}\n` +
-          `배송 가능: ${safe(item.deliveryAvailableDate)}`;
-      }
-
-      if (!costs.length) return `[이전설치비용DB]\n${lastItemNo || "-"} 등록된 비용 정보 없음`;
-      return `[이전설치비용DB]\n` + costs.map((c, idx) => {
-        return `${idx + 1}) ${safe(c.productName || c.modelName)}\n` +
-          `모델명: ${safe(c.modelName)}\n` +
-          `품목: ${safe(c.category)}\n` +
-          `이전설치비용: ${safe(c.installCost)}\n` +
-          `철거비용: ${safe(c.removalCost)}\n` +
-          `비고: ${safe(c.note)}`;
-      }).join("\n\n");
-    }
-
     function escapeHtml(value) {
       return String(value ?? "")
         .replace(/&/g, "&amp;")
@@ -816,7 +878,6 @@
         .replace(/\"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
-  
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
