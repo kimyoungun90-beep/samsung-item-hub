@@ -373,6 +373,59 @@
 
     .nav-btn.secondary { background: #243044; }
 
+    .process-page {
+      display: none;
+    }
+
+    .process-page.show {
+      display: block;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .process-btn {
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #f9fafb;
+      color: #111827;
+      font-size: 17px;
+      font-weight: 950;
+      box-shadow: none;
+    }
+
+    .process-btn.primary {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
+    .back-btn {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 18px;
+      background: #243044;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .process-description {
+      margin-top: 10px;
+      color: #6b7280;
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
     .footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; line-height: 1.5; }
 
     @media (max-width: 390px) {
@@ -385,13 +438,13 @@
 </head>
 <body>
   <main class="app">
-    <section class="hero">
+    <section id="heroSection" class="hero">
       <div class="hero-badge">Costco Item Search</div>
       <h1>코스트코<br />아이템 조회 HUB</h1>
       <p>아이템번호 6자리를 입력하고, 원하는 조회 버튼을 눌러 행사 및 배송 일정 또는 이전설치비용을 확인하실 수 있습니다.</p>
     </section>
 
-    <section class="card search-card">
+    <section id="searchSection" class="card search-card">
       <div class="label-line">
         <label class="label" for="itemInput">아이템번호</label>
         <span id="lastUpdatedText" class="update-date">최근 업데이트 일: -</span>
@@ -485,7 +538,30 @@
       </div>
     </section>
 
-    <div class="bottom-nav">
+    <section id="processPage" class="process-page">
+      <article class="card">
+        <div class="card-inner">
+          <div class="card-title">
+            <h2>삼성전자 프로세스</h2>
+            <span class="pill active">수정 요청</span>
+          </div>
+          <div class="empty-box">
+            문의 유형을 선택해 주세요. 선택한 유형별로 필요한 확인사항과 접수 양식을 단계별로 연결할 예정입니다.
+          </div>
+          <div class="process-grid">
+            <button class="process-btn primary" type="button" data-process="서비스">서비스</button>
+            <button class="process-btn" type="button" data-process="배송">배송</button>
+            <button class="process-btn" type="button" data-process="물류">물류</button>
+            <button class="process-btn" type="button" data-process="제품">제품</button>
+            <button class="process-btn" type="button" data-process="기타">기타</button>
+          </div>
+          <div id="processGuide" class="note-box">서비스, 배송, 물류, 제품, 기타 중 하나를 선택하면 해당 프로세스 화면으로 확장할 수 있습니다.</div>
+          <button id="backHomeBtn" class="back-btn" type="button">이전 화면으로 돌아가기</button>
+        </div>
+      </article>
+    </section>
+
+    <div id="bottomNav" class="bottom-nav">
       <button class="nav-btn" id="deptBtn" type="button">업무 지원 부서</button>
       <button class="nav-btn secondary" id="requestBtn" type="button">수정 요청</button>
     </div>
@@ -508,6 +584,10 @@
 
     const $ = (id) => document.getElementById(id);
 
+    const heroSection = $("heroSection");
+    const searchSection = $("searchSection");
+    const processPage = $("processPage");
+    const bottomNav = $("bottomNav");
     const itemInput = $("itemInput");
     const productSearchBtn = $("productSearchBtn");
     const installSearchBtn = $("installSearchBtn");
@@ -523,6 +603,8 @@
     const deptSelect = $("deptSelect");
     const logisticsSelect = $("logisticsSelect");
     const modeHint = $("modeHint");
+    const backHomeBtn = $("backHomeBtn");
+    const processGuide = $("processGuide");
     const lastUpdatedText = $("lastUpdatedText");
 
     lastUpdatedText.textContent = "최근 업데이트 일: 불러오는 중";
@@ -531,7 +613,11 @@
     productSearchBtn.addEventListener("click", () => searchByMode("product"));
     installSearchBtn.addEventListener("click", () => searchByMode("install"));
     deptBtn.addEventListener("click", showDepartments);
-    requestBtn.addEventListener("click", showRequestGuide);
+    requestBtn.addEventListener("click", openProcessPage);
+    backHomeBtn.addEventListener("click", closeProcessPage);
+    document.querySelectorAll(".process-btn").forEach((button) => {
+      button.addEventListener("click", () => selectProcess(button.dataset.process));
+    });
     resetBtn.addEventListener("click", resetView);
     sampleBtn.addEventListener("click", () => { itemInput.value = "689291"; searchByMode("product"); });
     deptSelect.addEventListener("change", () => { selectedStoreIndex = deptSelect.value; renderDepartmentResult(); });
@@ -638,27 +724,41 @@
       }
     }
 
-    function showRequestGuide() {
-      currentMode = "request";
-      resultWrap.classList.add("show");
-      hideAllSections();
-      deptSection.classList.add("show");
-      $("deptPill").textContent = "준비중";
-      $("deptPill").classList.remove("active");
-      deptSelect.innerHTML = `<option value="">수정 요청 기능 준비중</option>`;
-      logisticsSelect.innerHTML = `<option value="">수정 요청 기능 준비중</option>`;
-      $("deptList").innerHTML = `<div class="empty-box">수정 요청 기능은 다음 단계에서 연결하면 좋습니다.<br />추천 구조: 구글시트에 <b>수정요청DB</b>를 만들고, 아이템번호·요청내용·요청자·처리상태를 저장하는 방식입니다.</div>`;
-      modeHint.textContent = "※ 상품 정보나 비용 정보가 틀렸을 때 수정 요청을 남기는 기능으로 확장 예정입니다.";
-      showStatus("수정 요청 기능은 다음 단계에서 추가 예정입니다.", "warn");
+    function openProcessPage() {
+      currentMode = "process";
+      hideStatus();
+      heroSection.style.display = "none";
+      searchSection.style.display = "none";
+      resultWrap.classList.remove("show");
+      bottomNav.style.display = "none";
+      processPage.classList.add("show");
+      processGuide.textContent = "서비스, 배송, 물류, 제품, 기타 중 하나를 선택하면 해당 프로세스 화면으로 확장할 수 있습니다.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    async function loadInitialUpdatedAt() {
-      try {
-        const data = await fetchApi("action=config");
-        updateLastUpdated(data);
-      } catch (error) {
-        lastUpdatedText.textContent = `최근 업데이트 일: ${formatToday()}`;
-      }
+    function closeProcessPage() {
+      processPage.classList.remove("show");
+      heroSection.style.display = "block";
+      searchSection.style.display = "block";
+      bottomNav.style.display = "grid";
+      modeHint.textContent = "※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function selectProcess(type) {
+      document.querySelectorAll(".process-btn").forEach((button) => {
+        button.classList.toggle("primary", button.dataset.process === type);
+      });
+
+      const guideMap = {
+        서비스: "서비스 프로세스: AS 접수, 기사 방문, 서비스 진행 상태, 서비스 VOC 처리 기준을 연결하면 좋습니다.",
+        배송: "배송 프로세스: 배송 가능일, 배송 일정 변경, 주소 변경, 회원 안내 기준을 연결하면 좋습니다.",
+        물류: "물류 프로세스: 물류 이관 후 배송 확인, 기사 정보, TC별 연락처, 일정 변경 기준을 연결하면 좋습니다.",
+        제품: "제품 프로세스: 모델 스펙, 행사 적용 여부, 대체 모델, 재고/입고 문의 기준을 연결하면 좋습니다.",
+        기타: "기타 프로세스: 위 항목에 포함되지 않는 예외 문의나 현장 요청사항 접수로 연결하면 좋습니다."
+      };
+
+      processGuide.textContent = guideMap[type] || "프로세스 유형을 선택해 주세요.";
     }
 
     async function fetchApi(queryString) {
