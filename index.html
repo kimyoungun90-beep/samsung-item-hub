@@ -44,6 +44,9 @@
       padding: 18px 14px 30px;
     }
 
+    .main-page.show, .process-page.show { display: block; }
+    .main-page, .process-page { display: none; }
+
     .hero {
       background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #334155 100%);
       color: #fff;
@@ -57,9 +60,9 @@
       display: inline-flex;
       padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255,255,255,0.12);
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255,255,255,0.88);
       margin-bottom: 14px;
       font-weight: 700;
     }
@@ -73,7 +76,7 @@
 
     .hero p {
       margin: 10px 0 0;
-      color: rgba(255, 255, 255, 0.82);
+      color: rgba(255,255,255,0.82);
       font-size: 14px;
       line-height: 1.55;
       word-break: keep-all;
@@ -160,7 +163,7 @@
     .query-btn.secondary { background: var(--primary2); }
     .query-btn.active { outline: 3px solid rgba(22, 163, 74, 0.22); }
 
-    .sub-actions {
+    .sub-actions, .bottom-nav {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
@@ -353,9 +356,6 @@
     .bottom-nav {
       position: sticky;
       bottom: 12px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
       margin-top: 14px;
       z-index: 10;
     }
@@ -373,14 +373,6 @@
 
     .nav-btn.secondary { background: #243044; }
 
-    .process-page {
-      display: none;
-    }
-
-    .process-page.show {
-      display: block;
-    }
-
     .process-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -396,10 +388,9 @@
       color: #111827;
       font-size: 17px;
       font-weight: 950;
-      box-shadow: none;
     }
 
-    .process-btn.primary {
+    .process-btn.active {
       background: #111827;
       color: #fff;
       border-color: #111827;
@@ -417,20 +408,11 @@
       font-weight: 950;
     }
 
-    .process-description {
-      margin-top: 10px;
-      color: #6b7280;
-      font-size: 13px;
-      font-weight: 750;
-      line-height: 1.5;
-      word-break: keep-all;
-    }
-
     .footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; line-height: 1.5; }
 
     @media (max-width: 390px) {
       .hero h1 { font-size: 23px; }
-      .query-buttons { grid-template-columns: 1fr; }
+      .query-buttons, .process-grid { grid-template-columns: 1fr; }
       .kv-row { grid-template-columns: 94px 1fr; }
       .money-grid { grid-template-columns: 1fr; }
     }
@@ -438,135 +420,140 @@
 </head>
 <body>
   <main class="app">
-    <section id="heroSection" class="hero">
-      <div class="hero-badge">Costco Item Search</div>
-      <h1>코스트코<br />아이템 조회 HUB</h1>
-      <p>아이템번호 6자리를 입력하고, 원하는 조회 버튼을 눌러 행사 및 배송 일정 또는 이전설치비용을 확인하실 수 있습니다.</p>
-    </section>
+    <section id="mainPage" class="main-page show">
+      <section class="hero">
+        <div class="hero-badge">Costco Item Search</div>
+        <h1>코스트코<br />아이템 조회 HUB</h1>
+        <p>아이템번호 6자리를 입력하고, 원하는 조회 버튼을 눌러 행사 및 배송 일정 또는 이전설치비용을 확인하실 수 있습니다.</p>
+      </section>
 
-    <section id="searchSection" class="card search-card">
-      <div class="label-line">
-        <label class="label" for="itemInput">아이템번호</label>
-        <span id="lastUpdatedText" class="update-date">최근 업데이트 일: -</span>
-      </div>
-      <input id="itemInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="예: 689291" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" data-form-type="other" />
+      <section class="card search-card">
+        <div class="label-line">
+          <label class="label" for="itemInput">아이템번호</label>
+          <span id="lastUpdatedText" class="update-date">최근 업데이트 일: 불러오는 중</span>
+        </div>
+        <input id="itemInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="예: 689291" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" data-form-type="other" />
 
-      <div class="query-buttons">
-        <button id="productSearchBtn" class="query-btn" type="button">아이템번호<br />상품 조회</button>
-        <button id="installSearchBtn" class="query-btn secondary" type="button">이전설치비용<br />조회</button>
-      </div>
+        <div class="query-buttons">
+          <button id="productSearchBtn" class="query-btn" type="button">아이템번호<br />상품 조회</button>
+          <button id="installSearchBtn" class="query-btn secondary" type="button">이전설치비용<br />조회</button>
+        </div>
 
-      <div class="sub-actions">
-        <button class="ghost-btn" id="resetBtn" type="button">초기화</button>
-        <button class="ghost-btn" id="sampleBtn" type="button">샘플번호</button>
-      </div>
+        <div class="sub-actions">
+          <button class="ghost-btn" id="resetBtn" type="button">초기화</button>
+          <button class="ghost-btn" id="sampleBtn" type="button">샘플번호</button>
+        </div>
 
-      <p id="modeHint" class="hint">※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.</p>
-    </section>
+        <p id="modeHint" class="hint">※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.</p>
+      </section>
 
-    <div id="status" class="status"></div>
+      <div id="status" class="status"></div>
 
-    <section id="resultWrap" class="result-wrap">
-      <div id="productSection" class="result-section">
-        <article class="card">
-          <div class="card-inner">
-            <div class="card-title">
-              <h2>상품DB 조회 결과</h2>
-              <span id="categoryPill" class="pill">품목</span>
-            </div>
+      <section id="resultWrap" class="result-wrap">
+        <div id="productSection" class="result-section">
+          <article class="card">
+            <div class="card-inner">
+              <div class="card-title">
+                <h2>상품DB 조회 결과</h2>
+                <span id="categoryPill" class="pill">품목</span>
+              </div>
 
-            <div class="kv">
-              <div class="kv-row"><div class="key">아이템번호</div><div id="rItemNo" class="value big-value">-</div></div>
-              <div class="kv-row"><div class="key">모델명</div><div id="rModel" class="value">-</div></div>
-              <div class="kv-row"><div class="key">품목</div><div id="rCategory" class="value">-</div></div>
-              <div class="kv-row"><div class="key">상품명</div><div id="rProduct" class="value">-</div></div>
-              <div class="kv-row"><div class="key">브랜드</div><div id="rBrand" class="value">-</div></div>
-              <div class="kv-row"><div class="key">판매가격</div><div id="rPrice" class="value big-value">-</div></div>
-              <div class="kv-row">
-                <div class="key">행사 일정</div>
-                <div class="value">
-                  <div id="rPromoDate">-</div>
-                  <div id="rPromoNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
+              <div class="kv">
+                <div class="kv-row"><div class="key">아이템번호</div><div id="rItemNo" class="value big-value">-</div></div>
+                <div class="kv-row"><div class="key">모델명</div><div id="rModel" class="value">-</div></div>
+                <div class="kv-row"><div class="key">품목</div><div id="rCategory" class="value">-</div></div>
+                <div class="kv-row"><div class="key">상품명</div><div id="rProduct" class="value">-</div></div>
+                <div class="kv-row"><div class="key">브랜드</div><div id="rBrand" class="value">-</div></div>
+                <div class="kv-row"><div class="key">판매가격</div><div id="rPrice" class="value big-value">-</div></div>
+                <div class="kv-row">
+                  <div class="key">행사 일정</div>
+                  <div class="value">
+                    <div id="rPromoDate">-</div>
+                    <div id="rPromoNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
+                  </div>
+                </div>
+                <div class="kv-row">
+                  <div class="key">할인금액</div>
+                  <div class="value">
+                    <div id="rDiscount" class="big-value">-</div>
+                    <div id="rDiscountNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
+                  </div>
+                </div>
+                <div class="kv-row">
+                  <div class="key">배송 가능</div>
+                  <div class="value">
+                    <div id="rDelivery">-</div>
+                    <div id="rDeliveryNote" class="field-note">배송 가능 일자는 참조용입니다. 회원 응대 시 2주 안내는 필히 해주세요.</div>
+                  </div>
                 </div>
               </div>
-              <div class="kv-row">
-                <div class="key">할인금액</div>
-                <div class="value">
-                  <div id="rDiscount" class="big-value">-</div>
-                  <div id="rDiscountNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
-                </div>
+            </div>
+          </article>
+        </div>
+
+        <div id="installSection" class="result-section">
+          <article class="card">
+            <div class="card-inner">
+              <div class="card-title"><h2>이전설치비용DB 조회 결과</h2><span id="costPill" class="pill">비용</span></div>
+              <div id="costList" class="cost-list"></div>
+            </div>
+          </article>
+        </div>
+
+        <div id="deptSection" class="result-section">
+          <article class="card">
+            <div class="card-inner">
+              <div class="card-title"><h2>해당 부서 연락처</h2><span id="deptPill" class="pill">선택</span></div>
+
+              <div class="selector-box">
+                <label class="selector-label" for="deptSelect">업무지원실, 담당자 연락처(점포별 상이)</label>
+                <select id="deptSelect"><option value="">점포를 선택하세요</option></select>
               </div>
-              <div class="kv-row">
-                <div class="key">배송 가능</div>
-                <div class="value">
-                  <div id="rDelivery">-</div>
-                  <div id="rDeliveryNote" class="field-note">배송 가능 일자는 참조용입니다. 회원 응대 시 2주 안내는 필히 해주세요.</div>
-                </div>
+
+              <div class="selector-box">
+                <label class="selector-label" for="logisticsSelect">회원 배송 지역 선택</label>
+                <select id="logisticsSelect"><option value="">지역을 선택하세요</option></select>
               </div>
+
+              <div id="deptList" class="dept-list"></div>
             </div>
-          </div>
-        </article>
+          </article>
+        </div>
+      </section>
+
+      <div class="bottom-nav">
+        <button class="nav-btn" id="deptBtn" type="button">업무 지원 부서</button>
+        <button class="nav-btn secondary" id="processBtn" type="button">삼성 프로세스</button>
       </div>
 
-      <div id="installSection" class="result-section">
-        <article class="card">
-          <div class="card-inner">
-            <div class="card-title"><h2>이전설치비용DB 조회 결과</h2><span id="costPill" class="pill">비용</span></div>
-            <div id="costList" class="cost-list"></div>
-          </div>
-        </article>
-      </div>
-
-      <div id="deptSection" class="result-section">
-        <article class="card">
-          <div class="card-inner">
-            <div class="card-title"><h2>해당 부서 연락처</h2><span id="deptPill" class="pill">선택</span></div>
-
-            <div class="selector-box">
-              <label class="selector-label" for="deptSelect">업무지원실, 담당자 연락처(점포별 상이)</label>
-              <select id="deptSelect"><option value="">점포를 선택하세요</option></select>
-            </div>
-
-            <div class="selector-box">
-              <label class="selector-label" for="logisticsSelect">회원 배송 지역 선택</label>
-              <select id="logisticsSelect"><option value="">지역을 선택하세요</option></select>
-            </div>
-
-            <div id="deptList" class="dept-list"></div>
-          </div>
-        </article>
-      </div>
+      <footer class="footer">Costco Item Search HUB · GitHub Pages Version<br />Google Sheets DB 연결형</footer>
     </section>
 
     <section id="processPage" class="process-page">
+      <section class="hero">
+        <div class="hero-badge">Samsung Process</div>
+        <h1>삼성전자<br />프로세스</h1>
+        <p>문의 유형을 선택하면 서비스, 배송, 물류, 제품, 기타 프로세스별 확인사항을 정리할 수 있습니다.</p>
+      </section>
+
       <article class="card">
         <div class="card-inner">
           <div class="card-title">
-            <h2>삼성전자 프로세스</h2>
-            <span class="pill active">수정 요청</span>
-          </div>
-          <div class="empty-box">
-            문의 유형을 선택해 주세요. 선택한 유형별로 필요한 확인사항과 접수 양식을 단계별로 연결할 예정입니다.
+            <h2>프로세스 선택</h2>
+            <span class="pill active">5개 유형</span>
           </div>
           <div class="process-grid">
-            <button class="process-btn primary" type="button" data-process="서비스">서비스</button>
+            <button class="process-btn active" type="button" data-process="서비스">서비스</button>
             <button class="process-btn" type="button" data-process="배송">배송</button>
             <button class="process-btn" type="button" data-process="물류">물류</button>
             <button class="process-btn" type="button" data-process="제품">제품</button>
             <button class="process-btn" type="button" data-process="기타">기타</button>
           </div>
-          <div id="processGuide" class="note-box">서비스, 배송, 물류, 제품, 기타 중 하나를 선택하면 해당 프로세스 화면으로 확장할 수 있습니다.</div>
+          <div id="processGuide" class="note-box">서비스 프로세스: AS 접수, 기사 방문, 서비스 진행 상태, 서비스 VOC 처리 기준을 연결하면 좋습니다.</div>
           <button id="backHomeBtn" class="back-btn" type="button">이전 화면으로 돌아가기</button>
         </div>
       </article>
     </section>
-
-    <div id="bottomNav" class="bottom-nav">
-      <button class="nav-btn" id="deptBtn" type="button">업무 지원 부서</button>
-      <button class="nav-btn secondary" id="requestBtn" type="button">수정 요청</button>
-    </div>
-
-    <footer class="footer">Costco Item Search HUB · GitHub Pages Version<br />Google Sheets DB 연결형</footer>
   </main>
 
   <script>
@@ -584,17 +571,16 @@
 
     const $ = (id) => document.getElementById(id);
 
-    const heroSection = $("heroSection");
-    const searchSection = $("searchSection");
+    const mainPage = $("mainPage");
     const processPage = $("processPage");
-    const bottomNav = $("bottomNav");
     const itemInput = $("itemInput");
     const productSearchBtn = $("productSearchBtn");
     const installSearchBtn = $("installSearchBtn");
     const resetBtn = $("resetBtn");
     const sampleBtn = $("sampleBtn");
     const deptBtn = $("deptBtn");
-    const requestBtn = $("requestBtn");
+    const processBtn = $("processBtn");
+    const backHomeBtn = $("backHomeBtn");
     const statusBox = $("status");
     const resultWrap = $("resultWrap");
     const productSection = $("productSection");
@@ -603,25 +589,24 @@
     const deptSelect = $("deptSelect");
     const logisticsSelect = $("logisticsSelect");
     const modeHint = $("modeHint");
-    const backHomeBtn = $("backHomeBtn");
-    const processGuide = $("processGuide");
     const lastUpdatedText = $("lastUpdatedText");
+    const processGuide = $("processGuide");
 
-    lastUpdatedText.textContent = "최근 업데이트 일: 불러오는 중";
     loadInitialUpdatedAt();
 
     productSearchBtn.addEventListener("click", () => searchByMode("product"));
     installSearchBtn.addEventListener("click", () => searchByMode("install"));
     deptBtn.addEventListener("click", showDepartments);
-    requestBtn.addEventListener("click", openProcessPage);
+    processBtn.addEventListener("click", openProcessPage);
     backHomeBtn.addEventListener("click", closeProcessPage);
-    document.querySelectorAll(".process-btn").forEach((button) => {
-      button.addEventListener("click", () => selectProcess(button.dataset.process));
-    });
     resetBtn.addEventListener("click", resetView);
     sampleBtn.addEventListener("click", () => { itemInput.value = "689291"; searchByMode("product"); });
     deptSelect.addEventListener("change", () => { selectedStoreIndex = deptSelect.value; renderDepartmentResult(); });
     logisticsSelect.addEventListener("change", () => { selectedRegionIndex = logisticsSelect.value; renderDepartmentResult(); });
+
+    document.querySelectorAll(".process-btn").forEach((button) => {
+      button.addEventListener("click", () => selectProcess(button.dataset.process));
+    });
 
     itemInput.addEventListener("input", () => { itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6); });
     itemInput.addEventListener("keydown", (event) => { if (event.key === "Enter") searchByMode(currentMode === "install" ? "install" : "product"); });
@@ -629,12 +614,19 @@
     function showStatus(message, type = "warn") { statusBox.textContent = message; statusBox.className = `status show ${type}`; }
     function hideStatus() { statusBox.textContent = ""; statusBox.className = "status"; }
 
+    async function loadInitialUpdatedAt() {
+      try {
+        const data = await fetchApi("action=config");
+        updateLastUpdated(data);
+      } catch (error) {
+        lastUpdatedText.textContent = `최근 업데이트 일: ${formatToday()}`;
+      }
+    }
+
     function resetView() {
       itemInput.value = "";
       currentMode = "";
       currentResult = null;
-      currentDepartments = [];
-      currentLogistics = [];
       selectedStoreIndex = "";
       selectedRegionIndex = "";
       lastItemNo = "";
@@ -725,29 +717,20 @@
     }
 
     function openProcessPage() {
-      currentMode = "process";
-      hideStatus();
-      heroSection.style.display = "none";
-      searchSection.style.display = "none";
-      resultWrap.classList.remove("show");
-      bottomNav.style.display = "none";
+      mainPage.classList.remove("show");
       processPage.classList.add("show");
-      processGuide.textContent = "서비스, 배송, 물류, 제품, 기타 중 하나를 선택하면 해당 프로세스 화면으로 확장할 수 있습니다.";
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function closeProcessPage() {
       processPage.classList.remove("show");
-      heroSection.style.display = "block";
-      searchSection.style.display = "block";
-      bottomNav.style.display = "grid";
-      modeHint.textContent = "※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.";
+      mainPage.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function selectProcess(type) {
       document.querySelectorAll(".process-btn").forEach((button) => {
-        button.classList.toggle("primary", button.dataset.process === type);
+        button.classList.toggle("active", button.dataset.process === type);
       });
 
       const guideMap = {
@@ -848,15 +831,12 @@
         deptSelect.appendChild(option);
       });
 
-      currentLogistics
-        .filter((row) => safe(row.region, "") !== "")
-        .sort((a, b) => safe(a.region, "").localeCompare(safe(b.region, ""), "ko"))
-        .forEach((row, index) => {
-          const option = document.createElement("option");
-          option.value = String(index);
-          option.textContent = `${row.region} (${row.tcName})`;
-          logisticsSelect.appendChild(option);
-        });
+      getSortedLogistics().forEach((row, index) => {
+        const option = document.createElement("option");
+        option.value = String(index);
+        option.textContent = `${row.region} (${row.tcName})`;
+        logisticsSelect.appendChild(option);
+      });
 
       $("deptPill").textContent = `${currentDepartments.length}개 점포 / ${currentLogistics.length}개 지역`;
       $("deptPill").classList.toggle("active", currentDepartments.length > 0 || currentLogistics.length > 0);
@@ -872,6 +852,7 @@
         box.innerHTML = `<div class="empty-box">업무지원실/담당자 연락처와 회원 배송 지역을 각각 선택하면 해당 부서 연락처가 표시됩니다.</div>`;
         return;
       }
+
       box.innerHTML = `
         ${makeDeptContactCard({
           title: "업무지원실",
@@ -887,7 +868,9 @@
           phone: regionRow?.phone,
           note: regionRow?.coverage
         })}
-        ${makeSamsungContactCard({
+        ${makeDeptContactCard({
+          title: "삼성 담당자",
+          help: "제품, VOC 처리 방향, 단순 배송 요청 등",
           manager: dept?.samsungManager || dept?.ceManager || dept?.mxManager,
           phone: dept?.samsungPhone || dept?.cePhone || dept?.mxPhone,
           note: dept?.samsungNote || dept?.ceNote || dept?.mxNote
@@ -895,21 +878,14 @@
       `;
     }
 
-    function getSelectedLogisticsRow() {
-      const sorted = currentLogistics
+    function getSortedLogistics() {
+      return currentLogistics
         .filter((row) => safe(row.region, "") !== "")
         .sort((a, b) => safe(a.region, "").localeCompare(safe(b.region, ""), "ko"));
-      return sorted[Number(selectedRegionIndex)] || null;
     }
 
-    function makeSamsungContactCard({ manager, phone, note }) {
-      return makeDeptContactCard({
-        title: "삼성 담당자",
-        help: "제품, VOC 처리 방향, 단순 배송 요청 등",
-        manager,
-        phone,
-        note
-      });
+    function getSelectedLogisticsRow() {
+      return getSortedLogistics()[Number(selectedRegionIndex)] || null;
     }
 
     function makeDeptContactCard({ title, help, manager, phone, note }) {
