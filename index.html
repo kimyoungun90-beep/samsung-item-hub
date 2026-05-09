@@ -855,12 +855,14 @@
 
     function shouldShowPromoWarning(start, end) {
       const startDate = parseDateText(start);
-      const endDate = parseDateText(end);
+      if (!startDate) return false;
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      if (endDate) return endDate.getTime() >= today.getTime();
-      if (startDate) return startDate.getTime() >= today.getTime();
-      return false;
+
+      // 행사 시작일이 오늘보다 이후인 '예정 행사'에만 표시합니다.
+      // 이미 시작된 행사나 종료된 행사는 표시하지 않습니다.
+      return startDate.getTime() > today.getTime();
     }
 
     function parseDateText(value) {
