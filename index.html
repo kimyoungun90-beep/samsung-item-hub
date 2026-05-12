@@ -58,14 +58,17 @@
       overflow: hidden;
     }
 
-.hero-logo {
-  position: absolute;
-  top: 26px;
-  right: 28px;
-  width: 72px;
-  height: auto;
-  object-fit: contain;
-}
+    .hero-logo {
+      position: absolute;
+      top: 26px;
+      right: 28px;
+      width: 44px;
+      height: 15px;
+      border-radius: 4px;
+      object-fit: cover;
+      object-position: center;
+    }
+
     .hero-badge {
       display: inline-flex;
       padding: 7px 11px;
@@ -460,6 +463,53 @@
       display: block;
     }
 
+    .sample-list {
+      display: grid;
+      gap: 8px;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .sample-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .sample-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .sample-no {
+      font-size: 17px;
+      font-weight: 950;
+      color: #111827;
+      letter-spacing: -0.2px;
+    }
+
+    .sample-name {
+      font-size: 14px;
+      font-weight: 900;
+      color: #111827;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    .sample-meta {
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
     .footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; line-height: 1.5; }
 
     @media (max-width: 390px) {
@@ -553,6 +603,15 @@
           </article>
         </div>
 
+        <div id="sampleSection" class="result-section">
+          <article class="card">
+            <div class="card-inner">
+              <div class="card-title"><h2>샘플번호 목록</h2><span id="samplePill" class="pill">상품DB</span></div>
+              <div id="sampleList" class="sample-list"></div>
+            </div>
+          </article>
+        </div>
+
         <div id="deptSection" class="result-section">
           <article class="card">
             <div class="card-inner">
@@ -638,6 +697,7 @@
     let selectedRegionIndex = "";
     let lastItemNo = "";
     let processRows = [];
+    let sampleRows = [];
     let currentPage = "main";
 
     const $ = (id) => document.getElementById(id);
@@ -656,6 +716,7 @@
     const resultWrap = $("resultWrap");
     const productSection = $("productSection");
     const installSection = $("installSection");
+    const sampleSection = $("sampleSection");
     const deptSection = $("deptSection");
     const deptSelect = $("deptSelect");
     const logisticsSelect = $("logisticsSelect");
@@ -677,7 +738,7 @@
     backHomeBtn.addEventListener("click", closeProcessPage);
     backProcessBtn.addEventListener("click", closeProcessDetailPage);
     resetBtn.addEventListener("click", resetView);
-    sampleBtn.addEventListener("click", () => { itemInput.value = "689291"; searchByMode("product"); });
+    sampleBtn.addEventListener("click", showSamples);
     deptSelect.addEventListener("change", () => { selectedStoreIndex = deptSelect.value; renderDepartmentResult(); });
     logisticsSelect.addEventListener("change", () => { selectedRegionIndex = logisticsSelect.value; renderDepartmentResult(); });
 
@@ -719,6 +780,7 @@
     function hideAllSections() {
       productSection.classList.remove("show");
       installSection.classList.remove("show");
+      sampleSection.classList.remove("show");
       deptSection.classList.remove("show");
     }
 
@@ -766,6 +828,68 @@
       productSearchBtn.classList.toggle("active", mode === "product");
       installSearchBtn.classList.toggle("active", mode === "install");
       modeHint.textContent = mode === "product" ? "※ 상품 조회 결과만 표시합니다." : "※ 이전설치비용 조회 결과만 표시합니다.";
+    }
+
+    async function showSamples() {
+      hideStatus();
+      currentMode = "samples";
+      productSearchBtn.classList.remove("active");
+      installSearchBtn.classList.remove("active");
+      modeHint.textContent = "※ 상품DB의 아이템번호, 모델명, 품목, 상품명 목록을 확인합니다.";
+
+      try {
+        showStatus("샘플번호 목록을 불러오는 중입니다.", "warn");
+        const data = await fetchApi(`action=samples&_=${Date.now()}`);
+
+        if (!data || data.ok === false) {
+          throw new Error(data?.message || "샘플번호 응답 오류");
+        }
+
+        updateLastUpdated(data);
+        sampleRows = Array.isArray(data.samples) ? data.samples : [];
+        renderSamples(sampleRows);
+
+        resultWrap.classList.add("show");
+        hideAllSections();
+        sampleSection.classList.add("show");
+        showStatus(`${sampleRows.length}개 샘플번호를 불러왔습니다.`, "success");
+      } catch (error) {
+        console.error(error);
+        showStatus("샘플번호 목록을 불러오지 못했습니다. Apps Script의 samples 기능을 확인해 주세요.", "error");
+      }
+    }
+
+    function renderSamples(rows) {
+      const box = $("sampleList");
+      const pill = $("samplePill");
+      pill.textContent = `${rows.length}건`;
+      pill.classList.toggle("active", rows.length > 0);
+
+      if (!rows.length) {
+        box.innerHTML = `<div class="empty-box">상품DB에 표시할 샘플번호가 없습니다.</div>`;
+        return;
+      }
+
+      box.innerHTML = rows.map((row) => `
+        <div class="sample-item" data-item-no="${escapeHtml(row.itemNo)}">
+          <div class="sample-top">
+            <div class="sample-no">${escapeHtml(row.itemNo || "-")}</div>
+            <span class="pill">${escapeHtml(row.category || "-")}</span>
+          </div>
+          <div class="sample-name">${escapeHtml(row.productName || "-")}</div>
+          <div class="sample-meta">모델명: ${escapeHtml(row.modelName || "-")}</div>
+        </div>
+      `).join("");
+
+      box.querySelectorAll(".sample-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const itemNo = item.dataset.itemNo || "";
+          if (!itemNo) return;
+          itemInput.value = itemNo;
+          searchByMode("product");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
     }
 
     async function showDepartments() {
