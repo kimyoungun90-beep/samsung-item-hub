@@ -48,12 +48,26 @@
     .main-page, .process-page { display: none; }
 
     .hero {
+      position: relative;
       background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #334155 100%);
       color: #fff;
       border-radius: 28px;
       padding: 24px 20px;
       box-shadow: var(--shadow);
       margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .hero-logo {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 78px;
+      height: auto;
+      background: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      padding: 5px 7px;
+      object-fit: contain;
     }
 
     .hero-badge {
@@ -565,7 +579,7 @@
 
       <div class="bottom-nav">
         <button class="nav-btn" id="deptBtn" type="button">업무 지원 부서</button>
-        <button class="nav-btn secondary" id="processBtn" type="button">삼성 프로세스</button>
+        <button class="nav-btn secondary" id="processBtn" type="button">코스트코 프로세스</button>
       </div>
 
       <footer class="footer">Costco Item Search HUB · GitHub Pages Version<br />Google Sheets DB 연결형</footer>
@@ -573,8 +587,9 @@
 
     <section id="processPage" class="process-page">
       <section class="hero">
-        <div class="hero-badge">Samsung Process</div>
-        <h1>삼성전자<br />프로세스</h1>
+        <img class="hero-logo" src="zeniel-logo.png" alt="ZENIEL" />
+        <div class="hero-badge">Costco Process</div>
+        <h1>코스트코<br />프로세스</h1>
         <p>문의 유형을 선택하면 서비스, 배송, 물류, 제품, VOC처리 방안, 기타 프로세스별 질문을 확인할 수 있습니다.</p>
       </section>
 
