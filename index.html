@@ -809,38 +809,54 @@
       history.back();
     }
 
-    async function selectProcess(type, pushHistory = true) {
-      currentPage = "processDetail";
-      processPage.classList.remove("show");
-      mainPage.classList.remove("show");
-      processDetailPage.classList.add("show");
-      processDetailTitle.textContent = `${type} 질문`;
-      processDetailPill.textContent = "불러오는 중";
-      processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 질문을 불러오는 중입니다.</div>`;
-      window.scrollTo({ top: 0, behavior: "smooth" });
+async function selectProcess(type, pushHistory = true) {
+  currentPage = "processDetail";
+  processPage.classList.remove("show");
+  mainPage.classList.remove("show");
+  processDetailPage.classList.add("show");
 
-      if (pushHistory) {
-        history.pushState({ page: "processDetail", type }, "", `#process-${encodeURIComponent(type)}`);
-      }
+  processDetailTitle.textContent = `${type} 질문`;
+  processDetailPill.textContent = "불러오는 중";
+  processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 질문을 불러오는 중입니다.</div>`;
 
-      try {
-        if (!processRows.length) {
-          const data = await fetchApi("action=processes");
-          processRows = data.processes || [];
-          updateLastUpdated(data);
-        }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 
-        const rows = processRows
-          .filter((row) => safe(row.type, "") === type)
-          .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+  if (pushHistory) {
+    history.pushState(
+      { page: "processDetail", type },
+      "",
+      `#process-${encodeURIComponent(type)}`
+    );
+  }
 
-        renderProcessQuestions(type, rows);
-      } catch (error) {
-        console.error(error);
-        processDetailPill.textContent = "오류";
-        processQuestionList.innerHTML = `<div class="empty-box">프로세스DB를 불러오지 못했습니다. Apps Script에 processes 기능과 프로세스DB 시트를 확인해 주세요.</div>`;
-      }
+  try {
+    const data = await fetchApi(`action=processes&_=${Date.now()}`);
+
+    if (!data || data.ok === false) {
+      throw new Error(data?.message || "프로세스DB 응답 오류");
     }
+
+    updateLastUpdated(data);
+
+    processRows = Array.isArray(data.processes) ? data.processes : [];
+
+    const rows = processRows
+      .filter((row) => safe(row.type, "") === type)
+      .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+
+    renderProcessQuestions(type, rows);
+  } catch (error) {
+    console.error(error);
+    processDetailPill.textContent = "오류";
+    processQuestionList.innerHTML = `
+      <div class="empty-box">
+        프로세스DB 연결 중 오류가 발생했습니다.<br>
+        Apps Script 배포 상태와 GitHub index.html 최신 반영 여부를 확인해 주세요.<br><br>
+        오류내용: ${escapeHtml(error.message || error)}
+      </div>
+    `;
+  }
+}
 
     window.addEventListener("popstate", (event) => {
       const state = event.state || { page: "main" };
