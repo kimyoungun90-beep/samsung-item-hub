@@ -376,17 +376,17 @@
     .process-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
       margin-top: 12px;
     }
 
     .process-btn {
-      min-height: 76px;
+      min-height: 52px;
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 16px;
       background: #f9fafb;
       color: #111827;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 950;
     }
 
@@ -406,6 +406,48 @@
       color: #fff;
       font-size: 15px;
       font-weight: 950;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .question-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .question-button {
+      width: 100%;
+      border: 0;
+      background: #fff;
+      padding: 15px 14px;
+      text-align: left;
+      color: #111827;
+      font-size: 15px;
+      font-weight: 950;
+      line-height: 1.45;
+    }
+
+    .answer-box {
+      display: none;
+      border-top: 1px dashed var(--line);
+      padding: 14px;
+      color: #374151;
+      background: #f9fafb;
+      font-size: 14px;
+      font-weight: 750;
+      line-height: 1.55;
+      word-break: keep-all;
+      white-space: pre-line;
+    }
+
+    .question-card.open .answer-box {
+      display: block;
     }
 
     .footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; line-height: 1.5; }
@@ -533,7 +575,7 @@
       <section class="hero">
         <div class="hero-badge">Samsung Process</div>
         <h1>삼성전자<br />프로세스</h1>
-        <p>문의 유형을 선택하면 서비스, 배송, 물류, 제품, 기타 프로세스별 확인사항을 정리할 수 있습니다.</p>
+        <p>문의 유형을 선택하면 서비스, 배송, 물류, 제품, 기타 프로세스별 질문을 확인할 수 있습니다.</p>
       </section>
 
       <article class="card">
@@ -543,14 +585,28 @@
             <span class="pill active">5개 유형</span>
           </div>
           <div class="process-grid">
-            <button class="process-btn active" type="button" data-process="서비스">서비스</button>
+            <button class="process-btn" type="button" data-process="서비스">서비스</button>
             <button class="process-btn" type="button" data-process="배송">배송</button>
             <button class="process-btn" type="button" data-process="물류">물류</button>
             <button class="process-btn" type="button" data-process="제품">제품</button>
             <button class="process-btn" type="button" data-process="기타">기타</button>
           </div>
-          <div id="processGuide" class="note-box">서비스 프로세스: AS 접수, 기사 방문, 서비스 진행 상태, 서비스 VOC 처리 기준을 연결하면 좋습니다.</div>
           <button id="backHomeBtn" class="back-btn" type="button">이전 화면으로 돌아가기</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="processDetailPage" class="process-page">
+      <article class="card">
+        <div class="card-inner">
+          <div class="card-title">
+            <h2 id="processDetailTitle">프로세스 질문</h2>
+            <span id="processDetailPill" class="pill active">0건</span>
+          </div>
+          <div id="processQuestionList" class="question-list">
+            <div class="empty-box">질문을 불러오는 중입니다.</div>
+          </div>
+          <button id="backProcessBtn" class="back-btn" type="button">프로세스 선택으로 돌아가기</button>
         </div>
       </article>
     </section>
@@ -568,6 +624,7 @@
     let selectedStoreIndex = "";
     let selectedRegionIndex = "";
     let lastItemNo = "";
+    let processRows = [];
 
     const $ = (id) => document.getElementById(id);
 
@@ -590,7 +647,11 @@
     const logisticsSelect = $("logisticsSelect");
     const modeHint = $("modeHint");
     const lastUpdatedText = $("lastUpdatedText");
-    const processGuide = $("processGuide");
+    const processDetailPage = $("processDetailPage");
+    const processDetailTitle = $("processDetailTitle");
+    const processDetailPill = $("processDetailPill");
+    const processQuestionList = $("processQuestionList");
+    const backProcessBtn = $("backProcessBtn");
 
     loadInitialUpdatedAt();
 
@@ -599,6 +660,7 @@
     deptBtn.addEventListener("click", showDepartments);
     processBtn.addEventListener("click", openProcessPage);
     backHomeBtn.addEventListener("click", closeProcessPage);
+    backProcessBtn.addEventListener("click", closeProcessDetailPage);
     resetBtn.addEventListener("click", resetView);
     sampleBtn.addEventListener("click", () => { itemInput.value = "689291"; searchByMode("product"); });
     deptSelect.addEventListener("change", () => { selectedStoreIndex = deptSelect.value; renderDepartmentResult(); });
@@ -718,30 +780,71 @@
 
     function openProcessPage() {
       mainPage.classList.remove("show");
+      processDetailPage.classList.remove("show");
       processPage.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function closeProcessPage() {
       processPage.classList.remove("show");
+      processDetailPage.classList.remove("show");
       mainPage.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function selectProcess(type) {
-      document.querySelectorAll(".process-btn").forEach((button) => {
-        button.classList.toggle("active", button.dataset.process === type);
+    function closeProcessDetailPage() {
+      processDetailPage.classList.remove("show");
+      processPage.classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function selectProcess(type) {
+      processPage.classList.remove("show");
+      processDetailPage.classList.add("show");
+      processDetailTitle.textContent = `${type} 질문`;
+      processDetailPill.textContent = "불러오는 중";
+      processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 질문을 불러오는 중입니다.</div>`;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      try {
+        if (!processRows.length) {
+          const data = await fetchApi("action=processes");
+          processRows = data.processes || [];
+          updateLastUpdated(data);
+        }
+
+        const rows = processRows
+          .filter((row) => safe(row.type, "") === type)
+          .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+
+        renderProcessQuestions(type, rows);
+      } catch (error) {
+        console.error(error);
+        processDetailPill.textContent = "오류";
+        processQuestionList.innerHTML = `<div class="empty-box">프로세스DB를 불러오지 못했습니다. Apps Script에 processes 기능과 프로세스DB 시트를 확인해 주세요.</div>`;
+      }
+    }
+
+    function renderProcessQuestions(type, rows) {
+      processDetailPill.textContent = `${rows.length}건`;
+
+      if (!rows.length) {
+        processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 유형에 등록된 질문이 없습니다.</div>`;
+        return;
+      }
+
+      processQuestionList.innerHTML = rows.map((row, index) => `
+        <div class="question-card">
+          <button class="question-button" type="button">${index + 1}. ${escapeHtml(row.question || "질문 미등록")}</button>
+          <div class="answer-box">${escapeHtml(row.answer || "답변 미등록")}</div>
+        </div>
+      `).join("");
+
+      processQuestionList.querySelectorAll(".question-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          button.closest(".question-card").classList.toggle("open");
+        });
       });
-
-      const guideMap = {
-        서비스: "서비스 프로세스: AS 접수, 기사 방문, 서비스 진행 상태, 서비스 VOC 처리 기준을 연결하면 좋습니다.",
-        배송: "배송 프로세스: 배송 가능일, 배송 일정 변경, 주소 변경, 회원 안내 기준을 연결하면 좋습니다.",
-        물류: "물류 프로세스: 물류 이관 후 배송 확인, 기사 정보, TC별 연락처, 일정 변경 기준을 연결하면 좋습니다.",
-        제품: "제품 프로세스: 모델 스펙, 행사 적용 여부, 대체 모델, 재고/입고 문의 기준을 연결하면 좋습니다.",
-        기타: "기타 프로세스: 위 항목에 포함되지 않는 예외 문의나 현장 요청사항 접수로 연결하면 좋습니다."
-      };
-
-      processGuide.textContent = guideMap[type] || "프로세스 유형을 선택해 주세요.";
     }
 
     async function fetchApi(queryString) {
