@@ -861,6 +861,28 @@
       showMainPage();
     });
 
+    function renderProcessQuestions(type, rows) {
+      processDetailPill.textContent = `${rows.length}건`;
+
+      if (!rows.length) {
+        processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 유형에 등록된 질문이 없습니다.</div>`;
+        return;
+      }
+
+      processQuestionList.innerHTML = rows.map((row, index) => `
+        <div class="question-card">
+          <button class="question-button" type="button">${index + 1}. ${escapeHtml(row.question || "질문 미등록")}</button>
+          <div class="answer-box">${escapeHtml(row.answer || "답변 미등록")}</div>
+        </div>
+      `).join("");
+
+      processQuestionList.querySelectorAll(".question-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          button.closest(".question-card").classList.toggle("open");
+        });
+      });
+    }
+
     async function fetchApi(queryString) {
       const url = `${CONFIG.APPS_SCRIPT_URL}?${queryString}`;
       const response = await fetch(url);
