@@ -625,6 +625,7 @@
     let selectedRegionIndex = "";
     let lastItemNo = "";
     let processRows = [];
+    let currentPage = "main";
 
     const $ = (id) => document.getElementById(id);
 
@@ -653,6 +654,7 @@
     const processQuestionList = $("processQuestionList");
     const backProcessBtn = $("backProcessBtn");
 
+    history.replaceState({ page: "main" }, "", location.pathname + location.search);
     loadInitialUpdatedAt();
 
     productSearchBtn.addEventListener("click", () => searchByMode("product"));
@@ -778,33 +780,48 @@
       }
     }
 
-    function openProcessPage() {
-      mainPage.classList.remove("show");
-      processDetailPage.classList.remove("show");
-      processPage.classList.add("show");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function closeProcessPage() {
+    function showMainPage() {
+      currentPage = "main";
       processPage.classList.remove("show");
       processDetailPage.classList.remove("show");
       mainPage.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function closeProcessDetailPage() {
+    function showProcessSelectPage() {
+      currentPage = "process";
+      mainPage.classList.remove("show");
       processDetailPage.classList.remove("show");
       processPage.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    async function selectProcess(type) {
+    function openProcessPage() {
+      showProcessSelectPage();
+      history.pushState({ page: "process" }, "", "#process");
+    }
+
+    function closeProcessPage() {
+      history.back();
+    }
+
+    function closeProcessDetailPage() {
+      history.back();
+    }
+
+    async function selectProcess(type, pushHistory = true) {
+      currentPage = "processDetail";
       processPage.classList.remove("show");
+      mainPage.classList.remove("show");
       processDetailPage.classList.add("show");
       processDetailTitle.textContent = `${type} 질문`;
       processDetailPill.textContent = "불러오는 중";
       processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 질문을 불러오는 중입니다.</div>`;
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (pushHistory) {
+        history.pushState({ page: "processDetail", type }, "", `#process-${encodeURIComponent(type)}`);
+      }
 
       try {
         if (!processRows.length) {
@@ -825,27 +842,21 @@
       }
     }
 
-    function renderProcessQuestions(type, rows) {
-      processDetailPill.textContent = `${rows.length}건`;
+    window.addEventListener("popstate", (event) => {
+      const state = event.state || { page: "main" };
 
-      if (!rows.length) {
-        processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 유형에 등록된 질문이 없습니다.</div>`;
+      if (state.page === "process") {
+        showProcessSelectPage();
         return;
       }
 
-      processQuestionList.innerHTML = rows.map((row, index) => `
-        <div class="question-card">
-          <button class="question-button" type="button">${index + 1}. ${escapeHtml(row.question || "질문 미등록")}</button>
-          <div class="answer-box">${escapeHtml(row.answer || "답변 미등록")}</div>
-        </div>
-      `).join("");
+      if (state.page === "processDetail" && state.type) {
+        selectProcess(state.type, false);
+        return;
+      }
 
-      processQuestionList.querySelectorAll(".question-button").forEach((button) => {
-        button.addEventListener("click", () => {
-          button.closest(".question-card").classList.toggle("open");
-        });
-      });
-    }
+      showMainPage();
+    });
 
     async function fetchApi(queryString) {
       const url = `${CONFIG.APPS_SCRIPT_URL}?${queryString}`;
