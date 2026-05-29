@@ -1,1279 +1,460 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#111827" />
+  <meta name="theme-color" content="#0f172a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Item HUB" />
+  <meta name="apple-mobile-web-app-title" content="Costco HUB" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-  <title>코스트코 아이템 조회 HUB</title>
-
+  <title>코스트코 아이템 운영 HUB</title>
   <style>
-    :root {
-      --bg: #f3f4f6;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --line: #e5e7eb;
-      --primary: #111827;
-      --primary2: #243044;
-      --success: #16a34a;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --radius: 22px;
-      --shadow: 0 14px 34px rgba(17, 24, 39, 0.08);
+    :root{
+      --bg:#eef2f7; --card:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0;
+      --primary:#0f172a; --primary2:#1e293b; --accent:#2563eb; --accent2:#10b981;
+      --warn:#f59e0b; --danger:#ef4444; --shadow:0 18px 42px rgba(15,23,42,.10);
+      --radius:24px;
     }
-
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Noto Sans KR", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .app {
-      width: 100%;
-      max-width: 520px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding: 18px 14px 30px;
-    }
-
-    .main-page.show, .process-page.show { display: block; }
-    .main-page, .process-page { display: none; }
-
-    .hero {
-      position: relative;
-      background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #334155 100%);
-      color: #fff;
-      border-radius: 28px;
-      padding: 24px 20px;
-      box-shadow: var(--shadow);
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-
-    .hero-logo {
-  position: absolute;
-  top: 26px;
-  right: 28px;
-  width: 72px;
-  height: auto;
-  object-fit: contain;
-}
-    .hero-badge {
-      display: inline-flex;
-      padding: 7px 11px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.12);
-      font-size: 12px;
-      color: rgba(255,255,255,0.88);
-      margin-bottom: 14px;
-      font-weight: 700;
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: 26px;
-      line-height: 1.18;
-      letter-spacing: -0.7px;
-    }
-
-    .hero p {
-      margin: 10px 0 0;
-      color: rgba(255,255,255,0.82);
-      font-size: 14px;
-      line-height: 1.55;
-      word-break: keep-all;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .search-card { padding: 16px; margin-bottom: 14px; }
-
-    .label-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .label {
-      display: block;
-      font-size: 13px;
-      font-weight: 900;
-      color: #374151;
-    }
-
-    .update-date {
-      color: #6b7280;
-      font-size: 11px;
-      font-weight: 850;
-      white-space: nowrap;
-    }
-
-    input, select {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      padding: 16px 14px;
-      font-size: 17px;
-      font-weight: 800;
-      outline: none;
-      background: #fff;
-      color: var(--text);
-      letter-spacing: 0.2px;
-    }
-
-    select {
-      appearance: none;
-      background-image: linear-gradient(45deg, transparent 50%, #6b7280 50%), linear-gradient(135deg, #6b7280 50%, transparent 50%);
-      background-position: calc(100% - 21px) calc(50% - 3px), calc(100% - 15px) calc(50% - 3px);
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-      padding-right: 42px;
-    }
-
-    input::placeholder { color: #9ca3af; font-weight: 600; letter-spacing: 0; }
-    input:focus, select:focus { border-color: #111827; box-shadow: 0 0 0 4px rgba(17,24,39,0.08); }
-
-    button { font-family: inherit; cursor: pointer; }
-    button:active { transform: scale(0.985); }
-
-    .query-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .query-btn {
-      min-height: 56px;
-      border: 0;
-      border-radius: 17px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 15px;
-      font-weight: 950;
-      line-height: 1.25;
-      padding: 0 12px;
-    }
-
-    .query-btn.secondary { background: var(--primary2); }
-    .query-btn.active { outline: 3px solid rgba(22, 163, 74, 0.22); }
-
-    .sub-actions, .bottom-nav {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .ghost-btn {
-      min-height: 46px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: #f9fafb;
-      color: #111827;
-      font-size: 14px;
-      font-weight: 850;
-    }
-
-    .hint, .field-note {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-      word-break: keep-all;
-    }
-
-    .hint { margin: 10px 2px 0; }
-
-    .field-note {
-      display: none;
-      margin-top: 5px;
-      font-size: 11px;
-      font-weight: 750;
-    }
-
-    .field-note.show { display: block; }
-
-    .status {
-      display: none;
-      margin: 12px 0;
-      padding: 13px 14px;
-      border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.45;
-      border: 1px solid var(--line);
-      background: #fff;
-      font-weight: 700;
-      word-break: keep-all;
-    }
-
-    .status.show { display: block; }
-    .status.error { border-color: rgba(239,68,68,.25); background: #fef2f2; color: #991b1b; }
-    .status.success { border-color: rgba(22,163,74,.25); background: #f0fdf4; color: #166534; }
-    .status.warn { border-color: rgba(245,158,11,.25); background: #fffbeb; color: #92400e; }
-
-    .result-wrap { display: none; gap: 12px; }
-    .result-wrap.show { display: grid; }
-    .result-section { display: none; }
-    .result-section.show { display: block; }
-
-    .card-inner { padding: 16px; }
-
-    .card-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .card-title h2 { margin: 0; font-size: 18px; letter-spacing: -0.35px; }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 12px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .pill.active { background: #dcfce7; color: #166534; }
-
-    .kv { display: grid; gap: 10px; }
-
-    .kv-row {
-      display: grid;
-      grid-template-columns: 112px 1fr;
-      gap: 10px;
-      align-items: start;
-      padding-bottom: 10px;
-      border-bottom: 1px dashed var(--line);
-    }
-
-    .kv-row:last-child { border-bottom: 0; padding-bottom: 0; }
-
-    .key { color: var(--muted); font-size: 13px; font-weight: 850; }
-    .value { font-size: 14px; line-height: 1.5; font-weight: 800; word-break: keep-all; }
-    .big-value { font-size: 20px; font-weight: 950; letter-spacing: -0.35px; }
-
-    .cost-list, .dept-list { display: grid; gap: 10px; }
-
-    .cost-item, .dept-item {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      background: #fff;
-    }
-
-    .cost-top, .dept-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .cost-name, .dept-name {
-      font-size: 17px;
-      font-weight: 950;
-      line-height: 1.35;
-      letter-spacing: -0.25px;
-    }
-
-    .cost-sub, .dept-sub { margin-top: 4px; color: var(--muted); font-size: 13px; font-weight: 750; line-height: 1.45; }
-
-    .dept-help {
-      margin-left: 6px;
-      color: #6b7280;
-      font-size: 11px;
-      font-weight: 750;
-      line-height: 1.35;
-      word-break: keep-all;
-    }
-
-    .dept-title-line { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
-
-    .money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-
-    .money-box {
-      background: #f9fafb;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 12px;
-    }
-
-    .money-label { color: var(--muted); font-size: 12px; font-weight: 900; margin-bottom: 6px; }
-    .money-value { font-size: 16px; font-weight: 950; line-height: 1.45; letter-spacing: -0.2px; }
-
-    .note-box, .empty-box {
-      margin-top: 8px;
-      background: #f9fafb;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 12px;
-      font-size: 14px;
-      line-height: 1.5;
-      font-weight: 800;
-      color: #374151;
-      word-break: keep-all;
-    }
-
-    .empty-box { margin-top: 0; color: #6b7280; }
-
-    .selector-box {
-      margin-bottom: 12px;
-      background: #f9fafb;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 12px;
-    }
-
-    .selector-label { display: block; margin-bottom: 8px; color: #374151; font-size: 13px; font-weight: 950; }
-
-    .phone-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 8px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: #111827;
-      color: #fff;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 950;
-    }
-
-    .bottom-nav {
-      position: sticky;
-      bottom: 12px;
-      margin-top: 14px;
-      z-index: 10;
-    }
-
-    .nav-btn {
-      min-height: 49px;
-      border-radius: 18px;
-      background: #0f172a;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 950;
-      border: 0;
-      box-shadow: 0 10px 24px rgba(17,24,39,.16);
-    }
-
-    .nav-btn.secondary { background: #243044; }
-
-    .process-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .process-btn {
-      min-height: 52px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: #f9fafb;
-      color: #111827;
-      font-size: 15px;
-      font-weight: 950;
-    }
-
-    .process-btn.active {
-      background: #111827;
-      color: #fff;
-      border-color: #111827;
-    }
-
-    .back-btn {
-      width: 100%;
-      min-height: 48px;
-      margin-top: 12px;
-      border: 0;
-      border-radius: 18px;
-      background: #243044;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 950;
-    }
-
-    .question-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .question-card {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
-      overflow: hidden;
-    }
-
-    .question-button {
-      width: 100%;
-      border: 0;
-      background: #fff;
-      padding: 15px 14px;
-      text-align: left;
-      color: #111827;
-      font-size: 15px;
-      font-weight: 950;
-      line-height: 1.45;
-    }
-
-    .answer-box {
-      display: none;
-      border-top: 1px dashed var(--line);
-      padding: 14px;
-      color: #374151;
-      background: #f9fafb;
-      font-size: 14px;
-      font-weight: 750;
-      line-height: 1.55;
-      word-break: keep-all;
-      white-space: pre-line;
-    }
-
-    .question-card.open .answer-box {
-      display: block;
-    }
-
-    .sample-list {
-      display: grid;
-      gap: 8px;
-      max-height: 520px;
-      overflow-y: auto;
-      padding-right: 2px;
-    }
-
-    .sample-item {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: #fff;
-      padding: 12px;
-    }
-
-    .sample-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: flex-start;
-      margin-bottom: 6px;
-    }
-
-    .sample-no {
-      font-size: 17px;
-      font-weight: 950;
-      color: #111827;
-      letter-spacing: -0.2px;
-    }
-
-    .sample-name {
-      font-size: 14px;
-      font-weight: 900;
-      color: #111827;
-      line-height: 1.45;
-      word-break: keep-all;
-    }
-
-    .sample-meta {
-      margin-top: 4px;
-      color: #6b7280;
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.45;
-      word-break: keep-all;
-    }
-
-    .footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; line-height: 1.5; }
-
-    @media (max-width: 390px) {
-      .hero h1 { font-size: 23px; }
-      .query-buttons, .process-grid { grid-template-columns: 1fr; }
-      .kv-row { grid-template-columns: 94px 1fr; }
-      .money-grid { grid-template-columns: 1fr; }
-    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Pretendard","Noto Sans KR",sans-serif;background:
+      radial-gradient(circle at 15% 0%,rgba(37,99,235,.14),transparent 32%),
+      radial-gradient(circle at 90% 10%,rgba(16,185,129,.13),transparent 30%),var(--bg);color:var(--text)}
+    button,input{font:inherit} button{cursor:pointer} button:active{transform:scale(.986)}
+    .app{max-width:540px;margin:0 auto;min-height:100vh;padding:16px 14px 96px}
+    .hero{position:relative;overflow:hidden;border-radius:30px;padding:22px 18px 18px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e293b 58%,#334155);box-shadow:var(--shadow);margin-bottom:14px}
+    .hero:after{content:"";position:absolute;right:-52px;top:-62px;width:180px;height:180px;border-radius:999px;background:rgba(255,255,255,.10)}
+    .brand-row{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.13);font-size:12px;font-weight:900;color:rgba(255,255,255,.90)}
+    .mini-logo{width:42px;height:42px;border-radius:15px;background:rgba(255,255,255,.15);display:grid;place-items:center;font-weight:950;letter-spacing:-.7px;border:1px solid rgba(255,255,255,.15)}
+    h1{position:relative;z-index:1;margin:14px 0 8px;font-size:28px;line-height:1.14;letter-spacing:-.9px}
+    .hero p{position:relative;z-index:1;margin:0;color:rgba(255,255,255,.80);font-size:13px;line-height:1.55;word-break:keep-all}
+    .sync-line{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;position:relative;z-index:1}
+    .sync-text{font-size:11px;font-weight:850;color:rgba(255,255,255,.72)}
+    .refresh-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:8px 10px;font-size:12px;font-weight:950}
+    .nav{position:sticky;top:8px;z-index:20;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:7px;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border:1px solid rgba(226,232,240,.86);border-radius:22px;box-shadow:0 10px 28px rgba(15,23,42,.08);margin-bottom:14px}
+    .nav button{border:0;border-radius:16px;background:transparent;color:#475569;font-size:13px;font-weight:950;min-height:42px}
+    .nav button.active{background:#0f172a;color:#fff;box-shadow:0 8px 18px rgba(15,23,42,.20)}
+    .page{display:none}.page.show{display:block}
+    .card{background:rgba(255,255,255,.94);border:1px solid rgba(226,232,240,.92);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+    .card-inner{padding:15px}
+    .section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .section-title h2{margin:0;font-size:18px;letter-spacing:-.45px;line-height:1.32}.section-title small{display:block;margin-top:4px;color:var(--muted);font-size:12px;font-weight:800;line-height:1.35;word-break:keep-all}
+    .pill{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:12px;font-weight:950;white-space:nowrap}.pill.ok{background:#dcfce7;color:#166534}.pill.warn{background:#fef3c7;color:#92400e}
+    .search-box{display:flex;gap:8px;align-items:center}.search-box input{flex:1;width:100%;border:1px solid var(--line);background:#fff;border-radius:18px;min-height:55px;padding:0 15px;font-size:19px;font-weight:950;letter-spacing:.5px;outline:none}.search-box input::placeholder{color:#94a3b8;font-size:15px;font-weight:750;letter-spacing:0}.search-box input:focus{border-color:#0f172a;box-shadow:0 0 0 4px rgba(15,23,42,.08)}
+    .search-btn{min-width:92px;min-height:55px;border:0;border-radius:18px;background:var(--primary);color:#fff;font-size:15px;font-weight:950;box-shadow:0 10px 20px rgba(15,23,42,.18)}
+    .hint{margin:10px 2px 0;color:var(--muted);font-size:12px;font-weight:750;line-height:1.45;word-break:keep-all}
+    .status{display:none;margin:0 0 12px;padding:13px 14px;border-radius:18px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:850;line-height:1.45;word-break:keep-all}.status.show{display:block}.status.ok{background:#f0fdf4;border-color:#bbf7d0;color:#166534}.status.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}.status.err{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+    .product-visual{background:linear-gradient(180deg,#f8fafc,#eef2f7);border-bottom:1px solid var(--line);padding:12px}.photo-frame{position:relative;display:flex;align-items:center;justify-content:center;border-radius:22px;min-height:220px;background:#fff;border:1px solid #e2e8f0;overflow:hidden}.photo-frame img{width:100%;height:auto;max-height:340px;object-fit:contain;display:block}.photo-empty{padding:28px 20px;text-align:center;color:#94a3b8;font-weight:950;line-height:1.55}.photo-label{position:absolute;left:10px;top:10px;background:rgba(15,23,42,.88);color:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:950}
+    .product-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}.model{font-size:22px;font-weight:1000;letter-spacing:-.55px;line-height:1.22}.prod-name{margin-top:4px;color:#334155;font-size:14px;font-weight:850;line-height:1.45;word-break:keep-all}.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.meta .pill{font-size:11px;padding:6px 9px}
+    .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.tab-btn{min-height:47px;border:1px solid var(--line);border-radius:16px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:950}.tab-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}.detail-box{margin-top:10px;border:1px solid var(--line);border-radius:18px;background:#f8fafc;padding:14px;min-height:96px}.detail-title{font-size:14px;font-weight:1000;margin-bottom:9px;color:#0f172a}.detail-body{white-space:pre-line;font-size:14px;line-height:1.62;font-weight:760;color:#334155;word-break:keep-all}.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cost-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.cost-label{font-size:12px;font-weight:950;color:#64748b;margin-bottom:6px}.cost-value{font-size:16px;font-weight:1000;color:#0f172a;white-space:pre-line;line-height:1.45}.quick-list{display:grid;gap:8px;max-height:270px;overflow:auto;margin-top:12px}.quick-item{border:1px solid var(--line);background:#fff;border-radius:16px;padding:11px;text-align:left}.quick-no{font-size:16px;font-weight:1000}.quick-name{font-size:13px;font-weight:850;color:#475569;margin-top:3px;line-height:1.35;word-break:keep-all}
+    .toolbar{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px}.toolbar input{width:100%;border:1px solid var(--line);background:#fff;border-radius:18px;min-height:52px;padding:0 14px;font-size:16px;font-weight:850;outline:none}.chips{display:flex;gap:6px;overflow:auto;padding-bottom:2px}.chip{border:1px solid var(--line);background:#fff;color:#334155;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:950;white-space:nowrap}.chip.active{background:#0f172a;color:#fff;border-color:#0f172a}
+    .list{display:grid;gap:10px}.info-card{border:1px solid var(--line);border-radius:20px;background:#fff;padding:14px}.info-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.info-title{font-size:17px;font-weight:1000;letter-spacing:-.3px;line-height:1.35}.info-sub{margin-top:4px;color:#64748b;font-size:13px;font-weight:800;line-height:1.4}.kv{display:grid;gap:8px}.kv-row{display:grid;grid-template-columns:76px 1fr;gap:8px;border-top:1px dashed #e2e8f0;padding-top:8px}.key{color:#64748b;font-size:12px;font-weight:950}.val{color:#0f172a;font-size:14px;font-weight:820;line-height:1.45;word-break:keep-all;white-space:pre-line}.phone-link{display:inline-flex;margin-top:10px;text-decoration:none;background:#0f172a;color:#fff;border-radius:14px;padding:10px 12px;font-size:14px;font-weight:950}.empty{border:1px dashed #cbd5e1;border-radius:20px;background:rgba(255,255,255,.62);padding:22px;text-align:center;color:#64748b;font-size:14px;font-weight:850;line-height:1.55;word-break:keep-all}
+    .process-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.process-btn{min-height:50px;border:1px solid var(--line);border-radius:17px;background:#fff;color:#334155;font-weight:1000}.process-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}.process-card .info-title{font-size:16px}.process-body{margin-top:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:12px;white-space:pre-line;color:#334155;font-size:14px;font-weight:760;line-height:1.62;word-break:keep-all}.footer{margin-top:18px;text-align:center;color:#94a3b8;font-size:12px;font-weight:750;line-height:1.45}
+    .floating-refresh{position:fixed;right:14px;bottom:18px;z-index:30;border:0;border-radius:999px;background:#0f172a;color:#fff;padding:13px 15px;font-size:13px;font-weight:950;box-shadow:0 14px 30px rgba(15,23,42,.25)}
+    @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
   </style>
 </head>
 <body>
-  <main class="app">
-    <section id="mainPage" class="main-page show">
-      <section class="hero">
-        <img class="hero-logo" src="zeniel-logo.png" alt="ZENIEL" />
-        <div class="hero-badge">Costco Item Search</div>
-        <h1>코스트코<br />아이템 조회 HUB</h1>
-        <p>아이템번호 6자리를 입력하고, 원하는 조회 버튼을 눌러 행사 및 배송 일정 또는 이전설치비용을 확인하실 수 있습니다.</p>
-      </section>
+<main class="app">
+  <section class="hero">
+    <div class="brand-row"><span class="badge">Costco Operation HUB</span><div class="mini-logo">CE</div></div>
+    <h1>코스트코<br/>아이템 운영 HUB</h1>
+    <p>아이템번호로 모델 사진과 핵심정보를 빠르게 조회하고, 업무지원부서와 코스트코 프로세스를 한 화면에서 확인합니다.</p>
+    <div class="sync-line"><span id="syncText" class="sync-text">데이터 준비 중</span><button id="topRefreshBtn" class="refresh-btn" type="button">새로고침</button></div>
+  </section>
 
-      <section class="card search-card">
-        <div class="label-line">
-          <label class="label" for="itemInput">아이템번호</label>
-          <span id="lastUpdatedText" class="update-date">최근 업데이트 일: 불러오는 중</span>
+  <nav class="nav">
+    <button id="navItem" class="active" type="button">아이템</button>
+    <button id="navDept" type="button">업무지원</button>
+    <button id="navProcess" type="button">프로세스</button>
+  </nav>
+
+  <div id="status" class="status"></div>
+
+  <section id="pageItem" class="page show">
+    <article class="card">
+      <div class="card-inner">
+        <div class="section-title"><div><h2>아이템 번호 조회</h2><small>코스트코 아이템번호 6자리를 입력하세요.</small></div><span id="itemCountPill" class="pill">0건</span></div>
+        <div class="search-box">
+          <input id="itemInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="예: 689291" autocomplete="off" />
+          <button id="itemSearchBtn" class="search-btn" type="button">조회</button>
         </div>
-        <input id="itemInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="예: 689291" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" data-form-type="other" />
-
-        <div class="query-buttons">
-          <button id="productSearchBtn" class="query-btn" type="button">아이템번호<br />상품 조회</button>
-          <button id="installSearchBtn" class="query-btn secondary" type="button">이전설치비용<br />조회</button>
-        </div>
-
-        <div class="sub-actions">
-          <button class="ghost-btn" id="resetBtn" type="button">초기화</button>
-          <button class="ghost-btn" id="sampleBtn" type="button">샘플번호</button>
-        </div>
-
-        <p id="modeHint" class="hint">※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.</p>
-      </section>
-
-      <div id="status" class="status"></div>
-
-      <section id="resultWrap" class="result-wrap">
-        <div id="productSection" class="result-section">
-          <article class="card">
-            <div class="card-inner">
-              <div class="card-title">
-                <h2>상품DB 조회 결과</h2>
-                <span id="categoryPill" class="pill">품목</span>
-              </div>
-
-              <div class="kv">
-                <div class="kv-row"><div class="key">아이템번호</div><div id="rItemNo" class="value big-value">-</div></div>
-                <div class="kv-row"><div class="key">모델명</div><div id="rModel" class="value">-</div></div>
-                <div class="kv-row"><div class="key">품목</div><div id="rCategory" class="value">-</div></div>
-                <div class="kv-row"><div class="key">상품명</div><div id="rProduct" class="value">-</div></div>
-                <div class="kv-row"><div class="key">브랜드</div><div id="rBrand" class="value">-</div></div>
-                <div class="kv-row"><div class="key">판매가격</div><div id="rPrice" class="value big-value">-</div></div>
-                <div class="kv-row">
-                  <div class="key">행사 일정</div>
-                  <div class="value">
-                    <div id="rPromoDate">-</div>
-                    <div id="rPromoNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
-                  </div>
-                </div>
-                <div class="kv-row">
-                  <div class="key">할인금액</div>
-                  <div class="value">
-                    <div id="rDiscount" class="big-value">-</div>
-                    <div id="rDiscountNote" class="field-note">100% 확정이 아니므로 회원 응대 후 재방문 안내 시 필히 콜센터 확인 후 재방문 안내 해주세요.</div>
-                  </div>
-                </div>
-                <div class="kv-row">
-                  <div class="key">배송 가능</div>
-                  <div class="value">
-                    <div id="rDelivery">-</div>
-                    <div id="rDeliveryNote" class="field-note">배송 가능 일자는 참조용입니다. 회원 응대 시 2주 안내는 필히 해주세요.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <div id="installSection" class="result-section">
-          <article class="card">
-            <div class="card-inner">
-              <div class="card-title"><h2>이전설치비용DB 조회 결과</h2><span id="costPill" class="pill">비용</span></div>
-              <div id="costList" class="cost-list"></div>
-            </div>
-          </article>
-        </div>
-
-        <div id="sampleSection" class="result-section">
-          <article class="card">
-            <div class="card-inner">
-              <div class="card-title"><h2>샘플번호 목록</h2><span id="samplePill" class="pill">상품DB</span></div>
-              <div id="sampleList" class="sample-list"></div>
-            </div>
-          </article>
-        </div>
-
-        <div id="deptSection" class="result-section">
-          <article class="card">
-            <div class="card-inner">
-              <div class="card-title"><h2>해당 부서 연락처</h2><span id="deptPill" class="pill">선택</span></div>
-
-              <div class="selector-box">
-                <label class="selector-label" for="deptSelect">업무지원실, 담당자 연락처(점포별 상이)</label>
-                <select id="deptSelect"><option value="">점포를 선택하세요</option></select>
-              </div>
-
-              <div class="selector-box">
-                <label class="selector-label" for="logisticsSelect">회원 배송 지역 선택</label>
-                <select id="logisticsSelect"><option value="">지역을 선택하세요</option></select>
-              </div>
-
-              <div id="deptList" class="dept-list"></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <div class="bottom-nav">
-        <button class="nav-btn" id="deptBtn" type="button">업무 지원 부서</button>
-        <button class="nav-btn secondary" id="processBtn" type="button">코스트코 프로세스</button>
+        <p class="hint">※ 최초 1회만 구글시트 전체 DB를 받아오고, 이후 검색/탭 전환은 휴대폰 안에서 바로 처리됩니다.</p>
+        <div id="quickList" class="quick-list"></div>
       </div>
+    </article>
 
-      <footer class="footer">Costco Item Search HUB · GitHub Pages Version<br />Google Sheets DB 연결형</footer>
-    </section>
-
-    <section id="processPage" class="process-page">
-      <section class="hero">
-        <img class="hero-logo" src="zeniel-logo.png" alt="ZENIEL" />
-        <div class="hero-badge">Costco Process</div>
-        <h1>코스트코<br />프로세스</h1>
-        <p>문의 유형을 선택하면 서비스, 배송, 설치, 제품, VOC처리 방안, 기타 프로세스별 질문을 확인할 수 있습니다.</p>
-      </section>
-
-      <article class="card">
-        <div class="card-inner">
-          <div class="card-title">
-            <h2>프로세스 선택</h2>
-            <span class="pill active">6개 유형</span>
-          </div>
-          <div class="process-grid">
-            <button class="process-btn" type="button" data-process="서비스">서비스</button>
-            <button class="process-btn" type="button" data-process="배송">배송</button>
-            <button class="process-btn" type="button" data-process="설치">설치</button>
-            <button class="process-btn" type="button" data-process="제품">제품</button>
-            <button class="process-btn" type="button" data-process="VOC처리 방안">VOC처리 방안</button>
-            <button class="process-btn" type="button" data-process="기타">기타</button>
-          </div>
-          <button id="backHomeBtn" class="back-btn" type="button">이전 화면으로 돌아가기</button>
+    <article id="productCard" class="card" style="display:none">
+      <div class="product-visual">
+        <div class="photo-frame">
+          <span id="photoLabel" class="photo-label">PRODUCT</span>
+          <img id="productImg" alt="제품 이미지" />
+          <div id="photoEmpty" class="photo-empty" style="display:none">사진 URL이 없습니다.<br/>구글시트 대표이미지URL 칸에 사진 주소를 넣어주세요.</div>
         </div>
-      </article>
-    </section>
-
-    <section id="processDetailPage" class="process-page">
-      <article class="card">
-        <div class="card-inner">
-          <div class="card-title">
-            <h2 id="processDetailTitle">프로세스 질문</h2>
-            <span id="processDetailPill" class="pill active">0건</span>
-          </div>
-          <div id="processQuestionList" class="question-list">
-            <div class="empty-box">질문을 불러오는 중입니다.</div>
-          </div>
-          <button id="backProcessBtn" class="back-btn" type="button">프로세스 선택으로 돌아가기</button>
+      </div>
+      <div class="card-inner">
+        <div class="product-head">
+          <div><div id="modelName" class="model">-</div><div id="productName" class="prod-name">-</div><div id="metaList" class="meta"></div></div>
+          <span id="itemPill" class="pill ok">-</span>
         </div>
-      </article>
-    </section>
-  </main>
+        <div id="detailTabs" class="tabs"></div>
+        <div id="detailBox" class="detail-box"></div>
+      </div>
+    </article>
 
-  <script>
-    const CONFIG = {
-      APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec"
+    <div id="productEmpty" class="empty">조회할 아이템번호를 입력하면 모델 사진과 상세정보가 표시됩니다.</div>
+  </section>
+
+  <section id="pageDept" class="page">
+    <article class="card">
+      <div class="card-inner">
+        <div class="section-title"><div><h2>업무지원부서 검색</h2><small>점포, 지역, 담당자, 연락처, 업무범위로 검색 가능합니다.</small></div><span id="deptCountPill" class="pill">0건</span></div>
+        <div class="toolbar">
+          <input id="deptSearch" type="text" placeholder="예: 대구, 물류, 주소 변경, 담당자명" autocomplete="off" />
+          <div id="deptChips" class="chips"></div>
+        </div>
+        <div id="deptList" class="list"></div>
+      </div>
+    </article>
+  </section>
+
+  <section id="pageProcess" class="page">
+    <article class="card">
+      <div class="card-inner">
+        <div class="section-title"><div><h2>코스트코 프로세스</h2><small>시트에 입력한 내용이 유형별 페이지로 표시됩니다.</small></div><span id="processCountPill" class="pill">0건</span></div>
+        <div id="processTabs" class="process-tabs"></div>
+        <div id="processList" class="list"></div>
+      </div>
+    </article>
+  </section>
+
+  <button id="floatRefreshBtn" class="floating-refresh" type="button">DB 새로고침</button>
+  <footer class="footer">Google Sheets DB 연결형 · PWA App Shell Cache · Local Data Cache</footer>
+</main>
+
+<script>
+const CONFIG = {
+  // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
+  // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
+  CACHE_KEY: "costco_item_operation_hub_v2_cache",
+  CACHE_MAX_MS: 1000 * 60 * 60 * 12
+};
+
+const PROCESS_TYPES = ["시연 모드", "배송", "설치", "VOC", "기타"];
+const DETAIL_TABS = [
+  { key:"spec", label:"스펙" },
+  { key:"feature", label:"기능" },
+  { key:"promoDate", label:"행사 예정일" },
+  { key:"wallModel", label:"벽걸이 모델명" },
+  { key:"cost", label:"이전설치/철거 비용" }
+];
+
+let DB = { items:[], departments:[], processes:[], updatedAt:"" };
+let itemMap = new Map();
+let selectedItem = null;
+let selectedTab = "spec";
+let deptFilter = "전체";
+let processFilter = "시연 모드";
+
+const $ = (id)=>document.getElementById(id);
+const els = {
+  status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
+  navItem:$("navItem"), navDept:$("navDept"), navProcess:$("navProcess"),
+  pageItem:$("pageItem"), pageDept:$("pageDept"), pageProcess:$("pageProcess"),
+  itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), quickList:$("quickList"),
+  productCard:$("productCard"), productEmpty:$("productEmpty"), productImg:$("productImg"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
+  modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"),
+  deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"),
+  processTabs:$("processTabs"), processList:$("processList"), processCountPill:$("processCountPill")
+};
+
+init();
+
+function init(){
+  bindEvents();
+  renderDetailTabs();
+  renderDeptChips();
+  renderProcessTabs();
+  loadFromCache();
+  loadBootstrap(false);
+}
+
+function bindEvents(){
+  els.navItem.addEventListener("click",()=>showPage("item"));
+  els.navDept.addEventListener("click",()=>showPage("dept"));
+  els.navProcess.addEventListener("click",()=>showPage("process"));
+  els.itemSearchBtn.addEventListener("click",searchItem);
+  els.itemInput.addEventListener("input",()=>{
+    els.itemInput.value = els.itemInput.value.replace(/[^0-9]/g,"").slice(0,6);
+    if(els.itemInput.value.length === 6) searchItem(false);
+    else renderQuickList(els.itemInput.value);
+  });
+  els.itemInput.addEventListener("keydown",(e)=>{ if(e.key === "Enter") searchItem(); });
+  els.deptSearch.addEventListener("input",debounce(renderDepartments,120));
+  els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+  els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+}
+
+function showPage(page){
+  const map = { item:els.pageItem, dept:els.pageDept, process:els.pageProcess };
+  Object.values(map).forEach(el=>el.classList.remove("show"));
+  map[page].classList.add("show");
+  [els.navItem,els.navDept,els.navProcess].forEach(btn=>btn.classList.remove("active"));
+  if(page==="item") els.navItem.classList.add("active");
+  if(page==="dept") els.navDept.classList.add("active");
+  if(page==="process") els.navProcess.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showStatus(msg,type="warn"){
+  els.status.textContent = msg;
+  els.status.className = `status show ${type}`;
+}
+function hideStatus(){ els.status.className = "status"; els.status.textContent = ""; }
+
+function loadFromCache(){
+  try{
+    const raw = localStorage.getItem(CONFIG.CACHE_KEY);
+    if(!raw) return;
+    const cached = JSON.parse(raw);
+    if(!cached || !cached.data) return;
+    DB = cached.data;
+    rebuildIndex();
+    renderAll();
+    const ageMin = Math.round((Date.now() - (cached.savedAt||0))/60000);
+    els.syncText.textContent = `캐시 데이터 표시 중 · ${ageMin}분 전 저장`;
+  }catch(e){ console.log(e); }
+}
+
+async function loadBootstrap(force){
+  try{
+    showStatus(force ? "구글시트 최신 DB를 다시 불러오는 중입니다." : "구글시트 DB를 불러오는 중입니다.", "warn");
+    const data = await apiGet({ action:"bootstrap", refresh: force ? "1" : "0", _: Date.now() });
+    if(!data || data.ok === false) throw new Error(data?.message || "응답 오류");
+    DB = {
+      items: Array.isArray(data.items) ? data.items : [],
+      departments: Array.isArray(data.departments) ? data.departments : [],
+      processes: Array.isArray(data.processes) ? data.processes : [],
+      updatedAt: data.updatedAt || formatToday()
     };
-
-    let currentMode = "";
-    let currentResult = null;
-    let currentDepartments = [];
-    let currentLogistics = [];
-    let selectedStoreIndex = "";
-    let selectedRegionIndex = "";
-    let lastItemNo = "";
-    let processRows = [];
-    let sampleRows = [];
-    let currentPage = "main";
-
-    const $ = (id) => document.getElementById(id);
-
-    const mainPage = $("mainPage");
-    const processPage = $("processPage");
-    const itemInput = $("itemInput");
-    const productSearchBtn = $("productSearchBtn");
-    const installSearchBtn = $("installSearchBtn");
-    const resetBtn = $("resetBtn");
-    const sampleBtn = $("sampleBtn");
-    const deptBtn = $("deptBtn");
-    const processBtn = $("processBtn");
-    const backHomeBtn = $("backHomeBtn");
-    const statusBox = $("status");
-    const resultWrap = $("resultWrap");
-    const productSection = $("productSection");
-    const installSection = $("installSection");
-    const sampleSection = $("sampleSection");
-    const deptSection = $("deptSection");
-    const deptSelect = $("deptSelect");
-    const logisticsSelect = $("logisticsSelect");
-    const modeHint = $("modeHint");
-    const lastUpdatedText = $("lastUpdatedText");
-    const processDetailPage = $("processDetailPage");
-    const processDetailTitle = $("processDetailTitle");
-    const processDetailPill = $("processDetailPill");
-    const processQuestionList = $("processQuestionList");
-    const backProcessBtn = $("backProcessBtn");
-
-    history.replaceState({ page: "main" }, "", location.pathname + location.search);
-    loadInitialUpdatedAt();
-
-    productSearchBtn.addEventListener("click", () => searchByMode("product"));
-    installSearchBtn.addEventListener("click", () => searchByMode("install"));
-    deptBtn.addEventListener("click", showDepartments);
-    processBtn.addEventListener("click", openProcessPage);
-    backHomeBtn.addEventListener("click", closeProcessPage);
-    backProcessBtn.addEventListener("click", closeProcessDetailPage);
-    resetBtn.addEventListener("click", resetView);
-    sampleBtn.addEventListener("click", showSamples);
-    deptSelect.addEventListener("change", () => { selectedStoreIndex = deptSelect.value; renderDepartmentResult(); });
-    logisticsSelect.addEventListener("change", () => { selectedRegionIndex = logisticsSelect.value; renderDepartmentResult(); });
-
-    document.querySelectorAll(".process-btn").forEach((button) => {
-      button.addEventListener("click", () => selectProcess(button.dataset.process));
-    });
-
-    itemInput.addEventListener("input", () => { itemInput.value = itemInput.value.replace(/[^0-9]/g, "").slice(0, 6); });
-    itemInput.addEventListener("keydown", (event) => { if (event.key === "Enter") searchByMode(currentMode === "install" ? "install" : "product"); });
-
-    function showStatus(message, type = "warn") { statusBox.textContent = message; statusBox.className = `status show ${type}`; }
-    function hideStatus() { statusBox.textContent = ""; statusBox.className = "status"; }
-
-    async function loadInitialUpdatedAt() {
-      try {
-        const data = await fetchApi("action=config");
-        updateLastUpdated(data);
-      } catch (error) {
-        lastUpdatedText.textContent = `최근 업데이트 일: ${formatToday()}`;
-      }
-    }
-
-    function resetView() {
-      itemInput.value = "";
-      currentMode = "";
-      currentResult = null;
-      selectedStoreIndex = "";
-      selectedRegionIndex = "";
-      lastItemNo = "";
-      hideAllSections();
-      resultWrap.classList.remove("show");
-      productSearchBtn.classList.remove("active");
-      installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 원하는 조회 버튼을 눌러 상품 조회와 이전설치비용을 확인하세요.";
-      hideStatus();
-      itemInput.focus();
-    }
-
-    function hideAllSections() {
-      productSection.classList.remove("show");
-      installSection.classList.remove("show");
-      sampleSection.classList.remove("show");
-      deptSection.classList.remove("show");
-    }
-
-    async function searchByMode(mode) {
-      const itemNo = itemInput.value.trim();
-      hideStatus();
-
-      if (!/^\d{6}$/.test(itemNo)) {
-        showStatus("아이템번호 6자리 숫자를 입력해 주세요.", "error");
-        resultWrap.classList.remove("show");
-        return;
-      }
-
-      currentMode = mode;
-      lastItemNo = itemNo;
-      setActiveMode(mode);
-
-      try {
-        showStatus(mode === "product" ? "상품DB를 조회 중입니다." : "이전설치비용DB를 조회 중입니다.", "warn");
-        const data = await fetchApi(`action=search&itemNo=${encodeURIComponent(itemNo)}`);
-        currentResult = data || { item: null, costs: [] };
-        updateLastUpdated(data);
-
-        renderProduct(currentResult.item, itemNo);
-        renderCosts(currentResult.costs || [], currentResult.item, itemNo);
-
-        resultWrap.classList.add("show");
-        hideAllSections();
-
-        if (mode === "product") {
-          productSection.classList.add("show");
-          showStatus(currentResult.item ? "상품DB 조회가 완료되었습니다." : "상품DB에 등록된 상품 정보가 없습니다.", currentResult.item ? "success" : "error");
-        } else {
-          installSection.classList.add("show");
-          showStatus((currentResult.costs || []).length ? "이전설치비용DB 조회가 완료되었습니다." : "이전설치비용DB에 등록된 비용 정보가 없습니다.", (currentResult.costs || []).length ? "success" : "error");
-        }
-      } catch (error) {
-        console.error(error);
-        showStatus("조회 중 오류가 발생했습니다. Apps Script 배포 URL 또는 권한을 확인해 주세요.", "error");
-        resultWrap.classList.remove("show");
-      }
-    }
-
-    function setActiveMode(mode) {
-      productSearchBtn.classList.toggle("active", mode === "product");
-      installSearchBtn.classList.toggle("active", mode === "install");
-      modeHint.textContent = mode === "product" ? "※ 상품 조회 결과만 표시합니다." : "※ 이전설치비용 조회 결과만 표시합니다.";
-    }
-
-    async function showSamples() {
-      hideStatus();
-      currentMode = "samples";
-      productSearchBtn.classList.remove("active");
-      installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 상품DB의 아이템번호, 모델명, 품목, 상품명 목록을 확인합니다.";
-
-      try {
-        showStatus("샘플번호 목록을 불러오는 중입니다.", "warn");
-        const data = await fetchApi(`action=samples&_=${Date.now()}`);
-
-        if (!data || data.ok === false) {
-          throw new Error(data?.message || "샘플번호 응답 오류");
-        }
-
-        updateLastUpdated(data);
-        sampleRows = Array.isArray(data.samples) ? data.samples : [];
-        renderSamples(sampleRows);
-
-        resultWrap.classList.add("show");
-        hideAllSections();
-        sampleSection.classList.add("show");
-        showStatus(`${sampleRows.length}개 샘플번호를 불러왔습니다.`, "success");
-      } catch (error) {
-        console.error(error);
-        showStatus("샘플번호 목록을 불러오지 못했습니다. Apps Script의 samples 기능을 확인해 주세요.", "error");
-      }
-    }
-
-    function renderSamples(rows) {
-      const box = $("sampleList");
-      const pill = $("samplePill");
-      pill.textContent = `${rows.length}건`;
-      pill.classList.toggle("active", rows.length > 0);
-
-      if (!rows.length) {
-        box.innerHTML = `<div class="empty-box">상품DB에 표시할 샘플번호가 없습니다.</div>`;
-        return;
-      }
-
-      box.innerHTML = rows.map((row) => `
-        <div class="sample-item" data-item-no="${escapeHtml(row.itemNo)}">
-          <div class="sample-top">
-            <div class="sample-no">${escapeHtml(row.itemNo || "-")}</div>
-            <span class="pill">${escapeHtml(row.category || "-")}</span>
-          </div>
-          <div class="sample-name">${escapeHtml(row.productName || "-")}</div>
-          <div class="sample-meta">모델명: ${escapeHtml(row.modelName || "-")}</div>
-        </div>
-      `).join("");
-
-      box.querySelectorAll(".sample-item").forEach((item) => {
-        item.addEventListener("click", () => {
-          const itemNo = item.dataset.itemNo || "";
-          if (!itemNo) return;
-          itemInput.value = itemNo;
-          searchByMode("product");
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      });
-    }
-
-    async function showDepartments() {
-      hideStatus();
-      currentMode = "department";
-      productSearchBtn.classList.remove("active");
-      installSearchBtn.classList.remove("active");
-      modeHint.textContent = "※ 업무지원실/담당자 연락처와 회원 배송 지역을 각각 선택해 확인합니다.";
-
-      try {
-        showStatus("업무지원실 정보를 불러오는 중입니다.", "warn");
-        const data = await fetchApi("action=departments");
-        updateLastUpdated(data);
-        currentDepartments = data.departments || [];
-        currentLogistics = data.logistics || [];
-        renderDepartmentSelectors();
-
-        resultWrap.classList.add("show");
-        hideAllSections();
-        deptSection.classList.add("show");
-        showStatus("업무지원실/담당자 연락처와 회원 배송 지역을 선택해 주세요.", "success");
-      } catch (error) {
-        console.error(error);
-        showStatus("업무지원실 정보를 불러오지 못했습니다. Apps Script 코드와 부서DB/물류DB 시트를 확인해 주세요.", "error");
-      }
-    }
-
-    function showMainPage() {
-      currentPage = "main";
-      processPage.classList.remove("show");
-      processDetailPage.classList.remove("show");
-      mainPage.classList.add("show");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function showProcessSelectPage() {
-      currentPage = "process";
-      mainPage.classList.remove("show");
-      processDetailPage.classList.remove("show");
-      processPage.classList.add("show");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function openProcessPage() {
-      showProcessSelectPage();
-      history.pushState({ page: "process" }, "", "#process");
-    }
-
-    function closeProcessPage() {
-      history.back();
-    }
-
-    function closeProcessDetailPage() {
-      history.back();
-    }
-
-    async function selectProcess(type, pushHistory = true) {
-      currentPage = "processDetail";
-      processPage.classList.remove("show");
-      mainPage.classList.remove("show");
-      processDetailPage.classList.add("show");
-      processDetailTitle.textContent = `${type} 질문`;
-      processDetailPill.textContent = "불러오는 중";
-      processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 질문을 불러오는 중입니다.</div>`;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      if (pushHistory) {
-        history.pushState({ page: "processDetail", type }, "", `#process-${encodeURIComponent(type)}`);
-      }
-
-      try {
-        const data = await fetchApi(`action=processes&_=${Date.now()}`);
-
-        if (!data || data.ok === false) {
-          throw new Error(data?.message || "프로세스DB 응답 오류");
-        }
-
-        updateLastUpdated(data);
-        processRows = Array.isArray(data.processes) ? data.processes : [];
-
-        const rows = processRows
-          .filter((row) => safe(row.type, "") === type)
-          .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
-
-        renderProcessQuestions(type, rows);
-      } catch (error) {
-        console.error(error);
-        processDetailPill.textContent = "오류";
-        processQuestionList.innerHTML = `<div class="empty-box">프로세스DB 연결 중 오류가 발생했습니다.<br>Apps Script 배포 상태와 GitHub index.html 최신 반영 여부를 확인해 주세요.<br><br>오류내용: ${escapeHtml(error.message || error)}</div>`;
-      }
-    }
-
-    window.addEventListener("popstate", (event) => {
-      const state = event.state || { page: "main" };
-
-      if (state.page === "process") {
-        showProcessSelectPage();
-        return;
-      }
-
-      if (state.page === "processDetail" && state.type) {
-        selectProcess(state.type, false);
-        return;
-      }
-
-      showMainPage();
-    });
-
-    function renderProcessQuestions(type, rows) {
-      processDetailPill.textContent = `${rows.length}건`;
-
-      if (!rows.length) {
-        processQuestionList.innerHTML = `<div class="empty-box">${escapeHtml(type)} 유형에 등록된 질문이 없습니다.</div>`;
-        return;
-      }
-
-      processQuestionList.innerHTML = rows.map((row, index) => `
-        <div class="question-card">
-          <button class="question-button" type="button">${index + 1}. ${escapeHtml(row.question || "질문 미등록")}</button>
-          <div class="answer-box">${escapeHtml(row.answer || "답변 미등록")}</div>
-        </div>
-      `).join("");
-
-      processQuestionList.querySelectorAll(".question-button").forEach((button) => {
-        button.addEventListener("click", () => {
-          button.closest(".question-card").classList.toggle("open");
-        });
-      });
-    }
-
-    async function fetchApi(queryString) {
-      const url = `${CONFIG.APPS_SCRIPT_URL}?${queryString}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("API response error");
-      return await response.json();
-    }
-
-    function renderProduct(item, searchedItemNo) {
-      if (!item) {
-        $("rItemNo").textContent = searchedItemNo || "-";
-        $("rModel").textContent = "상품DB 미등록";
-        $("rCategory").textContent = "-";
-        $("rProduct").textContent = "-";
-        $("rBrand").textContent = "-";
-        $("rPrice").textContent = "-";
-        $("rPromoDate").textContent = "-";
-        $("rDiscount").textContent = "-";
-        $("rDelivery").textContent = "-";
-        $("categoryPill").textContent = "미등록";
-        $("categoryPill").classList.remove("active");
-        setProductNotes(null);
-        return;
-      }
-
-      $("rItemNo").textContent = safe(item.itemNo);
-      $("rModel").textContent = safe(item.modelName);
-      $("rCategory").textContent = safe(item.category);
-      $("rProduct").textContent = safe(item.productName);
-      $("rBrand").textContent = safe(item.brand);
-      $("rPrice").textContent = formatMoney(item.price);
-      $("rPromoDate").textContent = formatPromoDate(item.promoStart, item.promoEnd);
-      $("rDiscount").textContent = formatMoney(item.discountAmount);
-      $("rDelivery").textContent = safe(item.deliveryAvailableDate);
-      $("categoryPill").textContent = safe(item.category, "품목");
-      $("categoryPill").classList.add("active");
-      setProductNotes(item);
-    }
-
-    function renderCosts(costs, item, searchedItemNo) {
-      const box = $("costList");
-      box.innerHTML = "";
-
-      if (!costs.length) {
-        $("costPill").textContent = "미등록";
-        $("costPill").classList.remove("active");
-        box.innerHTML = `<div class="empty-box">${escapeHtml(searchedItemNo)} 아이템번호로 등록된 이전설치/철거 비용이 없습니다.</div>`;
-        return;
-      }
-
-      $("costPill").textContent = `${costs.length}건`;
-      $("costPill").classList.add("active");
-
-      costs.forEach((cost) => {
-        const div = document.createElement("div");
-        div.className = "cost-item";
-        div.innerHTML = `
-          <div class="cost-top">
-            <div>
-              <div class="cost-name">${escapeHtml(cost.productName || item?.productName || "-")}</div>
-              <div class="cost-sub">${escapeHtml(cost.modelName || item?.modelName || "-")}</div>
-            </div>
-            <span class="pill">${escapeHtml(cost.category || item?.category || "-")}</span>
-          </div>
-          <div class="money-grid">
-            <div class="money-box"><div class="money-label">이전설치비용</div><div class="money-value">${formatMultiline(cost.installCost)}</div></div>
-            <div class="money-box"><div class="money-label">철거비용</div><div class="money-value">${formatMultiline(cost.removalCost)}</div></div>
-          </div>
-          <div class="note-box">${escapeHtml(cost.note || "-")}</div>
-        `;
-        box.appendChild(div);
-      });
-    }
-
-    function renderDepartmentSelectors() {
-      deptSelect.innerHTML = `<option value="">점포를 선택하세요</option>`;
-      logisticsSelect.innerHTML = `<option value="">지역을 선택하세요</option>`;
-      selectedStoreIndex = "";
-      selectedRegionIndex = "";
-
-      currentDepartments.forEach((dept, index) => {
-        if (!safe(dept.store, "")) return;
-        const option = document.createElement("option");
-        option.value = String(index);
-        option.textContent = dept.store;
-        deptSelect.appendChild(option);
-      });
-
-      getSortedLogistics().forEach((row, index) => {
-        const option = document.createElement("option");
-        option.value = String(index);
-        option.textContent = `${row.region} (${row.tcName})`;
-        logisticsSelect.appendChild(option);
-      });
-
-      $("deptPill").textContent = `${currentDepartments.length}개 점포 / ${currentLogistics.length}개 지역`;
-      $("deptPill").classList.toggle("active", currentDepartments.length > 0 || currentLogistics.length > 0);
-      renderDepartmentResult();
-    }
-
-    function renderDepartmentResult() {
-      const box = $("deptList");
-      const dept = selectedStoreIndex !== "" ? currentDepartments[Number(selectedStoreIndex)] : null;
-      const regionRow = selectedRegionIndex !== "" ? getSelectedLogisticsRow() : null;
-
-      if (!dept && !regionRow) {
-        box.innerHTML = `<div class="empty-box">업무지원실/담당자 연락처와 회원 배송 지역을 각각 선택하면 해당 부서 연락처가 표시됩니다.</div>`;
-        return;
-      }
-
-      box.innerHTML = `
-        ${makeDeptContactCard({
-          title: "업무지원실",
-          help: "제품 물류 이관 전/후 배송 확인, 주소 변경, 일정 변경, 재고 문의",
-          manager: dept?.supportManager,
-          phone: dept?.supportPhone,
-          note: dept?.supportNote
-        })}
-        ${makeDeptContactCard({
-          title: "물류 연락처",
-          help: "제품 물류 이관 후 배송 확인, 기사 정보, 일정 변경",
-          manager: regionRow?.manager,
-          phone: regionRow?.phone,
-          note: regionRow?.coverage
-        })}
-        ${makeDeptContactCard({
-          title: "삼성 담당자",
-          help: "제품, VOC 처리 방향, 단순 배송 요청 등",
-          manager: dept?.samsungManager || dept?.ceManager || dept?.mxManager,
-          phone: dept?.samsungPhone || dept?.cePhone || dept?.mxPhone,
-          note: dept?.samsungNote || dept?.ceNote || dept?.mxNote
-        })}
-      `;
-    }
-
-    function getSortedLogistics() {
-      return currentLogistics
-        .filter((row) => safe(row.region, "") !== "")
-        .sort((a, b) => safe(a.region, "").localeCompare(safe(b.region, ""), "ko"));
-    }
-
-    function getSelectedLogisticsRow() {
-      return getSortedLogistics()[Number(selectedRegionIndex)] || null;
-    }
-
-    function makeDeptContactCard({ title, help, manager, phone, note }) {
-      const cleanPhone = safe(phone, "");
-      const telHref = cleanPhone ? `tel:${cleanPhone.replace(/[^0-9+]/g, "")}` : "#";
-      return `
-        <div class="dept-item">
-          <div class="dept-top">
-            <div class="dept-title-line">
-              <span class="dept-name">${escapeHtml(title)}</span>
-              <span class="dept-help">(${escapeHtml(help)})</span>
-            </div>
-          </div>
-          <div class="kv">
-            <div class="kv-row"><div class="key">담당자</div><div class="value">${escapeHtml(manager || "-")}</div></div>
-            <div class="kv-row"><div class="key">연락처</div><div class="value">${escapeHtml(cleanPhone || "-")}</div></div>
-            ${note ? `<div class="kv-row"><div class="key">비고</div><div class="value">${escapeHtml(note)}</div></div>` : ""}
-          </div>
-          ${cleanPhone ? `<a class="phone-link" href="${telHref}">전화 연결</a>` : ""}
-        </div>`;
-    }
-
-    function updateLastUpdated(data) {
-      const value = data?.updatedAt || data?.lastUpdated || "";
-      lastUpdatedText.textContent = `최근 업데이트 일: ${value ? safe(value) : formatToday()}`;
-    }
-
-    function setProductNotes(item) {
-      const deliveryNote = $("rDeliveryNote");
-      const promoNote = $("rPromoNote");
-      const discountNote = $("rDiscountNote");
-
-      if (!item) {
-        deliveryNote.classList.remove("show");
-        promoNote.classList.remove("show");
-        discountNote.classList.remove("show");
-        return;
-      }
-
-      const deliveryText = safe(item.deliveryAvailableDate, "");
-      const isCarry = deliveryText.includes("핸드캐리") || deliveryText.includes("핸디캐리");
-      deliveryNote.classList.toggle("show", !!deliveryText && !isCarry);
-
-      const showPromoWarning = shouldShowPromoWarning(item.promoStart);
-      promoNote.classList.toggle("show", showPromoWarning);
-      discountNote.classList.toggle("show", showPromoWarning && safe(item.discountAmount, "") !== "");
-    }
-
-    function shouldShowPromoWarning(start) {
-      const startDate = parseDateText(start);
-      if (!startDate) return false;
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return startDate.getTime() > today.getTime();
-    }
-
-    function parseDateText(value) {
-      if (!value) return null;
-      const text = String(value).trim();
-      const match = text.match(/(\d{4})[.\-\/\s년]+(\d{1,2})[.\-\/\s월]+(\d{1,2})/);
-      if (!match) return null;
-      const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-      date.setHours(0, 0, 0, 0);
-      return Number.isNaN(date.getTime()) ? null : date;
-    }
-
-    function formatPromoDate(start, end) {
-      const s = safe(start);
-      const e = safe(end);
-      if (s === "-" && e === "-") return "-";
-      return `${s} ~ ${e}`;
-    }
-
-    function formatMoney(value) {
-      if (value === undefined || value === null || value === "") return "-";
-      const text = String(value).trim();
-      if (!text) return "-";
-      if (text.includes("원")) return text;
-      const number = Number(text.replace(/[^0-9.-]/g, ""));
-      if (Number.isNaN(number)) return text;
-      return `${number.toLocaleString("ko-KR")}원`;
-    }
-
-    function formatMultiline(value) {
-      if (value === undefined || value === null || value === "") return "-";
-      return escapeHtml(String(value)).replace(/\n/g, "<br>");
-    }
-
-    function formatToday() {
-      const today = new Date();
-      const y = today.getFullYear();
-      const m = String(today.getMonth() + 1).padStart(2, "0");
-      const d = String(today.getDate()).padStart(2, "0");
-      return `${y}.${m}.${d}`;
-    }
-
-    function safe(value, fallback = "-") {
-      if (value === undefined || value === null || String(value).trim() === "") return fallback;
-      return String(value).trim();
-    }
-
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch((error) => console.log("Service Worker registration failed:", error));
-      });
-    }
-  </script>
+    localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({ savedAt:Date.now(), data:DB }));
+    rebuildIndex();
+    renderAll();
+    showStatus("DB 동기화가 완료되었습니다. 이제 검색과 탭 전환은 빠르게 작동합니다.", "ok");
+    els.syncText.textContent = `최근 업데이트: ${safe(DB.updatedAt, formatToday())}`;
+    setTimeout(hideStatus,1800);
+  }catch(e){
+    console.error(e);
+    showStatus("구글시트 DB를 불러오지 못했습니다. Apps Script 배포 URL, 권한, 시트명을 확인해 주세요. 저장된 캐시가 있으면 캐시 데이터로 표시됩니다.", "err");
+  }
+}
+
+async function apiGet(params){
+  const qs = new URLSearchParams(params).toString();
+  const url = `${CONFIG.APPS_SCRIPT_URL}?${qs}`;
+  try{
+    const res = await fetch(url, { method:"GET", cache:"no-store" });
+    if(!res.ok) throw new Error("fetch response error");
+    return await res.json();
+  }catch(fetchError){
+    return await jsonp(url);
+  }
+}
+
+function jsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb = `__costcoHubCb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const s = document.createElement("script");
+    const sep = url.includes("?") ? "&" : "?";
+    s.src = `${url}${sep}callback=${cb}`;
+    s.async = true;
+    const timer = setTimeout(()=>{cleanup();reject(new Error("JSONP timeout"));},15000);
+    function cleanup(){ clearTimeout(timer); delete window[cb]; s.remove(); }
+    window[cb] = (data)=>{ cleanup(); resolve(data); };
+    s.onerror = ()=>{ cleanup(); reject(new Error("JSONP error")); };
+    document.body.appendChild(s);
+  });
+}
+
+function rebuildIndex(){
+  itemMap = new Map();
+  DB.items.forEach(item=>{
+    const no = normalize(item.itemNo);
+    if(no) itemMap.set(no, item);
+  });
+}
+
+function renderAll(){
+  els.itemCountPill.textContent = `${DB.items.length}건`;
+  renderQuickList(els.itemInput.value);
+  renderDepartments();
+  renderProcesses();
+}
+
+function searchItem(showError=true){
+  const q = normalize(els.itemInput.value);
+  if(!/^\d{6}$/.test(q)){
+    if(showError) showStatus("아이템번호 6자리 숫자를 입력해 주세요.", "err");
+    return;
+  }
+  const item = itemMap.get(q);
+  if(!item){
+    selectedItem = null;
+    els.productCard.style.display = "none";
+    els.productEmpty.style.display = "block";
+    els.productEmpty.textContent = `${q} 아이템번호로 등록된 상품이 없습니다. 구글시트 상품DB를 확인해 주세요.`;
+    showStatus("등록된 상품 정보가 없습니다.", "err");
+    return;
+  }
+  selectedItem = item;
+  selectedTab = "spec";
+  renderProduct(item);
+  hideStatus();
+}
+
+function renderQuickList(query=""){
+  const q = normalize(query);
+  let rows = DB.items.slice(0, 15);
+  if(q){ rows = DB.items.filter(item => normalize(item.itemNo).includes(q)).slice(0,15); }
+  if(!rows.length){ els.quickList.innerHTML = ""; return; }
+  els.quickList.innerHTML = rows.map(item=>`
+    <button class="quick-item" type="button" data-item="${esc(item.itemNo)}">
+      <div class="quick-no">${esc(item.itemNo || "-")}</div>
+      <div class="quick-name">${esc(item.modelName || "모델명 미등록")} · ${esc(item.productName || item.category || "")}</div>
+    </button>`).join("");
+  els.quickList.querySelectorAll(".quick-item").forEach(btn=>{
+    btn.addEventListener("click",()=>{ els.itemInput.value = btn.dataset.item; searchItem(); });
+  });
+}
+
+function renderProduct(item){
+  els.productCard.style.display = "block";
+  els.productEmpty.style.display = "none";
+  els.modelName.textContent = safe(item.modelName,"모델명 미등록");
+  els.productName.textContent = safe(item.productName,"상품명 미등록");
+  els.itemPill.textContent = safe(item.itemNo,"-");
+  els.photoLabel.textContent = safe(item.category,"PRODUCT");
+  const imgUrl = convertDriveImageUrl(item.imageUrl || item.photoUrl || "");
+  if(imgUrl){
+    els.productImg.style.display = "block";
+    els.photoEmpty.style.display = "none";
+    els.productImg.src = imgUrl;
+    els.productImg.onerror = ()=>{ els.productImg.style.display="none"; els.photoEmpty.style.display="block"; els.photoEmpty.innerHTML="이미지를 불러오지 못했습니다.<br/>대표이미지URL 공개 권한을 확인해 주세요."; };
+  }else{
+    els.productImg.removeAttribute("src");
+    els.productImg.style.display = "none";
+    els.photoEmpty.style.display = "block";
+  }
+  const metas = [item.brand, item.category, item.keywords].filter(Boolean).slice(0,4);
+  els.metaList.innerHTML = metas.map(v=>`<span class="pill">${esc(v)}</span>`).join("");
+  renderDetailTabs();
+  renderDetailBox();
+}
+
+function renderDetailTabs(){
+  els.detailTabs.innerHTML = DETAIL_TABS.map(tab=>`<button class="tab-btn ${selectedTab===tab.key?"active":""}" type="button" data-key="${tab.key}">${tab.label}</button>`).join("");
+  els.detailTabs.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{ selectedTab = btn.dataset.key; renderDetailTabs(); renderDetailBox(); });
+  });
+}
+
+function renderDetailBox(){
+  if(!selectedItem){ els.detailBox.innerHTML = ""; return; }
+  const tab = DETAIL_TABS.find(t=>t.key===selectedTab) || DETAIL_TABS[0];
+  if(selectedTab === "cost"){
+    els.detailBox.innerHTML = `
+      <div class="detail-title">${tab.label}</div>
+      <div class="cost-grid">
+        <div class="cost-box"><div class="cost-label">이전설치비용</div><div class="cost-value">${esc(safe(selectedItem.installCost,"미등록"))}</div></div>
+        <div class="cost-box"><div class="cost-label">철거비용</div><div class="cost-value">${esc(safe(selectedItem.removalCost,"미등록"))}</div></div>
+      </div>
+      ${selectedItem.costNote || selectedItem.note ? `<div class="detail-body" style="margin-top:10px">${esc(selectedItem.costNote || selectedItem.note)}</div>` : ""}
+    `;
+    return;
+  }
+  const body = selectedItem[selectedTab] || "등록된 내용이 없습니다. 구글시트 해당 칸에 내용을 입력하면 반영됩니다.";
+  els.detailBox.innerHTML = `<div class="detail-title">${tab.label}</div><div class="detail-body">${esc(body)}</div>`;
+}
+
+function renderDeptChips(){
+  const chips = ["전체","업무지원실","물류","삼성","기타"];
+  els.deptChips.innerHTML = chips.map(ch=>`<button class="chip ${deptFilter===ch?"active":""}" type="button" data-chip="${ch}">${ch}</button>`).join("");
+  els.deptChips.querySelectorAll(".chip").forEach(btn=>{
+    btn.addEventListener("click",()=>{ deptFilter = btn.dataset.chip; renderDeptChips(); renderDepartments(); });
+  });
+}
+
+function renderDepartments(){
+  const q = normalizeText(els.deptSearch.value);
+  let rows = DB.departments.slice();
+  if(deptFilter !== "전체"){
+    const f = normalizeText(deptFilter);
+    rows = rows.filter(r => normalizeText([r.type,r.deptName,r.scope,r.keywords].join(" ")).includes(f));
+  }
+  if(q){
+    rows = rows.filter(r => normalizeText([r.type,r.place,r.deptName,r.manager,r.phone,r.scope,r.note,r.keywords].join(" ")).includes(q));
+  }
+  els.deptCountPill.textContent = `${rows.length}건`;
+  if(!rows.length){ els.deptList.innerHTML = `<div class="empty">검색 조건에 맞는 업무지원부서가 없습니다.</div>`; return; }
+  els.deptList.innerHTML = rows.map(r=>`
+    <div class="info-card">
+      <div class="info-top">
+        <div><div class="info-title">${esc(r.place || r.deptName || "미등록")}</div><div class="info-sub">${esc(r.scope || r.keywords || "업무범위 미등록")}</div></div>
+        <span class="pill ${r.type?"ok":""}">${esc(r.type || "부서")}</span>
+      </div>
+      <div class="kv">
+        <div class="kv-row"><div class="key">부서</div><div class="val">${esc(r.deptName || "-")}</div></div>
+        <div class="kv-row"><div class="key">담당자</div><div class="val">${esc(r.manager || "-")}</div></div>
+        <div class="kv-row"><div class="key">연락처</div><div class="val">${esc(r.phone || "-")}</div></div>
+        ${r.note ? `<div class="kv-row"><div class="key">비고</div><div class="val">${esc(r.note)}</div></div>` : ""}
+      </div>
+      ${r.phone ? `<a class="phone-link" href="tel:${String(r.phone).replace(/[^0-9+]/g,"")}">전화 연결</a>` : ""}
+    </div>`).join("");
+}
+
+function renderProcessTabs(){
+  els.processTabs.innerHTML = PROCESS_TYPES.map(t=>`<button class="process-btn ${processFilter===t?"active":""}" type="button" data-type="${t}">${t}</button>`).join("");
+  els.processTabs.querySelectorAll(".process-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{ processFilter = btn.dataset.type; renderProcessTabs(); renderProcesses(); });
+  });
+}
+
+function renderProcesses(){
+  const rows = DB.processes.filter(r => safe(r.type,"") === processFilter);
+  els.processCountPill.textContent = `${rows.length}건`;
+  if(!rows.length){ els.processList.innerHTML = `<div class="empty">${esc(processFilter)} 유형에 등록된 프로세스가 없습니다.</div>`; return; }
+  els.processList.innerHTML = rows.map((r,i)=>`
+    <div class="info-card process-card">
+      <div class="info-top"><div class="info-title">${i+1}. ${esc(r.title || "제목 미등록")}</div><span class="pill ok">${esc(r.type)}</span></div>
+      <div class="process-body">${esc(r.body || "내용 미등록")}</div>
+    </div>`).join("");
+}
+
+function convertDriveImageUrl(url){
+  const text = String(url || "").trim();
+  if(!text) return "";
+  const m1 = text.match(/\/file\/d\/([^/]+)/);
+  if(m1) return `https://drive.google.com/uc?export=view&id=${m1[1]}`;
+  const m2 = text.match(/[?&]id=([^&]+)/);
+  if(text.includes("drive.google.com") && m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
+  return text;
+}
+
+function normalize(v){ return String(v ?? "").replace(/[^0-9]/g,"").trim(); }
+function normalizeText(v){ return String(v ?? "").toLowerCase().replace(/\s+/g,"").trim(); }
+function safe(v,f="-"){ return v === undefined || v === null || String(v).trim() === "" ? f : String(v).trim(); }
+function esc(v){ return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;"); }
+function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); }; }
+function formatToday(){ const d=new Date(); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`; }
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+</script>
 </body>
 </html>
