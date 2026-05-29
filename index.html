@@ -55,7 +55,19 @@
     .list{display:grid;gap:10px}.info-card{border:1px solid var(--line);border-radius:20px;background:#fff;padding:14px}.info-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.info-title{font-size:17px;font-weight:1000;letter-spacing:-.3px;line-height:1.35}.info-sub{margin-top:4px;color:#64748b;font-size:13px;font-weight:800;line-height:1.4}.kv{display:grid;gap:8px}.kv-row{display:grid;grid-template-columns:76px 1fr;gap:8px;border-top:1px dashed #e2e8f0;padding-top:8px}.key{color:#64748b;font-size:12px;font-weight:950}.val{color:#0f172a;font-size:14px;font-weight:820;line-height:1.45;word-break:keep-all;white-space:pre-line}.phone-link{display:inline-flex;margin-top:10px;text-decoration:none;background:#0f172a;color:#fff;border-radius:14px;padding:10px 12px;font-size:14px;font-weight:950}.empty{border:1px dashed #cbd5e1;border-radius:20px;background:rgba(255,255,255,.62);padding:22px;text-align:center;color:#64748b;font-size:14px;font-weight:850;line-height:1.55;word-break:keep-all}
     .process-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.process-btn{min-height:50px;border:1px solid var(--line);border-radius:17px;background:#fff;color:#334155;font-weight:1000}.process-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}.process-card .info-title{font-size:16px}.process-body{margin-top:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:12px;white-space:pre-line;color:#334155;font-size:14px;font-weight:760;line-height:1.62;word-break:keep-all}.footer{margin-top:18px;text-align:center;color:#94a3b8;font-size:12px;font-weight:750;line-height:1.45}
     .floating-refresh{position:fixed;right:14px;bottom:18px;z-index:30;border:0;border-radius:999px;background:#0f172a;color:#fff;padding:13px 15px;font-size:13px;font-weight:950;box-shadow:0 14px 30px rgba(15,23,42,.25)}
-    @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
+
+    select{width:100%;border:1px solid var(--line);background:#fff;border-radius:17px;min-height:52px;padding:0 42px 0 14px;font-size:15px;font-weight:900;color:#0f172a;outline:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 20px) calc(50% - 3px),calc(100% - 14px) calc(50% - 3px);background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+    select:focus{border-color:#0f172a;box-shadow:0 0 0 4px rgba(15,23,42,.08)}
+    .selector-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+    .cost-warning{margin-top:10px;border:1px solid #fecaca;background:#fff5f5;color:#dc2626;border-radius:14px;padding:10px 11px;font-size:11px;font-weight:950;line-height:1.45;word-break:keep-all}
+    .process-question{width:100%;border:0;background:#fff;text-align:left;padding:0;color:#0f172a}
+    .process-question-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .process-toggle{margin-top:4px;color:#64748b;font-size:12px;font-weight:950;white-space:nowrap}
+    .process-body{display:none;margin-top:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:12px;white-space:pre-line;color:#334155;font-size:14px;font-weight:760;line-height:1.62;word-break:keep-all}
+    .process-card.open .process-body{display:block}
+    .process-img{display:block;width:100%;height:auto;max-height:320px;object-fit:contain;border:1px solid #e2e8f0;border-radius:15px;background:#fff;margin:0 0 10px}
+    .type-chip{background:#f1f5f9;color:#334155}
+    @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
   </style>
 </head>
 <body>
@@ -113,6 +125,10 @@
     <article class="card">
       <div class="card-inner">
         <div class="section-title"><div><h2>업무지원부서 검색</h2><small>점포, 지역, 담당자, 연락처, 업무범위로 검색 가능합니다.</small></div><span id="deptCountPill" class="pill">0건</span></div>
+        <div class="selector-grid">
+          <select id="storeSelect"><option value="">점포 선택</option></select>
+          <select id="logisticsSelect"><option value="">물류 지역 선택</option></select>
+        </div>
         <div class="toolbar">
           <input id="deptSearch" type="text" placeholder="예: 대구, 물류, 주소 변경, 담당자명" autocomplete="off" />
           <div id="deptChips" class="chips"></div>
@@ -125,8 +141,11 @@
   <section id="pageProcess" class="page">
     <article class="card">
       <div class="card-inner">
-        <div class="section-title"><div><h2>코스트코 프로세스</h2><small>시트에 입력한 내용이 유형별 페이지로 표시됩니다.</small></div><span id="processCountPill" class="pill">0건</span></div>
-        <div id="processTabs" class="process-tabs"></div>
+        <div class="section-title"><div><h2>코스트코 프로세스 검색</h2><small>구분은 그대로 두고, 제목/내용/키워드로 빠르게 검색합니다.</small></div><span id="processCountPill" class="pill">0건</span></div>
+        <div class="toolbar">
+          <input id="processSearch" type="text" placeholder="예: 세탁기, 드럼세탁기, 배송, VOC, 설치" autocomplete="off" />
+          <div id="processChips" class="chips"></div>
+        </div>
         <div id="processList" class="list"></div>
       </div>
     </article>
@@ -141,11 +160,10 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v2_cache",
+  CACHE_KEY: "costco_item_operation_hub_v31_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12
 };
 
-const PROCESS_TYPES = ["시연 모드", "배송", "설치", "VOC", "기타"];
 const DETAIL_TABS = [
   { key:"spec", label:"스펙" },
   { key:"feature", label:"기능" },
@@ -159,7 +177,8 @@ let itemMap = new Map();
 let selectedItem = null;
 let selectedTab = "spec";
 let deptFilter = "전체";
-let processFilter = "시연 모드";
+let deptInteracted = false;
+let processFilter = "전체";
 
 const $ = (id)=>document.getElementById(id);
 const els = {
@@ -169,8 +188,8 @@ const els = {
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), quickList:$("quickList"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), productImg:$("productImg"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"),
-  deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"),
-  processTabs:$("processTabs"), processList:$("processList"), processCountPill:$("processCountPill")
+  deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"),
+  processSearch:$("processSearch"), processChips:$("processChips"), processList:$("processList"), processCountPill:$("processCountPill")
 };
 
 init();
@@ -179,7 +198,7 @@ function init(){
   bindEvents();
   renderDetailTabs();
   renderDeptChips();
-  renderProcessTabs();
+  renderProcessChips();
   loadFromCache();
   loadBootstrap(false);
 }
@@ -195,7 +214,10 @@ function bindEvents(){
     else renderQuickList(els.itemInput.value);
   });
   els.itemInput.addEventListener("keydown",(e)=>{ if(e.key === "Enter") searchItem(); });
-  els.deptSearch.addEventListener("input",debounce(renderDepartments,120));
+  els.deptSearch.addEventListener("input",debounce(()=>{ deptInteracted = true; renderDepartments(); },120));
+  els.storeSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.storeSelect.value) els.logisticsSelect.value=""; renderDepartments(); });
+  els.logisticsSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.logisticsSelect.value) els.storeSelect.value=""; renderDepartments(); });
+  els.processSearch.addEventListener("input",debounce(renderProcesses,120));
   els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
   els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
 }
@@ -292,7 +314,9 @@ function rebuildIndex(){
 function renderAll(){
   els.itemCountPill.textContent = `${DB.items.length}건`;
   renderQuickList(els.itemInput.value);
+  renderDeptSelectors();
   renderDepartments();
+  renderProcessChips();
   renderProcesses();
 }
 
@@ -318,14 +342,17 @@ function searchItem(showError=true){
 }
 
 function renderQuickList(query=""){
-  const q = normalize(query);
-  let rows = DB.items.slice(0, 15);
-  if(q){ rows = DB.items.filter(item => normalize(item.itemNo).includes(q)).slice(0,15); }
-  if(!rows.length){ els.quickList.innerHTML = ""; return; }
+  const q = normalizeText(query);
+  let rows = DB.items.slice();
+  if(q){
+    rows = DB.items.filter(item => normalizeText([item.itemNo,item.modelName,item.productName,item.category,item.brand,item.keywords].join(" ")).includes(q));
+  }
+  if(!rows.length){ els.quickList.innerHTML = `<div class="empty" style="padding:14px">표시할 아이템이 없습니다.</div>`; return; }
   els.quickList.innerHTML = rows.map(item=>`
     <button class="quick-item" type="button" data-item="${esc(item.itemNo)}">
       <div class="quick-no">${esc(item.itemNo || "-")}</div>
       <div class="quick-name">${esc(item.modelName || "모델명 미등록")} · ${esc(item.productName || item.category || "")}</div>
+      <div class="info-sub">${esc(item.category || "품목 미등록")}</div>
     </button>`).join("");
   els.quickList.querySelectorAll(".quick-item").forEach(btn=>{
     btn.addEventListener("click",()=>{ els.itemInput.value = btn.dataset.item; searchItem(); });
@@ -333,6 +360,7 @@ function renderQuickList(query=""){
 }
 
 function renderProduct(item){
+  if(selectedTab === "wallModel" && !needsWallModel(item)) selectedTab = "spec";
   els.productCard.style.display = "block";
   els.productEmpty.style.display = "none";
   els.modelName.textContent = safe(item.modelName,"모델명 미등록");
@@ -356,8 +384,15 @@ function renderProduct(item){
   renderDetailBox();
 }
 
+function getVisibleDetailTabs(){
+  if(!selectedItem) return DETAIL_TABS;
+  return DETAIL_TABS.filter(tab => tab.key !== "wallModel" || needsWallModel(selectedItem));
+}
+
 function renderDetailTabs(){
-  els.detailTabs.innerHTML = DETAIL_TABS.map(tab=>`<button class="tab-btn ${selectedTab===tab.key?"active":""}" type="button" data-key="${tab.key}">${tab.label}</button>`).join("");
+  const tabs = getVisibleDetailTabs();
+  if(!tabs.some(t=>t.key===selectedTab)) selectedTab = tabs[0]?.key || "spec";
+  els.detailTabs.innerHTML = tabs.map(tab=>`<button class="tab-btn ${selectedTab===tab.key?"active":""}" type="button" data-key="${tab.key}">${tab.label}</button>`).join("");
   els.detailTabs.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{ selectedTab = btn.dataset.key; renderDetailTabs(); renderDetailBox(); });
   });
@@ -374,6 +409,7 @@ function renderDetailBox(){
         <div class="cost-box"><div class="cost-label">철거비용</div><div class="cost-value">${esc(safe(selectedItem.removalCost,"미등록"))}</div></div>
       </div>
       ${selectedItem.costNote || selectedItem.note ? `<div class="detail-body" style="margin-top:10px">${esc(selectedItem.costNote || selectedItem.note)}</div>` : ""}
+      <div class="cost-warning">※ 현재 금액은 이전/설치 단가표 기준입니다.<br/>※ 금액이 상이할 수도 있으니 자세한 금액은 1588-4190으로 모델명 확인 후 안내</div>
     `;
     return;
   }
@@ -382,30 +418,54 @@ function renderDetailBox(){
 }
 
 function renderDeptChips(){
-  const chips = ["전체","업무지원실","물류","삼성","기타"];
+  const chips = ["전체","업무지원실","물류","서비스","기타"];
   els.deptChips.innerHTML = chips.map(ch=>`<button class="chip ${deptFilter===ch?"active":""}" type="button" data-chip="${ch}">${ch}</button>`).join("");
   els.deptChips.querySelectorAll(".chip").forEach(btn=>{
-    btn.addEventListener("click",()=>{ deptFilter = btn.dataset.chip; renderDeptChips(); renderDepartments(); });
+    btn.addEventListener("click",()=>{ deptInteracted = true; deptFilter = btn.dataset.chip; renderDeptChips(); renderDepartments(); });
   });
+}
+
+function renderDeptSelectors(){
+  const storeNow = els.storeSelect.value;
+  const logisticsNow = els.logisticsSelect.value;
+  const stores = uniqueSorted(DB.departments.filter(r=>!isLogisticsDept(r)).map(r=>safe(r.place,"")).filter(Boolean));
+  const logistics = uniqueSorted(DB.departments.filter(r=>isLogisticsDept(r)).map(r=>safe(r.place,"")).filter(Boolean));
+  els.storeSelect.innerHTML = `<option value="">점포 선택</option>` + stores.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
+  els.logisticsSelect.innerHTML = `<option value="">물류 지역 선택</option>` + logistics.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
+  if(stores.includes(storeNow)) els.storeSelect.value = storeNow;
+  if(logistics.includes(logisticsNow)) els.logisticsSelect.value = logisticsNow;
 }
 
 function renderDepartments(){
   const q = normalizeText(els.deptSearch.value);
+  const selectedStore = els.storeSelect.value;
+  const selectedLogistics = els.logisticsSelect.value;
   let rows = DB.departments.slice();
+
+  if(selectedStore){ rows = rows.filter(r => !isLogisticsDept(r) && safe(r.place,"") === selectedStore); }
+  if(selectedLogistics){ rows = rows.filter(r => isLogisticsDept(r) && safe(r.place,"") === selectedLogistics); }
+
   if(deptFilter !== "전체"){
-    const f = normalizeText(deptFilter);
-    rows = rows.filter(r => normalizeText([r.type,r.deptName,r.scope,r.keywords].join(" ")).includes(f));
+    rows = rows.filter(r => displayDeptType(r) === deptFilter);
   }
   if(q){
     rows = rows.filter(r => normalizeText([r.type,r.place,r.deptName,r.manager,r.phone,r.scope,r.note,r.keywords].join(" ")).includes(q));
   }
+
+  const hasDeptCondition = !!q || !!selectedStore || !!selectedLogistics || (deptInteracted && deptFilter !== "전체");
+  if(!hasDeptCondition){
+    els.deptCountPill.textContent = `${DB.departments.length}건`;
+    els.deptList.innerHTML = `<div class="empty">점포 또는 물류 지역을 선택하거나, 상단 검색창에 담당자/연락처/업무 키워드를 입력하면 필요한 연락처만 표시됩니다.</div>`;
+    return;
+  }
+
   els.deptCountPill.textContent = `${rows.length}건`;
   if(!rows.length){ els.deptList.innerHTML = `<div class="empty">검색 조건에 맞는 업무지원부서가 없습니다.</div>`; return; }
   els.deptList.innerHTML = rows.map(r=>`
     <div class="info-card">
       <div class="info-top">
         <div><div class="info-title">${esc(r.place || r.deptName || "미등록")}</div><div class="info-sub">${esc(r.scope || r.keywords || "업무범위 미등록")}</div></div>
-        <span class="pill ${r.type?"ok":""}">${esc(r.type || "부서")}</span>
+        <span class="pill ok">${esc(displayDeptType(r))}</span>
       </div>
       <div class="kv">
         <div class="kv-row"><div class="key">부서</div><div class="val">${esc(r.deptName || "-")}</div></div>
@@ -417,22 +477,53 @@ function renderDepartments(){
     </div>`).join("");
 }
 
-function renderProcessTabs(){
-  els.processTabs.innerHTML = PROCESS_TYPES.map(t=>`<button class="process-btn ${processFilter===t?"active":""}" type="button" data-type="${t}">${t}</button>`).join("");
-  els.processTabs.querySelectorAll(".process-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{ processFilter = btn.dataset.type; renderProcessTabs(); renderProcesses(); });
+function renderProcessChips(){
+  const base = ["전체","시연 모드","배송","설치","VOC","기타"];
+  const extra = uniqueSorted(DB.processes.map(r=>safe(r.type,"")).filter(Boolean)).filter(v=>!base.includes(v));
+  const chips = base.concat(extra);
+  els.processChips.innerHTML = chips.map(ch=>`<button class="chip ${processFilter===ch?"active":""}" type="button" data-chip="${esc(ch)}">${esc(ch)}</button>`).join("");
+  els.processChips.querySelectorAll(".chip").forEach(btn=>{
+    btn.addEventListener("click",()=>{ processFilter = btn.dataset.chip; renderProcessChips(); renderProcesses(); });
   });
 }
 
 function renderProcesses(){
-  const rows = DB.processes.filter(r => safe(r.type,"") === processFilter);
+  const q = normalizeText(els.processSearch.value);
+  let rows = DB.processes.slice();
+  if(processFilter !== "전체"){
+    rows = rows.filter(r => safe(r.type,"") === processFilter);
+  }
+  if(q){
+    rows = rows.filter(r => normalizeText([r.type,r.title,r.body,r.keywords].join(" ")).includes(q));
+  }
   els.processCountPill.textContent = `${rows.length}건`;
-  if(!rows.length){ els.processList.innerHTML = `<div class="empty">${esc(processFilter)} 유형에 등록된 프로세스가 없습니다.</div>`; return; }
-  els.processList.innerHTML = rows.map((r,i)=>`
-    <div class="info-card process-card">
-      <div class="info-top"><div class="info-title">${i+1}. ${esc(r.title || "제목 미등록")}</div><span class="pill ok">${esc(r.type)}</span></div>
-      <div class="process-body">${esc(r.body || "내용 미등록")}</div>
-    </div>`).join("");
+  if(!rows.length){ els.processList.innerHTML = `<div class="empty">검색 조건에 맞는 프로세스가 없습니다.</div>`; return; }
+  els.processList.innerHTML = rows.map((r,i)=>{
+    const img = convertDriveImageUrl(r.imageUrl || "");
+    return `<div class="info-card process-card">
+      <button class="process-question" type="button">
+        <div class="process-question-row">
+          <div>
+            <div class="info-title">${i+1}. ${esc(r.title || "제목 미등록")}</div>
+            <div class="info-sub">${esc(r.keywords || "클릭하면 답변이 열립니다.")}</div>
+          </div>
+          <div><span class="pill type-chip">${esc(r.type || "프로세스")}</span><div class="process-toggle">답변 보기</div></div>
+        </div>
+      </button>
+      <div class="process-body">
+        ${img ? `<img class="process-img" src="${esc(img)}" alt="프로세스 이미지" loading="lazy" onerror="this.style.display='none'" />` : ""}
+        ${esc(r.body || "내용 미등록")}
+      </div>
+    </div>`;
+  }).join("");
+  els.processList.querySelectorAll(".process-question").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const card = btn.closest(".process-card");
+      card.classList.toggle("open");
+      const toggle = card.querySelector(".process-toggle");
+      if(toggle) toggle.textContent = card.classList.contains("open") ? "답변 닫기" : "답변 보기";
+    });
+  });
 }
 
 function convertDriveImageUrl(url){
@@ -443,6 +534,29 @@ function convertDriveImageUrl(url){
   const m2 = text.match(/[?&]id=([^&]+)/);
   if(text.includes("drive.google.com") && m2) return `https://drive.google.com/uc?export=view&id=${m2[1]}`;
   return text;
+}
+
+
+function needsWallModel(item){
+  const text = normalizeText([item.category,item.productName,item.modelName,item.keywords].join(" "));
+  return text.includes("tv") || text.includes("티비") || text.includes("텔레비전") || text.includes("모니터") || text.includes("monitor");
+}
+
+function isLogisticsDept(r){
+  const text = normalizeText([r.type,r.deptName,r.scope,r.keywords].join(" "));
+  return text.includes("물류") || text.includes("tc") || text.includes("배송지역");
+}
+
+function displayDeptType(r){
+  const text = normalizeText([r.type,r.deptName,r.scope,r.keywords].join(" "));
+  if(text.includes("물류") || text.includes("tc") || text.includes("배송지역")) return "물류";
+  if(text.includes("삼성") || text.includes("서비스") || text.includes("a/s") || text.includes("as")) return "서비스";
+  if(text.includes("업무지원")) return "업무지원실";
+  return safe(r.type,"기타") === "삼성" ? "서비스" : safe(r.type,"기타");
+}
+
+function uniqueSorted(arr){
+  return Array.from(new Set(arr.map(v=>String(v).trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b,"ko"));
 }
 
 function normalize(v){ return String(v ?? "").replace(/[^0-9]/g,"").trim(); }
