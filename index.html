@@ -185,7 +185,7 @@ const DETAIL_TABS = [
   { key:"spec", label:"스펙" },
   { key:"feature", label:"기능" },
   { key:"promoDate", label:"행사 예정일" },
-  { key:"wallModel", label:"벽걸이 모델명/설치비" },
+  { key:"wallModel", label:"벽걸이 모델명" },
   { key:"cost", label:"이전설치/철거 비용" }
 ];
 
@@ -405,8 +405,7 @@ function getProductImageUrls(item){
 function splitImageUrls(value){
   if(value === undefined || value === null) return [];
   return String(value)
-    .split(/[
-,|;]/)
+    .split(/[\r\n,|;]/)
     .map(v=>v.trim())
     .filter(Boolean);
 }
