@@ -1,4 +1,4 @@
-const CACHE_NAME = 'costco-item-operation-hub-v5';
+const CACHE_NAME = 'costco-item-operation-hub-v33';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
