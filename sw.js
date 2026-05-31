@@ -1,5 +1,5 @@
-const CACHE_NAME = 'costco-item-operation-hub-v35';
-const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+const CACHE_NAME = 'costco-item-operation-hub-v36';
+const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './tv_wall_install_fee.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
