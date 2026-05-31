@@ -684,5 +684,21 @@ if("serviceWorker" in navigator){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
 </script>
+  <div id="imageModal" class="image-modal hidden">
+  <button type="button" class="image-modal-close" aria-label="닫기">×</button>
+
+  <button type="button" class="image-modal-nav prev" aria-label="이전 이미지">
+    <span class="chevron chevron-left"></span>
+  </button>
+
+  <div class="image-modal-content">
+    <img id="imageModalImg" src="" alt="확대 이미지" />
+    <div id="imageModalCount" class="image-modal-count"></div>
+  </div>
+
+  <button type="button" class="image-modal-nav next" aria-label="다음 이미지">
+    <span class="chevron chevron-right"></span>
+  </button>
+</div>
 </body>
 </html>
