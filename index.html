@@ -192,11 +192,13 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v40_cache",
+  CACHE_KEY: "costco_item_operation_hub_v41_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
+  SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_MAX_COUNT: 10,
-  SPEC_IMAGE_EXT: "png"
+  SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
+  SPEC_IMAGE_CACHE_BUST: "v41"
 };
 
 const DETAIL_TABS = [
@@ -322,15 +324,17 @@ function bindEvents(){
       if(e.key === "ArrowRight") moveSpecViewer(1);
     }
   });
-  window.addEventListener("popstate",(e)=>{
+  window.addEventListener("popstate",()=>{
+    // 휴대폰 뒤로가기 버튼 대응: 앱 종료 대신 현재 열린 화면부터 닫기
     if(els.imageModal.classList.contains("show")){
       modalHistoryPushed = false;
       closeImageModal(true);
       return;
     }
-    if(els.specViewer.classList.contains("show") && (!e.state || e.state.hubOverlay !== "spec")){
+    if(els.specViewer.classList.contains("show")){
       specHistoryPushed = false;
       closeSpecViewer(true);
+      return;
     }
   });
   els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
@@ -801,7 +805,7 @@ function openImageModal(images, startIndex=0, caption="이미지 확대 보기")
   els.imageModal.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
   if(!modalHistoryPushed){
-    try{ history.pushState({hubOverlay:"image"}, ""); modalHistoryPushed = true; }catch(err){}
+    try{ history.pushState({hubOverlay:"image"}, "", "#image"); modalHistoryPushed = true; }catch(err){}
   }
 }
 
@@ -847,16 +851,49 @@ function getConfiguredSpecImageUrls(item){
   return uniqueArray(raw
     .flatMap(splitImageUrls)
     .map(convertDriveImageUrl)
-    .filter(looksLikeImageUrl));
+    .filter(looksLikeImageUrl)
+    .map(cacheBustImageUrl));
+}
+
+function getSpecItemNo(item){
+  return safe(item?.itemNo, "").replace(/[^0-9A-Za-z_-]/g, "");
+}
+
+function getSpecImageExtensions(){
+  if(Array.isArray(CONFIG.SPEC_IMAGE_EXTENSIONS) && CONFIG.SPEC_IMAGE_EXTENSIONS.length){
+    return CONFIG.SPEC_IMAGE_EXTENSIONS.map(v=>String(v).replace(/^\./,"").toLowerCase()).filter(Boolean);
+  }
+  return [String(CONFIG.SPEC_IMAGE_EXT || "png").replace(/^\./,"").toLowerCase()];
+}
+
+function cacheBustImageUrl(url){
+  const text = String(url || "").trim();
+  if(!text || text.startsWith("data:image/")) return text;
+  const token = CONFIG.SPEC_IMAGE_CACHE_BUST || Date.now();
+  return text + (text.includes("?") ? "&" : "?") + "v=" + encodeURIComponent(token);
+}
+
+function getAutoSpecImageCandidateGroups(item){
+  const itemNo = getSpecItemNo(item);
+  if(!itemNo) return [];
+  const localBase = CONFIG.SPEC_IMAGE_BASE_PATH || "./images/";
+  const rawBase = CONFIG.SPEC_IMAGE_RAW_BASE || "";
+  const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
+  const exts = getSpecImageExtensions();
+
+  return Array.from({length:max}, (_,i)=>{
+    const n = i + 1;
+    const group = [];
+    exts.forEach(ext=>{
+      group.push(cacheBustImageUrl(`${localBase}${itemNo}_${n}.${ext}`));
+      if(rawBase) group.push(cacheBustImageUrl(`${rawBase}${itemNo}_${n}.${ext}`));
+    });
+    return uniqueArray(group);
+  });
 }
 
 function getAutoSpecImageCandidates(item){
-  const itemNo = safe(item?.itemNo, "").replace(/[^0-9A-Za-z_-]/g, "");
-  if(!itemNo) return [];
-  const base = CONFIG.SPEC_IMAGE_BASE_PATH || "./images/";
-  const ext = (CONFIG.SPEC_IMAGE_EXT || "png").replace(/^\./, "");
-  const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
-  return Array.from({length:max}, (_,i)=>`${base}${itemNo}_${i+1}.${ext}`);
+  return getAutoSpecImageCandidateGroups(item).map(group=>group[0]).filter(Boolean);
 }
 
 function getSpecImageUrls(item){
@@ -864,18 +901,24 @@ function getSpecImageUrls(item){
   return explicit.length ? explicit : getAutoSpecImageCandidates(item);
 }
 
+async function firstExistingImage(urls){
+  const checks = await Promise.all(urls.map(url => imageExists(url).then(ok => ok ? url : "")));
+  return checks.find(Boolean) || "";
+}
+
 async function resolveSpecImageUrls(item){
   const explicit = getConfiguredSpecImageUrls(item);
   if(explicit.length) return explicit;
-  const candidates = getAutoSpecImageCandidates(item);
-  const checked = await Promise.all(candidates.map(url => imageExists(url).then(ok => ok ? url : "")));
+
+  const groups = getAutoSpecImageCandidateGroups(item);
+  const checked = await Promise.all(groups.map(group => firstExistingImage(group)));
   return checked.filter(Boolean);
 }
 
 function imageExists(url){
   return new Promise(resolve=>{
     const img = new Image();
-    const timer = setTimeout(()=>{ img.onload = img.onerror = null; resolve(false); }, 2500);
+    const timer = setTimeout(()=>{ img.onload = img.onerror = null; resolve(false); }, 1800);
     img.onload = ()=>{ clearTimeout(timer); resolve(true); };
     img.onerror = ()=>{ clearTimeout(timer); resolve(false); };
     img.src = url;
@@ -893,9 +936,10 @@ async function openSpecViewer(item){
   if(!item) return;
   specViewerUrls = [];
   specViewerIndex = 0;
+  const itemNo = safe(item?.itemNo,"아이템번호");
   els.specViewerTitle.textContent = `${safe(item?.modelName,"모델명 미등록")} · ${safe(item?.itemNo,"")}`;
   els.specViewerCount.textContent = "확인중";
-  els.specCarousel.innerHTML = `<div class="spec-slide"><div class="empty" style="width:92%;max-width:420px">스펙 사진 확인 중입니다.<br/>images 폴더에서 ${esc(safe(item?.itemNo,"아이템번호"))}_1.png 형식으로 찾습니다.</div></div>`;
+  els.specCarousel.innerHTML = `<div class="spec-slide"><div class="empty" style="width:92%;max-width:420px">스펙 사진 확인 중입니다.<br/>images 폴더에서 ${esc(itemNo)}_1.png 형식으로 찾습니다.</div></div>`;
   els.specDots.innerHTML = "";
   els.specPrev.style.display = "none";
   els.specNext.style.display = "none";
@@ -903,16 +947,27 @@ async function openSpecViewer(item){
   els.specViewer.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
   if(!specHistoryPushed){
-    try{ history.pushState({hubOverlay:"spec"}, ""); specHistoryPushed = true; }catch(err){}
+    try{ history.pushState({hubOverlay:"spec"}, "", "#spec"); specHistoryPushed = true; }catch(err){}
   }
 
   const urls = await resolveSpecImageUrls(item);
+  if(!els.specViewer.classList.contains("show")) return;
   if(!urls.length){
-    closeSpecViewer(true);
-    showStatus(`스펙 사진이 없습니다. GitHub images 폴더에 ${safe(item?.itemNo,"아이템번호")}_1.png 형식으로 올려주세요.`, "warn");
-    selectedTab = "spec";
-    renderDetailTabs();
-    renderDetailBox();
+    specViewerUrls = [];
+    specViewerIndex = 0;
+    els.specViewerCount.textContent = "없음";
+    els.specCarousel.innerHTML = `
+      <div class="spec-slide">
+        <div class="empty" style="width:92%;max-width:430px">
+          스펙 사진을 찾지 못했습니다.<br/>
+          GitHub images 폴더에<br/>
+          <b>${esc(itemNo)}_1.png</b><br/>
+          <b>${esc(itemNo)}_2.png</b><br/>
+          형식으로 올려주세요.<br/><br/>
+          ※ 앞에 <b>item_</b> 붙이면 안 됩니다.
+        </div>
+      </div>`;
+    els.specDots.innerHTML = "";
     return;
   }
 
