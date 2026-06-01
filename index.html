@@ -192,8 +192,11 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v38_cache",
-  CACHE_MAX_MS: 1000 * 60 * 60 * 12
+  CACHE_KEY: "costco_item_operation_hub_v39_cache",
+  CACHE_MAX_MS: 1000 * 60 * 60 * 12,
+  SPEC_IMAGE_BASE_PATH: "./images/",
+  SPEC_IMAGE_MAX_COUNT: 10,
+  SPEC_IMAGE_EXT: "png"
 };
 
 const DETAIL_TABS = [
@@ -605,7 +608,7 @@ function renderDetailTabs(){
   els.detailTabs.innerHTML = tabs.map(tab=>`<button class="tab-btn ${selectedTab===tab.key?"active":""}" type="button" data-key="${tab.key}">${tab.label}</button>`).join("");
   els.detailTabs.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      if(btn.dataset.key === "spec" && getSpecImageUrls(selectedItem).length){
+      if(btn.dataset.key === "spec"){
         openSpecViewer(selectedItem);
         return;
       }
@@ -619,10 +622,15 @@ function renderDetailTabs(){
 function renderDetailBox(){
   if(!selectedItem){ els.detailBox.innerHTML = ""; return; }
   const tab = DETAIL_TABS.find(t=>t.key===selectedTab) || DETAIL_TABS[0];
-  if(selectedTab === "spec" && getSpecImageUrls(selectedItem).length){
+  if(selectedTab === "spec"){
+    const explicitCount = getConfiguredSpecImageUrls(selectedItem).length;
+    const itemNo = safe(selectedItem.itemNo, "아이템번호");
     els.detailBox.innerHTML = `
       <div class="detail-title">${tab.label}</div>
-      <div class="spec-note-box">스펙이미지URL ${getSpecImageUrls(selectedItem).length}장이 등록되어 있습니다.<br/>스펙 버튼 또는 아래 버튼을 누르면 전체 화면으로 넘겨볼 수 있습니다.</div>
+      <div class="spec-note-box">
+        ${explicitCount ? `스펙이미지URL ${explicitCount}장이 등록되어 있습니다.` : `GitHub images 폴더에서 ${esc(itemNo)}_1.png, ${esc(itemNo)}_2.png 형식으로 자동 조회합니다.`}<br/>
+        스펙 버튼 또는 아래 버튼을 누르면 전체 화면으로 넘겨볼 수 있습니다.
+      </div>
       <button class="spec-open-btn" type="button">상세 스펙 사진 보기</button>
     `;
     return;
@@ -816,7 +824,7 @@ function closeImageModal(){
 }
 
 
-function getSpecImageUrls(item){
+function getConfiguredSpecImageUrls(item){
   if(!item) return [];
   const raw = [];
   if(Array.isArray(item.specImageUrls)) raw.push(...item.specImageUrls);
@@ -831,6 +839,38 @@ function getSpecImageUrls(item){
     .filter(looksLikeImageUrl));
 }
 
+function getAutoSpecImageCandidates(item){
+  const itemNo = safe(item?.itemNo, "").replace(/[^0-9A-Za-z_-]/g, "");
+  if(!itemNo) return [];
+  const base = CONFIG.SPEC_IMAGE_BASE_PATH || "./images/";
+  const ext = (CONFIG.SPEC_IMAGE_EXT || "png").replace(/^\./, "");
+  const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
+  return Array.from({length:max}, (_,i)=>`${base}${itemNo}_${i+1}.${ext}`);
+}
+
+function getSpecImageUrls(item){
+  const explicit = getConfiguredSpecImageUrls(item);
+  return explicit.length ? explicit : getAutoSpecImageCandidates(item);
+}
+
+async function resolveSpecImageUrls(item){
+  const explicit = getConfiguredSpecImageUrls(item);
+  if(explicit.length) return explicit;
+  const candidates = getAutoSpecImageCandidates(item);
+  const checked = await Promise.all(candidates.map(url => imageExists(url).then(ok => ok ? url : "")));
+  return checked.filter(Boolean);
+}
+
+function imageExists(url){
+  return new Promise(resolve=>{
+    const img = new Image();
+    const timer = setTimeout(()=>{ img.onload = img.onerror = null; resolve(false); }, 2500);
+    img.onload = ()=>{ clearTimeout(timer); resolve(true); };
+    img.onerror = ()=>{ clearTimeout(timer); resolve(false); };
+    img.src = url;
+  });
+}
+
 function looksLikeImageUrl(url){
   const text = String(url || "").trim();
   if(!text) return false;
@@ -838,18 +878,35 @@ function looksLikeImageUrl(url){
   return /^(https?:\/\/|\.\/|\/|data:image\/)/i.test(text) && /(\.png|\.jpg|\.jpeg|\.webp|\.gif)(\?|#|$)/i.test(text);
 }
 
-function openSpecViewer(item){
-  const urls = getSpecImageUrls(item);
-  if(!urls.length) return;
-  specViewerUrls = urls;
+async function openSpecViewer(item){
+  if(!item) return;
+  specViewerUrls = [];
   specViewerIndex = 0;
   els.specViewerTitle.textContent = `${safe(item?.modelName,"모델명 미등록")} · ${safe(item?.itemNo,"")}`;
-  els.specCarousel.innerHTML = urls.map((url,i)=>`<div class="spec-slide"><img src="${esc(url)}" data-index="${i}" alt="상세 스펙 ${i+1}" loading="lazy" /></div>`).join("");
-  els.specDots.innerHTML = urls.map((_,i)=>`<span class="spec-dot ${i===0?'active':''}" data-index="${i}"></span>`).join("");
-  els.specDots.querySelectorAll(".spec-dot").forEach(dot=>dot.addEventListener("click",()=>goSpecViewer(Number(dot.dataset.index||0))));
+  els.specViewerCount.textContent = "확인중";
+  els.specCarousel.innerHTML = `<div class="spec-slide"><div class="empty" style="width:92%;max-width:420px">스펙 사진 확인 중입니다.<br/>images 폴더에서 ${esc(safe(item?.itemNo,"아이템번호"))}_1.png 형식으로 찾습니다.</div></div>`;
+  els.specDots.innerHTML = "";
+  els.specPrev.style.display = "none";
+  els.specNext.style.display = "none";
   els.specViewer.classList.add("show");
   els.specViewer.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
+
+  const urls = await resolveSpecImageUrls(item);
+  if(!urls.length){
+    closeSpecViewer();
+    showStatus(`스펙 사진이 없습니다. GitHub images 폴더에 ${safe(item?.itemNo,"아이템번호")}_1.png 형식으로 올려주세요.`, "warn");
+    selectedTab = "spec";
+    renderDetailTabs();
+    renderDetailBox();
+    return;
+  }
+
+  specViewerUrls = urls;
+  specViewerIndex = 0;
+  els.specCarousel.innerHTML = urls.map((url,i)=>`<div class="spec-slide"><img src="${esc(url)}" data-index="${i}" alt="상세 스펙 ${i+1}" loading="lazy" /></div>`).join("");
+  els.specDots.innerHTML = urls.map((_,i)=>`<span class="spec-dot ${i===0?'active':''}" data-index="${i}"></span>`).join("");
+  els.specDots.querySelectorAll(".spec-dot").forEach(dot=>dot.addEventListener("click",()=>goSpecViewer(Number(dot.dataset.index||0))));
   requestAnimationFrame(()=>goSpecViewer(0,false));
 }
 
