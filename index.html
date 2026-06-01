@@ -67,6 +67,8 @@
     .type-chip{background:#f1f5f9;color:#334155}
 
     .image-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.92);padding:18px}.image-modal.show{display:flex}.image-modal-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}.image-modal img{max-width:100%;max-height:calc(100% - 84px);object-fit:contain;border-radius:18px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.35)}.image-modal-close{position:absolute;right:4px;top:4px;border:0;border-radius:999px;background:#fff;color:#0f172a;width:48px;height:48px;font-size:26px;font-weight:1000;line-height:1;box-shadow:0 10px 24px rgba(0,0,0,.25)}.image-modal-nav{position:absolute;top:50%;transform:translateY(-50%);width:58px;height:72px;border:0;border-radius:20px;background:rgba(15,23,42,.82);color:#fff;font-size:34px;font-weight:1000;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(0,0,0,.28)}.image-modal-nav.prev{left:4px}.image-modal-nav.next{right:4px}.image-modal-caption{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);max-width:92%;border-radius:999px;background:rgba(255,255,255,.92);color:#0f172a;padding:8px 12px;font-size:12px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .spec-viewer{position:fixed;inset:0;z-index:900;display:none;flex-direction:column;background:#f8fafc;color:#0f172a}.spec-viewer.show{display:flex}.spec-viewer-head{height:66px;display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-bottom:1px solid #e2e8f0;box-shadow:0 8px 24px rgba(15,23,42,.06);z-index:2}.spec-back{border:0;border-radius:14px;background:#0f172a;color:#fff;min-width:78px;min-height:42px;font-size:14px;font-weight:1000}.spec-head-text{flex:1;min-width:0}.spec-head-title{font-size:17px;font-weight:1000;line-height:1.25;letter-spacing:-.3px}.spec-head-sub{margin-top:2px;color:#64748b;font-size:12px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.spec-count{border-radius:999px;background:#eef2ff;color:#1e293b;padding:7px 10px;font-size:12px;font-weight:1000;white-space:nowrap}.spec-viewer-body{position:relative;flex:1;min-height:0;padding:10px 0 44px;background:linear-gradient(180deg,#f8fafc,#eef2f7)}.spec-carousel{height:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x}.spec-carousel::-webkit-scrollbar{display:none}.spec-slide{min-width:100%;height:100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;padding:6px 12px}.spec-slide img{max-width:100%;max-height:100%;object-fit:contain;background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 12px 34px rgba(15,23,42,.10);cursor:zoom-in}.spec-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:40px;height:52px;border:0;border-radius:16px;background:rgba(15,23,42,.78);color:#fff;font-size:24px;font-weight:1000;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(15,23,42,.18)}.spec-nav.prev{left:10px}.spec-nav.next{right:10px}.spec-dots{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:flex;gap:7px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 6px 18px rgba(15,23,42,.10)}.spec-dot{width:8px;height:8px;border-radius:999px;background:#cbd5e1}.spec-dot.active{background:#0f172a}.spec-open-btn{width:100%;border:0;border-radius:16px;background:#0f172a;color:#fff;min-height:50px;font-size:15px;font-weight:1000;margin-top:10px}.spec-note-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;font-size:13px;font-weight:850;color:#334155;line-height:1.55;word-break:keep-all}
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
   </style>
 </head>
@@ -168,12 +170,29 @@
   </div>
 </div>
 
+<div id="specViewer" class="spec-viewer" aria-hidden="true">
+  <div class="spec-viewer-head">
+    <button id="specBackBtn" class="spec-back" type="button">← 뒤로</button>
+    <div class="spec-head-text">
+      <div class="spec-head-title">상세 스펙 사진</div>
+      <div id="specViewerTitle" class="spec-head-sub">-</div>
+    </div>
+    <span id="specViewerCount" class="spec-count">1/1</span>
+  </div>
+  <div class="spec-viewer-body">
+    <button id="specPrev" class="spec-nav prev" type="button" aria-label="이전 스펙">❮</button>
+    <div id="specCarousel" class="spec-carousel" aria-label="상세 스펙 사진 목록"></div>
+    <button id="specNext" class="spec-nav next" type="button" aria-label="다음 스펙">❯</button>
+    <div id="specDots" class="spec-dots"></div>
+  </div>
+</div>
+
 <script>
 const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v36_cache",
+  CACHE_KEY: "costco_item_operation_hub_v38_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12
 };
 
@@ -185,6 +204,7 @@ const DETAIL_TABS = [
   { key:"cost", label:"이전설치/철거 비용" }
 ];
 
+
 let DB = { items:[], departments:[], processes:[], updatedAt:"" };
 let itemMap = new Map();
 let selectedItem = null;
@@ -194,6 +214,8 @@ let currentImageUrls = [];
 let modalImageUrls = [];
 let modalImageIndex = 0;
 let modalCaptionBase = "이미지 확대 보기";
+let specViewerUrls = [];
+let specViewerIndex = 0;
 let deptFilter = "전체";
 let deptInteracted = false;
 let processFilter = "전체";
@@ -208,7 +230,8 @@ const els = {
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"),
   deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"),
   processSearch:$("processSearch"), processChips:$("processChips"), processList:$("processList"), processCountPill:$("processCountPill"),
-  imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption")
+  imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption"),
+  specViewer:$("specViewer"), specBackBtn:$("specBackBtn"), specViewerTitle:$("specViewerTitle"), specViewerCount:$("specViewerCount"), specCarousel:$("specCarousel"), specPrev:$("specPrev"), specNext:$("specNext"), specDots:$("specDots")
 };
 
 init();
@@ -239,6 +262,12 @@ function bindEvents(){
   els.logisticsSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.logisticsSelect.value) els.storeSelect.value=""; renderDepartments(); });
   els.processSearch.addEventListener("input",debounce(renderProcesses,120));
   els.detailBox.addEventListener("click",(e)=>{
+    const specBtn = e.target.closest(".spec-open-btn");
+    if(specBtn){
+      e.stopPropagation();
+      openSpecViewer(selectedItem);
+      return;
+    }
     const img = e.target.closest(".detail-ref-image");
     if(img){
       e.stopPropagation();
@@ -265,11 +294,30 @@ function bindEvents(){
   els.imageModalNext.addEventListener("click",(e)=>{ e.stopPropagation(); moveModalImage(1); });
   bindModalSwipe();
   els.imageModal.addEventListener("click",(e)=>{ if(e.target === els.imageModal) closeImageModal(); });
+  els.specBackBtn.addEventListener("click",closeSpecViewer);
+  els.specPrev.addEventListener("click",(e)=>{ e.stopPropagation(); moveSpecViewer(-1); });
+  els.specNext.addEventListener("click",(e)=>{ e.stopPropagation(); moveSpecViewer(1); });
+  els.specCarousel.addEventListener("scroll",debounce(updateSpecViewerControls,80));
+  els.specCarousel.addEventListener("click",(e)=>{
+    const img = e.target.closest("img");
+    if(img) openImageModal(specViewerUrls, Number(img.dataset.index||0), safe(selectedItem?.modelName,"상세 스펙"));
+  });
+  bindSpecViewerSwipe();
   document.addEventListener("keydown",(e)=>{
-    if(e.key === "Escape") closeImageModal();
-    if(!els.imageModal.classList.contains("show")) return;
-    if(e.key === "ArrowLeft") moveModalImage(-1);
-    if(e.key === "ArrowRight") moveModalImage(1);
+    if(e.key === "Escape"){
+      if(els.imageModal.classList.contains("show")) closeImageModal();
+      else if(els.specViewer.classList.contains("show")) closeSpecViewer();
+      return;
+    }
+    if(els.imageModal.classList.contains("show")){
+      if(e.key === "ArrowLeft") moveModalImage(-1);
+      if(e.key === "ArrowRight") moveModalImage(1);
+      return;
+    }
+    if(els.specViewer.classList.contains("show")){
+      if(e.key === "ArrowLeft") moveSpecViewer(-1);
+      if(e.key === "ArrowRight") moveSpecViewer(1);
+    }
   });
   els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
   els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
@@ -556,13 +604,29 @@ function renderDetailTabs(){
   if(!tabs.some(t=>t.key===selectedTab)) selectedTab = tabs[0]?.key || "spec";
   els.detailTabs.innerHTML = tabs.map(tab=>`<button class="tab-btn ${selectedTab===tab.key?"active":""}" type="button" data-key="${tab.key}">${tab.label}</button>`).join("");
   els.detailTabs.querySelectorAll(".tab-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{ selectedTab = btn.dataset.key; renderDetailTabs(); renderDetailBox(); });
+    btn.addEventListener("click",()=>{
+      if(btn.dataset.key === "spec" && getSpecImageUrls(selectedItem).length){
+        openSpecViewer(selectedItem);
+        return;
+      }
+      selectedTab = btn.dataset.key;
+      renderDetailTabs();
+      renderDetailBox();
+    });
   });
 }
 
 function renderDetailBox(){
   if(!selectedItem){ els.detailBox.innerHTML = ""; return; }
   const tab = DETAIL_TABS.find(t=>t.key===selectedTab) || DETAIL_TABS[0];
+  if(selectedTab === "spec" && getSpecImageUrls(selectedItem).length){
+    els.detailBox.innerHTML = `
+      <div class="detail-title">${tab.label}</div>
+      <div class="spec-note-box">스펙이미지URL ${getSpecImageUrls(selectedItem).length}장이 등록되어 있습니다.<br/>스펙 버튼 또는 아래 버튼을 누르면 전체 화면으로 넘겨볼 수 있습니다.</div>
+      <button class="spec-open-btn" type="button">상세 스펙 사진 보기</button>
+    `;
+    return;
+  }
   if(selectedTab === "wallModel"){
     const wallModelText = safe(selectedItem.wallModel, "미등록");
     const showTvGuide = isTvItem(selectedItem);
@@ -748,7 +812,103 @@ function closeImageModal(){
   els.imageModal.setAttribute("aria-hidden","true");
   els.imageModalImg.removeAttribute("src");
   modalImageUrls = [];
-  document.body.style.overflow = "";
+  if(!els.specViewer.classList.contains("show")) document.body.style.overflow = "";
+}
+
+
+function getSpecImageUrls(item){
+  if(!item) return [];
+  const raw = [];
+  if(Array.isArray(item.specImageUrls)) raw.push(...item.specImageUrls);
+  raw.push(item.specImageUrl, item.specImageUrl2, item.specImageUrl3);
+
+  // 이전 버전 호환: 스펙 칸에 URL을 넣어둔 경우도 인식
+  raw.push(item.spec);
+
+  return uniqueArray(raw
+    .flatMap(splitImageUrls)
+    .map(convertDriveImageUrl)
+    .filter(looksLikeImageUrl));
+}
+
+function looksLikeImageUrl(url){
+  const text = String(url || "").trim();
+  if(!text) return false;
+  if(text.includes("drive.google.com/uc?export=view&id=")) return true;
+  return /^(https?:\/\/|\.\/|\/|data:image\/)/i.test(text) && /(\.png|\.jpg|\.jpeg|\.webp|\.gif)(\?|#|$)/i.test(text);
+}
+
+function openSpecViewer(item){
+  const urls = getSpecImageUrls(item);
+  if(!urls.length) return;
+  specViewerUrls = urls;
+  specViewerIndex = 0;
+  els.specViewerTitle.textContent = `${safe(item?.modelName,"모델명 미등록")} · ${safe(item?.itemNo,"")}`;
+  els.specCarousel.innerHTML = urls.map((url,i)=>`<div class="spec-slide"><img src="${esc(url)}" data-index="${i}" alt="상세 스펙 ${i+1}" loading="lazy" /></div>`).join("");
+  els.specDots.innerHTML = urls.map((_,i)=>`<span class="spec-dot ${i===0?'active':''}" data-index="${i}"></span>`).join("");
+  els.specDots.querySelectorAll(".spec-dot").forEach(dot=>dot.addEventListener("click",()=>goSpecViewer(Number(dot.dataset.index||0))));
+  els.specViewer.classList.add("show");
+  els.specViewer.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(()=>goSpecViewer(0,false));
+}
+
+function closeSpecViewer(){
+  els.specViewer.classList.remove("show");
+  els.specViewer.setAttribute("aria-hidden","true");
+  els.specCarousel.innerHTML = "";
+  els.specDots.innerHTML = "";
+  specViewerUrls = [];
+  if(!els.imageModal.classList.contains("show")) document.body.style.overflow = "";
+}
+
+function goSpecViewer(index, smooth=true){
+  const slides = els.specCarousel.querySelectorAll(".spec-slide");
+  if(!slides.length) return;
+  const next = Math.max(0, Math.min(index, slides.length-1));
+  specViewerIndex = next;
+  els.specCarousel.scrollTo({left: els.specCarousel.clientWidth * next, behavior: smooth ? "smooth" : "auto"});
+  updateSpecViewerControls();
+}
+
+function moveSpecViewer(step){
+  if(specViewerUrls.length < 2) return;
+  const next = (specViewerIndex + step + specViewerUrls.length) % specViewerUrls.length;
+  goSpecViewer(next);
+}
+
+function updateSpecViewerControls(){
+  const slides = els.specCarousel.querySelectorAll(".spec-slide");
+  if(!slides.length) return;
+  const width = els.specCarousel.clientWidth || 1;
+  const idx = Math.max(0, Math.min(Math.round(els.specCarousel.scrollLeft / width), slides.length-1));
+  specViewerIndex = idx;
+  els.specViewerCount.textContent = `${idx+1}/${slides.length}`;
+  els.specDots.querySelectorAll(".spec-dot").forEach((dot,i)=>dot.classList.toggle("active", i===idx));
+  const showNav = slides.length > 1 ? "flex" : "none";
+  els.specPrev.style.display = showNav;
+  els.specNext.style.display = showNav;
+  els.specDots.style.display = slides.length > 1 ? "flex" : "none";
+}
+
+function bindSpecViewerSwipe(){
+  let startX = 0;
+  let startY = 0;
+  els.specViewer.addEventListener("touchstart",(e)=>{
+    if(!els.specViewer.classList.contains("show")) return;
+    const t = e.changedTouches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+  },{passive:true});
+  els.specViewer.addEventListener("touchend",(e)=>{
+    if(!els.specViewer.classList.contains("show")) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+    if(Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    if(dx > 0) moveSpecViewer(-1);
+    else moveSpecViewer(1);
+  },{passive:true});
 }
 
 function bindCarouselSwipe(){
