@@ -1,4 +1,4 @@
-const CACHE_NAME = 'costco-item-operation-hub-v50';
+const CACHE_NAME = 'costco-item-operation-hub-v51';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './tv_wall_install_fee.png'];
 
 self.addEventListener('install', event => {
@@ -23,7 +23,17 @@ self.addEventListener('fetch', event => {
   const url = new URL(req.url);
 
   if (url.pathname.includes('/images/') || url.hostname.includes('raw.githubusercontent.com')) {
-    event.respondWith(fetch(req, { cache: 'no-store' }).catch(() => caches.match(req)));
+    event.respondWith(
+      caches.open(CACHE_NAME).then(cache =>
+        cache.match(req).then(cached => {
+          const fresh = fetch(req).then(res => {
+            if (res && res.ok) cache.put(req, res.clone());
+            return res;
+          }).catch(() => cached);
+          return cached || fresh;
+        })
+      )
+    );
     return;
   }
 

@@ -74,6 +74,9 @@
 
 
     .spec-category-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}.spec-category-card{width:100%;border:1px solid var(--line);background:#fff;border-radius:20px;padding:14px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 18px rgba(15,23,42,.04)}.spec-category-card:active{transform:scale(.992)}.spec-category-left{display:flex;align-items:center;gap:12px;min-width:0}.spec-category-icon{width:44px;height:44px;border-radius:16px;background:#0f172a;color:#fff;display:grid;place-items:center;font-size:20px;font-weight:1000;flex:0 0 auto}.spec-category-title{font-size:18px;font-weight:1000;letter-spacing:-.35px;color:#0f172a}.spec-category-desc{margin-top:4px;font-size:12px;font-weight:820;line-height:1.4;color:#64748b;word-break:keep-all}.spec-category-arrow{width:34px;height:34px;border-radius:999px;background:#f1f5f9;color:#0f172a;display:grid;place-items:center;font-weight:1000;flex:0 0 auto}.spec-filename-guide{margin-top:12px;border:1px dashed #cbd5e1;background:#f8fafc;border-radius:18px;padding:12px 13px;color:#334155;font-size:12px;font-weight:850;line-height:1.55;word-break:keep-all}.spec-filename-guide code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#e2e8f0;border-radius:8px;padding:2px 5px;color:#0f172a;font-weight:1000}
+
+    .spec-help-btn{border:0;border-radius:999px;background:#dcfce7;color:#14532d;min-height:36px;padding:0 12px;font-size:13px;font-weight:1000;white-space:nowrap;box-shadow:inset 0 0 0 1px #bbf7d0}.spec-help-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.48);padding:16px}.spec-help-modal.show{display:flex}.spec-help-panel{width:100%;max-width:560px;max-height:82vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);border:1px solid #e2e8f0}.spec-help-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 16px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.spec-help-title{font-size:18px;font-weight:1000;color:#0f172a;letter-spacing:-.3px}.spec-help-close{border:0;border-radius:999px;background:#0f172a;color:#fff;width:42px;height:42px;font-size:22px;font-weight:1000}.spec-help-list{display:grid;gap:10px;padding:14px 16px 18px}.spec-help-item{border:1px solid #e2e8f0;border-radius:16px;padding:12px 13px;background:#f8fafc}.spec-help-term{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:5px}.spec-help-desc{font-size:13px;font-weight:800;color:#475569;line-height:1.55;word-break:keep-all}.spec-help-hint{padding:0 16px 16px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}@media (max-width:640px){.spec-help-btn{min-height:34px;padding:0 10px;font-size:12px}.spec-help-modal{padding:10px}.spec-help-panel{border-radius:22px;max-height:84vh}.spec-help-title{font-size:17px}.spec-help-close{width:40px;height:40px}}
+
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
   </style>
 </head>
@@ -238,6 +241,7 @@
       <div class="spec-head-title">상세 스펙 사진</div>
       <div id="specViewerTitle" class="spec-head-sub">-</div>
     </div>
+    <button id="specHelpBtn" class="spec-help-btn" type="button" style="display:none">용어</button>
     <span id="specViewerCount" class="spec-count">1/1</span>
   </div>
   <div class="spec-viewer-body">
@@ -245,6 +249,17 @@
     <div id="specCarousel" class="spec-carousel" aria-label="상세 스펙 사진 목록"></div>
     <button id="specNext" class="spec-nav next" type="button" aria-label="다음 스펙">❯</button>
     <div id="specDots" class="spec-dots"></div>
+  </div>
+</div>
+
+<div id="specHelpModal" class="spec-help-modal" aria-hidden="true">
+  <div class="spec-help-panel" role="dialog" aria-modal="true" aria-label="스펙 용어 설명">
+    <div class="spec-help-head">
+      <div id="specHelpTitle" class="spec-help-title">스펙 용어 설명</div>
+      <button id="specHelpClose" class="spec-help-close" type="button" aria-label="닫기">×</button>
+    </div>
+    <div id="specHelpList" class="spec-help-list"></div>
+    <div class="spec-help-hint">※ PNG 이미지의 특정 행을 정확히 누르는 방식은 휴대폰 화면 크기마다 위치가 달라질 수 있어, 우선 용어 설명 버튼 방식으로 안정 적용했습니다.</div>
   </div>
 </div>
 
@@ -260,7 +275,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v49"
+  SPEC_IMAGE_CACHE_BUST: "v51"
 };
 
 const DETAIL_TABS = [
@@ -279,6 +294,34 @@ const SPEC_CATEGORY_IMAGES = [
   { key:"kimchi", label:"김치냉장고", icon:"KIM", desc:"보관, 숙성, 냉각, 편의 기능을 비교 확인", prefix:"spec_kimchi" }
 ];
 
+
+const SPEC_TERM_GUIDES = {
+  tv: [
+    { term:"해상도", desc:"화면을 이루는 픽셀 수입니다. 4K는 3,840×2,160 수준으로, 숫자가 클수록 더 촘촘하고 선명하게 표현됩니다." },
+    { term:"주사율", desc:"1초에 화면을 몇 번 새로 그리는지 나타냅니다. 60Hz보다 120Hz가 스포츠·게임처럼 빠른 화면에서 더 부드럽습니다." },
+    { term:"DLG", desc:"게임 화면을 더 부드럽게 보이도록 프레임을 보정하는 기능입니다. 실제 패널 주사율과 체감 부드러움은 모델별로 다를 수 있습니다." },
+    { term:"화질엔진", desc:"입력 영상을 분석해 색감, 선명도, 명암 등을 보정하는 TV의 영상 처리 프로세서입니다." },
+    { term:"HDR", desc:"밝은 곳은 더 밝게, 어두운 곳은 더 깊게 표현해 명암 범위를 넓히는 영상 기술입니다." },
+    { term:"HDR 10+", desc:"장면별 밝기 정보를 활용해 HDR 표현을 더 세밀하게 조정하는 규격입니다. 콘텐츠가 지원해야 효과를 볼 수 있습니다." },
+    { term:"명암비", desc:"가장 밝은 화면과 가장 어두운 화면의 차이입니다. 명암비가 높을수록 깊이감과 입체감이 좋아 보입니다." },
+    { term:"디밍 기술", desc:"화면 영역별로 밝기를 조절해 검은색 표현과 대비감을 개선하는 기능입니다." },
+    { term:"명암비 강화 기술", desc:"영상의 밝고 어두운 부분을 분석해 더 또렷하게 보이도록 대비를 보정하는 기능입니다." },
+    { term:"모션 성능", desc:"빠르게 움직이는 장면의 잔상이나 끊김을 줄여주는 성능입니다. 스포츠·액션·게임에서 체감이 큽니다." },
+    { term:"AI 화질 최적화/모드", desc:"시청 환경이나 콘텐츠를 분석해 밝기, 색감, 선명도 등을 자동으로 조정하는 기능입니다." },
+    { term:"AI 화질 업스케일링", desc:"저해상도 영상을 4K 수준에 가깝게 보이도록 선명도와 디테일을 보정하는 기능입니다." },
+    { term:"AI 모션 강화", desc:"움직임이 많은 장면을 분석해 더 자연스럽고 선명하게 보이도록 보정하는 기능입니다." },
+    { term:"HDR 밝기 최적화", desc:"주변 밝기나 장면 정보를 반영해 HDR 화면의 밝기 표현을 자동으로 맞추는 기능입니다." },
+    { term:"컬러 부스터", desc:"색 표현을 보정해 색감을 더 풍부하고 선명하게 보여주는 기능입니다." },
+    { term:"필름메이커 모드(FMM)", desc:"영화 제작자가 의도한 색감과 프레임 느낌에 가깝게 보이도록 영상 보정을 줄이는 모드입니다." },
+    { term:"돌비 애트모스", desc:"소리를 위·주변 공간까지 확장해 입체적으로 들리게 하는 사운드 기술입니다. 콘텐츠 지원 여부에 따라 차이가 납니다." },
+    { term:"무빙 사운드(OTS)", desc:"화면 속 움직임에 맞춰 소리 위치가 따라가는 것처럼 들리게 하는 삼성 사운드 기능입니다." }
+  ],
+  common: [
+    { term:"있음/지원", desc:"해당 기능을 사용할 수 있다는 뜻입니다. 실제 사용 조건은 콘텐츠, 연결 기기, 앱 지원 여부에 따라 달라질 수 있습니다." },
+    { term:"없음/미지원", desc:"해당 모델에서 해당 기능을 기본 지원하지 않는다는 뜻입니다." },
+    { term:"N/A", desc:"해당 항목이 제품 특성상 적용 대상이 아니거나 공식 비교값이 없는 경우입니다." }
+  ]
+};
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], updatedAt:"" };
 let itemMap = new Map();
@@ -299,6 +342,9 @@ let deptFilter = "전체";
 let deptInteracted = false;
 let processFilter = "전체";
 let compareFilter = "전체";
+let currentSpecCategoryKey = "";
+let specCategoryUrlCache = new Map();
+let specPrefetchStarted = false;
 
 const $ = (id)=>document.getElementById(id);
 const els = {
@@ -313,7 +359,7 @@ const els = {
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
   inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"),
   imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption"),
-  specViewer:$("specViewer"), specBackBtn:$("specBackBtn"), specViewerTitle:$("specViewerTitle"), specViewerCount:$("specViewerCount"), specCarousel:$("specCarousel"), specPrev:$("specPrev"), specNext:$("specNext"), specDots:$("specDots")
+  specViewer:$("specViewer"), specBackBtn:$("specBackBtn"), specViewerTitle:$("specViewerTitle"), specViewerCount:$("specViewerCount"), specCarousel:$("specCarousel"), specPrev:$("specPrev"), specNext:$("specNext"), specDots:$("specDots"), specHelpBtn:$("specHelpBtn"), specHelpModal:$("specHelpModal"), specHelpClose:$("specHelpClose"), specHelpList:$("specHelpList"), specHelpTitle:$("specHelpTitle")
 };
 
 init();
@@ -324,6 +370,7 @@ function init(){
   renderDeptChips();
   renderProcessChips();
   renderSpecCategoryCards();
+  prefetchSpecCategoryFirstImages();
   renderCompareChips();
   loadFromCache();
   loadBootstrap(false);
@@ -382,6 +429,9 @@ function bindEvents(){
   bindModalSwipe();
   els.imageModal.addEventListener("click",(e)=>{ if(e.target === els.imageModal) closeImageModal(); });
   els.specBackBtn.addEventListener("click",closeSpecViewer);
+  els.specHelpBtn.addEventListener("click",showSpecHelp);
+  els.specHelpClose.addEventListener("click",closeSpecHelp);
+  els.specHelpModal.addEventListener("click",(e)=>{ if(e.target === els.specHelpModal) closeSpecHelp(); });
   els.specPrev.addEventListener("click",(e)=>{ e.stopPropagation(); moveSpecViewer(-1); });
   els.specNext.addEventListener("click",(e)=>{ e.stopPropagation(); moveSpecViewer(1); });
   els.specCarousel.addEventListener("scroll",debounce(updateSpecViewerControls,80));
@@ -410,7 +460,8 @@ function bindEvents(){
   bindSpecViewerSwipe();
   document.addEventListener("keydown",(e)=>{
     if(e.key === "Escape"){
-      if(els.imageModal.classList.contains("show")) closeImageModal();
+      if(els.specHelpModal.classList.contains("show")) closeSpecHelp();
+      else if(els.imageModal.classList.contains("show")) closeImageModal();
       else if(els.specViewer.classList.contains("show")) closeSpecViewer();
       return;
     }
@@ -452,7 +503,7 @@ function showPage(page){
   map[page].classList.add("show");
   [els.navItem,els.navSpecTable,els.navInquiry,els.navDept,els.navProcess].forEach(btn=>btn.classList.remove("active"));
   if(page==="item") els.navItem.classList.add("active");
-  if(page==="specTable") els.navSpecTable.classList.add("active");
+  if(page==="specTable"){ els.navSpecTable.classList.add("active"); prefetchSpecCategoryFirstImages(); }
   if(page==="inquiry") els.navInquiry.classList.add("active");
   if(page==="dept") els.navDept.classList.add("active");
   if(page==="process") els.navProcess.classList.add("active");
@@ -544,6 +595,7 @@ function renderAll(){
   renderDeptSelectors();
   renderDepartments();
   renderSpecCategoryCards();
+  prefetchSpecCategoryFirstImages();
   renderCompareChips();
   renderSpecCompare();
   renderProcessChips();
@@ -1114,6 +1166,8 @@ function openSpecImageZoom(index){
 
 async function openSpecViewer(item){
   if(!item) return;
+  currentSpecCategoryKey = "";
+  if(els.specHelpBtn) els.specHelpBtn.style.display = "none";
   specViewerUrls = [];
   specViewerIndex = 0;
   const itemNo = safe(item?.itemNo,"아이템번호");
@@ -1161,6 +1215,7 @@ async function openSpecViewer(item){
 }
 
 function closeSpecViewer(fromPop=false){
+  closeSpecHelp();
   specHistoryPushed = false;
   els.specViewer.classList.remove("show");
   els.specViewer.setAttribute("aria-hidden","true");
@@ -1255,29 +1310,104 @@ async function fetchGithubCategorySpecUrls(cat){
   }
 }
 
+async function imageExistsWithTimeout(url, timeout=1800){
+  return new Promise(resolve=>{
+    const img = new Image();
+    const timer = setTimeout(()=>{ img.onload = img.onerror = null; resolve(false); }, timeout);
+    img.onload = ()=>{ clearTimeout(timer); resolve(true); };
+    img.onerror = ()=>{ clearTimeout(timer); resolve(false); };
+    img.src = url;
+  });
+}
+
 async function resolveSpecCategoryImageUrls(cat){
+  const cacheKey = safe(cat?.key || cat?.prefix, "");
+  if(cacheKey && specCategoryUrlCache.has(cacheKey)) return specCategoryUrlCache.get(cacheKey);
+
+  const prefix = safe(cat?.prefix, "spec");
+  const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
+
+  // 1순위: GitHub Pages local images 폴더의 PNG를 먼저 확인합니다.
+  // 기존 방식처럼 GitHub API를 먼저 기다리면 휴대폰에서 4~5초 지연될 수 있어 순서를 바꿨습니다.
+  const localPngChecks = Array.from({length:max}, (_,i)=>{
+    const no = i + 1;
+    const url = localSpecImageUrl(`${prefix}_${no}.png`);
+    return imageExistsWithTimeout(url, 1600).then(ok=> ok ? { no, url } : null);
+  });
+  const localPng = (await Promise.all(localPngChecks)).filter(Boolean).sort((a,b)=>a.no-b.no).map(v=>v.url);
+  if(localPng.length){
+    if(cacheKey) specCategoryUrlCache.set(cacheKey, localPng);
+    return localPng;
+  }
+
+  // 2순위: 실제 GitHub images 목록 확인
   const github = await fetchGithubCategorySpecUrls(cat);
-  if(github.length) return github;
+  if(github.length){
+    if(cacheKey) specCategoryUrlCache.set(cacheKey, github);
+    return github;
+  }
+
+  // 3순위: png 외 확장자까지 직접 확인
   const urls = [];
-  for(let i=1;i<=CONFIG.SPEC_IMAGE_MAX_COUNT;i++){
+  for(let i=1;i<=max;i++){
     const group = [];
     CONFIG.SPEC_IMAGE_EXTENSIONS.forEach(ext=>{
-      group.push(`${CONFIG.SPEC_IMAGE_RAW_BASE}${cat.prefix}_${i}.${ext}?${CONFIG.SPEC_IMAGE_CACHE_BUST}`);
-      group.push(`${CONFIG.SPEC_IMAGE_BASE_PATH}${cat.prefix}_${i}.${ext}?${CONFIG.SPEC_IMAGE_CACHE_BUST}`);
+      group.push(localSpecImageUrl(`${prefix}_${i}.${ext}`));
+      group.push(rawSpecImageUrl(`${prefix}_${i}.${ext}`));
     });
-    const found = await firstExistingImage(group);
+    const found = await firstExistingImage(uniqueArray(group));
     if(found) urls.push(found);
   }
+  if(cacheKey) specCategoryUrlCache.set(cacheKey, urls);
   return urls;
 }
 
+function preloadImage(url){
+  if(!url) return;
+  try{
+    const img = new Image();
+    img.decoding = "async";
+    img.loading = "eager";
+    img.src = url;
+  }catch(err){}
+}
+
+function prefetchSpecCategoryFirstImages(){
+  if(specPrefetchStarted) return;
+  specPrefetchStarted = true;
+  setTimeout(()=>{
+    SPEC_CATEGORY_IMAGES.forEach(cat=>{
+      preloadImage(localSpecImageUrl(`${cat.prefix}_1.png`));
+    });
+  }, 250);
+}
+
+function showSpecHelp(){
+  const list = (SPEC_TERM_GUIDES[currentSpecCategoryKey] || []).concat(SPEC_TERM_GUIDES.common || []);
+  if(!list.length) return;
+  const cat = SPEC_CATEGORY_IMAGES.find(x=>x.key === currentSpecCategoryKey);
+  els.specHelpTitle.textContent = cat ? `${cat.label} 용어 설명` : "스펙 용어 설명";
+  els.specHelpList.innerHTML = list.map(v=>`<div class="spec-help-item"><div class="spec-help-term">${esc(v.term)}</div><div class="spec-help-desc">${esc(v.desc)}</div></div>`).join("");
+  els.specHelpModal.classList.add("show");
+  els.specHelpModal.setAttribute("aria-hidden","false");
+}
+
+function closeSpecHelp(){
+  if(!els.specHelpModal) return;
+  els.specHelpModal.classList.remove("show");
+  els.specHelpModal.setAttribute("aria-hidden","true");
+}
+
+
 async function openSpecCategoryViewer(cat){
   if(!cat) return;
+  currentSpecCategoryKey = cat.key || "";
+  if(els.specHelpBtn) els.specHelpBtn.style.display = (SPEC_TERM_GUIDES[currentSpecCategoryKey] ? "inline-flex" : "none");
   specViewerUrls = [];
   specViewerIndex = 0;
   specViewerCaption = `${cat.label} 스펙 비교`;
   els.specViewer.querySelector(".spec-head-title").textContent = "스펙 비교";
-  els.specViewerTitle.textContent = `${cat.label} · 스펙/성능 비교 이미지`;
+  els.specViewerTitle.textContent = `${cat.label} · 스펙 비교 이미지`;
   els.specViewerCount.textContent = "확인중";
   els.specCarousel.innerHTML = `
     <div class="spec-slide">
