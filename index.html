@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -73,6 +72,8 @@
 
     .compare-scroll{overflow:auto;border:1px solid var(--line);border-radius:18px;background:#fff;max-height:70vh}.compare-table{width:100%;min-width:760px;border-collapse:separate;border-spacing:0;font-size:13px}.compare-table th{position:sticky;top:0;z-index:2;background:#0f172a;color:#fff;text-align:left;padding:11px 10px;font-size:12px;font-weight:1000;white-space:nowrap}.compare-table td{border-top:1px solid #e2e8f0;padding:10px;font-weight:850;color:#0f172a;vertical-align:top;white-space:pre-line;word-break:keep-all}.compare-table tbody tr:nth-child(even) td{background:#f8fafc}.compare-table .sticky-col{position:sticky;left:0;z-index:1;background:#fff;box-shadow:6px 0 10px rgba(15,23,42,.04)}.compare-table thead .sticky-col{z-index:3;background:#0f172a}.compare-value-on{color:#dc2626!important;font-weight:1000}.compare-value-off{color:#334155}.compare-guide{margin:8px 0 12px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}.form-grid{display:grid;gap:10px}.form-grid input,.form-grid textarea,.form-grid select{width:100%;border:1px solid var(--line);background:#fff;border-radius:17px;padding:0 14px;font-size:15px;font-weight:850;color:#0f172a;outline:none}.form-grid input,.form-grid select{min-height:50px}.form-grid textarea{min-height:150px;padding-top:13px;resize:vertical;line-height:1.5}.form-grid input:focus,.form-grid textarea:focus,.form-grid select:focus{border-color:#0f172a;box-shadow:0 0 0 4px rgba(15,23,42,.08)}.privacy-box{border:1px solid #cbd5e1;background:#f8fafc;border-radius:16px;padding:12px 13px;color:#334155;font-size:12px;font-weight:850;line-height:1.55;word-break:keep-all}.privacy-box b{color:#0f172a}.submit-btn{width:100%;border:0;border-radius:18px;background:#0f172a;color:#fff;min-height:54px;font-size:15px;font-weight:1000;box-shadow:0 10px 22px rgba(15,23,42,.18)}.submit-btn:disabled{opacity:.55;cursor:not-allowed}.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
+
+    .spec-category-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}.spec-category-card{width:100%;border:1px solid var(--line);background:#fff;border-radius:20px;padding:14px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 18px rgba(15,23,42,.04)}.spec-category-card:active{transform:scale(.992)}.spec-category-left{display:flex;align-items:center;gap:12px;min-width:0}.spec-category-icon{width:44px;height:44px;border-radius:16px;background:#0f172a;color:#fff;display:grid;place-items:center;font-size:20px;font-weight:1000;flex:0 0 auto}.spec-category-title{font-size:18px;font-weight:1000;letter-spacing:-.35px;color:#0f172a}.spec-category-desc{margin-top:4px;font-size:12px;font-weight:820;line-height:1.4;color:#64748b;word-break:keep-all}.spec-category-arrow{width:34px;height:34px;border-radius:999px;background:#f1f5f9;color:#0f172a;display:grid;place-items:center;font-weight:1000;flex:0 0 auto}.spec-filename-guide{margin-top:12px;border:1px dashed #cbd5e1;background:#f8fafc;border-radius:18px;padding:12px 13px;color:#334155;font-size:12px;font-weight:850;line-height:1.55;word-break:keep-all}.spec-filename-guide code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#e2e8f0;border-radius:8px;padding:2px 5px;color:#0f172a;font-weight:1000}
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
   </style>
 </head>
@@ -87,7 +88,7 @@
 
   <nav class="nav">
     <button id="navItem" class="active" type="button">아이템</button>
-    <button id="navSpecTable" type="button">스펙표</button>
+    <button id="navSpecTable" type="button">스펙/성능</button>
     <button id="navInquiry" type="button">문의</button>
     <button id="navDept" type="button">업무지원</button>
     <button id="navProcess" type="button">프로세스</button>
@@ -135,19 +136,25 @@
 
 
 
+
   <section id="pageSpecTable" class="page">
     <article class="card">
       <div class="card-inner">
         <div class="section-title">
           <div>
-            <h2>제품별 스펙표</h2>
-            <small>TV, 냉장고, 세탁기/건조기, 에어컨, 김치냉장고 기능 유무를 한눈에 비교합니다.</small>
+            <h2>스펙/성능표</h2>
+            <small>카테고리 버튼을 누르면 별도 화면에서 스펙표 이미지를 확인합니다.</small>
           </div>
-          <span id="compareCountPill" class="pill">0건</span>
+          <span class="pill ok">이미지형</span>
         </div>
-        <div id="compareChips" class="chips"></div>
-        <p class="compare-guide">※ 구글시트 <b>스펙비교표</b> 시트에 카테고리/아이템번호/모델명/상품명과 기능 항목을 입력하면 여기에 자동 표시됩니다. “있음/지원” 계열은 빨간색으로 강조됩니다.</p>
-        <div id="compareTableWrap" class="compare-scroll"></div>
+        <div id="specCategoryGrid" class="spec-category-grid"></div>
+        <div class="spec-filename-guide">
+          GitHub <b>images</b> 폴더에 아래 파일명으로 올리면 자동으로 불러옵니다.<br/>
+          TV: <code>spec_tv_1.png</code> · 냉장고: <code>spec_fridge_1.png</code><br/>
+          세탁기/건조기: <code>spec_washer_1.png</code> · 에어컨: <code>spec_aircon_1.png</code><br/>
+          김치냉장고: <code>spec_kimchi_1.png</code><br/>
+          여러 장이면 <code>_2</code>, <code>_3</code> 순서로 추가하면 됩니다.
+        </div>
       </div>
     </article>
   </section>
@@ -252,14 +259,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v48_cache",
+  CACHE_KEY: "costco_item_operation_hub_v49_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v48"
+  SPEC_IMAGE_CACHE_BUST: "v49"
 };
 
 const DETAIL_TABS = [
@@ -268,6 +275,14 @@ const DETAIL_TABS = [
   { key:"promoDate", label:"행사 예정일" },
   { key:"wallModel", label:"벽걸이 모델명/설치비" },
   { key:"cost", label:"이전설치/철거 비용" }
+];
+
+const SPEC_CATEGORY_IMAGES = [
+  { key:"tv", label:"TV", icon:"TV", desc:"화면, 영상, 사운드, 스마트 기능을 한눈에 확인", prefix:"spec_tv" },
+  { key:"fridge", label:"냉장고", icon:"REF", desc:"용량, 냉각, AI, 편의 기능을 비교 확인", prefix:"spec_fridge" },
+  { key:"washer", label:"세탁기/건조기", icon:"W/D", desc:"세탁, 건조, AI, 에너지 기능을 비교 확인", prefix:"spec_washer" },
+  { key:"aircon", label:"에어컨", icon:"A/C", desc:"냉방, 무풍, 청정, 제습, 스마트 기능을 비교 확인", prefix:"spec_aircon" },
+  { key:"kimchi", label:"김치냉장고", icon:"KIM", desc:"보관, 숙성, 냉각, 편의 기능을 비교 확인", prefix:"spec_kimchi" }
 ];
 
 
@@ -282,6 +297,7 @@ let modalImageIndex = 0;
 let modalCaptionBase = "이미지 확대 보기";
 let specViewerUrls = [];
 let specViewerIndex = 0;
+let specViewerCaption = "상세 스펙";
 let specTapStartX = 0;
 let specTapStartY = 0;
 let specTapMoved = false;
@@ -300,7 +316,7 @@ const els = {
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"),
   deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"),
   processSearch:$("processSearch"), processChips:$("processChips"), processList:$("processList"), processCountPill:$("processCountPill"),
-  compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
+  specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
   inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"),
   imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption"),
   specViewer:$("specViewer"), specBackBtn:$("specBackBtn"), specViewerTitle:$("specViewerTitle"), specViewerCount:$("specViewerCount"), specCarousel:$("specCarousel"), specPrev:$("specPrev"), specNext:$("specNext"), specDots:$("specDots")
@@ -313,6 +329,7 @@ function init(){
   renderDetailTabs();
   renderDeptChips();
   renderProcessChips();
+  renderSpecCategoryCards();
   renderCompareChips();
   loadFromCache();
   loadBootstrap(false);
@@ -532,6 +549,7 @@ function renderAll(){
   renderQuickList(els.itemInput.value);
   renderDeptSelectors();
   renderDepartments();
+  renderSpecCategoryCards();
   renderCompareChips();
   renderSpecCompare();
   renderProcessChips();
@@ -1097,7 +1115,7 @@ function looksLikeImageUrl(url){
 function openSpecImageZoom(index){
   if(!specViewerUrls.length) return;
   const next = Math.max(0, Math.min(Number(index) || 0, specViewerUrls.length - 1));
-  openImageModal(specViewerUrls, next, safe(selectedItem?.modelName,"상세 스펙"));
+  openImageModal(specViewerUrls, next, specViewerCaption || safe(selectedItem?.modelName,"상세 스펙"));
 }
 
 async function openSpecViewer(item){
@@ -1105,6 +1123,8 @@ async function openSpecViewer(item){
   specViewerUrls = [];
   specViewerIndex = 0;
   const itemNo = safe(item?.itemNo,"아이템번호");
+  specViewerCaption = safe(item?.modelName,"상세 스펙");
+  els.specViewer.querySelector(".spec-head-title").textContent = "상세 스펙 사진";
   els.specViewerTitle.textContent = `${safe(item?.modelName,"모델명 미등록")} · ${safe(item?.itemNo,"")}`;
   els.specViewerCount.textContent = "확인중";
   els.specCarousel.innerHTML = `
@@ -1143,12 +1163,7 @@ async function openSpecViewer(item){
     return;
   }
 
-  specViewerUrls = urls;
-  specViewerIndex = 0;
-  els.specCarousel.innerHTML = urls.map((url,i)=>`<div class="spec-slide"><div class="spec-slide-inner"><div class="spec-card"><img src="${esc(url)}" data-index="${i}" alt="상세 스펙 ${i+1}" loading="eager" onclick="openSpecImageZoom(${i})" /><div class="spec-card-foot"><div class="spec-card-tip">사진을 누르면 확대할 수 있습니다 · 좌우로 밀면 다음 사진으로 이동합니다.</div><span class="spec-card-page">${i+1} / ${urls.length}</span></div></div></div></div>`).join("");
-  els.specDots.innerHTML = urls.map((_,i)=>`<span class="spec-dot ${i===0?'active':''}" data-index="${i}"></span>`).join("");
-  els.specDots.querySelectorAll(".spec-dot").forEach(dot=>dot.addEventListener("click",()=>goSpecViewer(Number(dot.dataset.index||0))));
-  requestAnimationFrame(()=>goSpecViewer(0,false));
+  renderSpecViewerImages(urls, "상세 스펙");
 }
 
 function closeSpecViewer(fromPop=false){
@@ -1191,6 +1206,131 @@ function updateSpecViewerControls(){
   els.specDots.style.display = slides.length > 1 ? "flex" : "none";
 }
 
+
+
+function renderSpecCategoryCards(){
+  if(!els.specCategoryGrid) return;
+  els.specCategoryGrid.innerHTML = SPEC_CATEGORY_IMAGES.map(cat=>`
+    <button class="spec-category-card" type="button" data-key="${esc(cat.key)}">
+      <div class="spec-category-left">
+        <div class="spec-category-icon">${esc(cat.icon)}</div>
+        <div>
+          <div class="spec-category-title">${esc(cat.label)} 스펙/성능표</div>
+          <div class="spec-category-desc">${esc(cat.desc)}</div>
+        </div>
+      </div>
+      <div class="spec-category-arrow">›</div>
+    </button>`).join("");
+  els.specCategoryGrid.querySelectorAll(".spec-category-card").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const cat = SPEC_CATEGORY_IMAGES.find(x=>x.key === btn.dataset.key);
+      if(cat) openSpecCategoryViewer(cat);
+    });
+  });
+}
+
+function getSpecCategoryCandidateUrls(cat){
+  const prefix = safe(cat?.prefix, "spec");
+  const urls = [];
+  for(let i=1;i<=CONFIG.SPEC_IMAGE_MAX_COUNT;i++){
+    CONFIG.SPEC_IMAGE_EXTENSIONS.forEach(ext=>{
+      urls.push(`${CONFIG.SPEC_IMAGE_RAW_BASE}${prefix}_${i}.${ext}?${CONFIG.SPEC_IMAGE_CACHE_BUST}`);
+      urls.push(`${CONFIG.SPEC_IMAGE_BASE_PATH}${prefix}_${i}.${ext}?${CONFIG.SPEC_IMAGE_CACHE_BUST}`);
+    });
+  }
+  return urls;
+}
+
+async function fetchGithubCategorySpecUrls(cat){
+  try{
+    const prefix = safe(cat?.prefix, "").toLowerCase();
+    if(!prefix) return [];
+    const res = await fetch(`${CONFIG.SPEC_IMAGE_GITHUB_API}&_=${Date.now()}`, { cache:"no-store" });
+    if(!res.ok) return [];
+    const files = await res.json();
+    if(!Array.isArray(files)) return [];
+    return files
+      .filter(f=>{
+        const name = String(f.name || "").toLowerCase();
+        return name.startsWith(prefix + "_") && CONFIG.SPEC_IMAGE_EXTENSIONS.some(ext=>name.endsWith("."+ext));
+      })
+      .sort((a,b)=>naturalCompare(a.name,b.name))
+      .map(f=>`${f.download_url}?${CONFIG.SPEC_IMAGE_CACHE_BUST}`);
+  }catch(err){
+    return [];
+  }
+}
+
+async function resolveSpecCategoryImageUrls(cat){
+  const github = await fetchGithubCategorySpecUrls(cat);
+  if(github.length) return github;
+  const urls = [];
+  for(let i=1;i<=CONFIG.SPEC_IMAGE_MAX_COUNT;i++){
+    const group = [];
+    CONFIG.SPEC_IMAGE_EXTENSIONS.forEach(ext=>{
+      group.push(`${CONFIG.SPEC_IMAGE_RAW_BASE}${cat.prefix}_${i}.${ext}?${CONFIG.SPEC_IMAGE_CACHE_BUST}`);
+      group.push(`${CONFIG.SPEC_IMAGE_BASE_PATH}${cat.prefix}_${i}.${ext}?${CONFIG.SPEC_IMAGE_CACHE_BUST}`);
+    });
+    const found = await firstExistingImage(group);
+    if(found) urls.push(found);
+  }
+  return urls;
+}
+
+async function openSpecCategoryViewer(cat){
+  if(!cat) return;
+  specViewerUrls = [];
+  specViewerIndex = 0;
+  specViewerCaption = `${cat.label} 스펙/성능표`;
+  els.specViewer.querySelector(".spec-head-title").textContent = "스펙/성능표";
+  els.specViewerTitle.textContent = `${cat.label} · 스펙/성능 비교 이미지`;
+  els.specViewerCount.textContent = "확인중";
+  els.specCarousel.innerHTML = `
+    <div class="spec-slide">
+      <div class="spec-slide-inner">
+        <div class="spec-status-card">
+          <div class="spec-status-title">${esc(cat.label)} 스펙/성능표를 불러오는 중입니다.</div>
+          <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(cat.prefix)}_1.png</b> 형식으로 확인하고 있습니다.</div>
+        </div>
+      </div>
+    </div>`;
+  els.specDots.innerHTML = "";
+  els.specPrev.style.display = "none";
+  els.specNext.style.display = "none";
+  els.specViewer.classList.add("show");
+  els.specViewer.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  pushSpecHistory();
+
+  const urls = await resolveSpecCategoryImageUrls(cat);
+  if(!els.specViewer.classList.contains("show")) return;
+  if(!urls.length){
+    specViewerUrls = [];
+    specViewerIndex = 0;
+    els.specViewerCount.textContent = "없음";
+    els.specCarousel.innerHTML = `
+      <div class="spec-slide">
+        <div class="spec-slide-inner">
+          <div class="spec-status-card">
+            <div class="spec-status-title">${esc(cat.label)} 스펙/성능표 이미지를 찾지 못했습니다.</div>
+            <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(cat.prefix)}_1.png</b>, <b>${esc(cat.prefix)}_2.png</b><br/>형식으로 올려주세요.<br/><br/>업로드 직후라면 1분 뒤 다시 열어주세요.</div>
+          </div>
+        </div>
+      </div>`;
+    els.specDots.innerHTML = "";
+    return;
+  }
+  renderSpecViewerImages(urls, `${cat.label} 스펙/성능표`);
+}
+
+function renderSpecViewerImages(urls, altBase){
+  specViewerUrls = urls;
+  specViewerIndex = 0;
+  els.specCarousel.innerHTML = urls.map((url,i)=>`<div class="spec-slide"><div class="spec-slide-inner"><div class="spec-card"><img src="${esc(url)}" data-index="${i}" alt="${esc(altBase)} ${i+1}" loading="eager" onclick="openSpecImageZoom(${i})" /><div class="spec-card-foot"><div class="spec-card-tip">사진을 누르면 확대할 수 있습니다 · 좌우로 밀면 다음 사진으로 이동합니다.</div><span class="spec-card-page">${i+1} / ${urls.length}</span></div></div></div></div>`).join("");
+  els.specDots.innerHTML = urls.map((_,i)=>`<span class="spec-dot ${i===0?'active':''}" data-index="${i}"></span>`).join("");
+  els.specDots.querySelectorAll(".spec-dot").forEach(dot=>dot.addEventListener("click",()=>goSpecViewer(Number(dot.dataset.index||0))));
+  requestAnimationFrame(()=>goSpecViewer(0,false));
+}
 
 function renderCompareChips(){
   if(!els.compareChips) return;
