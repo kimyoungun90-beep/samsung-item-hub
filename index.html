@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -34,8 +35,8 @@
     .sync-line{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;position:relative;z-index:1}
     .sync-text{font-size:11px;font-weight:850;color:rgba(255,255,255,.72)}
     .refresh-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:8px 10px;font-size:12px;font-weight:950}
-    .nav{position:sticky;top:8px;z-index:20;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:7px;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border:1px solid rgba(226,232,240,.86);border-radius:22px;box-shadow:0 10px 28px rgba(15,23,42,.08);margin-bottom:14px}
-    .nav button{border:0;border-radius:16px;background:transparent;color:#475569;font-size:13px;font-weight:950;min-height:42px}
+    .nav{position:sticky;top:8px;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:7px;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border:1px solid rgba(226,232,240,.86);border-radius:22px;box-shadow:0 10px 28px rgba(15,23,42,.08);margin-bottom:14px}
+    .nav button{border:0;border-radius:16px;background:transparent;color:#475569;font-size:12px;font-weight:950;min-height:42px}
     .nav button.active{background:#0f172a;color:#fff;box-shadow:0 8px 18px rgba(15,23,42,.20)}
     .page{display:none}.page.show{display:block}
     .card{background:rgba(255,255,255,.94);border:1px solid rgba(226,232,240,.92);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
@@ -69,7 +70,10 @@
     .image-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.92);padding:18px}.image-modal.show{display:flex}.image-modal-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}.image-modal img{max-width:100%;max-height:calc(100% - 84px);object-fit:contain;border-radius:18px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.35)}.image-modal-close{position:absolute;right:4px;top:4px;border:0;border-radius:999px;background:#fff;color:#0f172a;width:48px;height:48px;font-size:26px;font-weight:1000;line-height:1;box-shadow:0 10px 24px rgba(0,0,0,.25)}.image-modal-nav{display:none!important}.image-modal-nav.prev{left:4px}.image-modal-nav.next{right:4px}.image-modal-caption{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);max-width:92%;border-radius:999px;background:rgba(255,255,255,.92);color:#0f172a;padding:8px 12px;font-size:12px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
     .spec-viewer{position:fixed;inset:0;z-index:900;display:none;flex-direction:column;background:linear-gradient(180deg,#eef4fb 0%,#f8fafc 100%);color:#0f172a}.spec-viewer.show{display:flex}.spec-viewer-head{height:74px;display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.95);backdrop-filter:saturate(140%) blur(14px);border-bottom:1px solid #e2e8f0;box-shadow:0 10px 28px rgba(15,23,42,.06);z-index:2}.spec-back{border:0;border-radius:18px;background:#0f172a;color:#fff;min-width:92px;min-height:46px;font-size:15px;font-weight:1000;box-shadow:0 10px 24px rgba(15,23,42,.14)}.spec-head-text{flex:1;min-width:0}.spec-head-title{font-size:19px;font-weight:1000;line-height:1.18;letter-spacing:-.35px}.spec-head-sub{margin-top:3px;color:#64748b;font-size:13px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.spec-count{border-radius:999px;background:#eff3ff;color:#0f172a;padding:9px 12px;font-size:13px;font-weight:1000;white-space:nowrap;box-shadow:inset 0 0 0 1px #dbe4ff}.spec-viewer-body{position:relative;flex:1;min-height:0;padding:14px 12px 74px;overflow:hidden}.spec-carousel{height:100%;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-y pinch-zoom}.spec-carousel::-webkit-scrollbar{display:none}.spec-slide{min-width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always;display:block;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch}.spec-slide-inner{max-width:860px;margin:0 auto 16px}.spec-card{background:#fff;border:1px solid #e2e8f0;border-radius:24px;box-shadow:0 18px 40px rgba(15,23,42,.08);overflow:hidden}.spec-slide img{display:block;width:100%;height:auto;object-fit:contain;background:#fff;border:0;border-radius:0;box-shadow:none;cursor:zoom-in;user-select:none;-webkit-user-drag:none}.spec-card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:#f8fafc;border-top:1px solid #e2e8f0}.spec-card-tip{color:#64748b;font-size:12px;font-weight:850;line-height:1.35;word-break:keep-all}.spec-card-page{border-radius:999px;background:#0f172a;color:#fff;padding:7px 12px;font-size:12px;font-weight:1000;white-space:nowrap}.spec-status-card{max-width:460px;margin:28px auto 0;background:#fff;border:1px dashed #cbd5e1;border-radius:22px;padding:28px 22px;text-align:center;box-shadow:0 16px 36px rgba(15,23,42,.06)}.spec-status-title{font-size:18px;font-weight:1000;color:#0f172a;line-height:1.35}.spec-status-sub{margin-top:10px;color:#64748b;font-size:14px;font-weight:850;line-height:1.6;word-break:keep-all}.spec-status-sub b{color:#0f172a}.spec-nav{display:none!important}.spec-dots{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:3;display:flex;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.96);box-shadow:0 10px 26px rgba(15,23,42,.12)}.spec-dot{width:9px;height:9px;border-radius:999px;background:#cbd5e1;transition:transform .15s ease, background .15s ease}.spec-dot.active{background:#0f172a;transform:scale(1.12)}.spec-open-btn{width:100%;border:0;border-radius:16px;background:#0f172a;color:#fff;min-height:50px;font-size:15px;font-weight:1000;margin-top:10px}.spec-note-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;font-size:13px;font-weight:850;color:#334155;line-height:1.55;word-break:keep-all}@media (max-width:640px){.spec-viewer-head{height:70px;padding:10px 12px}.spec-back{min-width:84px;min-height:44px;border-radius:16px}.spec-head-title{font-size:18px}.spec-head-sub{font-size:12px}.spec-count{padding:8px 11px;font-size:12px}.spec-viewer-body{padding:12px 10px 72px}.spec-card{border-radius:20px}.spec-card-foot{padding:10px 12px}.spec-card-tip{font-size:11px}.spec-card-page{padding:6px 10px;font-size:11px}.spec-status-card{padding:24px 18px;border-radius:18px}.spec-status-title{font-size:17px}.spec-status-sub{font-size:13px}}
-    @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
+
+    .compare-scroll{overflow:auto;border:1px solid var(--line);border-radius:18px;background:#fff;max-height:70vh}.compare-table{width:100%;min-width:760px;border-collapse:separate;border-spacing:0;font-size:13px}.compare-table th{position:sticky;top:0;z-index:2;background:#0f172a;color:#fff;text-align:left;padding:11px 10px;font-size:12px;font-weight:1000;white-space:nowrap}.compare-table td{border-top:1px solid #e2e8f0;padding:10px;font-weight:850;color:#0f172a;vertical-align:top;white-space:pre-line;word-break:keep-all}.compare-table tbody tr:nth-child(even) td{background:#f8fafc}.compare-table .sticky-col{position:sticky;left:0;z-index:1;background:#fff;box-shadow:6px 0 10px rgba(15,23,42,.04)}.compare-table thead .sticky-col{z-index:3;background:#0f172a}.compare-value-on{color:#dc2626!important;font-weight:1000}.compare-value-off{color:#334155}.compare-guide{margin:8px 0 12px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}.form-grid{display:grid;gap:10px}.form-grid input,.form-grid textarea,.form-grid select{width:100%;border:1px solid var(--line);background:#fff;border-radius:17px;padding:0 14px;font-size:15px;font-weight:850;color:#0f172a;outline:none}.form-grid input,.form-grid select{min-height:50px}.form-grid textarea{min-height:150px;padding-top:13px;resize:vertical;line-height:1.5}.form-grid input:focus,.form-grid textarea:focus,.form-grid select:focus{border-color:#0f172a;box-shadow:0 0 0 4px rgba(15,23,42,.08)}.privacy-box{border:1px solid #cbd5e1;background:#f8fafc;border-radius:16px;padding:12px 13px;color:#334155;font-size:12px;font-weight:850;line-height:1.55;word-break:keep-all}.privacy-box b{color:#0f172a}.submit-btn{width:100%;border:0;border-radius:18px;background:#0f172a;color:#fff;min-height:54px;font-size:15px;font-weight:1000;box-shadow:0 10px 22px rgba(15,23,42,.18)}.submit-btn:disabled{opacity:.55;cursor:not-allowed}.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+    @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
   </style>
 </head>
 <body>
@@ -83,6 +87,8 @@
 
   <nav class="nav">
     <button id="navItem" class="active" type="button">아이템</button>
+    <button id="navSpecTable" type="button">스펙표</button>
+    <button id="navInquiry" type="button">문의</button>
     <button id="navDept" type="button">업무지원</button>
     <button id="navProcess" type="button">프로세스</button>
   </nav>
@@ -125,6 +131,60 @@
     </article>
 
     <div id="productEmpty" class="empty">아이템번호 또는 모델명을 입력하면 모델 사진과 상세정보가 표시됩니다.</div>
+  </section>
+
+
+
+  <section id="pageSpecTable" class="page">
+    <article class="card">
+      <div class="card-inner">
+        <div class="section-title">
+          <div>
+            <h2>제품별 스펙표</h2>
+            <small>TV, 냉장고, 세탁기/건조기, 에어컨, 김치냉장고 기능 유무를 한눈에 비교합니다.</small>
+          </div>
+          <span id="compareCountPill" class="pill">0건</span>
+        </div>
+        <div id="compareChips" class="chips"></div>
+        <p class="compare-guide">※ 구글시트 <b>스펙비교표</b> 시트에 카테고리/아이템번호/모델명/상품명과 기능 항목을 입력하면 여기에 자동 표시됩니다. “있음/지원” 계열은 빨간색으로 강조됩니다.</p>
+        <div id="compareTableWrap" class="compare-scroll"></div>
+      </div>
+    </article>
+  </section>
+
+  <section id="pageInquiry" class="page">
+    <article class="card">
+      <div class="card-inner">
+        <div class="section-title">
+          <div>
+            <h2>소통 창구</h2>
+            <small>코스트코 직원 또는 상담사가 모르는 내용을 문의할 수 있습니다.</small>
+          </div>
+          <span class="pill warn">관리자 확인</span>
+        </div>
+        <div class="privacy-box">
+          <b>해당 내용은 관리자만 확인이 가능하며 매장 방문 또는 연락처 기재 시 별도 연락 드리겠습니다.</b><br/>
+          입력하신 연락처는 문의 응대, 매장 방문 조율 및 별도 연락 목적에 한해 사용되며, 광고·홍보 목적의 연락에는 사용하지 않습니다.
+        </div>
+        <div class="form-grid" style="margin-top:12px">
+          <div class="form-row-2">
+            <select id="inquiryType">
+              <option value="코스트코 직원">코스트코 직원</option>
+              <option value="삼성 상담사">삼성 상담사</option>
+              <option value="기타">기타</option>
+            </select>
+            <input id="inquiryStore" type="text" placeholder="점포명 예: 대구점" autocomplete="off" data-lpignore="true" data-1p-ignore="true" />
+          </div>
+          <div class="form-row-2">
+            <input id="inquiryName" type="text" placeholder="성함/직책 선택 입력" autocomplete="off" data-lpignore="true" data-1p-ignore="true" />
+            <input id="inquiryPhone" type="tel" placeholder="연락처 선택 입력" autocomplete="off" data-lpignore="true" data-1p-ignore="true" />
+          </div>
+          <textarea id="inquiryBody" placeholder="문의 내용을 입력해 주세요. 예: 설치비 확인, 제품 기능 문의, 프로세스 문의 등"></textarea>
+          <button id="inquirySubmitBtn" class="submit-btn" type="button">문의 등록</button>
+          <div id="inquiryResult" class="status"></div>
+        </div>
+      </div>
+    </article>
   </section>
 
   <section id="pageDept" class="page">
@@ -192,14 +252,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v47_cache",
+  CACHE_KEY: "costco_item_operation_hub_v48_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v47"
+  SPEC_IMAGE_CACHE_BUST: "v48"
 };
 
 const DETAIL_TABS = [
@@ -211,7 +271,7 @@ const DETAIL_TABS = [
 ];
 
 
-let DB = { items:[], departments:[], processes:[], updatedAt:"" };
+let DB = { items:[], departments:[], processes:[], specCompare:[], updatedAt:"" };
 let itemMap = new Map();
 let selectedItem = null;
 let selectedTab = "feature";
@@ -228,17 +288,20 @@ let specTapMoved = false;
 let deptFilter = "전체";
 let deptInteracted = false;
 let processFilter = "전체";
+let compareFilter = "전체";
 
 const $ = (id)=>document.getElementById(id);
 const els = {
   status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
-  navItem:$("navItem"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageItem:$("pageItem"), pageDept:$("pageDept"), pageProcess:$("pageProcess"),
+  navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
+  pageItem:$("pageItem"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), quickList:$("quickList"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"),
   deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"),
   processSearch:$("processSearch"), processChips:$("processChips"), processList:$("processList"), processCountPill:$("processCountPill"),
+  compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
+  inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"),
   imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption"),
   specViewer:$("specViewer"), specBackBtn:$("specBackBtn"), specViewerTitle:$("specViewerTitle"), specViewerCount:$("specViewerCount"), specCarousel:$("specCarousel"), specPrev:$("specPrev"), specNext:$("specNext"), specDots:$("specDots")
 };
@@ -250,12 +313,15 @@ function init(){
   renderDetailTabs();
   renderDeptChips();
   renderProcessChips();
+  renderCompareChips();
   loadFromCache();
   loadBootstrap(false);
 }
 
 function bindEvents(){
   els.navItem.addEventListener("click",()=>showPage("item"));
+  els.navSpecTable.addEventListener("click",()=>showPage("specTable"));
+  els.navInquiry.addEventListener("click",()=>showPage("inquiry"));
   els.navDept.addEventListener("click",()=>showPage("dept"));
   els.navProcess.addEventListener("click",()=>showPage("process"));
   els.itemSearchBtn.addEventListener("click",searchItem);
@@ -270,6 +336,7 @@ function bindEvents(){
   els.storeSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.storeSelect.value) els.logisticsSelect.value=""; renderDepartments(); });
   els.logisticsSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.logisticsSelect.value) els.storeSelect.value=""; renderDepartments(); });
   els.processSearch.addEventListener("input",debounce(renderProcesses,120));
+  els.inquirySubmitBtn.addEventListener("click",submitInquiry);
   els.detailBox.addEventListener("click",(e)=>{
     const specBtn = e.target.closest(".spec-open-btn");
     if(specBtn){
@@ -369,11 +436,13 @@ function bindEvents(){
 }
 
 function showPage(page){
-  const map = { item:els.pageItem, dept:els.pageDept, process:els.pageProcess };
+  const map = { item:els.pageItem, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
   Object.values(map).forEach(el=>el.classList.remove("show"));
   map[page].classList.add("show");
-  [els.navItem,els.navDept,els.navProcess].forEach(btn=>btn.classList.remove("active"));
+  [els.navItem,els.navSpecTable,els.navInquiry,els.navDept,els.navProcess].forEach(btn=>btn.classList.remove("active"));
   if(page==="item") els.navItem.classList.add("active");
+  if(page==="specTable") els.navSpecTable.classList.add("active");
+  if(page==="inquiry") els.navInquiry.classList.add("active");
   if(page==="dept") els.navDept.classList.add("active");
   if(page==="process") els.navProcess.classList.add("active");
   window.scrollTo({top:0,behavior:"smooth"});
@@ -408,6 +477,7 @@ async function loadBootstrap(force){
       items: Array.isArray(data.items) ? data.items : [],
       departments: Array.isArray(data.departments) ? data.departments : [],
       processes: Array.isArray(data.processes) ? data.processes : [],
+      specCompare: Array.isArray(data.specCompare) ? data.specCompare : [],
       updatedAt: data.updatedAt || formatToday()
     };
     localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({ savedAt:Date.now(), data:DB }));
@@ -462,6 +532,8 @@ function renderAll(){
   renderQuickList(els.itemInput.value);
   renderDeptSelectors();
   renderDepartments();
+  renderCompareChips();
+  renderSpecCompare();
   renderProcessChips();
   renderProcesses();
 }
@@ -1117,6 +1189,88 @@ function updateSpecViewerControls(){
   els.specPrev.style.display = "none";
   els.specNext.style.display = "none";
   els.specDots.style.display = slides.length > 1 ? "flex" : "none";
+}
+
+
+function renderCompareChips(){
+  if(!els.compareChips) return;
+  const defaultCats = ["전체","TV","냉장고","세탁기/건조기","에어컨","김치냉장고"];
+  const fromDb = uniqueSorted((DB.specCompare || []).map(r=>r.category));
+  const cats = uniqueArray(defaultCats.concat(fromDb));
+  els.compareChips.innerHTML = cats.map(cat=>`<button class="chip ${compareFilter===cat?'active':''}" type="button" data-cat="${esc(cat)}">${esc(cat)}</button>`).join("");
+  els.compareChips.querySelectorAll(".chip").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      compareFilter = btn.dataset.cat || "전체";
+      renderCompareChips();
+      renderSpecCompare();
+    });
+  });
+}
+
+function renderSpecCompare(){
+  if(!els.compareTableWrap) return;
+  const rows = (DB.specCompare || []).filter(r => compareFilter === "전체" || safe(r.category,"") === compareFilter);
+  els.compareCountPill.textContent = `${rows.length}건`;
+  if(!rows.length){
+    els.compareTableWrap.innerHTML = `<div class="empty" style="margin:0;border:0;border-radius:18px">스펙비교표 데이터가 없습니다.<br/>구글시트 <b>스펙비교표</b> 시트에 카테고리/아이템번호/모델명/상품명과 기능 항목을 입력해 주세요.</div>`;
+    return;
+  }
+  const fixed = ["category","itemNo","modelName","productName","order"];
+  const featureNames = [];
+  rows.forEach(r => Object.keys(r.features || {}).forEach(k=>{ if(k && !featureNames.includes(k)) featureNames.push(k); }));
+  const head = [`<th class="sticky-col">모델/상품</th>`, ...featureNames.map(f=>`<th>${esc(f)}</th>`)].join("");
+  const body = rows.map(r=>{
+    const title = `<b>${esc(r.itemNo || "")}</b><br/>${esc(r.modelName || "")}${r.productName ? `<br/><span style="color:#64748b;font-size:12px">${esc(r.productName)}</span>` : ""}`;
+    const cells = featureNames.map(f=>{
+      const val = safe((r.features || {})[f], "-");
+      return `<td class="${isPositiveSpecValue(val)?'compare-value-on':isNegativeSpecValue(val)?'compare-value-off':''}">${esc(val)}</td>`;
+    }).join("");
+    return `<tr><td class="sticky-col">${title}</td>${cells}</tr>`;
+  }).join("");
+  els.compareTableWrap.innerHTML = `<table class="compare-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+function isPositiveSpecValue(v){
+  const t = normalizeText(v);
+  return ["있음","지원","웰컴에어케어","웰컴쿨링","맞춤건조","자동건조","정음모드","저소음모드","가능","o","yes","y"].some(x=>t.includes(x));
+}
+function isNegativeSpecValue(v){
+  const t = normalizeText(v);
+  return ["없음","미지원","불가","x","no","n"].some(x=>t===x || t.includes(x));
+}
+
+async function submitInquiry(){
+  const type = safe(els.inquiryType.value, "기타");
+  const store = els.inquiryStore.value.trim();
+  const name = els.inquiryName.value.trim();
+  const phone = els.inquiryPhone.value.trim();
+  const body = els.inquiryBody.value.trim();
+  if(!body){
+    showInquiryResult("문의 내용을 입력해 주세요.", "err");
+    els.inquiryBody.focus();
+    return;
+  }
+  els.inquirySubmitBtn.disabled = true;
+  showInquiryResult("문의 내용을 등록하는 중입니다.", "warn");
+  try{
+    const res = await apiGet({ action:"submitInquiry", type, store, name, phone, body, page: location.href, _: Date.now() });
+    if(!res || res.ok === false) throw new Error(res?.message || "등록 실패");
+    els.inquiryStore.value = "";
+    els.inquiryName.value = "";
+    els.inquiryPhone.value = "";
+    els.inquiryBody.value = "";
+    showInquiryResult("문의가 등록되었습니다. 해당 내용은 관리자만 확인 가능합니다.", "ok");
+  }catch(err){
+    console.error(err);
+    showInquiryResult("문의 등록에 실패했습니다. Apps Script 배포/권한을 확인해 주세요.", "err");
+  }finally{
+    els.inquirySubmitBtn.disabled = false;
+  }
+}
+
+function showInquiryResult(msg,type="warn"){
+  els.inquiryResult.textContent = msg;
+  els.inquiryResult.className = `status show ${type}`;
 }
 
 function oneStepSwipe(target, isActive, onLeft, onRight){
