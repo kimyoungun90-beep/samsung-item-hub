@@ -88,7 +88,7 @@
 
   <nav class="nav">
     <button id="navItem" class="active" type="button">아이템</button>
-    <button id="navSpecTable" type="button">스펙/성능</button>
+    <button id="navSpecTable" type="button">스펙 비교</button>
     <button id="navInquiry" type="button">문의</button>
     <button id="navDept" type="button">업무지원</button>
     <button id="navProcess" type="button">프로세스</button>
@@ -142,19 +142,13 @@
       <div class="card-inner">
         <div class="section-title">
           <div>
-            <h2>스펙/성능표</h2>
-            <small>카테고리 버튼을 누르면 별도 화면에서 스펙표 이미지를 확인합니다.</small>
+            <h2>스펙 비교</h2>
+            <small>카테고리 버튼을 누르면 별도 화면에서 스펙 비교 이미지를 확인합니다.</small>
           </div>
           <span class="pill ok">이미지형</span>
         </div>
         <div id="specCategoryGrid" class="spec-category-grid"></div>
-        <div class="spec-filename-guide">
-          GitHub <b>images</b> 폴더에 아래 파일명으로 올리면 자동으로 불러옵니다.<br/>
-          TV: <code>spec_tv_1.png</code> · 냉장고: <code>spec_fridge_1.png</code><br/>
-          세탁기/건조기: <code>spec_washer_1.png</code> · 에어컨: <code>spec_aircon_1.png</code><br/>
-          김치냉장고: <code>spec_kimchi_1.png</code><br/>
-          여러 장이면 <code>_2</code>, <code>_3</code> 순서로 추가하면 됩니다.
-        </div>
+
       </div>
     </article>
   </section>
@@ -1215,7 +1209,7 @@ function renderSpecCategoryCards(){
       <div class="spec-category-left">
         <div class="spec-category-icon">${esc(cat.icon)}</div>
         <div>
-          <div class="spec-category-title">${esc(cat.label)} 스펙/성능표</div>
+          <div class="spec-category-title">${esc(cat.label)} 스펙 비교</div>
           <div class="spec-category-desc">${esc(cat.desc)}</div>
         </div>
       </div>
@@ -1281,15 +1275,15 @@ async function openSpecCategoryViewer(cat){
   if(!cat) return;
   specViewerUrls = [];
   specViewerIndex = 0;
-  specViewerCaption = `${cat.label} 스펙/성능표`;
-  els.specViewer.querySelector(".spec-head-title").textContent = "스펙/성능표";
+  specViewerCaption = `${cat.label} 스펙 비교`;
+  els.specViewer.querySelector(".spec-head-title").textContent = "스펙 비교";
   els.specViewerTitle.textContent = `${cat.label} · 스펙/성능 비교 이미지`;
   els.specViewerCount.textContent = "확인중";
   els.specCarousel.innerHTML = `
     <div class="spec-slide">
       <div class="spec-slide-inner">
         <div class="spec-status-card">
-          <div class="spec-status-title">${esc(cat.label)} 스펙/성능표를 불러오는 중입니다.</div>
+          <div class="spec-status-title">${esc(cat.label)} 스펙 비교를 불러오는 중입니다.</div>
           <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(cat.prefix)}_1.png</b> 형식으로 확인하고 있습니다.</div>
         </div>
       </div>
@@ -1312,7 +1306,7 @@ async function openSpecCategoryViewer(cat){
       <div class="spec-slide">
         <div class="spec-slide-inner">
           <div class="spec-status-card">
-            <div class="spec-status-title">${esc(cat.label)} 스펙/성능표 이미지를 찾지 못했습니다.</div>
+            <div class="spec-status-title">${esc(cat.label)} 스펙 비교 이미지를 찾지 못했습니다.</div>
             <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(cat.prefix)}_1.png</b>, <b>${esc(cat.prefix)}_2.png</b><br/>형식으로 올려주세요.<br/><br/>업로드 직후라면 1분 뒤 다시 열어주세요.</div>
           </div>
         </div>
@@ -1320,7 +1314,7 @@ async function openSpecCategoryViewer(cat){
     els.specDots.innerHTML = "";
     return;
   }
-  renderSpecViewerImages(urls, `${cat.label} 스펙/성능표`);
+  renderSpecViewerImages(urls, `${cat.label} 스펙 비교`);
 }
 
 function renderSpecViewerImages(urls, altBase){
