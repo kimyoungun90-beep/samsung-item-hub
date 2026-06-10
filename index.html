@@ -78,6 +78,34 @@
     .spec-help-guide{display:none;align-items:center;justify-content:center;gap:7px;padding:10px 12px 0;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.55) 100%);font-size:12px;font-weight:900;color:#475569;word-break:keep-all}.spec-help-guide-text{line-height:1.25;text-align:center}.spec-help-btn{border:0;border-radius:999px;background:#dcfce7;color:#14532d;min-height:36px;min-width:56px;padding:0 14px;font-size:13px;font-weight:1000;white-space:nowrap;box-shadow:inset 0 0 0 1px #bbf7d0;display:inline-flex;align-items:center;justify-content:center;text-align:center}.spec-help-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.48);padding:16px}.spec-help-modal.show{display:flex}.spec-help-panel{width:100%;max-width:560px;max-height:82vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);border:1px solid #e2e8f0}.spec-help-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 16px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.spec-help-title{font-size:18px;font-weight:1000;color:#0f172a;letter-spacing:-.3px}.spec-help-close{border:0;border-radius:999px;background:#0f172a;color:#fff;width:42px;height:42px;font-size:22px;font-weight:1000}.spec-help-list{display:grid;gap:10px;padding:14px 16px 18px}.spec-help-item{border:1px solid #e2e8f0;border-radius:16px;padding:12px 13px;background:#f8fafc}.spec-help-term{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:5px}.spec-help-desc{font-size:13px;font-weight:800;color:#475569;line-height:1.55;word-break:keep-all}.spec-help-hint{padding:0 16px 16px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}@media (max-width:640px){.spec-help-guide{padding:9px 8px 0;gap:5px;font-size:11px}.spec-help-btn{min-height:34px;min-width:52px;padding:0 10px;font-size:12px}.spec-help-modal{padding:10px}.spec-help-panel{border-radius:22px;max-height:84vh}.spec-help-title{font-size:17px}.spec-help-close{width:40px;height:40px}}
 
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
+
+    /* v56 참조내용 리치텍스트 표시: 구글시트 글자색/크기/굵기 반영 */
+    .sheet-rich-reference{
+      white-space:normal !important;
+      word-break:keep-all;
+      overflow-wrap:anywhere;
+      line-height:1.65;
+      color:#334155;
+      font-size:16px;
+      font-weight:750;
+    }
+    .sheet-rich-reference span,
+    .sheet-rich-reference b,
+    .sheet-rich-reference strong,
+    .sheet-rich-reference em,
+    .sheet-rich-reference u{
+      line-height:inherit;
+    }
+    .sheet-rich-reference p,
+    .sheet-rich-reference div{
+      margin:0;
+      line-height:inherit;
+    }
+    .sheet-rich-reference .sheet-rich-empty{
+      color:#94a3b8;
+      font-weight:900;
+    }
+
   </style>
 </head>
 <body>
@@ -272,14 +300,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v55_cache",
+  CACHE_KEY: "costco_item_operation_hub_v56_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v55"
+  SPEC_IMAGE_CACHE_BUST: "v56"
 };
 
 const DETAIL_TABS = [
@@ -1174,11 +1202,119 @@ function openSpecImageZoom(index){
 
 
 function getFeatureReferenceNotes(item){
-  const notes = Array.isArray(item?.featureReferenceNotes) ? item.featureReferenceNotes : [];
-  const cleaned = notes.map(v=>safe(v, ""));
+  if(!item) return [];
+  const sources = [
+    item.featureReferenceNotes,
+    item.referenceTexts,
+    item.referenceNotes,
+    item.refTexts,
+    item.referenceBlocks
+  ];
+
+  for(const src of sources){
+    if(!src) continue;
+    if(Array.isArray(src)){
+      const arr = src.map(v=>{
+        if(v && typeof v === "object") return safe(v.text || v.value || v.plainText || v.html || "", "");
+        return safe(v, "");
+      });
+      if(arr.some(Boolean)) return arr;
+    }
+  }
+
+  const individual = [];
+  for(let i=1;i<=10;i++){
+    const value = item[`reference${i}`] || item[`ref${i}`] || item[`참조내용${i}`] || item[`참조 내용${i}`];
+    if(value) individual.push(safe(value, ""));
+  }
+  if(individual.some(Boolean)) return individual;
+
   const fallback = safe(item?.referenceNote || item?.featureWrite || item?.featureNote || item?.featureDetail || item?.feature, "");
-  if(cleaned.some(Boolean)) return cleaned;
   return fallback ? [fallback] : [];
+}
+
+function getFeatureReferenceHtmls(item){
+  if(!item) return [];
+
+  const sources = [
+    item.referenceHtmls,
+    item.referenceContentsHtml,
+    item.featureReferenceHtmls,
+    item.refContentHtmls,
+    item.refHtmls,
+    item.referenceHtml,
+    item.refHtml,
+    item.referenceBlocks
+  ];
+
+  for(const src of sources){
+    if(!src) continue;
+    if(Array.isArray(src)){
+      const arr = src.map(v=>{
+        if(v && typeof v === "object") return String(v.html || v.valueHtml || v.richHtml || "");
+        return String(v || "");
+      }).filter(Boolean);
+      if(arr.length) return arr;
+    }
+    if(typeof src === "string" && src.trim()) return [src];
+  }
+
+  const out = [];
+  for(let i=1;i<=10;i++){
+    const value = item[`reference${i}Html`] || item[`ref${i}Html`] || item[`참조내용${i}Html`] || item[`참조 내용${i}Html`];
+    if(value) out.push(String(value));
+  }
+  return out;
+}
+
+function isProbablyHtml(v){
+  return /<\/?[a-z][\s\S]*>/i.test(String(v || ""));
+}
+
+function sanitizeReferenceHtml(raw){
+  const value = String(raw || "").trim();
+  if(!value) return "";
+  if(!isProbablyHtml(value)) return esc(value).replace(/\n/g, "<br>");
+
+  const template = document.createElement("template");
+  template.innerHTML = value;
+
+  template.content.querySelectorAll("script,iframe,object,embed,link,meta,style").forEach(el=>el.remove());
+
+  const allowedTags = new Set(["SPAN","BR","B","STRONG","I","EM","U","P","DIV"]);
+  const allowedStyle = new Set(["color","font-size","font-weight","text-decoration","background-color"]);
+
+  Array.from(template.content.querySelectorAll("*")).forEach(el=>{
+    if(!allowedTags.has(el.tagName)){
+      const span = document.createElement("span");
+      span.innerHTML = el.innerHTML;
+      el.replaceWith(span);
+      el = span;
+    }
+
+    Array.from(el.attributes).forEach(attr=>{
+      const name = attr.name.toLowerCase();
+      if(name === "style"){
+        const clean = [];
+        String(attr.value || "").split(";").forEach(part=>{
+          const [propRaw, ...valueParts] = part.split(":");
+          const prop = String(propRaw || "").trim().toLowerCase();
+          const val = valueParts.join(":").trim();
+          if(!allowedStyle.has(prop) || !val) return;
+          if(/url\s*\(|expression\s*\(|javascript:/i.test(val)) return;
+          clean.push(`${prop}:${val}`);
+        });
+        if(clean.length) el.setAttribute("style", clean.join(";"));
+        else el.removeAttribute("style");
+      }else if(name === "class" && attr.value === "sheet-rich-empty"){
+        // 유지
+      }else{
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+
+  return template.innerHTML;
 }
 
 function getFeatureReferenceText(item, index=0){
@@ -1187,15 +1323,31 @@ function getFeatureReferenceText(item, index=0){
   return safe(notes[i] || notes[0] || "", "");
 }
 
+function getFeatureReferenceHtml(item, index=0){
+  const htmls = getFeatureReferenceHtmls(item);
+  const i = Math.max(0, Number(index) || 0);
+  return sanitizeReferenceHtml(htmls[i] || htmls[0] || "");
+}
+
 function renderFeatureReferenceCard(item, index=0, total=0){
   const i = Math.max(0, Number(index) || 0);
-  const body = getFeatureReferenceText(item, i);
-  const badge = total > 1 ? `${i+1}번 이미지` : "구글시트 수정";
+  const richHtml = getFeatureReferenceHtml(item, i);
+  const bodyText = getFeatureReferenceText(item, i);
+  const badgeHtml = total > 1 ? `<span class="spec-write-badge">${esc(i+1)}번 이미지</span>` : "";
+
+  let bodyHtml = "";
+  if(richHtml){
+    bodyHtml = `<div class="spec-write-body sheet-rich-reference">${richHtml}</div>`;
+  }else if(bodyText){
+    bodyHtml = `<div class="spec-write-body sheet-rich-reference">${esc(bodyText).replace(/\n/g, "<br>")}</div>`;
+  }else{
+    bodyHtml = `<div class="spec-write-body sheet-rich-reference spec-write-empty"><span class="sheet-rich-empty">등록된 참조 내용이 없습니다.</span></div>`;
+  }
+
   return `
     <div class="spec-write-card">
-      <div class="spec-write-title">참조 내용 <span class="spec-write-badge">${esc(badge)}</span></div>
-      <div class="spec-write-body ${body ? "" : "spec-write-empty"}">${body ? esc(body) : "등록된 참조 내용이 없습니다."}</div>
-      <div class="spec-write-help">※ 구글시트 상품DB의 <b>참조내용1~참조내용10</b> 칸에 입력하면 기능 이미지 순서별로 내용이 바뀝니다.</div>
+      <div class="spec-write-title">참조 내용 ${badgeHtml}</div>
+      ${bodyHtml}
     </div>`;
 }
 
