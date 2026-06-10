@@ -272,14 +272,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v49_cache",
+  CACHE_KEY: "costco_item_operation_hub_v55_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v53"
+  SPEC_IMAGE_CACHE_BUST: "v55"
 };
 
 const DETAIL_TABS = [
@@ -1173,17 +1173,29 @@ function openSpecImageZoom(index){
 }
 
 
-function getFeatureWriteText(item){
-  return safe(item?.featureWrite || item?.featureNote || item?.featureDetail || item?.feature, "");
+function getFeatureReferenceNotes(item){
+  const notes = Array.isArray(item?.featureReferenceNotes) ? item.featureReferenceNotes : [];
+  const cleaned = notes.map(v=>safe(v, ""));
+  const fallback = safe(item?.referenceNote || item?.featureWrite || item?.featureNote || item?.featureDetail || item?.feature, "");
+  if(cleaned.some(Boolean)) return cleaned;
+  return fallback ? [fallback] : [];
 }
 
-function renderFeatureWriteCard(item){
-  const body = getFeatureWriteText(item);
+function getFeatureReferenceText(item, index=0){
+  const notes = getFeatureReferenceNotes(item);
+  const i = Math.max(0, Number(index) || 0);
+  return safe(notes[i] || notes[0] || "", "");
+}
+
+function renderFeatureReferenceCard(item, index=0, total=0){
+  const i = Math.max(0, Number(index) || 0);
+  const body = getFeatureReferenceText(item, i);
+  const badge = total > 1 ? `${i+1}번 이미지` : "구글시트 수정";
   return `
     <div class="spec-write-card">
-      <div class="spec-write-title">기능 작성 내용 <span class="spec-write-badge">구글시트 수정</span></div>
-      <div class="spec-write-body ${body ? "" : "spec-write-empty"}">${body ? esc(body) : "작성된 기능 설명이 없습니다."}</div>
-      <div class="spec-write-help">※ 구글시트 상품DB의 <b>기능작성내용</b> 칸에 입력하면 이 공간에 표시됩니다. 간단 설명은 기존 <b>기능</b> 칸도 표시됩니다.</div>
+      <div class="spec-write-title">참조 내용 <span class="spec-write-badge">${esc(badge)}</span></div>
+      <div class="spec-write-body ${body ? "" : "spec-write-empty"}">${body ? esc(body) : "등록된 참조 내용이 없습니다."}</div>
+      <div class="spec-write-help">※ 구글시트 상품DB의 <b>참조내용1~참조내용10</b> 칸에 입력하면 기능 이미지 순서별로 내용이 바뀝니다.</div>
     </div>`;
 }
 
@@ -1235,7 +1247,7 @@ async function openFeatureViewer(item){
           <div class="spec-status-title">기능 사진을 불러오는 중입니다.</div>
           <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(itemNo)}_feature_1.png</b> 형식으로 확인하고 있습니다.</div>
         </div>
-        ${renderFeatureWriteCard(item)}
+        ${renderFeatureReferenceCard(item, 0, 1)}
       </div>
     </div>`;
   els.specDots.innerHTML = "";
@@ -1257,15 +1269,15 @@ async function openFeatureViewer(item){
         <div class="spec-slide-inner">
           <div class="spec-status-card">
             <div class="spec-status-title">기능 사진을 찾지 못했습니다.</div>
-            <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(itemNo)}_feature_1.png</b>, <b>${esc(itemNo)}_feature_2.png</b><br/>형식으로 올려주세요.<br/><br/>※ 업로드 직후라면 1분 정도 뒤 다시 열어주세요.</div>
+            <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(itemNo)}_feature_1.png</b>, <b>${esc(itemNo)}_feature_2.png</b><br/>형식으로 최대 10장까지 올려주세요.<br/><br/>※ 업로드 직후라면 1분 정도 뒤 다시 열어주세요.</div>
           </div>
-          ${renderFeatureWriteCard(item)}
+          ${renderFeatureReferenceCard(item, 0, 1)}
         </div>
       </div>`;
     els.specDots.innerHTML = "";
     return;
   }
-  renderSpecViewerImages(urls, "상세 기능", renderFeatureWriteCard(item));
+  renderSpecViewerImages(urls, "상세 기능", (i)=>renderFeatureReferenceCard(item, i, urls.length));
 }
 
 async function openSpecViewer(item){
@@ -1558,7 +1570,10 @@ async function openSpecCategoryViewer(cat){
 function renderSpecViewerImages(urls, altBase, extraHtml=""){
   specViewerUrls = urls;
   specViewerIndex = 0;
-  els.specCarousel.innerHTML = urls.map((url,i)=>`<div class="spec-slide"><div class="spec-slide-inner"><div class="spec-card"><img src="${esc(url)}" data-index="${i}" alt="${esc(altBase)} ${i+1}" loading="eager" onclick="openSpecImageZoom(${i})" /><div class="spec-card-foot"><div class="spec-card-tip">사진을 누르면 확대할 수 있습니다 · 좌우로 밀면 다음 사진으로 이동합니다.</div><span class="spec-card-page">${i+1} / ${urls.length}</span></div></div>${extraHtml || ""}</div></div>`).join("");
+  els.specCarousel.innerHTML = urls.map((url,i)=>{
+    const extra = typeof extraHtml === "function" ? extraHtml(i, url) : (extraHtml || "");
+    return `<div class="spec-slide"><div class="spec-slide-inner"><div class="spec-card"><img src="${esc(url)}" data-index="${i}" alt="${esc(altBase)} ${i+1}" loading="eager" onclick="openSpecImageZoom(${i})" /><div class="spec-card-foot"><div class="spec-card-tip">사진을 누르면 확대할 수 있습니다 · 좌우로 밀면 다음 사진으로 이동합니다.</div><span class="spec-card-page">${i+1} / ${urls.length}</span></div></div>${extra}</div></div>`;
+  }).join("");
   els.specDots.innerHTML = urls.map((_,i)=>`<span class="spec-dot ${i===0?'active':''}" data-index="${i}"></span>`).join("");
   els.specDots.querySelectorAll(".spec-dot").forEach(dot=>dot.addEventListener("click",()=>goSpecViewer(Number(dot.dataset.index||0))));
   requestAnimationFrame(()=>goSpecViewer(0,false));
