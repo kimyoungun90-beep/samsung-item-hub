@@ -79,7 +79,7 @@
 
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
 
-    /* v56 참조내용 리치텍스트 표시: 구글시트 글자색/크기/굵기 반영 */
+    /* v57 참조내용 리치텍스트 표시: 구글시트 글자색/크기/굵기 반영 */
     .sheet-rich-reference{
       white-space:normal !important;
       word-break:keep-all;
@@ -300,14 +300,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v56_cache",
+  CACHE_KEY: "costco_item_operation_hub_v57_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v56"
+  SPEC_IMAGE_CACHE_BUST: "v57"
 };
 
 const DETAIL_TABS = [
@@ -1359,25 +1359,72 @@ function getFeatureImageUrlsFromSheet(item){
   return uniqueArray(raw.flatMap(splitImageUrls));
 }
 
+async function fetchGithubFeatureImageUrls(item){
+  const itemNo = getSpecItemNo(item);
+  if(!itemNo || !CONFIG.SPEC_IMAGE_GITHUB_API) return [];
+  try{
+    const res = await fetch(CONFIG.SPEC_IMAGE_GITHUB_API + "&t=" + Date.now(), { cache:"no-store" });
+    if(!res.ok) return [];
+    const files = await res.json();
+    if(!Array.isArray(files)) return [];
+    const exts = getSpecImageExtensions().join("|");
+    const safeNo = itemNo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const re = new RegExp("^(?:item_)?" + safeNo + "[_-](feature|func)[_-](\\d+)\\.(" + exts + ")$", "i");
+    return files
+      .map(f=>{
+        const name = String(f?.name || "").trim();
+        const m = name.match(re);
+        if(!m) return null;
+        return {
+          no: Number(m[2]),
+          priority: m[1].toLowerCase() === "feature" ? 0 : 1,
+          name,
+          url: cacheBustImageUrl(f.download_url || rawSpecImageUrl(name))
+        };
+      })
+      .filter(v=>v && v.url)
+      .sort((a,b)=>(a.no-b.no) || (a.priority-b.priority) || naturalCompare(a.name,b.name))
+      .map(v=>v.url);
+  }catch(err){
+    return [];
+  }
+}
+
+async function firstExistingImageFast(urls, timeout=1200){
+  const ordered = uniqueArray(urls);
+  const results = await Promise.all(ordered.map(url => imageExistsWithTimeout(url, timeout).then(ok => ok ? url : "").catch(()=>"")));
+  return results.find(Boolean) || "";
+}
+
 async function resolveFeatureImageUrls(item){
-  const fromSheet = getFeatureImageUrlsFromSheet(item);
+  const fromSheet = getFeatureImageUrlsFromSheet(item).map(convertDriveImageUrl).filter(looksLikeImageUrl).map(cacheBustImageUrl);
   if(fromSheet.length) return fromSheet;
-  const itemNo = safe(item?.itemNo, "");
+
+  const github = await fetchGithubFeatureImageUrls(item);
+  if(github.length) return github;
+
+  const itemNo = getSpecItemNo(item);
   if(!itemNo) return [];
   const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
-  const urls = [];
-  for(let i=1;i<=max;i++){
+  const exts = getSpecImageExtensions();
+
+  // GitHub API가 느리거나 막힐 때 대비: 예상 파일명을 병렬로 빠르게 확인합니다.
+  const checks = Array.from({length:max}, (_,idx)=>{
+    const i = idx + 1;
     const group = [];
-    CONFIG.SPEC_IMAGE_EXTENSIONS.forEach(ext=>{
-      group.push(localSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
-      group.push(rawSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
-      group.push(localSpecImageUrl(`${itemNo}_func_${i}.${ext}`));
-      group.push(rawSpecImageUrl(`${itemNo}_func_${i}.${ext}`));
+    ["feature", "func"].forEach(kind=>{
+      exts.forEach(ext=>{
+        group.push(localSpecImageUrl(`${itemNo}_${kind}_${i}.${ext}`));
+        group.push(rawSpecImageUrl(`${itemNo}_${kind}_${i}.${ext}`));
+        group.push(localSpecImageUrl(`item_${itemNo}_${kind}_${i}.${ext}`));
+        group.push(rawSpecImageUrl(`item_${itemNo}_${kind}_${i}.${ext}`));
+      });
     });
-    const found = await firstExistingImage(uniqueArray(group));
-    if(found) urls.push(found);
-  }
-  return urls;
+    return firstExistingImageFast(group, 1400).then(url => url ? { no:i, url } : null);
+  });
+
+  const found = (await Promise.all(checks)).filter(Boolean).sort((a,b)=>a.no-b.no).map(v=>v.url);
+  return uniqueArray(found);
 }
 
 async function openFeatureViewer(item){
@@ -1397,7 +1444,7 @@ async function openFeatureViewer(item){
       <div class="spec-slide-inner">
         <div class="spec-status-card">
           <div class="spec-status-title">기능 사진을 불러오는 중입니다.</div>
-          <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(itemNo)}_feature_1.png</b> 형식으로 확인하고 있습니다.</div>
+          <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(itemNo)}_feature_1.png</b> 형식으로 빠르게 확인하고 있습니다.</div>
         </div>
         ${renderFeatureReferenceCard(item, 0, 1)}
       </div>
@@ -1421,7 +1468,7 @@ async function openFeatureViewer(item){
         <div class="spec-slide-inner">
           <div class="spec-status-card">
             <div class="spec-status-title">기능 사진을 찾지 못했습니다.</div>
-            <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(itemNo)}_feature_1.png</b>, <b>${esc(itemNo)}_feature_2.png</b><br/>형식으로 최대 10장까지 올려주세요.<br/><br/>※ 업로드 직후라면 1분 정도 뒤 다시 열어주세요.</div>
+            <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(itemNo)}_feature_1.png</b>, <b>${esc(itemNo)}_feature_2.png</b><br/>형식으로 최대 10장까지 올려주세요.<br/>※ <b>item_${esc(itemNo)}_feature_1.png</b> 형식도 인식합니다.<br/><br/>※ 업로드 직후라면 1분 정도 뒤 다시 열어주세요.</div>
           </div>
           ${renderFeatureReferenceCard(item, 0, 1)}
         </div>
