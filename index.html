@@ -113,7 +113,7 @@
           <input id="itemInput" name="q_item_plain" type="search" inputmode="text" placeholder="예: 689291 또는 RM70F91R1A" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
           <button id="itemSearchBtn" class="search-btn" type="button">조회</button>
         </div>
-        <p class="hint">※ 최초 1회만 구글시트 전체 DB를 받아오고, 이후 검색/탭 전환은 휴대폰 안에서 바로 처리됩니다.</p>
+        <p class="hint">※ 저장된 DB가 있으면 앱을 열자마자 먼저 표시하고, 최신 구글DB는 뒤에서 자동 갱신됩니다.</p>
         <div id="quickList" class="quick-list"></div>
       </div>
     </article>
@@ -290,14 +290,15 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v62_cache",
+  CACHE_KEY: "costco_item_operation_hub_cache_v1",
+  LEGACY_CACHE_KEYS: Array.from({length: 14}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v62"
+  SPEC_IMAGE_CACHE_BUST: "v63"
 };
 
 const DETAIL_TABS = [
@@ -395,8 +396,8 @@ function init(){
   renderSpecCategoryCards();
   prefetchSpecCategoryFirstImages();
   renderCompareChips();
-  loadFromCache();
-  loadBootstrap(false);
+  const cachedLoaded = loadFromCache();
+  loadBootstrap(false, { silent: cachedLoaded });
 }
 
 function bindEvents(){
@@ -543,21 +544,55 @@ function hideStatus(){ els.status.className = "status"; els.status.textContent =
 
 function loadFromCache(){
   try{
-    const raw = localStorage.getItem(CONFIG.CACHE_KEY);
-    if(!raw) return;
-    const cached = JSON.parse(raw);
-    if(!cached || !cached.data) return;
+    const cached = readBestLocalCache();
+    if(!cached || !cached.data) return false;
     DB = cached.data;
     rebuildIndex();
     renderAll();
-    const ageMin = Math.round((Date.now() - (cached.savedAt||0))/60000);
-    els.syncText.textContent = `캐시 데이터 표시 중 · ${ageMin}분 전 저장`;
-  }catch(e){ console.log(e); }
+    try{
+      localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({ savedAt:cached.savedAt || Date.now(), data:DB }));
+    }catch(e){}
+    const ageMin = Math.max(0, Math.round((Date.now() - (cached.savedAt||0))/60000));
+    els.syncText.textContent = `저장 DB 즉시 표시 · ${ageMin}분 전 저장`;
+    hideStatus();
+    return true;
+  }catch(e){
+    console.log(e);
+    return false;
+  }
 }
 
-async function loadBootstrap(force){
+function readBestLocalCache(){
+  const keys = new Set([CONFIG.CACHE_KEY, ...(CONFIG.LEGACY_CACHE_KEYS || [])]);
   try{
-    showStatus(force ? "구글시트 최신 DB를 다시 불러오는 중입니다." : "구글시트 DB를 불러오는 중입니다.", "warn");
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if(/^costco_item_operation_hub_v\d+_cache$/.test(k || "")) keys.add(k);
+    }
+  }catch(e){}
+
+  let best = null;
+  keys.forEach(key=>{
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) return;
+      const cached = JSON.parse(raw);
+      if(!cached || !cached.data) return;
+      if(!best || (cached.savedAt || 0) > (best.savedAt || 0)) best = cached;
+    }catch(e){}
+  });
+  return best;
+}
+
+async function loadBootstrap(force, options={}){
+  const silent = options && options.silent === true;
+  try{
+    if(!silent){
+      showStatus(force ? "구글시트 최신 DB를 다시 불러오는 중입니다." : "구글시트 DB를 불러오는 중입니다.", "warn");
+    }else{
+      els.syncText.textContent = "저장 DB 즉시 표시 · 최신 DB 확인 중";
+    }
+
     const data = await apiGet({ action:"bootstrap", refresh: force ? "1" : "0", _: Date.now() });
     if(!data || data.ok === false) throw new Error(data?.message || "응답 오류");
     DB = {
@@ -571,12 +606,22 @@ async function loadBootstrap(force){
     localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({ savedAt:Date.now(), data:DB }));
     rebuildIndex();
     renderAll();
-    showStatus("DB 동기화가 완료되었습니다. 이제 검색과 탭 전환은 빠르게 작동합니다.", "ok");
     els.syncText.textContent = `최근 업데이트: ${safe(DB.updatedAt, formatToday())}`;
-    setTimeout(hideStatus,1800);
+
+    if(!silent || force){
+      showStatus("DB 동기화가 완료되었습니다. 다음 접속부터 저장 DB가 먼저 바로 표시됩니다.", "ok");
+      setTimeout(hideStatus,1800);
+    }else{
+      hideStatus();
+    }
   }catch(e){
     console.error(e);
-    showStatus("구글시트 DB를 불러오지 못했습니다. Apps Script 배포 URL, 권한, 시트명을 확인해 주세요. 저장된 캐시가 있으면 캐시 데이터로 표시됩니다.", "err");
+    if(silent){
+      els.syncText.textContent = "저장 DB 표시 중 · 최신 DB 확인 실패";
+      hideStatus();
+    }else{
+      showStatus("구글시트 DB를 불러오지 못했습니다. 저장된 DB가 있으면 앱은 저장 DB로 표시됩니다. Apps Script 배포 URL, 권한, 시트명을 확인해 주세요.", "err");
+    }
   }
 }
 
