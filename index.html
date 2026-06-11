@@ -47,6 +47,9 @@
     .search-btn{min-width:92px;min-height:55px;border:0;border-radius:18px;background:var(--primary);color:#fff;font-size:15px;font-weight:950;box-shadow:0 10px 20px rgba(15,23,42,.18)}
     .hint{margin:10px 2px 0;color:var(--muted);font-size:12px;font-weight:750;line-height:1.45;word-break:keep-all}
     .status{display:none;margin:0 0 12px;padding:13px 14px;border-radius:18px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:850;line-height:1.45;word-break:keep-all}.status.show{display:block}.status.ok{background:#f0fdf4;border-color:#bbf7d0;color:#166534}.status.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}.status.err{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+
+    .notice-card{display:block;background:#fff;border:1px solid rgba(226,232,240,.92);border-radius:22px;box-shadow:0 14px 34px rgba(15,23,42,.08);margin:0 0 12px;overflow:hidden}.notice-inner{padding:14px}.notice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}.notice-title{font-size:15px;font-weight:1000;color:#0f172a;letter-spacing:-.35px}.notice-meta{font-size:11px;font-weight:900;color:#64748b;margin-top:3px}.notice-list{display:grid;gap:8px}.notice-item{border:1px solid #e2e8f0;background:#f8fafc;border-radius:16px;padding:11px 12px}.notice-item-title{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:5px;line-height:1.35}.notice-item-body{white-space:pre-line;font-size:13px;font-weight:800;line-height:1.55;color:#334155;word-break:keep-all}.notice-empty{font-size:13px;font-weight:850;color:#94a3b8;line-height:1.45}.event-schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.event-box{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.event-box-label{font-size:12px;font-weight:1000;color:#64748b;margin-bottom:7px}.event-box-value{font-size:14px;font-weight:850;line-height:1.58;color:#0f172a;white-space:pre-line;word-break:keep-all}.event-item{border-top:1px dashed #cbd5e1;padding-top:9px;margin-top:9px}.event-item:first-child{border-top:0;padding-top:0;margin-top:0}.event-item-title{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:4px}.event-row{font-size:13px;font-weight:850;color:#334155;line-height:1.55}.event-empty{font-size:13px;font-weight:850;color:#94a3b8;line-height:1.45}.promo-warning{margin-top:10px;border:1px solid #fecaca;background:#fff5f5;color:#dc2626;border-radius:16px;padding:11px 12px;font-size:12px;font-weight:1000;line-height:1.55;word-break:keep-all}
+    @media(max-width:480px){.event-schedule-grid{grid-template-columns:1fr}}
     .product-visual{background:linear-gradient(180deg,#f8fafc,#eef2f7);border-bottom:1px solid var(--line);padding:12px}.photo-frame{position:relative;display:flex;align-items:center;justify-content:center;border-radius:22px;min-height:220px;background:#fff;border:1px solid #e2e8f0;overflow:hidden}.photo-carousel{width:100%;display:flex;overflow-x:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:auto;scrollbar-width:none;touch-action:pan-y}.photo-carousel::-webkit-scrollbar{display:none}.photo-slide{min-width:100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;padding:8px}.photo-slide img{width:100%;height:auto;max-height:340px;object-fit:contain;display:block;cursor:zoom-in;user-select:none;-webkit-user-drag:none}.photo-empty{padding:28px 20px;text-align:center;color:#94a3b8;font-weight:950;line-height:1.55}.photo-label{position:absolute;left:10px;top:10px;background:rgba(15,23,42,.88);color:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:950;z-index:3}.photo-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:42px;height:52px;border:0;border-radius:16px;background:rgba(15,23,42,.84);color:#fff;font-size:26px;font-weight:1000;display:none;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(15,23,42,.16);touch-action:manipulation}.photo-arrow.show{display:flex}.photo-arrow.prev{left:8px}.photo-arrow.next{right:8px}.photo-dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:4;display:flex;gap:6px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 4px 14px rgba(15,23,42,.08)}.photo-dot{width:8px;height:8px;border-radius:999px;background:#cbd5e1}.photo-dot.active{background:#0f172a}.photo-count{position:absolute;right:10px;top:10px;z-index:3;background:rgba(255,255,255,.90);color:#0f172a;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:950}
     .product-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}.model{font-size:22px;font-weight:1000;letter-spacing:-.55px;line-height:1.22}.prod-name{margin-top:4px;color:#334155;font-size:14px;font-weight:850;line-height:1.45;word-break:keep-all}.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.meta .pill{font-size:11px;padding:6px 9px}
     .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.tab-btn{min-height:47px;border:1px solid var(--line);border-radius:16px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:950}.tab-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}.detail-box{margin-top:10px;border:1px solid var(--line);border-radius:18px;background:#f8fafc;padding:14px;min-height:96px}.detail-title{font-size:14px;font-weight:1000;margin-bottom:9px;color:#0f172a}.detail-body{white-space:pre-line;font-size:14px;line-height:1.62;font-weight:760;color:#334155;word-break:keep-all}.wallmodel-stack{display:grid;gap:12px}.wall-model-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.wall-model-label{font-size:12px;font-weight:950;color:#64748b;margin-bottom:6px}.wall-model-value{white-space:pre-line;font-size:15px;line-height:1.58;font-weight:900;color:#0f172a;word-break:keep-all}.detail-ref-image-wrap{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px}.detail-ref-image{display:block;width:100%;height:auto;border-radius:12px;background:#fff;cursor:zoom-in}.detail-help{margin-top:8px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cost-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.cost-label{font-size:12px;font-weight:950;color:#64748b;margin-bottom:6px}.cost-value{font-size:16px;font-weight:1000;color:#0f172a;white-space:pre-line;line-height:1.45}.cost-warning{margin-top:12px;border:1px solid #fecaca;background:#fff5f5;color:#dc2626;border-radius:16px;padding:12px 13px;font-size:12px;font-weight:900;line-height:1.55;word-break:keep-all}.cost-warning p{margin:0}.cost-warning p + p{margin-top:4px}.cost-phone{font-weight:1000;font-size:14px;letter-spacing:.1px}.quick-list{display:grid;gap:8px;max-height:270px;overflow:auto;margin-top:12px}.quick-item{border:1px solid var(--line);background:#fff;border-radius:16px;padding:11px;text-align:left}.quick-no{font-size:16px;font-weight:1000}.quick-name{font-size:13px;font-weight:850;color:#475569;margin-top:3px;line-height:1.35;word-break:keep-all}
@@ -78,34 +81,6 @@
     .spec-help-guide{display:none;align-items:center;justify-content:center;gap:7px;padding:10px 12px 0;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.55) 100%);font-size:12px;font-weight:900;color:#475569;word-break:keep-all}.spec-help-guide-text{line-height:1.25;text-align:center}.spec-help-btn{border:0;border-radius:999px;background:#dcfce7;color:#14532d;min-height:36px;min-width:56px;padding:0 14px;font-size:13px;font-weight:1000;white-space:nowrap;box-shadow:inset 0 0 0 1px #bbf7d0;display:inline-flex;align-items:center;justify-content:center;text-align:center}.spec-help-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.48);padding:16px}.spec-help-modal.show{display:flex}.spec-help-panel{width:100%;max-width:560px;max-height:82vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);border:1px solid #e2e8f0}.spec-help-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 16px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.spec-help-title{font-size:18px;font-weight:1000;color:#0f172a;letter-spacing:-.3px}.spec-help-close{border:0;border-radius:999px;background:#0f172a;color:#fff;width:42px;height:42px;font-size:22px;font-weight:1000}.spec-help-list{display:grid;gap:10px;padding:14px 16px 18px}.spec-help-item{border:1px solid #e2e8f0;border-radius:16px;padding:12px 13px;background:#f8fafc}.spec-help-term{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:5px}.spec-help-desc{font-size:13px;font-weight:800;color:#475569;line-height:1.55;word-break:keep-all}.spec-help-hint{padding:0 16px 16px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}@media (max-width:640px){.spec-help-guide{padding:9px 8px 0;gap:5px;font-size:11px}.spec-help-btn{min-height:34px;min-width:52px;padding:0 10px;font-size:12px}.spec-help-modal{padding:10px}.spec-help-panel{border-radius:22px;max-height:84vh}.spec-help-title{font-size:17px}.spec-help-close{width:40px;height:40px}}
 
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
-
-    /* v57 참조내용 리치텍스트 표시: 구글시트 글자색/크기/굵기 반영 */
-    .sheet-rich-reference{
-      white-space:normal !important;
-      word-break:keep-all;
-      overflow-wrap:anywhere;
-      line-height:1.65;
-      color:#334155;
-      font-size:16px;
-      font-weight:750;
-    }
-    .sheet-rich-reference span,
-    .sheet-rich-reference b,
-    .sheet-rich-reference strong,
-    .sheet-rich-reference em,
-    .sheet-rich-reference u{
-      line-height:inherit;
-    }
-    .sheet-rich-reference p,
-    .sheet-rich-reference div{
-      margin:0;
-      line-height:inherit;
-    }
-    .sheet-rich-reference .sheet-rich-empty{
-      color:#94a3b8;
-      font-weight:900;
-    }
-
   </style>
 </head>
 <body>
@@ -126,6 +101,19 @@
   </nav>
 
   <div id="status" class="status"></div>
+
+  <article id="noticeCard" class="notice-card">
+    <div class="notice-inner">
+      <div class="notice-head">
+        <div>
+          <div class="notice-title">공지사항</div>
+          <div id="noticeMeta" class="notice-meta">업데이트 내용을 불러오는 중입니다.</div>
+        </div>
+        <span class="pill warn">업데이트</span>
+      </div>
+      <div id="noticeList" class="notice-list"><div class="notice-empty">등록된 공지사항이 없습니다.</div></div>
+    </div>
+  </article>
 
   <section id="pageItem" class="page show">
     <article class="card">
@@ -313,7 +301,7 @@ const CONFIG = {
 const DETAIL_TABS = [
   { key:"spec", label:"스펙" },
   { key:"feature", label:"기능" },
-  { key:"promoDate", label:"행사 예정일" },
+  { key:"promoDate", label:"행사일/예정일" },
   { key:"wallModel", label:"벽걸이 모델명/설치비" },
   { key:"cost", label:"이전설치/철거 비용" }
 ];
@@ -355,7 +343,7 @@ const SPEC_TERM_GUIDES = {
   ]
 };
 
-let DB = { items:[], departments:[], processes:[], specCompare:[], updatedAt:"" };
+let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], updatedAt:"" };
 let itemMap = new Map();
 let selectedItem = null;
 let selectedTab = "feature";
@@ -380,7 +368,7 @@ let specPrefetchStarted = false;
 
 const $ = (id)=>document.getElementById(id);
 const els = {
-  status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
+  status:$("status"), noticeCard:$("noticeCard"), noticeList:$("noticeList"), noticeMeta:$("noticeMeta"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
   pageItem:$("pageItem"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), quickList:$("quickList"),
@@ -572,6 +560,7 @@ async function loadBootstrap(force){
       departments: Array.isArray(data.departments) ? data.departments : [],
       processes: Array.isArray(data.processes) ? data.processes : [],
       specCompare: Array.isArray(data.specCompare) ? data.specCompare : [],
+      notices: Array.isArray(data.notices) ? data.notices : [],
       updatedAt: data.updatedAt || formatToday()
     };
     localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({ savedAt:Date.now(), data:DB }));
@@ -622,6 +611,7 @@ function rebuildIndex(){
 }
 
 function renderAll(){
+  renderNotice();
   els.itemCountPill.textContent = `${DB.items.length}건`;
   renderQuickList(els.itemInput.value);
   renderDeptSelectors();
@@ -833,6 +823,59 @@ function renderDetailTabs(){
   });
 }
 
+
+function renderNotice(){
+  if(!els.noticeList) return;
+  const notices = Array.isArray(DB.notices) ? DB.notices.filter(n => safe(n.title,"") || safe(n.body,"")) : [];
+  if(!notices.length){
+    els.noticeMeta.textContent = "등록된 공지사항이 없습니다.";
+    els.noticeList.innerHTML = `<div class="notice-empty">프로세스/제품/업무지원실 변동사항은 구글시트 공지사항에 입력하면 여기에 자동 표시됩니다.</div>`;
+    return;
+  }
+  els.noticeMeta.textContent = `${notices.length}건 표시 · 변경 전까지 유지`;
+  els.noticeList.innerHTML = notices.slice(0,3).map(n=>`
+    <div class="notice-item">
+      <div class="notice-item-title">${esc(safe(n.title,"공지사항"))}</div>
+      <div class="notice-item-body">${esc(safe(n.body,""))}</div>
+      ${n.date || n.type ? `<div class="notice-meta" style="margin-top:7px">${esc([n.type,n.date].filter(Boolean).join(" · "))}</div>` : ``}
+    </div>`).join("");
+}
+
+function renderEventScheduleBox(item, tabLabel){
+  const promoDate = safe(item?.promoDate, "등록된 예정일이 없습니다. 구글시트 상품DB의 행사예정일 칸에 입력하면 반영됩니다.");
+  const events = Array.isArray(item?.operationEvents) ? item.operationEvents : [];
+  const eventHtml = events.length ? events.map(ev=>{
+    const period = [safe(ev.eventStart,""), safe(ev.eventEnd,"")].filter(Boolean).join(" ~ ");
+    const price = safe(ev.salePrice,"") || safe(ev.finalPrice,"");
+    const rows = [
+      period ? `기간: ${period}` : "",
+      ev.eventModel ? `행사모델: ${safe(ev.eventModel,"")}` : "",
+      ev.beforePrice ? `기존가: ${safe(ev.beforePrice,"")}` : "",
+      price ? `행사가: ${price}` : "",
+      ev.note ? safe(ev.note,"") : ""
+    ].filter(Boolean);
+    return `<div class="event-item">
+      <div class="event-item-title">${esc(safe(ev.eventName,"행사"))}</div>
+      ${rows.map(r=>`<div class="event-row">${esc(r)}</div>`).join("")}
+    </div>`;
+  }).join("") : `<div class="event-empty">등록된 행사일이 없습니다.<br/>B시트 운영기록의 product_item_no와 아이템번호가 같으면 자동 표시됩니다.</div>`;
+
+  els.detailBox.innerHTML = `
+    <div class="detail-title">${esc(tabLabel)}</div>
+    <div class="event-schedule-grid">
+      <div class="event-box">
+        <div class="event-box-label">행사일</div>
+        <div class="event-box-value">${eventHtml}</div>
+      </div>
+      <div class="event-box">
+        <div class="event-box-label">예정일</div>
+        <div class="event-box-value">${esc(promoDate)}</div>
+      </div>
+    </div>
+    <div class="promo-warning">※ 행사 변동이 발생될 수 있으며 예정일 안내 시 필히 코스트코 콜센터 확인 후 재방문 안내 해주세요.</div>
+  `;
+}
+
 function renderDetailBox(){
   if(!selectedItem){ els.detailBox.innerHTML = ""; return; }
   const tab = DETAIL_TABS.find(t=>t.key===selectedTab) || DETAIL_TABS[0];
@@ -840,6 +883,10 @@ function renderDetailBox(){
     selectedTab = "feature";
     renderDetailTabs();
     renderDetailBox();
+    return;
+  }
+  if(selectedTab === "promoDate"){
+    renderEventScheduleBox(selectedItem, tab.label);
     return;
   }
   if(selectedTab === "wallModel"){
@@ -1202,119 +1249,11 @@ function openSpecImageZoom(index){
 
 
 function getFeatureReferenceNotes(item){
-  if(!item) return [];
-  const sources = [
-    item.featureReferenceNotes,
-    item.referenceTexts,
-    item.referenceNotes,
-    item.refTexts,
-    item.referenceBlocks
-  ];
-
-  for(const src of sources){
-    if(!src) continue;
-    if(Array.isArray(src)){
-      const arr = src.map(v=>{
-        if(v && typeof v === "object") return safe(v.text || v.value || v.plainText || v.html || "", "");
-        return safe(v, "");
-      });
-      if(arr.some(Boolean)) return arr;
-    }
-  }
-
-  const individual = [];
-  for(let i=1;i<=10;i++){
-    const value = item[`reference${i}`] || item[`ref${i}`] || item[`참조내용${i}`] || item[`참조 내용${i}`];
-    if(value) individual.push(safe(value, ""));
-  }
-  if(individual.some(Boolean)) return individual;
-
+  const notes = Array.isArray(item?.featureReferenceNotes) ? item.featureReferenceNotes : [];
+  const cleaned = notes.map(v=>safe(v, ""));
   const fallback = safe(item?.referenceNote || item?.featureWrite || item?.featureNote || item?.featureDetail || item?.feature, "");
+  if(cleaned.some(Boolean)) return cleaned;
   return fallback ? [fallback] : [];
-}
-
-function getFeatureReferenceHtmls(item){
-  if(!item) return [];
-
-  const sources = [
-    item.referenceHtmls,
-    item.referenceContentsHtml,
-    item.featureReferenceHtmls,
-    item.refContentHtmls,
-    item.refHtmls,
-    item.referenceHtml,
-    item.refHtml,
-    item.referenceBlocks
-  ];
-
-  for(const src of sources){
-    if(!src) continue;
-    if(Array.isArray(src)){
-      const arr = src.map(v=>{
-        if(v && typeof v === "object") return String(v.html || v.valueHtml || v.richHtml || "");
-        return String(v || "");
-      }).filter(Boolean);
-      if(arr.length) return arr;
-    }
-    if(typeof src === "string" && src.trim()) return [src];
-  }
-
-  const out = [];
-  for(let i=1;i<=10;i++){
-    const value = item[`reference${i}Html`] || item[`ref${i}Html`] || item[`참조내용${i}Html`] || item[`참조 내용${i}Html`];
-    if(value) out.push(String(value));
-  }
-  return out;
-}
-
-function isProbablyHtml(v){
-  return /<\/?[a-z][\s\S]*>/i.test(String(v || ""));
-}
-
-function sanitizeReferenceHtml(raw){
-  const value = String(raw || "").trim();
-  if(!value) return "";
-  if(!isProbablyHtml(value)) return esc(value).replace(/\n/g, "<br>");
-
-  const template = document.createElement("template");
-  template.innerHTML = value;
-
-  template.content.querySelectorAll("script,iframe,object,embed,link,meta,style").forEach(el=>el.remove());
-
-  const allowedTags = new Set(["SPAN","BR","B","STRONG","I","EM","U","P","DIV"]);
-  const allowedStyle = new Set(["color","font-size","font-weight","text-decoration","background-color"]);
-
-  Array.from(template.content.querySelectorAll("*")).forEach(el=>{
-    if(!allowedTags.has(el.tagName)){
-      const span = document.createElement("span");
-      span.innerHTML = el.innerHTML;
-      el.replaceWith(span);
-      el = span;
-    }
-
-    Array.from(el.attributes).forEach(attr=>{
-      const name = attr.name.toLowerCase();
-      if(name === "style"){
-        const clean = [];
-        String(attr.value || "").split(";").forEach(part=>{
-          const [propRaw, ...valueParts] = part.split(":");
-          const prop = String(propRaw || "").trim().toLowerCase();
-          const val = valueParts.join(":").trim();
-          if(!allowedStyle.has(prop) || !val) return;
-          if(/url\s*\(|expression\s*\(|javascript:/i.test(val)) return;
-          clean.push(`${prop}:${val}`);
-        });
-        if(clean.length) el.setAttribute("style", clean.join(";"));
-        else el.removeAttribute("style");
-      }else if(name === "class" && attr.value === "sheet-rich-empty"){
-        // 유지
-      }else{
-        el.removeAttribute(attr.name);
-      }
-    });
-  });
-
-  return template.innerHTML;
 }
 
 function getFeatureReferenceText(item, index=0){
@@ -1323,31 +1262,15 @@ function getFeatureReferenceText(item, index=0){
   return safe(notes[i] || notes[0] || "", "");
 }
 
-function getFeatureReferenceHtml(item, index=0){
-  const htmls = getFeatureReferenceHtmls(item);
-  const i = Math.max(0, Number(index) || 0);
-  return sanitizeReferenceHtml(htmls[i] || htmls[0] || "");
-}
-
 function renderFeatureReferenceCard(item, index=0, total=0){
   const i = Math.max(0, Number(index) || 0);
-  const richHtml = getFeatureReferenceHtml(item, i);
-  const bodyText = getFeatureReferenceText(item, i);
-  const badgeHtml = total > 1 ? `<span class="spec-write-badge">${esc(i+1)}번 이미지</span>` : "";
-
-  let bodyHtml = "";
-  if(richHtml){
-    bodyHtml = `<div class="spec-write-body sheet-rich-reference">${richHtml}</div>`;
-  }else if(bodyText){
-    bodyHtml = `<div class="spec-write-body sheet-rich-reference">${esc(bodyText).replace(/\n/g, "<br>")}</div>`;
-  }else{
-    bodyHtml = `<div class="spec-write-body sheet-rich-reference spec-write-empty"><span class="sheet-rich-empty">등록된 참조 내용이 없습니다.</span></div>`;
-  }
-
+  const body = getFeatureReferenceText(item, i);
+  const badge = total > 1 ? `${i+1}번 이미지` : "구글시트 수정";
   return `
     <div class="spec-write-card">
-      <div class="spec-write-title">참조 내용 ${badgeHtml}</div>
-      ${bodyHtml}
+      <div class="spec-write-title">참조 내용 <span class="spec-write-badge">${esc(badge)}</span></div>
+      <div class="spec-write-body ${body ? "" : "spec-write-empty"}">${body ? esc(body) : "등록된 참조 내용이 없습니다."}</div>
+      <div class="spec-write-help">※ 구글시트 상품DB의 <b>참조내용1~참조내용10</b> 칸에 입력하면 기능 이미지 순서별로 내용이 바뀝니다.</div>
     </div>`;
 }
 
@@ -1359,72 +1282,25 @@ function getFeatureImageUrlsFromSheet(item){
   return uniqueArray(raw.flatMap(splitImageUrls));
 }
 
-async function fetchGithubFeatureImageUrls(item){
-  const itemNo = getSpecItemNo(item);
-  if(!itemNo || !CONFIG.SPEC_IMAGE_GITHUB_API) return [];
-  try{
-    const res = await fetch(CONFIG.SPEC_IMAGE_GITHUB_API + "&t=" + Date.now(), { cache:"no-store" });
-    if(!res.ok) return [];
-    const files = await res.json();
-    if(!Array.isArray(files)) return [];
-    const exts = getSpecImageExtensions().join("|");
-    const safeNo = itemNo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const re = new RegExp("^(?:item_)?" + safeNo + "[_-](feature|func)[_-](\\d+)\\.(" + exts + ")$", "i");
-    return files
-      .map(f=>{
-        const name = String(f?.name || "").trim();
-        const m = name.match(re);
-        if(!m) return null;
-        return {
-          no: Number(m[2]),
-          priority: m[1].toLowerCase() === "feature" ? 0 : 1,
-          name,
-          url: cacheBustImageUrl(f.download_url || rawSpecImageUrl(name))
-        };
-      })
-      .filter(v=>v && v.url)
-      .sort((a,b)=>(a.no-b.no) || (a.priority-b.priority) || naturalCompare(a.name,b.name))
-      .map(v=>v.url);
-  }catch(err){
-    return [];
-  }
-}
-
-async function firstExistingImageFast(urls, timeout=1200){
-  const ordered = uniqueArray(urls);
-  const results = await Promise.all(ordered.map(url => imageExistsWithTimeout(url, timeout).then(ok => ok ? url : "").catch(()=>"")));
-  return results.find(Boolean) || "";
-}
-
 async function resolveFeatureImageUrls(item){
-  const fromSheet = getFeatureImageUrlsFromSheet(item).map(convertDriveImageUrl).filter(looksLikeImageUrl).map(cacheBustImageUrl);
+  const fromSheet = getFeatureImageUrlsFromSheet(item);
   if(fromSheet.length) return fromSheet;
-
-  const github = await fetchGithubFeatureImageUrls(item);
-  if(github.length) return github;
-
-  const itemNo = getSpecItemNo(item);
+  const itemNo = safe(item?.itemNo, "");
   if(!itemNo) return [];
   const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
-  const exts = getSpecImageExtensions();
-
-  // GitHub API가 느리거나 막힐 때 대비: 예상 파일명을 병렬로 빠르게 확인합니다.
-  const checks = Array.from({length:max}, (_,idx)=>{
-    const i = idx + 1;
+  const urls = [];
+  for(let i=1;i<=max;i++){
     const group = [];
-    ["feature", "func"].forEach(kind=>{
-      exts.forEach(ext=>{
-        group.push(localSpecImageUrl(`${itemNo}_${kind}_${i}.${ext}`));
-        group.push(rawSpecImageUrl(`${itemNo}_${kind}_${i}.${ext}`));
-        group.push(localSpecImageUrl(`item_${itemNo}_${kind}_${i}.${ext}`));
-        group.push(rawSpecImageUrl(`item_${itemNo}_${kind}_${i}.${ext}`));
-      });
+    CONFIG.SPEC_IMAGE_EXTENSIONS.forEach(ext=>{
+      group.push(localSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
+      group.push(rawSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
+      group.push(localSpecImageUrl(`${itemNo}_func_${i}.${ext}`));
+      group.push(rawSpecImageUrl(`${itemNo}_func_${i}.${ext}`));
     });
-    return firstExistingImageFast(group, 1400).then(url => url ? { no:i, url } : null);
-  });
-
-  const found = (await Promise.all(checks)).filter(Boolean).sort((a,b)=>a.no-b.no).map(v=>v.url);
-  return uniqueArray(found);
+    const found = await firstExistingImage(uniqueArray(group));
+    if(found) urls.push(found);
+  }
+  return urls;
 }
 
 async function openFeatureViewer(item){
@@ -1444,7 +1320,7 @@ async function openFeatureViewer(item){
       <div class="spec-slide-inner">
         <div class="spec-status-card">
           <div class="spec-status-title">기능 사진을 불러오는 중입니다.</div>
-          <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(itemNo)}_feature_1.png</b> 형식으로 빠르게 확인하고 있습니다.</div>
+          <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(itemNo)}_feature_1.png</b> 형식으로 확인하고 있습니다.</div>
         </div>
         ${renderFeatureReferenceCard(item, 0, 1)}
       </div>
@@ -1468,7 +1344,7 @@ async function openFeatureViewer(item){
         <div class="spec-slide-inner">
           <div class="spec-status-card">
             <div class="spec-status-title">기능 사진을 찾지 못했습니다.</div>
-            <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(itemNo)}_feature_1.png</b>, <b>${esc(itemNo)}_feature_2.png</b><br/>형식으로 최대 10장까지 올려주세요.<br/>※ <b>item_${esc(itemNo)}_feature_1.png</b> 형식도 인식합니다.<br/><br/>※ 업로드 직후라면 1분 정도 뒤 다시 열어주세요.</div>
+            <div class="spec-status-sub">GitHub <b>images</b> 폴더에<br/><b>${esc(itemNo)}_feature_1.png</b>, <b>${esc(itemNo)}_feature_2.png</b><br/>형식으로 최대 10장까지 올려주세요.<br/><br/>※ 업로드 직후라면 1분 정도 뒤 다시 열어주세요.</div>
           </div>
           ${renderFeatureReferenceCard(item, 0, 1)}
         </div>
