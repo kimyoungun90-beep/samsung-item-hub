@@ -49,7 +49,8 @@
     .status{display:none;margin:0 0 12px;padding:13px 14px;border-radius:18px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:850;line-height:1.45;word-break:keep-all}.status.show{display:block}.status.ok{background:#f0fdf4;border-color:#bbf7d0;color:#166534}.status.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}.status.err{background:#fef2f2;border-color:#fecaca;color:#991b1b}
 
     .notice-card{display:block;background:#fff;border:1px solid rgba(226,232,240,.92);border-radius:22px;box-shadow:0 14px 34px rgba(15,23,42,.08);margin:0 0 12px;overflow:hidden}.notice-inner{padding:14px}.notice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}.notice-title{font-size:15px;font-weight:1000;color:#0f172a;letter-spacing:-.35px}.notice-meta{font-size:11px;font-weight:900;color:#64748b;margin-top:3px}.notice-list{display:grid;gap:8px}.notice-item{border:1px solid #e2e8f0;background:#f8fafc;border-radius:16px;padding:11px 12px}.notice-item-title{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:5px;line-height:1.35}.notice-item-body{white-space:pre-line;font-size:13px;font-weight:800;line-height:1.55;color:#334155;word-break:keep-all}.notice-empty{font-size:13px;font-weight:850;color:#94a3b8;line-height:1.45}.event-schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.event-box{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.event-box-label{font-size:12px;font-weight:1000;color:#64748b;margin-bottom:7px}.event-box-value{font-size:14px;font-weight:850;line-height:1.58;color:#0f172a;white-space:pre-line;word-break:keep-all}.event-item{border-top:1px dashed #cbd5e1;padding-top:9px;margin-top:9px}.event-item:first-child{border-top:0;padding-top:0;margin-top:0}.event-item-title{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:4px}.event-row{font-size:13px;font-weight:850;color:#334155;line-height:1.55}.event-empty{font-size:13px;font-weight:850;color:#94a3b8;line-height:1.45}.promo-warning{margin-top:10px;border:1px solid #fecaca;background:#fff5f5;color:#dc2626;border-radius:16px;padding:11px 12px;font-size:12px;font-weight:1000;line-height:1.55;word-break:keep-all}
-    @media(max-width:480px){.event-schedule-grid{grid-template-columns:1fr}}
+    .notice-modal{position:fixed;inset:0;z-index:1300;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.52);padding:16px}.notice-modal.show{display:flex}.notice-modal-panel{width:100%;max-width:520px;max-height:82vh;overflow:auto;background:#fff;border-radius:26px;border:1px solid #e2e8f0;box-shadow:0 26px 72px rgba(15,23,42,.28)}.notice-modal-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 17px 13px;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.notice-modal-title{font-size:19px;font-weight:1000;color:#0f172a;letter-spacing:-.45px}.notice-modal-sub{margin-top:4px;font-size:12px;font-weight:900;color:#64748b;line-height:1.35}.notice-modal-close{border:0;border-radius:999px;background:#0f172a;color:#fff;width:44px;height:44px;font-size:22px;font-weight:1000;flex:0 0 auto}.notice-modal-list{display:grid;gap:10px;padding:15px 16px 18px}.notice-modal-item{border:1px solid #dbeafe;background:#f8fafc;border-radius:18px;padding:13px 14px}.notice-modal-item-title{font-size:15px;font-weight:1000;color:#0f172a;margin-bottom:6px;line-height:1.35}.notice-modal-item-body{white-space:pre-line;font-size:13px;font-weight:850;line-height:1.6;color:#334155;word-break:keep-all}.notice-modal-meta{margin-top:8px;font-size:11px;font-weight:900;color:#64748b}.notice-modal-empty{font-size:13px;font-weight:850;color:#94a3b8;line-height:1.45;padding:15px 16px 18px}
+    @media(max-width:480px){.event-schedule-grid{grid-template-columns:1fr}.notice-modal{padding:10px}.notice-modal-panel{border-radius:22px;max-height:84vh}.notice-modal-title{font-size:18px}}
     .product-visual{background:linear-gradient(180deg,#f8fafc,#eef2f7);border-bottom:1px solid var(--line);padding:12px}.photo-frame{position:relative;display:flex;align-items:center;justify-content:center;border-radius:22px;min-height:220px;background:#fff;border:1px solid #e2e8f0;overflow:hidden}.photo-carousel{width:100%;display:flex;overflow-x:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:auto;scrollbar-width:none;touch-action:pan-y}.photo-carousel::-webkit-scrollbar{display:none}.photo-slide{min-width:100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;padding:8px}.photo-slide img{width:100%;height:auto;max-height:340px;object-fit:contain;display:block;cursor:zoom-in;user-select:none;-webkit-user-drag:none}.photo-empty{padding:28px 20px;text-align:center;color:#94a3b8;font-weight:950;line-height:1.55}.photo-label{position:absolute;left:10px;top:10px;background:rgba(15,23,42,.88);color:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:950;z-index:3}.photo-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:42px;height:52px;border:0;border-radius:16px;background:rgba(15,23,42,.84);color:#fff;font-size:26px;font-weight:1000;display:none;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(15,23,42,.16);touch-action:manipulation}.photo-arrow.show{display:flex}.photo-arrow.prev{left:8px}.photo-arrow.next{right:8px}.photo-dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:4;display:flex;gap:6px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 4px 14px rgba(15,23,42,.08)}.photo-dot{width:8px;height:8px;border-radius:999px;background:#cbd5e1}.photo-dot.active{background:#0f172a}.photo-count{position:absolute;right:10px;top:10px;z-index:3;background:rgba(255,255,255,.90);color:#0f172a;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:950}
     .product-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}.model{font-size:22px;font-weight:1000;letter-spacing:-.55px;line-height:1.22}.prod-name{margin-top:4px;color:#334155;font-size:14px;font-weight:850;line-height:1.45;word-break:keep-all}.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.meta .pill{font-size:11px;padding:6px 9px}
     .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.tab-btn{min-height:47px;border:1px solid var(--line);border-radius:16px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:950}.tab-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}.detail-box{margin-top:10px;border:1px solid var(--line);border-radius:18px;background:#f8fafc;padding:14px;min-height:96px}.detail-title{font-size:14px;font-weight:1000;margin-bottom:9px;color:#0f172a}.detail-body{white-space:pre-line;font-size:14px;line-height:1.62;font-weight:760;color:#334155;word-break:keep-all}.wallmodel-stack{display:grid;gap:12px}.wall-model-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.wall-model-label{font-size:12px;font-weight:950;color:#64748b;margin-bottom:6px}.wall-model-value{white-space:pre-line;font-size:15px;line-height:1.58;font-weight:900;color:#0f172a;word-break:keep-all}.detail-ref-image-wrap{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px}.detail-ref-image{display:block;width:100%;height:auto;border-radius:12px;background:#fff;cursor:zoom-in}.detail-help{margin-top:8px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cost-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}.cost-label{font-size:12px;font-weight:950;color:#64748b;margin-bottom:6px}.cost-value{font-size:16px;font-weight:1000;color:#0f172a;white-space:pre-line;line-height:1.45}.cost-warning{margin-top:12px;border:1px solid #fecaca;background:#fff5f5;color:#dc2626;border-radius:16px;padding:12px 13px;font-size:12px;font-weight:900;line-height:1.55;word-break:keep-all}.cost-warning p{margin:0}.cost-warning p + p{margin-top:4px}.cost-phone{font-weight:1000;font-size:14px;letter-spacing:.1px}.quick-list{display:grid;gap:8px;max-height:270px;overflow:auto;margin-top:12px}.quick-item{border:1px solid var(--line);background:#fff;border-radius:16px;padding:11px;text-align:left}.quick-no{font-size:16px;font-weight:1000}.quick-name{font-size:13px;font-weight:850;color:#475569;margin-top:3px;line-height:1.35;word-break:keep-all}
@@ -240,6 +241,18 @@
   <button id="floatRefreshBtn" class="floating-refresh" type="button">DB 새로고침</button>
   <footer class="footer">Google Sheets DB 연결형 · PWA App Shell Cache · Local Data Cache</footer>
 </main>
+<div id="noticeModal" class="notice-modal" aria-hidden="true">
+  <div class="notice-modal-panel" role="dialog" aria-modal="true" aria-label="공지사항">
+    <div class="notice-modal-head">
+      <div>
+        <div class="notice-modal-title">공지사항</div>
+        <div id="noticeModalSub" class="notice-modal-sub">프로세스 · 제품 · 업무지원 변동사항</div>
+      </div>
+      <button id="noticeModalClose" class="notice-modal-close" type="button" aria-label="닫기">×</button>
+    </div>
+    <div id="noticeModalList" class="notice-modal-list"></div>
+  </div>
+</div>
 <div id="imageModal" class="image-modal" aria-hidden="true">
   <div class="image-modal-inner">
     <button id="imageModalClose" class="image-modal-close" type="button" aria-label="닫기">×</button>
@@ -288,14 +301,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v57_cache",
+  CACHE_KEY: "costco_item_operation_hub_v58_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v57"
+  SPEC_IMAGE_CACHE_BUST: "v58"
 };
 
 const DETAIL_TABS = [
@@ -344,6 +357,7 @@ const SPEC_TERM_GUIDES = {
 };
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], updatedAt:"" };
+let noticePopupOpened = false;
 let itemMap = new Map();
 let selectedItem = null;
 let selectedTab = "feature";
@@ -368,7 +382,7 @@ let specPrefetchStarted = false;
 
 const $ = (id)=>document.getElementById(id);
 const els = {
-  status:$("status"), noticeCard:$("noticeCard"), noticeList:$("noticeList"), noticeMeta:$("noticeMeta"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
+  status:$("status"), noticeCard:$("noticeCard"), noticeList:$("noticeList"), noticeMeta:$("noticeMeta"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
   pageItem:$("pageItem"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), quickList:$("quickList"),
@@ -515,6 +529,8 @@ function bindEvents(){
   }catch(err){}
   els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
   els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+  if(els.noticeModalClose) els.noticeModalClose.addEventListener("click",closeNoticeModal);
+  if(els.noticeModal) els.noticeModal.addEventListener("click",(e)=>{ if(e.target === els.noticeModal) closeNoticeModal(); });
 }
 
 function showPage(page){
@@ -829,20 +845,48 @@ function renderNotice(){
   const notices = Array.isArray(DB.notices) ? DB.notices.filter(n => safe(n.title,"") || safe(n.body,"")) : [];
   if(!notices.length){
     els.noticeMeta.textContent = "등록된 공지사항이 없습니다.";
-    els.noticeList.innerHTML = `<div class="notice-empty">프로세스/제품/업무지원실 변동사항은 구글시트 공지사항에 입력하면 여기에 자동 표시됩니다.</div>`;
+    els.noticeList.innerHTML = `<div class="notice-empty">프로세스/제품/업무지원 변동사항은 공지사항 시트에 입력하면 앱 실행 시 팝업으로 표시됩니다.</div>`;
+    if(els.noticeModalList) els.noticeModalList.innerHTML = `<div class="notice-modal-empty">등록된 공지사항이 없습니다.</div>`;
     return;
   }
-  els.noticeMeta.textContent = `${notices.length}건 표시 · 변경 전까지 유지`;
-  els.noticeList.innerHTML = notices.slice(0,3).map(n=>`
+
+  const noticeHtml = notices.slice(0,5).map(n=>`
     <div class="notice-item">
       <div class="notice-item-title">${esc(safe(n.title,"공지사항"))}</div>
       <div class="notice-item-body">${esc(safe(n.body,""))}</div>
       ${n.date || n.type ? `<div class="notice-meta" style="margin-top:7px">${esc([n.type,n.date].filter(Boolean).join(" · "))}</div>` : ``}
     </div>`).join("");
+  els.noticeMeta.textContent = `${notices.length}건 표시 · 변경 전까지 유지`;
+  els.noticeList.innerHTML = noticeHtml;
+
+  if(els.noticeModalList){
+    els.noticeModalSub.textContent = `${notices.length}건 표시 · 닫기 전까지 확인`;
+    els.noticeModalList.innerHTML = notices.map(n=>`
+      <div class="notice-modal-item">
+        <div class="notice-modal-item-title">${esc(safe(n.title,"공지사항"))}</div>
+        <div class="notice-modal-item-body">${esc(safe(n.body,""))}</div>
+        ${n.date || n.type ? `<div class="notice-modal-meta">${esc([n.type,n.date].filter(Boolean).join(" · "))}</div>` : ``}
+      </div>`).join("");
+    if(!noticePopupOpened) openNoticeModal();
+  }
+}
+
+function openNoticeModal(){
+  if(!els.noticeModal) return;
+  noticePopupOpened = true;
+  els.noticeModal.classList.add("show");
+  els.noticeModal.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+function closeNoticeModal(){
+  if(!els.noticeModal) return;
+  els.noticeModal.classList.remove("show");
+  els.noticeModal.setAttribute("aria-hidden","true");
+  if(!els.imageModal.classList.contains("show") && !els.specViewer.classList.contains("show")) document.body.style.overflow = "";
 }
 
 function renderEventScheduleBox(item, tabLabel){
-  const promoDate = safe(item?.promoDate, "등록된 예정일이 없습니다. 구글시트 상품DB의 행사예정일 칸에 입력하면 반영됩니다.");
+  const promoDate = safe(item?.promoDate, "등록된 예정일이 없습니다.");
   const events = Array.isArray(item?.operationEvents) ? item.operationEvents : [];
   const eventHtml = events.length ? events.map(ev=>{
     const period = [safe(ev.eventStart,""), safe(ev.eventEnd,"")].filter(Boolean).join(" ~ ");
@@ -858,7 +902,7 @@ function renderEventScheduleBox(item, tabLabel){
       <div class="event-item-title">${esc(safe(ev.eventName,"행사"))}</div>
       ${rows.map(r=>`<div class="event-row">${esc(r)}</div>`).join("")}
     </div>`;
-  }).join("") : `<div class="event-empty">등록된 행사일이 없습니다.<br/>B시트 운영기록의 product_item_no와 아이템번호가 같으면 자동 표시됩니다.</div>`;
+  }).join("") : `<div class="event-empty">등록된 행사일이 없습니다.</div>`;
 
   els.detailBox.innerHTML = `
     <div class="detail-title">${esc(tabLabel)}</div>
@@ -870,9 +914,9 @@ function renderEventScheduleBox(item, tabLabel){
       <div class="event-box">
         <div class="event-box-label">예정일</div>
         <div class="event-box-value">${esc(promoDate)}</div>
+        <div class="promo-warning">※ 행사 변동이 발생될 수 있으며 예정일 안내 시 필히 코스트코 콜센터 확인 후 재방문 안내 해주세요.</div>
       </div>
     </div>
-    <div class="promo-warning">※ 행사 변동이 발생될 수 있으며 예정일 안내 시 필히 코스트코 콜센터 확인 후 재방문 안내 해주세요.</div>
   `;
 }
 
