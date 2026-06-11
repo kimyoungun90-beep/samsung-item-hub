@@ -288,14 +288,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v60_cache",
+  CACHE_KEY: "costco_item_operation_hub_v61_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v60"
+  SPEC_IMAGE_CACHE_BUST: "v61"
 };
 
 const DETAIL_TABS = [
@@ -1877,6 +1877,13 @@ function styleAttr(style){
 }
 function styledText(v, fallback="", style=null){
   const text = safe(v, fallback);
+  const rich = style && Array.isArray(style.__rich) ? style.__rich : null;
+  if(rich && safe(v,"").trim() !== ""){
+    return rich.map(seg=>{
+      const segStyle = mergeTextStyles(style, seg && seg.style ? seg.style : null);
+      return `<span${styleAttr(segStyle)}>${esc(seg && seg.text ? seg.text : "")}</span>`;
+    }).join("");
+  }
   return `<span${styleAttr(style)}>${esc(text)}</span>`;
 }
 
