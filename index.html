@@ -298,7 +298,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v63"
+  SPEC_IMAGE_CACHE_BUST: "v64"
 };
 
 const DETAIL_TABS = [
@@ -368,6 +368,7 @@ let processFilter = "전체";
 let compareFilter = "전체";
 let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
+let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
 
 const $ = (id)=>document.getElementById(id);
@@ -841,6 +842,7 @@ function renderProduct(item){
   els.itemPill.innerHTML = styledText(item.itemNo,"-", styleOf(item,"itemNo"));
   els.photoLabel.innerHTML = styledText(item.category,"PRODUCT", styleOf(item,"category"));
   renderProductImages(item);
+  prefetchFeatureImages(item);
   const metas = [
     { value:item.brand, style:styleOf(item,"brand") },
     { value:item.category, style:styleOf(item,"category") },
@@ -1356,24 +1358,90 @@ function getFeatureImageUrlsFromSheet(item){
   return uniqueArray(raw.flatMap(splitImageUrls));
 }
 
+async function fetchGithubFeatureImageUrls(item){
+  const itemNo = getSpecItemNo(item);
+  if(!itemNo || !CONFIG.SPEC_IMAGE_GITHUB_API) return [];
+  try{
+    const res = await fetch(CONFIG.SPEC_IMAGE_GITHUB_API + "&t=" + Date.now(), { cache:"no-store" });
+    if(!res.ok) return [];
+    const files = await res.json();
+    if(!Array.isArray(files)) return [];
+    const exts = getSpecImageExtensions().join("|");
+    const re = new RegExp("^" + itemNo.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + "[_-](feature|func)[_-](\\d+)\\.(" + exts + ")$", "i");
+    return files
+      .map(f=>{
+        const name = String(f?.name || "").trim();
+        const m = name.match(re);
+        if(!m) return null;
+        return { no:Number(m[2]), url:cacheBustImageUrl(f.download_url || rawSpecImageUrl(name)) };
+      })
+      .filter(v=>v && v.url)
+      .sort((a,b)=>a.no-b.no)
+      .map(v=>v.url);
+  }catch(err){
+    return [];
+  }
+}
+
+async function firstExistingImageFast(urls, timeout=1100){
+  for(const url of urls){
+    const ok = await imageExistsWithTimeout(url, timeout);
+    if(ok) return url;
+  }
+  return "";
+}
+
 async function resolveFeatureImageUrls(item){
+  const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
+  if(cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
+
   const fromSheet = getFeatureImageUrlsFromSheet(item);
-  if(fromSheet.length) return fromSheet;
-  const itemNo = safe(item?.itemNo, "");
+  if(fromSheet.length){
+    if(cacheKey) featureImageUrlCache.set(cacheKey, fromSheet);
+    return fromSheet;
+  }
+
+  const itemNo = getSpecItemNo(item);
   if(!itemNo) return [];
   const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
-  const urls = [];
-  for(let i=1;i<=max;i++){
-    const group = [];
-    CONFIG.SPEC_IMAGE_EXTENSIONS.forEach(ext=>{
-      group.push(localSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
-      group.push(rawSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
-      group.push(localSpecImageUrl(`${itemNo}_func_${i}.${ext}`));
-      group.push(rawSpecImageUrl(`${itemNo}_func_${i}.${ext}`));
-    });
-    const found = await firstExistingImage(uniqueArray(group));
-    if(found) urls.push(found);
+  const exts = getSpecImageExtensions();
+
+  // 1순위: 가장 많이 쓰는 GitHub Pages images 폴더의 PNG 파일을 병렬로 먼저 확인합니다.
+  // 기존처럼 1장씩 순서대로 실패를 기다리면 기능 사진 버튼에서 지연이 크게 발생합니다.
+  const localPngChecks = Array.from({length:max}, (_,i)=>{
+    const no = i + 1;
+    const url = localSpecImageUrl(`${itemNo}_feature_${no}.png`);
+    return imageExistsWithTimeout(url, 900).then(ok=> ok ? { no, url } : null);
+  });
+  const localPng = (await Promise.all(localPngChecks)).filter(Boolean).sort((a,b)=>a.no-b.no).map(v=>v.url);
+  if(localPng.length){
+    if(cacheKey) featureImageUrlCache.set(cacheKey, localPng);
+    return localPng;
   }
+
+  // 2순위: GitHub API 목록으로 실제 업로드된 feature/func 파일을 확인합니다.
+  const github = await fetchGithubFeatureImageUrls(item);
+  if(github.length){
+    if(cacheKey) featureImageUrlCache.set(cacheKey, github);
+    return github;
+  }
+
+  // 3순위: png 외 확장자와 func 파일명을 병렬 확인합니다.
+  const checks = Array.from({length:max}, (_,i)=>{
+    const no = i + 1;
+    const group = [];
+    exts.forEach(ext=>{
+      group.push(localSpecImageUrl(`${itemNo}_feature_${no}.${ext}`));
+      group.push(localSpecImageUrl(`${itemNo}_func_${no}.${ext}`));
+      const rawFeature = rawSpecImageUrl(`${itemNo}_feature_${no}.${ext}`);
+      const rawFunc = rawSpecImageUrl(`${itemNo}_func_${no}.${ext}`);
+      if(rawFeature) group.push(rawFeature);
+      if(rawFunc) group.push(rawFunc);
+    });
+    return firstExistingImageFast(uniqueArray(group), 1000).then(url=> url ? { no, url } : null);
+  });
+  const urls = (await Promise.all(checks)).filter(Boolean).sort((a,b)=>a.no-b.no).map(v=>v.url);
+  if(cacheKey) featureImageUrlCache.set(cacheKey, urls);
   return urls;
 }
 
@@ -1393,7 +1461,7 @@ async function openFeatureViewer(item){
     <div class="spec-slide">
       <div class="spec-slide-inner">
         <div class="spec-status-card">
-          <div class="spec-status-title">기능 사진을 불러오는 중입니다.</div>
+          <div class="spec-status-title">기능 사진을 빠르게 확인하는 중입니다.</div>
           <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(itemNo)}_feature_1.png</b> 형식으로 확인하고 있습니다.</div>
         </div>
         ${renderFeatureReferenceCard(item, 0, 1)}
@@ -1637,6 +1705,25 @@ function preloadImage(url){
     img.loading = "eager";
     img.src = url;
   }catch(err){}
+}
+
+function prefetchFeatureImages(item){
+  if(!item) return;
+  const fromSheet = getFeatureImageUrlsFromSheet(item);
+  if(fromSheet.length){
+    setTimeout(()=>fromSheet.slice(0,4).forEach(preloadImage), 120);
+    return;
+  }
+  const itemNo = getSpecItemNo(item);
+  if(!itemNo) return;
+  setTimeout(()=>{
+    const exts = getSpecImageExtensions();
+    for(let i=1;i<=3;i++){
+      exts.forEach(ext=>{
+        preloadImage(localSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
+      });
+    }
+  }, 120);
 }
 
 function prefetchSpecCategoryFirstImages(){
