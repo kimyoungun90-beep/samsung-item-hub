@@ -103,19 +103,6 @@
 
   <div id="status" class="status"></div>
 
-  <article id="noticeCard" class="notice-card">
-    <div class="notice-inner">
-      <div class="notice-head">
-        <div>
-          <div class="notice-title">공지사항</div>
-          <div id="noticeMeta" class="notice-meta">업데이트 내용을 불러오는 중입니다.</div>
-        </div>
-        <span class="pill warn">업데이트</span>
-      </div>
-      <div id="noticeList" class="notice-list"><div class="notice-empty">등록된 공지사항이 없습니다.</div></div>
-    </div>
-  </article>
-
   <section id="pageItem" class="page show">
     <article class="card">
       <div class="card-inner">
@@ -301,14 +288,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v59_cache",
+  CACHE_KEY: "costco_item_operation_hub_v60_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v59"
+  SPEC_IMAGE_CACHE_BUST: "v60"
 };
 
 const DETAIL_TABS = [
@@ -382,7 +369,7 @@ let specPrefetchStarted = false;
 
 const $ = (id)=>document.getElementById(id);
 const els = {
-  status:$("status"), noticeCard:$("noticeCard"), noticeList:$("noticeList"), noticeMeta:$("noticeMeta"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
+  status:$("status"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
   pageItem:$("pageItem"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), quickList:$("quickList"),
@@ -845,23 +832,17 @@ function renderDetailTabs(){
 
 
 function renderNotice(){
-  if(!els.noticeList) return;
-  const notices = Array.isArray(DB.notices) ? DB.notices.filter(n => safe(n.title,"") || safe(n.body,"")) : [];
+  const notices = Array.isArray(DB.notices)
+    ? DB.notices.filter(n => safe(n.title,"") || safe(n.body,""))
+    : [];
+
+  // 공지사항은 메인 화면 카드로 노출하지 않고, 내용이 있을 때만 팝업으로 표시합니다.
   if(!notices.length){
-    els.noticeMeta.textContent = "등록된 공지사항이 없습니다.";
-    els.noticeList.innerHTML = `<div class="notice-empty">프로세스/제품/업무지원 변동사항은 공지사항 시트에 입력하면 앱 실행 시 팝업으로 표시됩니다.</div>`;
-    if(els.noticeModalList) els.noticeModalList.innerHTML = `<div class="notice-modal-empty">등록된 공지사항이 없습니다.</div>`;
+    if(els.noticeModalList) els.noticeModalList.innerHTML = "";
+    noticePopupOpened = false;
+    closeNoticeModal();
     return;
   }
-
-  const noticeHtml = notices.slice(0,5).map(n=>`
-    <div class="notice-item">
-      <div class="notice-item-title">${styledText(n.title,"공지사항",styleOf(n,"title"))}</div>
-      <div class="notice-item-body">${styledText(n.body,"",styleOf(n,"body"))}</div>
-      ${n.date || n.type ? `<div class="notice-meta" style="margin-top:7px">${styledText(n.type,"",styleOf(n,"type"))}${n.type&&n.date?" · ":""}${styledText(n.date,"",styleOf(n,"date"))}</div>` : ``}
-    </div>`).join("");
-  els.noticeMeta.textContent = `${notices.length}건 표시 · 변경 전까지 유지`;
-  els.noticeList.innerHTML = noticeHtml;
 
   if(els.noticeModalList){
     els.noticeModalSub.textContent = `${notices.length}건 표시 · 닫기 전까지 확인`;
