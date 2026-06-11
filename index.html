@@ -301,14 +301,14 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_v58_cache",
+  CACHE_KEY: "costco_item_operation_hub_v59_cache",
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v58"
+  SPEC_IMAGE_CACHE_BUST: "v59"
 };
 
 const DETAIL_TABS = [
@@ -716,9 +716,9 @@ function renderQuickList(query=""){
   if(!rows.length){ els.quickList.innerHTML = `<div class="empty" style="padding:14px">표시할 아이템이 없습니다.</div>`; return; }
   els.quickList.innerHTML = rows.map(item=>`
     <button class="quick-item" type="button" data-item="${esc(item.itemNo)}">
-      <div class="quick-no">${esc(item.itemNo || "-")}</div>
-      <div class="quick-name">${esc(item.modelName || "모델명 미등록")} · ${esc(item.productName || item.category || "")}</div>
-      <div class="info-sub">${esc(item.category || "품목 미등록")}</div>
+      <div class="quick-no">${styledText(item.itemNo,"-",styleOf(item,"itemNo"))}</div>
+      <div class="quick-name">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))} · ${styledText(item.productName || item.category,"",styleOf(item,item.productName?"productName":"category"))}</div>
+      <div class="info-sub">${styledText(item.category,"품목 미등록",styleOf(item,"category"))}</div>
     </button>`).join("");
   els.quickList.querySelectorAll(".quick-item").forEach(btn=>{
     btn.addEventListener("click",()=>{ els.itemInput.value = btn.dataset.item; searchItem(); });
@@ -802,13 +802,17 @@ function renderProduct(item){
   if(selectedTab === "wallModel" && !needsWallModel(item)) selectedTab = "spec";
   els.productCard.style.display = "block";
   els.productEmpty.style.display = "none";
-  els.modelName.textContent = safe(item.modelName,"모델명 미등록");
-  els.productName.textContent = safe(item.productName,"상품명 미등록");
-  els.itemPill.textContent = safe(item.itemNo,"-");
-  els.photoLabel.textContent = safe(item.category,"PRODUCT");
+  els.modelName.innerHTML = styledText(item.modelName,"모델명 미등록", styleOf(item,"modelName"));
+  els.productName.innerHTML = styledText(item.productName,"상품명 미등록", styleOf(item,"productName"));
+  els.itemPill.innerHTML = styledText(item.itemNo,"-", styleOf(item,"itemNo"));
+  els.photoLabel.innerHTML = styledText(item.category,"PRODUCT", styleOf(item,"category"));
   renderProductImages(item);
-  const metas = [item.brand, item.category, item.keywords].filter(Boolean).slice(0,4);
-  els.metaList.innerHTML = metas.map(v=>`<span class="pill">${esc(v)}</span>`).join("");
+  const metas = [
+    { value:item.brand, style:styleOf(item,"brand") },
+    { value:item.category, style:styleOf(item,"category") },
+    { value:item.keywords, style:styleOf(item,"keywords") }
+  ].filter(m=>m.value).slice(0,4);
+  els.metaList.innerHTML = metas.map(m=>`<span class="pill">${styledText(m.value,"",m.style)}</span>`).join("");
   renderDetailTabs();
   renderDetailBox();
 }
@@ -852,9 +856,9 @@ function renderNotice(){
 
   const noticeHtml = notices.slice(0,5).map(n=>`
     <div class="notice-item">
-      <div class="notice-item-title">${esc(safe(n.title,"공지사항"))}</div>
-      <div class="notice-item-body">${esc(safe(n.body,""))}</div>
-      ${n.date || n.type ? `<div class="notice-meta" style="margin-top:7px">${esc([n.type,n.date].filter(Boolean).join(" · "))}</div>` : ``}
+      <div class="notice-item-title">${styledText(n.title,"공지사항",styleOf(n,"title"))}</div>
+      <div class="notice-item-body">${styledText(n.body,"",styleOf(n,"body"))}</div>
+      ${n.date || n.type ? `<div class="notice-meta" style="margin-top:7px">${styledText(n.type,"",styleOf(n,"type"))}${n.type&&n.date?" · ":""}${styledText(n.date,"",styleOf(n,"date"))}</div>` : ``}
     </div>`).join("");
   els.noticeMeta.textContent = `${notices.length}건 표시 · 변경 전까지 유지`;
   els.noticeList.innerHTML = noticeHtml;
@@ -863,9 +867,9 @@ function renderNotice(){
     els.noticeModalSub.textContent = `${notices.length}건 표시 · 닫기 전까지 확인`;
     els.noticeModalList.innerHTML = notices.map(n=>`
       <div class="notice-modal-item">
-        <div class="notice-modal-item-title">${esc(safe(n.title,"공지사항"))}</div>
-        <div class="notice-modal-item-body">${esc(safe(n.body,""))}</div>
-        ${n.date || n.type ? `<div class="notice-modal-meta">${esc([n.type,n.date].filter(Boolean).join(" · "))}</div>` : ``}
+        <div class="notice-modal-item-title">${styledText(n.title,"공지사항",styleOf(n,"title"))}</div>
+        <div class="notice-modal-item-body">${styledText(n.body,"",styleOf(n,"body"))}</div>
+        ${n.date || n.type ? `<div class="notice-modal-meta">${styledText(n.type,"",styleOf(n,"type"))}${n.type&&n.date?" · ":""}${styledText(n.date,"",styleOf(n,"date"))}</div>` : ``}
       </div>`).join("");
     if(!noticePopupOpened) openNoticeModal();
   }
@@ -891,16 +895,17 @@ function renderEventScheduleBox(item, tabLabel){
   const eventHtml = events.length ? events.map(ev=>{
     const period = [safe(ev.eventStart,""), safe(ev.eventEnd,"")].filter(Boolean).join(" ~ ");
     const price = safe(ev.salePrice,"") || safe(ev.finalPrice,"");
+    const priceStyle = ev.salePrice ? styleOf(ev,"salePrice") : styleOf(ev,"finalPrice");
     const rows = [
-      period ? `기간: ${period}` : "",
-      ev.eventModel ? `행사모델: ${safe(ev.eventModel,"")}` : "",
-      ev.beforePrice ? `기존가: ${safe(ev.beforePrice,"")}` : "",
-      price ? `행사가: ${price}` : "",
-      ev.note ? safe(ev.note,"") : ""
+      period ? { label:"기간: ", value:period, style:mergeTextStyles(styleOf(ev,"eventStart"), styleOf(ev,"eventEnd")) } : null,
+      ev.eventModel ? { label:"행사모델: ", value:safe(ev.eventModel,""), style:styleOf(ev,"eventModel") } : null,
+      ev.beforePrice ? { label:"기존가: ", value:safe(ev.beforePrice,""), style:styleOf(ev,"beforePrice") } : null,
+      price ? { label:"행사가: ", value:price, style:priceStyle } : null,
+      ev.note ? { label:"", value:safe(ev.note,""), style:styleOf(ev,"note") } : null
     ].filter(Boolean);
     return `<div class="event-item">
-      <div class="event-item-title">${esc(safe(ev.eventName,"행사"))}</div>
-      ${rows.map(r=>`<div class="event-row">${esc(r)}</div>`).join("")}
+      <div class="event-item-title">${styledText(ev.eventName,"행사",styleOf(ev,"eventName"))}</div>
+      ${rows.map(r=>`<div class="event-row">${esc(r.label)}${styledText(r.value,"",r.style)}</div>`).join("")}
     </div>`;
   }).join("") : `<div class="event-empty">등록된 행사일이 없습니다.</div>`;
 
@@ -913,7 +918,7 @@ function renderEventScheduleBox(item, tabLabel){
       </div>
       <div class="event-box">
         <div class="event-box-label">예정일</div>
-        <div class="event-box-value">${esc(promoDate)}</div>
+        <div class="event-box-value">${styledText(promoDate,"등록된 예정일이 없습니다.",styleOf(item,"promoDate"))}</div>
         <div class="promo-warning">※ 행사 변동이 발생될 수 있으며 예정일 안내 시 필히 코스트코 콜센터 확인 후 재방문 안내 해주세요.</div>
       </div>
     </div>
@@ -941,7 +946,7 @@ function renderDetailBox(){
       <div class="wallmodel-stack">
         <div class="wall-model-box">
           <div class="wall-model-label">벽걸이 모델명</div>
-          <div class="wall-model-value">${esc(wallModelText)}</div>
+          <div class="wall-model-value">${styledText(wallModelText,"미등록",styleOf(selectedItem,"wallModel"))}</div>
         </div>
         ${showTvGuide ? `
           <div class="detail-ref-image-wrap">
@@ -958,10 +963,10 @@ function renderDetailBox(){
     els.detailBox.innerHTML = `
       <div class="detail-title">${tab.label}</div>
       <div class="cost-grid">
-        <div class="cost-box"><div class="cost-label">이전설치비용</div><div class="cost-value">${esc(safe(selectedItem.installCost,"미등록"))}</div></div>
-        <div class="cost-box"><div class="cost-label">철거비용</div><div class="cost-value">${esc(safe(selectedItem.removalCost,"미등록"))}</div></div>
+        <div class="cost-box"><div class="cost-label">이전설치비용</div><div class="cost-value">${styledText(selectedItem.installCost,"미등록",styleOf(selectedItem,"installCost"))}</div></div>
+        <div class="cost-box"><div class="cost-label">철거비용</div><div class="cost-value">${styledText(selectedItem.removalCost,"미등록",styleOf(selectedItem,"removalCost"))}</div></div>
       </div>
-      ${selectedItem.costNote || selectedItem.note ? `<div class="detail-body" style="margin-top:10px">${esc(selectedItem.costNote || selectedItem.note)}</div>` : ""}
+      ${selectedItem.costNote || selectedItem.note ? `<div class="detail-body" style="margin-top:10px">${styledText(selectedItem.costNote || selectedItem.note,"",styleOf(selectedItem, selectedItem.costNote ? "costNote" : "note"))}</div>` : ""}
       <div class="cost-warning">
         <p>※ 현재 금액은 이전/설치 단가표 기준입니다.</p>
         ${isAircon ? `<p>※ 환경에 따라 추가 설치비가 발생할 수 있습니다.</p>` : ``}
@@ -971,7 +976,7 @@ function renderDetailBox(){
     return;
   }
   const body = selectedItem[selectedTab] || "등록된 내용이 없습니다. 구글시트 해당 칸에 내용을 입력하면 반영됩니다.";
-  els.detailBox.innerHTML = `<div class="detail-title">${tab.label}</div><div class="detail-body">${esc(body)}</div>`;
+  els.detailBox.innerHTML = `<div class="detail-title">${tab.label}</div><div class="detail-body">${styledText(body,"",styleOf(selectedItem,selectedTab))}</div>`;
 }
 
 function renderDeptChips(){
@@ -1021,14 +1026,14 @@ function renderDepartments(){
   els.deptList.innerHTML = rows.map(r=>`
     <div class="info-card">
       <div class="info-top">
-        <div><div class="info-title">${esc(r.place || r.deptName || "미등록")}</div><div class="info-sub">${esc(r.scope || r.keywords || "업무범위 미등록")}</div></div>
-        <span class="pill ok">${esc(displayDeptType(r))}</span>
+        <div><div class="info-title">${styledText(r.place || r.deptName,"미등록",styleOf(r,r.place?"place":"deptName"))}</div><div class="info-sub">${styledText(r.scope || r.keywords,"업무범위 미등록",styleOf(r,r.scope?"scope":"keywords"))}</div></div>
+        <span class="pill ok">${styledText(displayDeptType(r),"",styleOf(r,"type"))}</span>
       </div>
       <div class="kv">
-        <div class="kv-row"><div class="key">부서</div><div class="val">${esc(r.deptName || "-")}</div></div>
-        <div class="kv-row"><div class="key">담당자</div><div class="val">${esc(r.manager || "-")}</div></div>
-        <div class="kv-row"><div class="key">연락처</div><div class="val">${esc(r.phone || "-")}</div></div>
-        ${r.note ? `<div class="kv-row"><div class="key">비고</div><div class="val">${esc(r.note)}</div></div>` : ""}
+        <div class="kv-row"><div class="key">부서</div><div class="val">${styledText(r.deptName,"-",styleOf(r,"deptName"))}</div></div>
+        <div class="kv-row"><div class="key">담당자</div><div class="val">${styledText(r.manager,"-",styleOf(r,"manager"))}</div></div>
+        <div class="kv-row"><div class="key">연락처</div><div class="val">${styledText(r.phone,"-",styleOf(r,"phone"))}</div></div>
+        ${r.note ? `<div class="kv-row"><div class="key">비고</div><div class="val">${styledText(r.note,"",styleOf(r,"note"))}</div></div>` : ""}
       </div>
       ${r.phone ? `<a class="phone-link" href="tel:${String(r.phone).replace(/[^0-9+]/g,"")}">전화 연결</a>` : ""}
     </div>`).join("");
@@ -1061,15 +1066,15 @@ function renderProcesses(){
       <button class="process-question" type="button">
         <div class="process-question-row">
           <div>
-            <div class="info-title">${i+1}. ${esc(r.title || "제목 미등록")}</div>
-            <div class="info-sub">${esc(r.keywords || "클릭하면 답변이 열립니다.")}</div>
+            <div class="info-title">${i+1}. ${styledText(r.title,"제목 미등록",styleOf(r,"title"))}</div>
+            <div class="info-sub">${styledText(r.keywords,"클릭하면 답변이 열립니다.",styleOf(r,"keywords"))}</div>
           </div>
-          <div><span class="pill type-chip">${esc(r.type || "프로세스")}</span><div class="process-toggle">답변 보기</div></div>
+          <div><span class="pill type-chip">${styledText(r.type,"프로세스",styleOf(r,"type"))}</span><div class="process-toggle">답변 보기</div></div>
         </div>
       </button>
       <div class="process-body">
         ${img ? `<img class="process-img" src="${esc(img)}" alt="프로세스 이미지" loading="lazy" onerror="this.style.display='none'" />` : ""}
-        ${esc(r.body || "내용 미등록")}
+        ${styledText(r.body,"내용 미등록",styleOf(r,"body"))}
       </div>
     </div>`;
   }).join("");
@@ -1726,10 +1731,11 @@ function renderSpecCompare(){
   rows.forEach(r => Object.keys(r.features || {}).forEach(k=>{ if(k && !featureNames.includes(k)) featureNames.push(k); }));
   const head = [`<th class="sticky-col">모델/상품</th>`, ...featureNames.map(f=>`<th>${esc(f)}</th>`)].join("");
   const body = rows.map(r=>{
-    const title = `<b>${esc(r.itemNo || "")}</b><br/>${esc(r.modelName || "")}${r.productName ? `<br/><span style="color:#64748b;font-size:12px">${esc(r.productName)}</span>` : ""}`;
+    const title = `<b>${styledText(r.itemNo,"",styleOf(r,"itemNo"))}</b><br/>${styledText(r.modelName,"",styleOf(r,"modelName"))}${r.productName ? `<br/><span style="color:#64748b;font-size:12px">${styledText(r.productName,"",styleOf(r,"productName"))}</span>` : ""}`;
     const cells = featureNames.map(f=>{
       const val = safe((r.features || {})[f], "-");
-      return `<td class="${isPositiveSpecValue(val)?'compare-value-on':isNegativeSpecValue(val)?'compare-value-off':''}">${esc(val)}</td>`;
+      const st = (r.featureStyles || {})[f];
+      return `<td class="${isPositiveSpecValue(val)?'compare-value-on':isNegativeSpecValue(val)?'compare-value-off':''}">${styledText(val,"-",st)}</td>`;
     }).join("");
     return `<tr><td class="sticky-col">${title}</td>${cells}</tr>`;
   }).join("");
@@ -1867,6 +1873,32 @@ function uniqueSorted(arr){
 
 function normalize(v){ return normalizeItemNo(v); }
 function normalizeItemNo(v){ return String(v ?? "").replace(/[^0-9]/g,"").trim(); }
+
+function styleOf(obj, key){
+  return obj && obj.styles ? obj.styles[key] : null;
+}
+function mergeTextStyles(...styles){
+  const out = {};
+  styles.filter(Boolean).forEach(st=>{
+    if(!out.color && st.color) out.color = st.color;
+    if(!out.fontSize && st.fontSize) out.fontSize = st.fontSize;
+  });
+  return Object.keys(out).length ? out : null;
+}
+function styleAttr(style){
+  if(!style || typeof style !== "object") return "";
+  const rules = [];
+  const color = String(style.color || "").trim();
+  if(/^#[0-9a-fA-F]{3,8}$/.test(color) || /^[a-zA-Z]+$/.test(color)) rules.push(`color:${color} !important`);
+  const fs = Number(style.fontSize);
+  if(Number.isFinite(fs) && fs > 0) rules.push(`font-size:${fs}pt`);
+  return rules.length ? ` style="${esc(rules.join(";"))}"` : "";
+}
+function styledText(v, fallback="", style=null){
+  const text = safe(v, fallback);
+  return `<span${styleAttr(style)}>${esc(text)}</span>`;
+}
+
 function normalizeText(v){ return String(v ?? "").toLowerCase().replace(/\s+/g,"").trim(); }
 function safe(v,f="-"){ return v === undefined || v === null || String(v).trim() === "" ? f : String(v).trim(); }
 function esc(v){ return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;"); }
