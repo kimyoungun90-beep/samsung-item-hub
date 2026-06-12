@@ -1338,14 +1338,21 @@ function getFeatureReferenceText(item, index=0){
   return safe(notes[i] || notes[0] || "", "");
 }
 
+function getFeatureReferenceStyle(item, index=0){
+  const styles = Array.isArray(item?.featureReferenceNoteStyles) ? item.featureReferenceNoteStyles : [];
+  const i = Math.max(0, Number(index) || 0);
+  return styles[i] || styles[0] || styleOf(item, "referenceNote") || styleOf(item, "featureWrite") || styleOf(item, "feature") || null;
+}
+
 function renderFeatureReferenceCard(item, index=0, total=0){
   const i = Math.max(0, Number(index) || 0);
   const body = getFeatureReferenceText(item, i);
+  const bodyStyle = getFeatureReferenceStyle(item, i);
   const badge = total > 1 ? `${i+1}번 이미지` : "구글시트 수정";
   return `
     <div class="spec-write-card">
       <div class="spec-write-title">참조 내용 <span class="spec-write-badge">${esc(badge)}</span></div>
-      <div class="spec-write-body ${body ? "" : "spec-write-empty"}">${body ? esc(body) : "등록된 참조 내용이 없습니다."}</div>
+      <div class="spec-write-body ${body ? "" : "spec-write-empty"}">${body ? styledText(body, "", bodyStyle) : "등록된 참조 내용이 없습니다."}</div>
       <div class="spec-write-help">※ 구글시트 상품DB의 <b>참조내용1~참조내용10</b> 칸에 입력하면 기능 이미지 순서별로 내용이 바뀝니다.</div>
     </div>`;
 }
