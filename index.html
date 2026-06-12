@@ -85,6 +85,243 @@
     .spec-help-guide{display:none;align-items:center;justify-content:center;gap:7px;padding:10px 12px 0;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.55) 100%);font-size:12px;font-weight:900;color:#475569;word-break:keep-all}.spec-help-guide-text{line-height:1.25;text-align:center}.spec-help-btn{border:0;border-radius:999px;background:#dcfce7;color:#14532d;min-height:36px;min-width:56px;padding:0 14px;font-size:13px;font-weight:1000;white-space:nowrap;box-shadow:inset 0 0 0 1px #bbf7d0;display:inline-flex;align-items:center;justify-content:center;text-align:center}.spec-help-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.48);padding:16px}.spec-help-modal.show{display:flex}.spec-help-panel{width:100%;max-width:560px;max-height:82vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);border:1px solid #e2e8f0}.spec-help-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 16px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.spec-help-title{font-size:18px;font-weight:1000;color:#0f172a;letter-spacing:-.3px}.spec-help-close{border:0;border-radius:999px;background:#0f172a;color:#fff;width:42px;height:42px;font-size:22px;font-weight:1000}.spec-help-list{display:grid;gap:10px;padding:14px 16px 18px}.spec-help-item{border:1px solid #e2e8f0;border-radius:16px;padding:12px 13px;background:#f8fafc}.spec-help-term{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:5px}.spec-help-desc{font-size:13px;font-weight:800;color:#475569;line-height:1.55;word-break:keep-all}.spec-help-hint{padding:0 16px 16px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}@media (max-width:640px){.spec-help-guide{padding:9px 8px 0;gap:5px;font-size:11px}.spec-help-btn{min-height:34px;min-width:52px;padding:0 10px;font-size:12px}.spec-help-modal{padding:10px}.spec-help-panel{border-radius:22px;max-height:84vh}.spec-help-title{font-size:17px}.spec-help-close{width:40px;height:40px}}
 
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
+
+
+    /* ================================
+       v73 One UI Tizen Visual Skin
+       기능은 유지하고 화면 디자인만 밝은 카드형으로 정리
+       ================================ */
+    :root{
+      --bg:#f4f8ff;
+      --card:#ffffff;
+      --text:#07152d;
+      --muted:#6b7a90;
+      --line:#dfe8f4;
+      --primary:#0b63ce;
+      --primary2:#0a4fb0;
+      --accent:#1d75ff;
+      --accent2:#20c997;
+      --shadow:0 22px 54px rgba(15,45,90,.10);
+      --radius:28px;
+    }
+    body{
+      background:
+        radial-gradient(circle at 8% -4%,rgba(64,143,255,.20),transparent 34%),
+        radial-gradient(circle at 92% 2%,rgba(118,215,255,.18),transparent 33%),
+        linear-gradient(180deg,#f7fbff 0%,#edf5ff 100%);
+      color:var(--text);
+    }
+    .app{max-width:590px;padding:18px 16px 104px;}
+    .hero{
+      border-radius:34px;
+      padding:26px 22px 22px;
+      color:#07152d;
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.96),rgba(246,251,255,.90)),
+        radial-gradient(circle at 92% 0%,rgba(29,117,255,.18),transparent 32%);
+      border:1px solid rgba(219,232,248,.95);
+      box-shadow:0 28px 70px rgba(15,55,100,.12);
+    }
+    .hero:after{background:rgba(29,117,255,.10);right:-60px;top:-74px;width:210px;height:210px;}
+    .badge{
+      background:#eef6ff;
+      color:#0b63ce;
+      border:1px solid #d8eaff;
+      font-weight:1000;
+    }
+    .mini-logo{
+      background:#0b63ce;
+      color:#fff;
+      border:0;
+      box-shadow:0 12px 28px rgba(11,99,206,.25);
+    }
+    h1{font-size:31px;letter-spacing:-1.2px;color:#07152d;}
+    .hero p{color:#46566d;font-size:14px;font-weight:850;}
+    .sync-line{
+      background:#0d1b35;
+      color:#fff;
+      border-radius:22px;
+      padding:13px 13px 13px 15px;
+      box-shadow:0 18px 38px rgba(13,27,53,.18);
+    }
+    .sync-text{color:rgba(255,255,255,.78);font-size:12px;}
+    .refresh-btn{
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
+      min-height:40px;
+      padding:0 15px;
+    }
+    .nav{
+      top:10px;
+      gap:7px;
+      padding:8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+      border:1px solid rgba(216,232,252,.95);
+      box-shadow:0 18px 46px rgba(15,55,100,.12);
+    }
+    .nav button{
+      min-height:47px;
+      border-radius:999px;
+      color:#46566d;
+      font-size:13px;
+      letter-spacing:-.2px;
+    }
+    .nav button.active{
+      background:linear-gradient(180deg,#0f67d8,#084ea9);
+      color:#fff;
+      box-shadow:0 14px 28px rgba(11,99,206,.28);
+    }
+    .card{
+      background:rgba(255,255,255,.93);
+      border:1px solid rgba(219,232,248,.95);
+      border-radius:30px;
+      box-shadow:0 22px 54px rgba(15,55,100,.10);
+      margin-bottom:16px;
+    }
+    .card-inner{padding:20px;}
+    .section-title h2{font-size:21px;letter-spacing:-.7px;color:#07152d;}
+    .section-title small{font-size:13px;color:#6b7a90;font-weight:900;}
+    .pill{
+      background:#eef6ff;
+      color:#0b63ce;
+      border:1px solid #d8eaff;
+      font-size:12px;
+      padding:8px 12px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.65);
+    }
+    .pill.ok{background:#e9fff3;color:#087d46;border-color:#c9f4dd;}
+    .pill.warn{background:#fff6d8;color:#915b00;border-color:#ffe7a8;}
+    .search-box{gap:10px;}
+    .search-box input{
+      min-height:60px;
+      border-radius:24px;
+      border:1px solid #dbe7f5;
+      background:#fff;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+      font-size:22px;
+    }
+    .search-box input:focus{border-color:#1d75ff;box-shadow:0 0 0 5px rgba(29,117,255,.12);}
+    .search-btn,.submit-btn,.spec-open-btn{
+      background:linear-gradient(180deg,#0f67d8,#084ea9);
+      box-shadow:0 16px 32px rgba(11,99,206,.25);
+      border-radius:24px;
+    }
+    .item-category-chips{gap:9px;padding:13px 2px 3px;}
+    .item-cat-btn{
+      min-height:44px;
+      border-radius:999px;
+      border-color:#dbe7f5;
+      background:#fff;
+      color:#43536a;
+      box-shadow:0 10px 22px rgba(15,55,100,.06);
+      font-size:13px;
+    }
+    .item-cat-btn.active{
+      background:#0d1b35;
+      border-color:#0d1b35;
+      color:#fff;
+      box-shadow:0 14px 30px rgba(13,27,53,.20);
+    }
+    .item-filter-summary{font-size:13px;color:#6b7a90;font-weight:950;}
+    .quick-item{
+      border:1px solid #dbe7f5;
+      background:#fff;
+      border-radius:22px;
+      box-shadow:0 12px 30px rgba(15,55,100,.06);
+    }
+    .quick-item:active{transform:scale(.992);}
+    .quick-no{color:#07152d;font-size:18px;}
+    .quick-name{color:#33445c;}
+    .product-visual{background:linear-gradient(180deg,#f7fbff,#eef6ff);}
+    .photo-frame{
+      border-radius:28px;
+      border:1px solid #dbe7f5;
+      background:#fff;
+      box-shadow:0 20px 48px rgba(15,55,100,.10);
+      overflow:hidden;
+    }
+    .photo-label{
+      background:#0d1b35;
+      color:#fff;
+      border-radius:999px;
+      padding:10px 14px;
+    }
+    .photo-count,.detail-chip.active,.tabs button.active{
+      background:#0d1b35;
+      color:#fff;
+    }
+    .photo-arrow{
+      background:rgba(13,27,53,.86);
+      color:#fff;
+      border-radius:20px;
+      box-shadow:0 12px 28px rgba(13,27,53,.22);
+    }
+    .model{font-size:25px;color:#07152d;letter-spacing:-.8px;}
+    .prod-name{font-size:16px;color:#33445c;}
+    .meta span{
+      background:#f2f7ff;
+      color:#405168;
+      border:1px solid #e0ecfa;
+      border-radius:999px;
+    }
+    .tabs button,.detail-chip,.process-chip,.dept-chip,.compare-chip{
+      border-color:#dbe7f5;
+      background:#fff;
+      color:#405168;
+      border-radius:22px;
+      box-shadow:0 10px 24px rgba(15,55,100,.05);
+    }
+    .tabs button.active,.detail-chip.active,.process-chip.active,.dept-chip.active,.compare-chip.active{
+      background:linear-gradient(180deg,#0f67d8,#084ea9);
+      border-color:#0f67d8;
+      color:#fff;
+      box-shadow:0 14px 30px rgba(11,99,206,.22);
+    }
+    .detail-box,.spec-note-box,.privacy-box,.notice-modal-item,.event-box{
+      border-color:#dbe7f5;
+      background:linear-gradient(180deg,#ffffff,#fbfdff);
+      border-radius:22px;
+    }
+    .spec-category-card,.dept-card,.process-card{
+      border-color:#dbe7f5;
+      border-radius:24px;
+      background:#fff;
+      box-shadow:0 14px 34px rgba(15,55,100,.07);
+    }
+    .spec-category-icon{
+      background:linear-gradient(180deg,#0f67d8,#084ea9);
+      border-radius:18px;
+      box-shadow:0 12px 26px rgba(11,99,206,.22);
+    }
+    .spec-category-title{color:#07152d;}
+    .spec-category-arrow{background:#eef6ff;color:#0b63ce;}
+    .process-answer,.dept-detail,.cost-card,.kv-card{
+      background:#f7fbff;
+      border-color:#dbe7f5;
+      border-radius:22px;
+    }
+    .form-grid input,.form-grid textarea,.form-grid select{
+      border-color:#dbe7f5;
+      border-radius:22px;
+      background:#fff;
+    }
+    .form-grid input:focus,.form-grid textarea:focus,.form-grid select:focus{border-color:#1d75ff;box-shadow:0 0 0 5px rgba(29,117,255,.12);}
+    .spec-viewer{background:linear-gradient(180deg,#f7fbff,#edf5ff);}
+    .spec-viewer-head{background:rgba(255,255,255,.92);border-color:#dbe7f5;box-shadow:0 18px 38px rgba(15,55,100,.08);}
+    .spec-back{background:#0d1b35;border-radius:999px;}
+    .spec-card,.spec-write-card{border-color:#dbe7f5;border-radius:28px;box-shadow:0 22px 54px rgba(15,55,100,.10);}
+    .spec-count,.spec-card-page{background:#0d1b35;color:#fff;}
+    .spec-dots{box-shadow:0 12px 30px rgba(15,55,100,.13);}
+    .spec-dot.active{background:#0f67d8;}
+    .footer{color:#8da0b8;font-weight:900;}
+    @media(max-width:390px){
+      .app{padding-left:12px;padding-right:12px;}
+      h1{font-size:28px;}
+      .nav button{font-size:12px;min-height:44px;}
+      .card-inner{padding:17px;}
+    }
+
   </style>
 </head>
 <body>
