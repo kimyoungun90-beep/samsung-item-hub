@@ -114,8 +114,6 @@
           <input id="itemInput" name="q_item_plain" type="search" inputmode="text" placeholder="예: 689291 또는 RM70F91R1A" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
           <button id="itemSearchBtn" class="search-btn" type="button">조회</button>
         </div>
-        <p class="hint">※ 저장된 DB가 있으면 앱을 열자마자 먼저 표시하고, 최신 구글DB는 뒤에서 자동 갱신됩니다.</p>
-        <div class="item-filter-guide"><b>처음 사용하는 경우</b> 품목을 먼저 선택한 뒤 모델명이나 아이템번호를 검색하면 더 쉽게 찾을 수 있습니다.</div>
         <div id="itemCategoryChips" class="item-category-chips" aria-label="품목 필터"></div>
         <div id="itemFilterSummary" class="item-filter-summary"></div>
         <div id="quickList" class="quick-list"></div>
@@ -325,9 +323,9 @@ const SPEC_CATEGORY_IMAGES = [
 const ITEM_CATEGORY_FILTERS = [
   { key:"전체", label:"전체" },
   { key:"TV/모니터", label:"TV/모니터" },
+  { key:"에어컨", label:"에어컨" },
   { key:"냉장고", label:"냉장고" },
   { key:"세탁기/건조기", label:"세탁기/건조기" },
-  { key:"에어컨", label:"에어컨" },
   { key:"김치냉장고", label:"김치냉장고" },
   { key:"소형가전", label:"소형가전" }
 ];
@@ -437,8 +435,15 @@ function bindEvents(){
       const btn = e.target.closest(".item-cat-btn");
       if(!btn) return;
       selectedItemCategoryFilter = btn.dataset.key || "전체";
+      // 품목 버튼을 누를 때 기존에 입력된 아이템번호/모델명이 남아 있으면
+      // 다른 품목 조회가 0건으로 보일 수 있어 자동으로 검색어를 비웁니다.
+      if(els.itemInput) els.itemInput.value = "";
+      selectedItem = null;
+      selectedTab = "";
+      if(els.productCard) els.productCard.style.display = "none";
+      if(els.productEmpty) els.productEmpty.style.display = "none";
       renderItemCategoryChips();
-      renderQuickList(els.itemInput.value);
+      renderQuickList("");
       hideStatus();
     });
   }
