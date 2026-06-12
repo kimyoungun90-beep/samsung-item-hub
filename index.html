@@ -577,7 +577,7 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_cache_v77",
+  CACHE_KEY: "costco_item_operation_hub_cache_v79",
   LEGACY_CACHE_KEYS: Array.from({length: 14}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
@@ -585,7 +585,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v77"
+  SPEC_IMAGE_CACHE_BUST: "v79"
 };
 
 const DETAIL_TABS = [
@@ -645,7 +645,7 @@ const SPEC_TERM_GUIDES = {
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v77";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v79";
 let currentPage = "home";
 let appBackStack = [];
 let recentExpanded = false;
@@ -1064,8 +1064,8 @@ function renderRecentList(){
 function renderRecentItem(r){
   const isItem=String(r.type||"")==="item";
   const item = isItem ? findItemForRecent(r) : null;
-  const img = item ? getItemThumbnailUrl(item) : (r.thumbImage || "");
-  const thumb=isItem&&img?`<img src="${esc(img)}" alt="${esc(r.title||'최근 조회')}" onerror="this.remove();">`:recentIcon(r.type);
+  const thumbCandidates = item ? getItemThumbnailCandidates(item) : uniqueArray([r.thumbImage].filter(Boolean));
+  const thumb=isItem&&thumbCandidates.length?thumbImageHTML(thumbCandidates[0], r.title||'최근 조회', thumbCandidates[1]||""):recentIcon(r.type);
   return `<button class="home-recent-item" type="button" data-id="${esc(r.id)}"><div class="home-recent-thumb">${thumb}</div><div class="home-recent-content"><div class="home-recent-type">${esc(recentTypeLabel(r.type))}</div><div class="home-recent-title">${esc(r.title||"최근 조회")}</div><div class="home-recent-sub">${esc(r.subtitle||"")}</div></div><div class="home-recent-arrow">›</div></button>`;
 }
 function findItemForRecent(r){
@@ -1091,10 +1091,36 @@ function getCategoryIconSvg(label){
   return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="12" fill="none" stroke="#5b6778" stroke-width="4"/></svg>`);
 }
 function categoryIconImageHTML(label, cls="") { const src = getCategoryIconSvg(label); return `<img class="${esc(cls)}" src="${src}" alt="${esc(label||'품목')}" />`; }
-function getItemThumbnailUrl(item){
-  return convertDriveImageUrl(item?.thumbUrl || item?.representativeThumbUrl || item?.listImageUrl || item?.thumbnailUrl || item?.thumbnail || "");
+function getGithubItemThumbnailUrl(item){
+  const itemNo = normalizeItemNo(item?.itemNo);
+  if(!itemNo) return "";
+  return `${CONFIG.SPEC_IMAGE_RAW_BASE}thumb_${encodeURIComponent(itemNo)}.png?v=${encodeURIComponent(CONFIG.SPEC_IMAGE_CACHE_BUST || "1")}`;
 }
-function getRepresentativeImageUrl(item){ return getItemThumbnailUrl(item); }
+function getSheetThumbnailUrl(item){
+  // 수동 예비값이 있으면 GitHub 자동 썸네일 실패 시에만 사용합니다.
+  return convertDriveImageUrl(item?.manualThumbUrl || item?.representativeThumbUrl || item?.listImageUrl || item?.thumbnailUrl || item?.thumbnail || item?.thumbUrl || "");
+}
+function getItemThumbnailCandidates(item){
+  // 작은 이미지(홈 최근조회/아이템 리스트/상세 진입 전)는 구글시트 URL 입력 없이
+  // GitHub images 폴더의 thumb_아이템번호.png를 우선 사용합니다.
+  // item_아이템번호.png는 상세 대표이미지용으로 예약되어 있어 작은 이미지에서는 쓰지 않습니다.
+  return uniqueArray([getGithubItemThumbnailUrl(item), getSheetThumbnailUrl(item)].filter(Boolean));
+}
+function getItemThumbnailUrl(item){ return getItemThumbnailCandidates(item)[0] || ""; }
+function getRepresentativeImageUrl(item){ return convertDriveImageUrl(item?.imageUrl || ""); }
+function thumbImageHTML(src, alt="", fallback="", extra=""){
+  const fallbackAttr = fallback ? ` data-fallback="${esc(fallback)}"` : "";
+  return `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy"${fallbackAttr} ${extra} onerror="handleThumbImageError(this);">`;
+}
+function handleThumbImageError(img){
+  const fallback = img && img.dataset ? (img.dataset.fallback || "") : "";
+  if(fallback){
+    img.removeAttribute("data-fallback");
+    img.src = fallback;
+    return;
+  }
+  if(img) img.remove();
+}
 function categoryIconForLabel(label){ return String(label||""); }
 function categoryIconForItem(item){ return itemCategoryGroup(item); }
 
@@ -1253,11 +1279,12 @@ function renderQuickList(query=""){
     return;
   }
   els.quickList.innerHTML = rows.map(item=>{
-    const thumb = getRepresentativeImageUrl(item) || "";
+    const thumbCandidates = getItemThumbnailCandidates(item);
+    const thumb = thumbCandidates[0] || "";
     const tag = itemCategoryGroup(item);
     return `
     <button class="quick-item oneui-item-card" type="button" data-item="${esc(item.itemNo)}">
-      <div class="quick-thumb">${thumb ? `<img src="${esc(thumb)}" alt="${esc(safe(item.modelName,'제품 이미지'))}" loading="lazy" onerror="this.remove();">` : `${categoryIconImageHTML(categoryIconForItem(item), "thumb-icon-img")}`}</div>
+      <div class="quick-thumb">${thumb ? thumbImageHTML(thumb, safe(item.modelName,'제품 이미지'), thumbCandidates[1] || "") : `${categoryIconImageHTML(categoryIconForItem(item), "thumb-icon-img")}`}</div>
       <div class="quick-info">
         <div class="quick-no">${styledText(item.itemNo,"-",styleOf(item,"itemNo"))}</div>
         <div class="quick-model">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}</div>
