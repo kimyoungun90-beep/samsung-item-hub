@@ -98,9 +98,9 @@
   <nav class="nav">
     <button id="navItem" class="active" type="button">아이템</button>
     <button id="navSpecTable" type="button">스펙 비교</button>
-    <button id="navInquiry" type="button">문의</button>
-    <button id="navDept" type="button">업무지원</button>
     <button id="navProcess" type="button">프로세스</button>
+    <button id="navDept" type="button">업무지원</button>
+    <button id="navInquiry" type="button">문의</button>
   </nav>
 
   <div id="status" class="status"></div>
@@ -167,14 +167,15 @@
       <div class="card-inner">
         <div class="section-title">
           <div>
-            <h2>소통 창구</h2>
-            <small>코스트코 직원 또는 상담사가 모르는 내용을 문의할 수 있습니다.</small>
+            <h2>요청/문의 창구</h2>
+            <small>코스트코 직원 또는 상담사 요청 사항 및 문의 사항 있으실 경우 해당 창구를 통해 문의 할 수 있습니다.</small>
           </div>
           <span class="pill warn">관리자 확인</span>
         </div>
         <div class="privacy-box">
-          <b>해당 내용은 관리자만 확인이 가능하며 매장 방문 또는 연락처 기재 시 별도 연락 드리겠습니다.</b><br/>
-          입력하신 연락처는 문의 응대, 매장 방문 조율 및 별도 연락 목적에 한해 사용되며, 광고·홍보 목적의 연락에는 사용하지 않습니다.
+          VOC 및 빠른 조정이 필요한 경우 개인적 연락을 바라며, 해당 창구는 수시로 확인이 필요한 회원 또는 프로세스, 제품 등 문의가 있으신 경우 문의바랍니다.<br/>
+          점포 및 성함은 소통을 위해 작성 부탁드리며 연락처는 필수 기재는 아닙니다.<br/>
+          연락처는 별도 광고, 홍보 목적의 사용은 하지 않습니다.
         </div>
         <div class="form-grid" style="margin-top:12px">
           <div class="form-row-2">
@@ -298,7 +299,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v64"
+  SPEC_IMAGE_CACHE_BUST: "v66"
 };
 
 const DETAIL_TABS = [
@@ -350,7 +351,7 @@ let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], u
 let noticePopupOpened = false;
 let itemMap = new Map();
 let selectedItem = null;
-let selectedTab = "feature";
+let selectedTab = "";
 let selectedPhotoIndex = 0;
 let currentImageUrls = [];
 let modalImageUrls = [];
@@ -711,7 +712,7 @@ function searchItem(showError=true){
   }
   const item = matches[0];
   selectedItem = item;
-  selectedTab = "feature";
+  selectedTab = "";
   els.itemInput.value = item.itemNo || item.modelName || raw;
   renderProduct(item);
   renderQuickList(raw);
@@ -834,7 +835,7 @@ function updatePhotoControls(){
 }
 
 function renderProduct(item){
-  if(selectedTab === "wallModel" && !needsWallModel(item)) selectedTab = "spec";
+  if(selectedTab === "wallModel" && !needsWallModel(item)) selectedTab = "";
   els.productCard.style.display = "block";
   els.productEmpty.style.display = "none";
   els.modelName.innerHTML = styledText(item.modelName,"모델명 미등록", styleOf(item,"modelName"));
@@ -860,7 +861,7 @@ function getVisibleDetailTabs(){
 
 function renderDetailTabs(){
   const tabs = getVisibleDetailTabs();
-  if(!tabs.some(t=>t.key===selectedTab)) selectedTab = tabs[0]?.key || "spec";
+  if(selectedTab && !tabs.some(t=>t.key===selectedTab)) selectedTab = "";
   els.detailTabs.innerHTML = tabs.map(tab=>`<button class="tab-btn ${selectedTab===tab.key?"active":""}" type="button" data-key="${tab.key}">${tab.label}</button>`).join("");
   els.detailTabs.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
@@ -956,10 +957,21 @@ function renderEventScheduleBox(item, tabLabel){
 }
 
 function renderDetailBox(){
-  if(!selectedItem){ els.detailBox.innerHTML = ""; return; }
-  const tab = DETAIL_TABS.find(t=>t.key===selectedTab) || DETAIL_TABS[0];
-  if(selectedTab === "spec"){
-    selectedTab = "feature";
+  if(!selectedItem || !selectedTab){
+    els.detailBox.innerHTML = "";
+    els.detailBox.style.display = "none";
+    return;
+  }
+  els.detailBox.style.display = "block";
+  const tab = DETAIL_TABS.find(t=>t.key===selectedTab);
+  if(!tab){
+    selectedTab = "";
+    renderDetailTabs();
+    renderDetailBox();
+    return;
+  }
+  if(selectedTab === "spec" || selectedTab === "feature"){
+    selectedTab = "";
     renderDetailTabs();
     renderDetailBox();
     return;
@@ -1005,7 +1017,12 @@ function renderDetailBox(){
     `;
     return;
   }
-  const body = selectedItem[selectedTab] || "등록된 내용이 없습니다. 구글시트 해당 칸에 내용을 입력하면 반영됩니다.";
+  const body = selectedItem[selectedTab] || "";
+  if(!body){
+    els.detailBox.innerHTML = "";
+    els.detailBox.style.display = "none";
+    return;
+  }
   els.detailBox.innerHTML = `<div class="detail-title">${tab.label}</div><div class="detail-body">${styledText(body,"",styleOf(selectedItem,selectedTab))}</div>`;
 }
 
@@ -1353,7 +1370,6 @@ function renderFeatureReferenceCard(item, index=0, total=0){
     <div class="spec-write-card">
       <div class="spec-write-title">참조 내용 <span class="spec-write-badge">${esc(badge)}</span></div>
       <div class="spec-write-body ${body ? "" : "spec-write-empty"}">${body ? styledText(body, "", bodyStyle) : "등록된 참조 내용이 없습니다."}</div>
-      <div class="spec-write-help">※ 구글시트 상품DB의 <b>참조내용1~참조내용10</b> 칸에 입력하면 기능 이미지 순서별로 내용이 바뀝니다.</div>
     </div>`;
 }
 
