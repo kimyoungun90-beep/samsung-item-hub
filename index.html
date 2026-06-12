@@ -349,6 +349,34 @@ body.view-nonhome .app{padding-top:0;}
     body.view-nonhome .item-cat-btn .cat-icon img{width:26px;height:26px;object-fit:contain;display:block;}
     body.view-nonhome .item-cat-btn.active .cat-icon img{filter:brightness(0) invert(1);}
     .quick-thumb .thumb-icon-img,.home-recent-thumb .thumb-icon-img{width:34px !important;height:34px !important;object-fit:contain;display:block;}
+
+    /* v82: item paging + text detail page */
+    #itemPageRefreshBtn{visibility:hidden !important;pointer-events:none !important;}
+    .item-pagination{display:flex;align-items:center;justify-content:center;gap:9px;margin:14px 0 2px;flex-wrap:wrap;}
+    .item-page-btn{min-width:30px;height:30px;border:0;border-radius:999px;background:transparent;color:#334155;font-size:12px;font-weight:1000;display:inline-flex;align-items:center;justify-content:center;}
+    .item-page-btn.active{background:#0b63ce;color:#fff;box-shadow:0 8px 18px rgba(11,99,206,.22);}
+    .item-page-btn.next{font-size:18px;color:#07152d;}
+    .item-page-btn:disabled{opacity:.35;}
+    .photo-label,.photo-count{display:none !important;}
+    .photo-arrow{background:transparent !important;color:#111827 !important;box-shadow:none !important;border:0 !important;width:42px !important;height:58px !important;border-radius:0 !important;font-size:54px !important;line-height:1 !important;text-shadow:0 2px 10px rgba(255,255,255,.75);}
+    .photo-arrow.prev{left:3px !important;}.photo-arrow.next{right:3px !important;}
+    .item-detail-tabs-two{grid-template-columns:1fr 1fr !important;}
+
+    .item-detail-hero{background:rgba(255,255,255,.96);border:1px solid #dce7f4;border-radius:24px;padding:12px;box-shadow:0 14px 34px rgba(15,55,100,.08);display:grid;grid-template-columns:88px 1fr;gap:13px;align-items:center;margin-bottom:12px;}
+    .item-detail-thumb{width:88px;height:104px;border-radius:18px;background:#f4f8fd;border:1px solid #e5edf7;display:grid;place-items:center;overflow:hidden;}
+    .item-detail-thumb img{width:100%;height:100%;object-fit:contain;display:block;}
+    .item-detail-no{font-size:15px;font-weight:1000;color:#07152d;line-height:1.2;}
+    .item-detail-model{margin-top:3px;font-size:15px;font-weight:1000;color:#07152d;line-height:1.25;word-break:break-word;}
+    .item-detail-prod{margin-top:4px;font-size:13px;font-weight:850;color:#64748b;line-height:1.35;word-break:keep-all;}
+    .item-detail-cat{display:inline-flex;margin-top:8px;border-radius:999px;background:#eaf3ff;color:#0b63ce;padding:5px 9px;font-size:12px;font-weight:1000;}
+    .item-detail-tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0;}
+    .item-detail-tab{border:1px solid #dce7f4;background:#fff;color:#334155;min-height:48px;border-radius:18px;font-size:14px;font-weight:1000;box-shadow:0 8px 20px rgba(15,55,100,.04);}
+    .item-detail-tab.active{background:#0d1b35;color:#fff;border-color:#0d1b35;}
+    .item-detail-content{background:#fff;border:1px solid #dce7f4;border-radius:22px;padding:16px;box-shadow:0 12px 28px rgba(15,55,100,.06);}
+    .item-detail-content-title{font-size:17px;font-weight:1000;color:#07152d;margin-bottom:10px;}
+    .item-detail-content-body{white-space:pre-line;font-size:14px;font-weight:850;line-height:1.65;color:#334155;word-break:keep-all;}
+    .item-detail-empty{color:#94a3b8;font-weight:900;}
+    @media(max-width:430px){.item-detail-hero{grid-template-columns:76px 1fr;gap:11px}.item-detail-thumb{width:76px;height:92px}.item-detail-tabs{gap:7px}.item-detail-tab{min-height:44px;font-size:13px;border-radius:16px}.photo-arrow{font-size:48px !important;width:36px !important;}}
   </style>
 
 </head>
@@ -397,6 +425,7 @@ body.view-nonhome .app{padding-top:0;}
         <div id="itemCategoryChips" class="item-category-chips" aria-label="품목 필터"></div>
         <div id="itemFilterSummary" class="item-filter-summary"></div>
         <div id="quickList" class="quick-list"></div>
+        <div id="itemPagination" class="item-pagination" aria-label="아이템 목록 페이지"></div>
       </div>
     </article>
 
@@ -427,6 +456,11 @@ body.view-nonhome .app{padding-top:0;}
 
 
 
+  <section id="pageItemDetail" class="page">
+    <article class="card" style="background:transparent;border:0;box-shadow:none;overflow:visible">
+      <div id="itemDetailContent" class="card-inner" style="padding:0"></div>
+    </article>
+  </section>
 
   <section id="pageSpecTable" class="page">
     <article class="card">
@@ -577,7 +611,7 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_cache_v81",
+  CACHE_KEY: "costco_item_operation_hub_cache_v83",
   LEGACY_CACHE_KEYS: Array.from({length: 14}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
@@ -585,7 +619,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v81"
+  SPEC_IMAGE_CACHE_BUST: "v83"
 };
 
 const DETAIL_TABS = [
@@ -645,7 +679,7 @@ const SPEC_TERM_GUIDES = {
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v81";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v83";
 let currentPage = "home";
 let appBackStack = [];
 let recentExpanded = false;
@@ -654,6 +688,9 @@ let itemMap = new Map();
 let selectedItemCategoryFilter = "전체";
 let selectedItem = null;
 let selectedTab = "";
+let quickListCurrentPage = 1;
+const QUICK_LIST_PAGE_SIZE = 5;
+let itemDetailTab = "spec";
 let selectedPhotoIndex = 0;
 let currentImageUrls = [];
 let modalImageUrls = [];
@@ -678,10 +715,10 @@ const $ = (id)=>document.getElementById(id);
 const els = {
   status:$("status"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageHome:$("pageHome"), pageItem:$("pageItem"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
-  itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"),
+  pageHome:$("pageHome"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
+  itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
-  modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"),
+  modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
   deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"),
   processSearch:$("processSearch"), processChips:$("processChips"), processList:$("processList"), processCountPill:$("processCountPill"),
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
@@ -720,10 +757,11 @@ function bindEvents(){
   if(els.homeRecentToggle) els.homeRecentToggle.addEventListener("click",toggleRecentList);
   document.querySelectorAll(".home-quick").forEach(btn=>btn.addEventListener("click",()=>{
     const page = btn.dataset.page;
-    if(page) showPage(page);
+    if(page === "item") openItemLookupReset();
+    else if(page) showPage(page);
     if(btn.dataset.action === "notice"){ markUpdatesSeen(); renderNotice(true); openNoticeModal(); }
   }));
-  els.navItem.addEventListener("click",()=>showPage("item"));
+  els.navItem.addEventListener("click",openItemLookupReset);
   els.navSpecTable.addEventListener("click",()=>showPage("specTable"));
   els.navInquiry.addEventListener("click",()=>showPage("inquiry"));
   els.navDept.addEventListener("click",()=>showPage("dept"));
@@ -733,7 +771,7 @@ function bindEvents(){
     const value = els.itemInput.value.trim();
     const digits = normalizeItemNo(value);
     if(/^\d{6}$/.test(digits) && /^\d+$/.test(value.replace(/\s+/g,""))) searchItem(false);
-    else renderQuickList(value);
+    else { quickListCurrentPage = 1; renderQuickList(value); }
   });
   els.itemInput.addEventListener("keydown",(e)=>{ if(e.key === "Enter") searchItem(); });
   if(els.itemCategoryChips){
@@ -746,6 +784,7 @@ function bindEvents(){
       if(els.itemInput) els.itemInput.value = "";
       selectedItem = null;
       selectedTab = "";
+      quickListCurrentPage = 1;
       if(els.productCard) els.productCard.style.display = "none";
       if(els.productEmpty) els.productEmpty.style.display = "none";
       renderItemCategoryChips();
@@ -871,7 +910,7 @@ function bindEvents(){
 }
 
 function showPage(page, push=true){
-  const map = { home:els.pageHome, item:els.pageItem, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
+  const map = { home:els.pageHome, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
   const target = map[page] ? page : "home";
   if(push && currentPage && currentPage !== target){
     appBackStack.push(currentPage);
@@ -899,6 +938,24 @@ function handleAppBack(){
   if(els.specViewer && els.specViewer.classList.contains("show")){ closeSpecViewer(); return; }
   const prev = appBackStack.length ? appBackStack.pop() : "home";
   showPage(prev || "home", false);
+}
+
+function resetItemLookup(){
+  if(els.itemInput) els.itemInput.value = "";
+  selectedItem = null;
+  selectedTab = "";
+  quickListCurrentPage = 1;
+  if(els.productCard) els.productCard.style.display = "none";
+  if(els.productEmpty) els.productEmpty.style.display = "none";
+  if(els.itemDetailContent) els.itemDetailContent.innerHTML = "";
+  renderItemCategoryChips();
+  renderQuickList("");
+  hideStatus();
+}
+
+function openItemLookupReset(){
+  showPage("item");
+  resetItemLookup();
 }
 
 function goHomeNow(){
@@ -1088,7 +1145,7 @@ function findItemForRecent(r){
 function recentIcon(type){ if(type==="spec") return `<span class="home-quick-icon">⚖</span>`; if(type==="process") return `<span class="home-quick-icon">☷</span>`; if(type==="notice") return `<span class="home-quick-icon">☊</span>`; return `<span class="home-quick-icon">⌕</span>`; }
 function recentTypeLabel(type){ if(type==="spec") return "스펙 비교"; if(type==="process") return "프로세스"; return "아이템"; }
 function openRecentView(id){ const recent=getRecentViews().find(r=>r.id===id); if(!recent) return; if(recent.type==="item"){ showPage("item"); if(els.itemInput) els.itemInput.value=recent.itemNo||recent.title||""; searchItem(false); return;} if(recent.type==="spec"){ showPage("specTable"); return;} if(recent.type==="process"){ showPage("process"); return;} }
-function runHomeSearch(){ const q=String(els.homeSearchInput?.value||"").trim(); showPage("item"); if(els.itemInput) els.itemInput.value=q; if(q) searchItem(false); else renderQuickList(""); }
+function runHomeSearch(){ const q=String(els.homeSearchInput?.value||"").trim(); showPage("item"); if(els.itemInput) els.itemInput.value=q; quickListCurrentPage = 1; if(q) searchItem(false); else renderQuickList(""); }
 function svgData(str){ return `data:image/svg+xml;utf8,${encodeURIComponent(str)}`; }
 function getCategoryIconSvg(label){
   const v=String(label||"");
@@ -1165,6 +1222,7 @@ function searchItem(showError=true){
     return;
   }
 
+  quickListCurrentPage = 1;
   const matches = findItemsByQuery(raw);
   if(!matches.length){
     selectedItem = null;
@@ -1279,16 +1337,21 @@ function renderQuickList(query=""){
     rows = rows.filter(item => normalizeText([item.itemNo,item.modelName,item.productName,item.category,item.brand,item.keywords].join(" ")).includes(q));
   }
   updateItemCountPill(rows);
+  const totalPages = Math.max(1, Math.ceil(rows.length / QUICK_LIST_PAGE_SIZE));
+  quickListCurrentPage = Math.max(1, Math.min(quickListCurrentPage || 1, totalPages));
   if(els.itemFilterSummary){
-    const filterLabel = selectedItemCategoryFilter === "전체" ? "전체 품목" : selectedItemCategoryFilter;
-    els.itemFilterSummary.textContent = `${filterLabel} 기준으로 ${rows.length}개 아이템이 표시됩니다.`;
+    const filterLabel = selectedItemCategoryFilter === "전체" ? "전체" : selectedItemCategoryFilter;
+    els.itemFilterSummary.textContent = `${filterLabel} ${rows.length}건`;
   }
   if(!rows.length){
     const msg = selectedItemCategoryFilter === "전체" ? "표시할 아이템이 없습니다." : `${selectedItemCategoryFilter} 품목에 표시할 아이템이 없습니다.`;
     els.quickList.innerHTML = `<div class="empty" style="padding:14px">${esc(msg)}<br/>검색어를 지우거나 품목을 전체로 변경해 주세요.</div>`;
+    if(els.itemPagination) els.itemPagination.innerHTML = "";
     return;
   }
-  els.quickList.innerHTML = rows.map(item=>{
+  const startIndex = (quickListCurrentPage - 1) * QUICK_LIST_PAGE_SIZE;
+  const pageRows = rows.slice(startIndex, startIndex + QUICK_LIST_PAGE_SIZE);
+  els.quickList.innerHTML = pageRows.map(item=>{
     const thumbCandidates = getItemThumbnailCandidates(item);
     const thumb = thumbCandidates[0] || "";
     const tag = itemCategoryGroup(item);
@@ -1307,7 +1370,29 @@ function renderQuickList(query=""){
   els.quickList.querySelectorAll(".quick-item").forEach(btn=>{
     btn.addEventListener("click",()=>{ els.itemInput.value = btn.dataset.item; searchItem(); });
   });
+  renderItemPagination(totalPages);
 }
+
+function renderItemPagination(totalPages){
+  if(!els.itemPagination) return;
+  if(totalPages <= 1){ els.itemPagination.innerHTML = ""; return; }
+  const buttons = [];
+  for(let i=1;i<=totalPages;i++){
+    buttons.push(`<button class="item-page-btn ${i===quickListCurrentPage?"active":""}" type="button" data-page="${i}" aria-label="${i}페이지">${i}</button>`);
+  }
+  buttons.push(`<button class="item-page-btn next" type="button" data-page="${Math.min(totalPages, quickListCurrentPage+1)}" ${quickListCurrentPage>=totalPages?"disabled":""} aria-label="다음 페이지">›</button>`);
+  els.itemPagination.innerHTML = buttons.join("");
+  els.itemPagination.querySelectorAll(".item-page-btn[data-page]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if(btn.disabled) return;
+      quickListCurrentPage = Number(btn.dataset.page) || 1;
+      renderQuickList(els.itemInput ? els.itemInput.value : "");
+      const top = els.quickList ? els.quickList.getBoundingClientRect().top + window.scrollY - 12 : 0;
+      window.scrollTo({top:Math.max(0,top),behavior:"smooth"});
+    });
+  });
+}
+
 
 function getProductImageUrls(item){
   const raw = [];
@@ -1414,7 +1499,7 @@ function renderDetailTabs(){
   els.detailTabs.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
       if(btn.dataset.key === "spec"){
-        openSpecViewer(selectedItem);
+        openItemDetailPage(selectedItem);
         return;
       }
       if(btn.dataset.key === "feature"){
@@ -1424,6 +1509,58 @@ function renderDetailTabs(){
       selectedTab = btn.dataset.key;
       renderDetailTabs();
       renderDetailBox();
+    });
+  });
+}
+
+
+const ITEM_DETAIL_TABS = [
+  { key:"spec", label:"스펙", field:"spec" },
+  { key:"feature", label:"주요기능", field:"feature" }
+];
+
+function openItemDetailPage(item){
+  if(!item) return;
+  selectedItem = item;
+  itemDetailTab = "spec";
+  renderItemTextDetail();
+  showPage("itemDetail");
+}
+
+function renderItemTextDetail(){
+  if(!els.itemDetailContent || !selectedItem) return;
+  const item = selectedItem;
+  const thumbCandidates = getItemThumbnailCandidates(item);
+  const thumb = thumbCandidates[0] || getItemThumbnailUrl(item) || "";
+  const active = ITEM_DETAIL_TABS.find(t=>t.key===itemDetailTab) || ITEM_DETAIL_TABS[0];
+  const body = safe(item[active.field], "");
+  els.itemDetailContent.innerHTML = `
+    <div class="item-detail-hero">
+      <div class="item-detail-thumb">${thumb ? thumbImageHTML(thumb, safe(item.modelName,'제품 이미지'), thumbCandidates[1] || "") : categoryIconImageHTML(categoryIconForItem(item), "thumb-icon-img")}</div>
+      <div class="item-detail-info">
+        <div class="item-detail-no">${styledText(item.itemNo,"-",styleOf(item,"itemNo"))}</div>
+        <div class="item-detail-model">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}</div>
+        <div class="item-detail-prod">${styledText(item.productName,"상품명 미등록",styleOf(item,"productName"))}</div>
+        <span class="item-detail-cat">${styledText(item.category,"품목 미등록",styleOf(item,"category"))}</span>
+      </div>
+    </div>
+    <div class="item-detail-tabs item-detail-tabs-two">
+      ${ITEM_DETAIL_TABS.map(t=>`<button class="item-detail-tab ${t.key===active.key?"active":""}" type="button" data-key="${esc(t.key)}">${esc(t.label)}</button>`).join("")}
+    </div>
+    <div class="item-detail-content">
+      <div class="item-detail-content-title">${esc(active.label)}</div>
+      <div class="item-detail-content-body ${body?"":"item-detail-empty"}">${body ? styledText(body,"",styleOf(item,active.field)) : "구글시트 상품DB의 스펙 칸에 내용을 입력하세요."}</div>
+    </div>
+  `;
+  els.itemDetailContent.querySelectorAll(".item-detail-tab").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const key = btn.dataset.key || "spec";
+      if(key === "feature"){
+        openFeatureViewer(selectedItem);
+        return;
+      }
+      itemDetailTab = key;
+      renderItemTextDetail();
     });
   });
 }
