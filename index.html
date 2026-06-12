@@ -337,7 +337,7 @@ body.view-nonhome .app{padding-top:0;}
 
   </style>
 
-  <style id="v76-overrides">
+  <style id="v77-overrides">
     .hero{display:none !important;}
     #mainNav{display:none !important;}
     body.view-home .global-action{display:none !important;}
@@ -577,7 +577,7 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_cache_v76",
+  CACHE_KEY: "costco_item_operation_hub_cache_v77",
   LEGACY_CACHE_KEYS: Array.from({length: 14}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
@@ -585,7 +585,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v76"
+  SPEC_IMAGE_CACHE_BUST: "v77"
 };
 
 const DETAIL_TABS = [
@@ -645,7 +645,7 @@ const SPEC_TERM_GUIDES = {
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v76";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v77";
 let currentPage = "home";
 let appBackStack = [];
 let recentExpanded = false;
@@ -1063,8 +1063,17 @@ function renderRecentList(){
 }
 function renderRecentItem(r){
   const isItem=String(r.type||"")==="item";
-  const thumb=isItem&&r.image?`<img src="${esc(r.image)}" alt="${esc(r.title||'최근 조회')}" onerror="this.remove();">`:recentIcon(r.type);
+  const item = isItem ? findItemForRecent(r) : null;
+  const img = item ? getItemThumbnailUrl(item) : (r.thumbImage || "");
+  const thumb=isItem&&img?`<img src="${esc(img)}" alt="${esc(r.title||'최근 조회')}" onerror="this.remove();">`:recentIcon(r.type);
   return `<button class="home-recent-item" type="button" data-id="${esc(r.id)}"><div class="home-recent-thumb">${thumb}</div><div class="home-recent-content"><div class="home-recent-type">${esc(recentTypeLabel(r.type))}</div><div class="home-recent-title">${esc(r.title||"최근 조회")}</div><div class="home-recent-sub">${esc(r.subtitle||"")}</div></div><div class="home-recent-arrow">›</div></button>`;
+}
+function findItemForRecent(r){
+  if(!r) return null;
+  const itemNo = normalizeItemNo(r.itemNo || String(r.id||"").replace(/^item:/,""));
+  if(itemNo && itemMap.has(itemNo)) return itemMap.get(itemNo);
+  const title = normalizeText(r.title || "");
+  return (DB.items || []).find(item => normalizeText(item.modelName) === title || normalizeText(item.itemNo) === title) || null;
 }
 function recentIcon(type){ if(type==="spec") return `<span class="home-quick-icon">⚖</span>`; if(type==="process") return `<span class="home-quick-icon">☷</span>`; if(type==="notice") return `<span class="home-quick-icon">☊</span>`; return `<span class="home-quick-icon">⌕</span>`; }
 function recentTypeLabel(type){ if(type==="spec") return "스펙 비교"; if(type==="process") return "프로세스"; return "아이템"; }
@@ -1082,7 +1091,10 @@ function getCategoryIconSvg(label){
   return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="12" fill="none" stroke="#5b6778" stroke-width="4"/></svg>`);
 }
 function categoryIconImageHTML(label, cls="") { const src = getCategoryIconSvg(label); return `<img class="${esc(cls)}" src="${src}" alt="${esc(label||'품목')}" />`; }
-function getRepresentativeImageUrl(item){ return convertDriveImageUrl(item?.thumbUrl || item?.listImageUrl || item?.representativeThumbUrl || item?.imageUrl || (getProductImageUrls(item)[0] || "")); }
+function getItemThumbnailUrl(item){
+  return convertDriveImageUrl(item?.thumbUrl || item?.representativeThumbUrl || item?.listImageUrl || item?.thumbnailUrl || item?.thumbnail || "");
+}
+function getRepresentativeImageUrl(item){ return getItemThumbnailUrl(item); }
 function categoryIconForLabel(label){ return String(label||""); }
 function categoryIconForItem(item){ return itemCategoryGroup(item); }
 
@@ -1141,7 +1153,7 @@ function searchItem(showError=true){
   selectedTab = "";
   els.itemInput.value = item.itemNo || item.modelName || raw;
   renderProduct(item);
-  addRecentView({ type:"item", id:`item:${item.itemNo || item.modelName}`, itemNo:item.itemNo, title:safe(item.itemNo || item.modelName,"아이템"), subtitle:[item.modelName,item.productName].filter(Boolean).join(" · "), image:(getRepresentativeImageUrl(item) || "") });
+  addRecentView({ type:"item", id:`item:${item.itemNo || item.modelName}`, itemNo:item.itemNo, title:safe(item.itemNo || item.modelName,"아이템"), subtitle:[item.modelName,item.productName].filter(Boolean).join(" · "), thumbImage:(getItemThumbnailUrl(item) || "") });
   renderQuickList(raw);
   hideStatus();
 }
