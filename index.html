@@ -336,6 +336,21 @@ body.view-nonhome .app{padding-top:0;}
 @media(max-width:430px){.global-back-top,.global-refresh-top{width:46px;height:46px}.global-back-bottom,.global-home-bottom{bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}body.view-nonhome .app{padding-left:10px;padding-right:10px;padding-bottom:92px}.quick-item.oneui-item-card{grid-template-columns:66px 1fr 16px;gap:10px}.quick-thumb{width:66px;height:74px}.quick-info .quick-model{font-size:13px}.quick-info .quick-prod{font-size:11px}}
 
   </style>
+
+  <style id="v76-overrides">
+    .hero{display:none !important;}
+    #mainNav{display:none !important;}
+    body.view-home .global-action{display:none !important;}
+    .global-back-top,.global-refresh-top{background:#fff !important;color:#0b63ce !important;border:1px solid #dbeafe !important;box-shadow:0 14px 28px rgba(15,55,100,.12) !important;}
+    .global-back-top{font-size:24px !important;}
+    .global-back-bottom{background:#fff !important;color:#0b63ce !important;border:1px solid #dbeafe !important;border-radius:999px !important;box-shadow:0 14px 28px rgba(15,55,100,.12) !important;}
+    .global-home-bottom{box-shadow:0 16px 34px rgba(13,27,53,.20) !important;}
+    body.view-nonhome .item-cat-btn .cat-icon{overflow:hidden;}
+    body.view-nonhome .item-cat-btn .cat-icon img{width:26px;height:26px;object-fit:contain;display:block;}
+    body.view-nonhome .item-cat-btn.active .cat-icon img{filter:brightness(0) invert(1);}
+    .quick-thumb .thumb-icon-img,.home-recent-thumb .thumb-icon-img{width:34px !important;height:34px !important;object-fit:contain;display:block;}
+  </style>
+
 </head>
 <body>
 <main class="app">
@@ -562,7 +577,7 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_cache_v1",
+  CACHE_KEY: "costco_item_operation_hub_cache_v76",
   LEGACY_CACHE_KEYS: Array.from({length: 14}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
@@ -570,7 +585,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v72"
+  SPEC_IMAGE_CACHE_BUST: "v76"
 };
 
 const DETAIL_TABS = [
@@ -629,8 +644,8 @@ const SPEC_TERM_GUIDES = {
 };
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
-const HOME_RECENT_KEY = "costco_item_hub_recent_v75";
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v75";
+const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v76";
 let currentPage = "home";
 let appBackStack = [];
 let recentExpanded = false;
@@ -823,8 +838,7 @@ function bindEvents(){
       if(e.key === "ArrowRight") moveSpecViewer(1);
     }
   });
-  window.addEventListener("popstate",()=>{
-    // 휴대폰 뒤로가기 버튼 대응: 앱 종료 대신 현재 열린 화면부터 닫기
+  window.addEventListener("popstate",(e)=>{
     if(els.imageModal.classList.contains("show")){
       modalHistoryPushed = false;
       closeImageModal(true);
@@ -834,6 +848,15 @@ function bindEvents(){
       specHistoryPushed = false;
       closeSpecViewer(true);
       return;
+    }
+    const statePage = e.state && e.state.hubPage;
+    if(statePage){
+      showPage(statePage, false);
+      return;
+    }
+    if(currentPage !== "home" || appBackStack.length){
+      const prev = appBackStack.length ? appBackStack.pop() : "home";
+      showPage(prev || "home", false);
     }
   });
   try{
@@ -1008,8 +1031,8 @@ function rebuildIndex(){
 function renderHomeDashboard(){
   if(!els.pageHome) return;
   const hs = DB.homeSettings || {};
-  if(els.homeGreeting) els.homeGreeting.textContent = hs.mainGreeting || hs.메인인사 || hs.greeting || "안녕하세요 👋";
-  if(els.homeSub) els.homeSub.textContent = hs.subGreeting || hs.서브문구 || hs.subtitle || "오늘도 빠르고 정확하게 업무를 지원합니다.";
+  if(els.homeGreeting) els.homeGreeting.textContent = hs.mainGreeting || hs.메인인사 || hs.homeGreeting || hs.greeting || "안녕하세요 👋";
+  if(els.homeSub) els.homeSub.textContent = hs.subGreeting || hs.서브문구 || hs.homeSub || hs.subtitle || "오늘도 빠르고 정확하게 업무를 지원합니다.";
   renderHomeUpdateDot();
   renderRecentList();
 }
@@ -1040,15 +1063,28 @@ function renderRecentList(){
 }
 function renderRecentItem(r){
   const isItem=String(r.type||"")==="item";
-  const thumb=isItem&&r.image?`<img src="${esc(r.image)}" alt="${esc(r.title||'최근 조회')}" onerror="this.remove();">`:`<span>${esc(recentIcon(r.type))}</span>`;
+  const thumb=isItem&&r.image?`<img src="${esc(r.image)}" alt="${esc(r.title||'최근 조회')}" onerror="this.remove();">`:recentIcon(r.type);
   return `<button class="home-recent-item" type="button" data-id="${esc(r.id)}"><div class="home-recent-thumb">${thumb}</div><div class="home-recent-content"><div class="home-recent-type">${esc(recentTypeLabel(r.type))}</div><div class="home-recent-title">${esc(r.title||"최근 조회")}</div><div class="home-recent-sub">${esc(r.subtitle||"")}</div></div><div class="home-recent-arrow">›</div></button>`;
 }
-function recentIcon(type){ if(type==="spec") return "▦"; if(type==="process") return "☷"; return "⌕"; }
+function recentIcon(type){ if(type==="spec") return `<span class="home-quick-icon">⚖</span>`; if(type==="process") return `<span class="home-quick-icon">☷</span>`; if(type==="notice") return `<span class="home-quick-icon">☊</span>`; return `<span class="home-quick-icon">⌕</span>`; }
 function recentTypeLabel(type){ if(type==="spec") return "스펙 비교"; if(type==="process") return "프로세스"; return "아이템"; }
 function openRecentView(id){ const recent=getRecentViews().find(r=>r.id===id); if(!recent) return; if(recent.type==="item"){ showPage("item"); if(els.itemInput) els.itemInput.value=recent.itemNo||recent.title||""; searchItem(false); return;} if(recent.type==="spec"){ showPage("specTable"); return;} if(recent.type==="process"){ showPage("process"); return;} }
 function runHomeSearch(){ const q=String(els.homeSearchInput?.value||"").trim(); showPage("item"); if(els.itemInput) els.itemInput.value=q; if(q) searchItem(false); else renderQuickList(""); }
-function categoryIconForLabel(label){ const v=String(label||""); if(v.includes("TV")) return "▭"; if(v.includes("에어컨")) return "▯"; if(v.includes("냉장고")) return "▥"; if(v.includes("세탁")) return "◉"; if(v.includes("김치")) return "▤"; if(v.includes("소형")) return "♙"; return "전체"; }
-function categoryIconForItem(item){ return categoryIconForLabel(itemCategoryGroup(item)); }
+function svgData(str){ return `data:image/svg+xml;utf8,${encodeURIComponent(str)}`; }
+function getCategoryIconSvg(label){
+  const v=String(label||"");
+  if(v.includes("TV")) return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="8" y="14" width="48" height="30" rx="2" fill="none" stroke="#5b6778" stroke-width="4"/><path d="M24 52h16" stroke="#5b6778" stroke-width="4" stroke-linecap="round"/><path d="M32 44v8" stroke="#5b6778" stroke-width="4" stroke-linecap="round"/></svg>`);
+  if(v.includes("에어컨")) return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="26" y="8" width="12" height="48" rx="2" fill="none" stroke="#5b6778" stroke-width="4"/></svg>`);
+  if(v.includes("김치")) return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="18" y="8" width="28" height="48" rx="2" fill="none" stroke="#5b6778" stroke-width="4"/><path d="M18 32h28" stroke="#5b6778" stroke-width="4"/></svg>`);
+  if(v.includes("냉장고")) return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="18" y="8" width="28" height="48" rx="2" fill="none" stroke="#5b6778" stroke-width="4"/><path d="M18 28h28" stroke="#5b6778" stroke-width="4"/></svg>`);
+  if(v.includes("세탁")) return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="14" y="8" width="36" height="48" rx="2" fill="none" stroke="#5b6778" stroke-width="4"/><circle cx="32" cy="34" r="12" fill="none" stroke="#5b6778" stroke-width="4"/><circle cx="22" cy="18" r="2.5" fill="#5b6778"/><circle cx="30" cy="18" r="2.5" fill="#5b6778"/></svg>`);
+  if(v.includes("소형")) return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M20 22h24l-4 30H24l-4-30Z" fill="none" stroke="#5b6778" stroke-width="4"/><path d="M26 22v-4a6 6 0 0 1 12 0v4" fill="none" stroke="#5b6778" stroke-width="4" stroke-linecap="round"/></svg>`);
+  return svgData(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="10" y="10" width="44" height="44" rx="12" fill="none" stroke="#5b6778" stroke-width="4"/></svg>`);
+}
+function categoryIconImageHTML(label, cls="") { const src = getCategoryIconSvg(label); return `<img class="${esc(cls)}" src="${src}" alt="${esc(label||'품목')}" />`; }
+function getRepresentativeImageUrl(item){ return convertDriveImageUrl(item?.thumbUrl || item?.listImageUrl || item?.representativeThumbUrl || item?.imageUrl || (getProductImageUrls(item)[0] || "")); }
+function categoryIconForLabel(label){ return String(label||""); }
+function categoryIconForItem(item){ return itemCategoryGroup(item); }
 
 function renderAll(){
   renderHomeDashboard();
@@ -1105,7 +1141,7 @@ function searchItem(showError=true){
   selectedTab = "";
   els.itemInput.value = item.itemNo || item.modelName || raw;
   renderProduct(item);
-  addRecentView({ type:"item", id:`item:${item.itemNo || item.modelName}`, itemNo:item.itemNo, title:safe(item.itemNo || item.modelName,"아이템"), subtitle:[item.modelName,item.productName].filter(Boolean).join(" · "), image:(getProductImageUrls(item)[0] || "") });
+  addRecentView({ type:"item", id:`item:${item.itemNo || item.modelName}`, itemNo:item.itemNo, title:safe(item.itemNo || item.modelName,"아이템"), subtitle:[item.modelName,item.productName].filter(Boolean).join(" · "), image:(getRepresentativeImageUrl(item) || "") });
   renderQuickList(raw);
   hideStatus();
 }
@@ -1150,7 +1186,7 @@ function renderItemCategoryChips(){
   });
   els.itemCategoryChips.innerHTML = ITEM_CATEGORY_FILTERS.map(cat => `
     <button class="item-cat-btn ${selectedItemCategoryFilter===cat.key?"active":""}" type="button" data-key="${esc(cat.key)}">
-      <span class="cat-icon">${esc(categoryIconForLabel(cat.label))}</span><span>${esc(cat.label)}</span><span class="cat-count">${counts[cat.key] || 0}</span>
+      <span class="cat-icon">${categoryIconImageHTML(cat.label)}</span><span>${esc(cat.label)}</span><span class="cat-count">${counts[cat.key] || 0}</span>
     </button>`).join("");
   updateItemCountPill();
 }
@@ -1205,11 +1241,11 @@ function renderQuickList(query=""){
     return;
   }
   els.quickList.innerHTML = rows.map(item=>{
-    const thumb = getProductImageUrls(item)[0] || "";
+    const thumb = getRepresentativeImageUrl(item) || "";
     const tag = itemCategoryGroup(item);
     return `
     <button class="quick-item oneui-item-card" type="button" data-item="${esc(item.itemNo)}">
-      <div class="quick-thumb">${thumb ? `<img src="${esc(thumb)}" alt="${esc(safe(item.modelName,'제품 이미지'))}" loading="lazy" onerror="this.remove();">` : `<span>${esc(categoryIconForItem(item))}</span>`}</div>
+      <div class="quick-thumb">${thumb ? `<img src="${esc(thumb)}" alt="${esc(safe(item.modelName,'제품 이미지'))}" loading="lazy" onerror="this.remove();">` : `${categoryIconImageHTML(categoryIconForItem(item), "thumb-icon-img")}`}</div>
       <div class="quick-info">
         <div class="quick-no">${styledText(item.itemNo,"-",styleOf(item,"itemNo"))}</div>
         <div class="quick-model">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}</div>
