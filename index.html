@@ -621,7 +621,7 @@ const CONFIG = {
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_cache_v84",
+  CACHE_KEY: "costco_item_operation_hub_cache_v85",
   LEGACY_CACHE_KEYS: Array.from({length: 14}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
@@ -629,7 +629,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v84"
+  SPEC_IMAGE_CACHE_BUST: "v85"
 };
 
 const DETAIL_TABS = [
@@ -689,7 +689,7 @@ const SPEC_TERM_GUIDES = {
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v84";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v85";
 let currentPage = "home";
 let appBackStack = [];
 let recentExpanded = false;
