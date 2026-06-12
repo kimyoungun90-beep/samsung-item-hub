@@ -301,7 +301,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v68"
+  SPEC_IMAGE_CACHE_BUST: "v72"
 };
 
 const DETAIL_TABS = [
@@ -809,13 +809,22 @@ function filterItemsByCategory(items){
 }
 
 function itemCategoryGroup(item){
-  const raw = [item?.category, item?.productName, item?.keywords].join(" ");
-  const text = normalizeText(raw);
+  // v72: 상품명에 "무풍콤보" 같은 문구가 있어도 세탁기/건조기로 잘못 분류되지 않도록
+  // 상품DB의 "품목" 값을 최우선으로 보고, 에어컨을 세탁/건조기보다 먼저 판정합니다.
+  const categoryText = normalizeText(item?.category || "");
+  if(categoryText.includes("에어컨") || categoryText.includes("aircon") || categoryText === "ac" || categoryText.includes("a/c")) return "에어컨";
+  if(categoryText.includes("tv") || categoryText.includes("티비") || categoryText.includes("텔레비전") || categoryText.includes("모니터")) return "TV/모니터";
+  if(categoryText.includes("김치")) return "김치냉장고";
+  if(categoryText.includes("냉장고") || categoryText.includes("냉동고")) return "냉장고";
+  if(categoryText.includes("세탁") || categoryText.includes("건조") || categoryText.includes("원바디")) return "세탁기/건조기";
+  if(categoryText.includes("소형") || categoryText.includes("청소기") || categoryText.includes("전자레인지") || categoryText.includes("큐커") || categoryText.includes("인덕션") || categoryText.includes("제습기")) return "소형가전";
+
+  const text = normalizeText([item?.productName, item?.modelName, item?.keywords].join(" "));
+  if(text.includes("에어컨") || text.includes("aircon") || text.includes("a/c") || /^(af|ar|aw)/i.test(String(item?.modelName || ""))) return "에어컨";
   if(text.includes("김치")) return "김치냉장고";
   if(text.includes("tv") || text.includes("티비") || text.includes("텔레비전") || text.includes("모니터")) return "TV/모니터";
   if(text.includes("냉장고") || text.includes("냉동고")) return "냉장고";
-  if(text.includes("세탁") || text.includes("건조") || text.includes("원바디") || text.includes("콤보")) return "세탁기/건조기";
-  if(text.includes("에어컨") || text.includes("aircon") || text.includes("ac") || text.includes("a/c")) return "에어컨";
+  if(text.includes("세탁기") || text.includes("건조기") || text.includes("세탁") || text.includes("원바디")) return "세탁기/건조기";
   if(text.includes("소형") || text.includes("청소기") || text.includes("전자레인지") || text.includes("큐커") || text.includes("인덕션") || text.includes("제습기")) return "소형가전";
   return safe(item?.category, "기타");
 }
