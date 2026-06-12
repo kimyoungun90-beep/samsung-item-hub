@@ -322,80 +322,56 @@
       .card-inner{padding:17px;}
     }
 
+  
 
-    /* v74 One UI Tizen 홈 대시보드 */
-    .nav.home-mode{display:none}
-    .home-dashboard{display:none}.home-dashboard.show{display:block}
-    .home-card{background:rgba(255,255,255,.94);border:1px solid #e2ebf6;border-radius:30px;box-shadow:0 22px 56px rgba(15,55,100,.10);overflow:hidden;margin-bottom:14px}
-    .home-top{position:relative;padding:22px 18px 18px;background:linear-gradient(180deg,#ffffff,#f8fbff)}
-    .home-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}
-    .home-title{margin:0;font-size:25px;line-height:1.22;letter-spacing:-.7px;color:#07152d;font-weight:1000;white-space:pre-line;word-break:keep-all}
-    .home-sub{margin:8px 0 0;color:#64748b;font-size:14px;font-weight:850;line-height:1.5;white-space:pre-line;word-break:keep-all}
-    .home-bell{position:relative;width:42px;height:42px;border:0;border-radius:15px;background:#fff;color:#07152d;display:grid;place-items:center;font-size:20px;box-shadow:0 10px 24px rgba(15,55,100,.09);border:1px solid #e2ebf6;flex:0 0 auto}
-    .home-bell-dot{position:absolute;top:8px;right:8px;width:9px;height:9px;border-radius:999px;background:#ef4444;border:2px solid #fff;display:none}.home-bell-dot.show{display:block}
-    .home-search{display:flex;align-items:center;gap:8px;border:1px solid #dce7f4;background:#fff;border-radius:22px;min-height:56px;padding:0 10px 0 15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
-    .home-search input{flex:1;border:0;outline:0;background:transparent;min-width:0;font-size:14px;font-weight:850;color:#07152d}.home-search input::placeholder{color:#a7b4c6;font-weight:800}
-    .home-search button{width:42px;height:42px;border:0;border-radius:15px;background:#edf6ff;color:#0b63ce;font-size:20px;font-weight:1000}
-    .home-block{padding:16px 18px 18px}.home-block-title{font-size:15px;font-weight:1000;color:#07152d;margin-bottom:12px;letter-spacing:-.25px}
-    .home-quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.home-quick{border:1px solid #e2ebf6;background:#fff;border-radius:20px;padding:14px 8px;min-height:92px;display:grid;gap:8px;place-items:center;text-align:center;color:#07152d;font-size:12px;font-weight:1000;box-shadow:0 8px 20px rgba(15,55,100,.04)}.home-quick-icon{width:36px;height:36px;border-radius:14px;background:#eef6ff;color:#0b63ce;display:grid;place-items:center;font-size:21px;font-weight:1000}.home-quick:active{transform:scale(.986)}
-    .home-recent-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.home-recent-head .home-block-title{margin:0}.home-recent-toggle{border:0;background:transparent;color:#64748b;font-size:12px;font-weight:950;white-space:nowrap}.home-recent-list{display:grid;gap:8px;max-height:258px;overflow:hidden}.home-recent-list.expanded{max-height:520px;overflow-y:auto;padding-right:2px}.home-recent-item{width:100%;border:1px solid #e2ebf6;background:#fff;border-radius:17px;padding:10px;display:flex;gap:11px;align-items:center;text-align:left;box-shadow:0 6px 16px rgba(15,55,100,.04)}.home-recent-thumb{width:54px;height:54px;border-radius:14px;background:#f1f6fb;display:grid;place-items:center;flex:0 0 auto;overflow:hidden;color:#0b63ce;font-size:22px;font-weight:1000}.home-recent-thumb img{width:100%;height:100%;object-fit:contain}.home-recent-content{min-width:0;flex:1}.home-recent-type{font-size:11px;font-weight:1000;color:#0b63ce;margin-bottom:3px}.home-recent-title{font-size:14px;font-weight:1000;color:#07152d;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.home-recent-sub{margin-top:3px;font-size:12px;font-weight:820;color:#64748b;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.home-recent-arrow{color:#94a3b8;font-weight:1000}.home-empty{border:1px dashed #cbd5e1;border-radius:18px;background:#f8fbff;color:#64748b;padding:16px 12px;font-size:13px;font-weight:850;text-align:center;line-height:1.45}
-    .home-refresh{width:100%;border:0;border-radius:999px;min-height:46px;background:#f1f5f9;color:#334155;font-size:13px;font-weight:1000;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px}
-    @media(max-width:430px){.home-quick-grid{gap:8px}.home-quick{min-height:86px;font-size:11px}.home-title{font-size:23px}}
+/* v75: One UI Tizen navigation/home/item lookup refinement */
+body.view-nonhome .hero,
+body.view-nonhome #mainNav,
+body.view-nonhome .nav{display:none !important;}
+body.view-home .global-action{display:none !important;}
+body.view-nonhome .app{padding-top:0;}
+.nav.home-mode{display:none !important;}
+.home-dashboard{display:none}.home-dashboard.show{display:block}.home-card{background:rgba(255,255,255,.94);border:1px solid #e2ebf6;border-radius:30px;box-shadow:0 22px 56px rgba(15,55,100,.10);overflow:hidden;margin-bottom:14px}.home-top{position:relative;padding:22px 18px 18px;background:linear-gradient(180deg,#ffffff,#f8fbff)}.home-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}.home-title{margin:0;font-size:25px;line-height:1.22;letter-spacing:-.7px;color:#07152d;font-weight:1000;white-space:pre-line;word-break:keep-all}.home-sub{margin:8px 0 0;color:#64748b;font-size:14px;font-weight:850;line-height:1.5;white-space:pre-line;word-break:keep-all}.home-bell{position:relative;width:42px;height:42px;border:0;border-radius:15px;background:#fff;color:#07152d;display:grid;place-items:center;font-size:19px;box-shadow:0 10px 24px rgba(15,55,100,.09);border:1px solid #e2ebf6;flex:0 0 auto}.home-bell-dot{position:absolute;top:8px;right:8px;width:9px;height:9px;border-radius:999px;background:#ef4444;border:2px solid #fff;display:none}.home-bell-dot.show{display:block}.home-search{display:flex;align-items:center;gap:8px;border:1px solid #dce7f4;background:#fff;border-radius:22px;min-height:56px;padding:0 10px 0 15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}.home-search input{flex:1;border:0;outline:0;background:transparent;min-width:0;font-size:14px;font-weight:850;color:#07152d}.home-search input::placeholder{color:#a7b4c6;font-weight:800}.home-search button{width:42px;height:42px;border:0;border-radius:15px;background:#edf6ff;color:#0b63ce;font-size:20px;font-weight:1000}.home-block{padding:16px 18px 18px}.home-block-title{font-size:15px;font-weight:1000;color:#07152d;margin-bottom:12px;letter-spacing:-.25px}.home-quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.home-quick{border:1px solid #e2ebf6;background:#fff;border-radius:20px;padding:14px 8px;min-height:92px;display:grid;gap:8px;place-items:center;text-align:center;color:#07152d;font-size:12px;font-weight:1000;box-shadow:0 8px 20px rgba(15,55,100,.04)}.home-quick-icon{width:36px;height:36px;border-radius:14px;background:#eef6ff;color:#0b63ce;display:grid;place-items:center;font-size:21px;font-weight:1000}.home-recent-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.home-recent-head .home-block-title{margin:0}.home-recent-toggle{border:0;background:transparent;color:#64748b;font-size:12px;font-weight:950;white-space:nowrap}.home-recent-list{display:grid;gap:8px;max-height:300px;overflow:hidden}.home-recent-list.expanded{max-height:620px;overflow-y:auto;padding-right:2px}.home-empty{border:1px dashed #cbd5e1;border-radius:18px;background:#f8fbff;color:#64748b;padding:16px 12px;font-size:13px;font-weight:850;text-align:center;line-height:1.45}.home-refresh{width:100%;border:0;border-radius:999px;min-height:46px;background:#f1f5f9;color:#334155;font-size:13px;font-weight:1000;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px}
+.page-topbar{position:sticky;top:0;z-index:24;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;margin:-2px -2px 12px;padding:8px 0;background:linear-gradient(180deg,rgba(246,250,255,.98),rgba(246,250,255,.88));backdrop-filter:blur(14px);}.page-topbar-title{text-align:center;font-size:16px;font-weight:1000;color:#07152d;letter-spacing:-.35px;}.page-icon-btn{width:42px;height:42px;border:0;border-radius:15px;background:rgba(255,255,255,.88);color:#0b63ce;box-shadow:0 10px 24px rgba(15,55,100,.08);font-size:22px;font-weight:1000;display:grid;place-items:center;}.global-action{position:fixed;z-index:1200;border:0;display:flex;align-items:center;justify-content:center;box-shadow:0 16px 34px rgba(13,27,53,.20);font-weight:1000;touch-action:manipulation;}.global-back-top{left:14px;top:calc(env(safe-area-inset-top,0px) + 12px);width:50px;height:50px;border-radius:18px;background:#0d1b35;color:#fff;font-size:28px;}.global-back-bottom{left:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);width:58px;height:58px;border-radius:22px;background:#0d1b35;color:#fff;font-size:30px;}.global-refresh-top{right:14px;top:calc(env(safe-area-inset-top,0px) + 12px);width:50px;height:50px;border-radius:18px;background:#fff;color:#0b63ce;border:1px solid #dbeafe;font-size:22px;}.global-home-bottom{right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);min-width:92px;height:58px;border-radius:999px;background:#0d1b35;color:#fff;font-size:16px;padding:0 18px;gap:7px;}body.view-nonhome .floating-refresh{display:none !important;}body.view-nonhome #pageItem .card:first-of-type{box-shadow:none;border:0;background:transparent;border-radius:0;margin:0;overflow:visible;}body.view-nonhome #pageItem .card:first-of-type>.card-inner{padding:0;}body.view-nonhome #pageItem .section-title{display:none;}body.view-nonhome #pageItem .search-box{position:relative;margin:0 0 10px;display:block;}body.view-nonhome #pageItem .search-box input{min-height:48px;border-radius:20px;padding:0 48px 0 16px;font-size:14px;font-weight:850;letter-spacing:0;background:#fff;border:1px solid #dce7f4;box-shadow:0 8px 22px rgba(15,55,100,.05);}body.view-nonhome #pageItem .search-box input::placeholder{font-size:13px;color:#a7b4c6;}body.view-nonhome #pageItem .search-btn{position:absolute;right:5px;top:5px;min-width:38px;width:38px;min-height:38px;height:38px;border-radius:14px;background:#eef6ff;color:#0b63ce;box-shadow:none;font-size:0;}body.view-nonhome #pageItem .search-btn::before{content:'⌕';font-size:24px;font-weight:1000;line-height:1;}body.view-nonhome .item-category-chips{gap:11px;padding:8px 2px 14px;margin:0 -2px;align-items:flex-start;}body.view-nonhome .item-cat-btn{width:52px;min-width:52px;min-height:64px;height:auto;padding:5px 2px;border:0;background:transparent;box-shadow:none;border-radius:16px;display:flex;flex-direction:column;gap:5px;font-size:10px;font-weight:900;color:#334155;text-align:center;line-height:1.1;}body.view-nonhome .item-cat-btn .cat-icon{width:38px;height:38px;border-radius:12px;background:#fff;border:1px solid #dce7f4;box-shadow:0 8px 20px rgba(15,55,100,.07);display:grid;place-items:center;font-size:21px;color:#334155;}body.view-nonhome .item-cat-btn.active{background:transparent;border:0;box-shadow:none;color:#0b63ce;}body.view-nonhome .item-cat-btn.active .cat-icon{background:linear-gradient(180deg,#1268d7,#0755bd);color:#fff;border-color:#1268d7;box-shadow:0 12px 26px rgba(11,99,206,.24);}body.view-nonhome .item-cat-btn .cat-count{display:none;}body.view-nonhome .item-filter-summary{margin:0 4px 10px;font-size:12px;color:#334155;font-weight:900;}body.view-nonhome .quick-list{max-height:none;overflow:visible;gap:9px;margin-top:0;}.quick-item.oneui-item-card,.home-recent-item{border:1px solid #e1eaf6;background:#fff;border-radius:18px;padding:12px;display:grid;grid-template-columns:72px 1fr 18px;align-items:center;gap:12px;min-height:104px;text-align:left;box-shadow:0 10px 26px rgba(15,55,100,.06);width:100%;}.quick-thumb{width:72px;height:80px;border-radius:14px;background:#f4f8fd;display:grid;place-items:center;overflow:hidden;color:#0b63ce;font-size:28px;font-weight:1000;}.quick-thumb img{width:100%;height:100%;object-fit:contain;display:block;}.quick-info{min-width:0;}.quick-info .quick-no{font-size:15px;font-weight:1000;color:#07152d;line-height:1.2;margin-bottom:4px;}.quick-info .quick-model{font-size:14px;font-weight:1000;color:#0f172a;line-height:1.25;word-break:break-word;}.quick-info .quick-prod{font-size:12px;font-weight:850;color:#64748b;line-height:1.3;margin-top:3px;word-break:keep-all;}.quick-tag{display:inline-flex;align-items:center;justify-content:center;margin-top:7px;border-radius:999px;background:#eaf3ff;color:#0b63ce;font-size:11px;font-weight:1000;padding:4px 8px;}.quick-arrow{color:#9aa8ba;font-size:22px;font-weight:1000;}body.view-nonhome #productEmpty{display:none !important;}.home-recent-item{grid-template-columns:64px 1fr 18px;min-height:88px;padding:10px;}.home-recent-thumb{width:64px !important;height:64px !important;border-radius:14px;background:#f4f8fd;display:grid;place-items:center;overflow:hidden;}.home-recent-thumb img{width:100%;height:100%;object-fit:contain}.home-recent-type{display:none;}.home-recent-title{font-size:14px;font-weight:1000;color:#07152d;}.home-recent-sub{font-size:12px;color:#64748b;}.home-recent-arrow{color:#94a3b8;font-weight:1000;}.page-topbar .page-back-btn{visibility:hidden;pointer-events:none;}
+@media(max-width:430px){.global-back-top,.global-refresh-top{width:46px;height:46px}.global-back-bottom,.global-home-bottom{bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}body.view-nonhome .app{padding-left:10px;padding-right:10px;padding-bottom:92px}.quick-item.oneui-item-card{grid-template-columns:66px 1fr 16px;gap:10px}.quick-thumb{width:66px;height:74px}.quick-info .quick-model{font-size:13px}.quick-info .quick-prod{font-size:11px}}
 
-    .quick-thumb{width:62px;height:62px;border-radius:14px;background:#f1f6fb;display:grid;place-items:center;flex:0 0 auto;overflow:hidden;color:#0b63ce;font-size:22px;font-weight:1000}.quick-thumb img{width:100%;height:100%;object-fit:contain}.quick-meta{min-width:0;flex:1}.quick-item{display:flex!important;align-items:center;gap:12px}.quick-arrow{color:#94a3b8;font-weight:1000;flex:0 0 auto}.quick-tag{display:inline-flex;margin-top:6px;border-radius:999px;background:#eaf3ff;color:#0b63ce;padding:4px 8px;font-size:11px;font-weight:1000}
   </style>
 </head>
 <body>
 <main class="app">
+  <section class="hero">
+    <div class="brand-row"><span class="badge">Costco Operation HUB</span><div class="mini-logo">CE</div></div>
+    <h1>코스트코<br/>아이템 운영 HUB</h1>
+    <p>아이템번호로 모델 사진과 핵심정보를 빠르게 조회하고, 업무지원부서와 코스트코 프로세스를 한 화면에서 확인합니다.</p>
+    <div class="sync-line"><span id="syncText" class="sync-text">데이터 준비 중</span><button id="topRefreshBtn" class="refresh-btn" type="button">새로고침</button></div>
+  </section>
+
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head">
-          <div>
-            <h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1>
-            <p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다.</p>
-          </div>
-          <button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">⌁<span id="homeBellDot" class="home-bell-dot"></span></button>
-        </div>
-        <div class="home-search">
-          <input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
-          <button id="homeSearchBtn" type="button" aria-label="아이템 조회">⌕</button>
-        </div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다.</p></div><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button></div>
+        <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
-      <div class="home-block">
-        <div class="home-block-title">바로가기</div>
-        <div class="home-quick-grid">
-          <button class="home-quick" type="button" data-page="item"><span class="home-quick-icon">⌕</span><span>아이템 조회</span></button>
-          <button class="home-quick" type="button" data-page="specTable"><span class="home-quick-icon">⚖</span><span>스펙 비교</span></button>
-          <button class="home-quick" type="button" data-page="process"><span class="home-quick-icon">☷</span><span>프로세스</span></button>
-          <button class="home-quick" type="button" data-page="dept"><span class="home-quick-icon">☏</span><span>업무지원</span></button>
-          <button class="home-quick" type="button" data-page="inquiry"><span class="home-quick-icon">☰</span><span>문의</span></button>
-          <button class="home-quick" type="button" data-action="notice"><span class="home-quick-icon">☊</span><span>공지사항</span></button>
-        </div>
-      </div>
-      <div class="home-block" style="padding-top:0">
-        <div class="home-recent-head">
-          <div class="home-block-title">최근 조회</div>
-          <button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(최근 10개) ›</button>
-        </div>
-        <div id="homeRecentList" class="home-recent-list"></div>
-        <button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button>
-      </div>
+      <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
+        <button class="home-quick" type="button" data-page="item"><span class="home-quick-icon">⌕</span><span>아이템 조회</span></button>
+        <button class="home-quick" type="button" data-page="specTable"><span class="home-quick-icon">⚖</span><span>스펙 비교</span></button>
+        <button class="home-quick" type="button" data-page="process"><span class="home-quick-icon">☷</span><span>프로세스</span></button>
+        <button class="home-quick" type="button" data-page="dept"><span class="home-quick-icon">☏</span><span>업무지원</span></button>
+        <button class="home-quick" type="button" data-page="inquiry"><span class="home-quick-icon">☰</span><span>문의</span></button>
+        <button class="home-quick" type="button" data-action="notice"><span class="home-quick-icon">☊</span><span>공지사항</span></button>
+      </div></div>
+      <div class="home-block" style="padding-top:0"><div class="home-recent-head"><div class="home-block-title">최근 조회</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(최근 10개) ›</button></div><div id="homeRecentList" class="home-recent-list"></div><button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button></div>
     </article>
-    <footer class="footer"><span id="syncText">데이터 준비 중</span></footer>
   </section>
 
   <nav id="mainNav" class="nav home-mode">
-    <button id="navItem" type="button">아이템</button>
-    <button id="navSpecTable" type="button">스펙 비교</button>
-    <button id="navProcess" type="button">프로세스</button>
-    <button id="navDept" type="button">업무지원</button>
-    <button id="navInquiry" type="button">문의</button>
+    <button id="navItem" type="button">아이템</button><button id="navSpecTable" type="button">스펙 비교</button><button id="navProcess" type="button">프로세스</button><button id="navDept" type="button">업무지원</button><button id="navInquiry" type="button">문의</button>
   </nav>
 
   <div id="status" class="status"></div>
 
   <section id="pageItem" class="page">
+    <div class="page-topbar"><button class="page-icon-btn page-back-btn" type="button" aria-label="뒤로">‹</button><div class="page-topbar-title">아이템 조회</div><button id="itemPageRefreshBtn" class="page-icon-btn" type="button" aria-label="새로고침">↻</button></div>
     <article class="card">
       <div class="card-inner">
         <div class="section-title"><div><h2>아이템 번호 / 모델명 조회</h2><small>코스트코 아이템번호 6자리 또는 모델명을 입력하세요.</small></div><span id="itemCountPill" class="pill">0건</span></div>
@@ -431,7 +407,7 @@
       </div>
     </article>
 
-    <div id="productEmpty" class="empty" style="display:none"></div>
+    <div id="productEmpty" class="empty">품목을 먼저 선택하거나 아이템번호/모델명을 입력하면 모델 사진과 상세정보가 표시됩니다.</div>
   </section>
 
 
@@ -520,6 +496,10 @@
   </section>
 
   <button id="floatRefreshBtn" class="floating-refresh" type="button">DB 새로고침</button>
+  <button id="globalBackTop" class="global-action global-back-top" type="button" aria-label="뒤로">‹</button>
+  <button id="globalBackBottom" class="global-action global-back-bottom" type="button" aria-label="뒤로">‹</button>
+  <button id="globalRefreshTop" class="global-action global-refresh-top" type="button" aria-label="새로고침">↻</button>
+  <button id="globalHomeBottom" class="global-action global-home-bottom" type="button" aria-label="홈">⌂ 홈</button>
   <footer class="footer">Google Sheets DB 연결형 · PWA App Shell Cache · Local Data Cache</footer>
 </main>
 <div id="noticeModal" class="notice-modal" aria-hidden="true">
@@ -590,7 +570,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v74"
+  SPEC_IMAGE_CACHE_BUST: "v72"
 };
 
 const DETAIL_TABS = [
@@ -648,12 +628,12 @@ const SPEC_TERM_GUIDES = {
   ]
 };
 
-
-const HOME_RECENT_KEY = "costco_item_hub_recent_v1";
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v1";
-const HOME_RECENT_LIMIT = 10;
-
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
+const HOME_RECENT_KEY = "costco_item_hub_recent_v75";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v75";
+let currentPage = "home";
+let appBackStack = [];
+let recentExpanded = false;
 let noticePopupOpened = false;
 let itemMap = new Map();
 let selectedItemCategoryFilter = "전체";
@@ -681,10 +661,9 @@ let specPrefetchStarted = false;
 
 const $ = (id)=>document.getElementById(id);
 const els = {
-  status:$("status"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"),
-  pageHome:$("pageHome"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
+  status:$("status"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageItem:$("pageItem"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"),
+  pageHome:$("pageHome"), pageItem:$("pageItem"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"),
@@ -699,6 +678,7 @@ const els = {
 init();
 
 function init(){
+  document.body.classList.add("view-home");
   bindEvents();
   renderDetailTabs();
   renderDeptChips();
@@ -712,6 +692,12 @@ function init(){
 }
 
 function bindEvents(){
+  document.querySelectorAll(".page-back-btn").forEach(btn=>btn.addEventListener("click",handleAppBack));
+  if(els.globalBackTop) els.globalBackTop.addEventListener("click",handleAppBack);
+  if(els.globalBackBottom) els.globalBackBottom.addEventListener("click",handleAppBack);
+  if(els.globalHomeBottom) els.globalHomeBottom.addEventListener("click",()=>showPage("home"));
+  if(els.globalRefreshTop) els.globalRefreshTop.addEventListener("click",()=>loadBootstrap(true));
+  if(els.itemPageRefreshBtn) els.itemPageRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
   if(els.homeSearchBtn) els.homeSearchBtn.addEventListener("click",runHomeSearch);
   if(els.homeSearchInput) els.homeSearchInput.addEventListener("keydown",e=>{ if(e.key === "Enter") runHomeSearch(); });
   if(els.homeBellBtn) els.homeBellBtn.addEventListener("click",()=>{ markUpdatesSeen(); renderNotice(true); openNoticeModal(); });
@@ -855,25 +841,43 @@ function bindEvents(){
       history.replaceState({hubBase:true}, "", getCleanAppUrl());
     }
   }catch(err){}
-  if(els.topRefreshBtn) els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
-  if(els.floatRefreshBtn) els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+  els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+  els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
   if(els.noticeModalClose) els.noticeModalClose.addEventListener("click",closeNoticeModal);
   if(els.noticeModal) els.noticeModal.addEventListener("click",(e)=>{ if(e.target === els.noticeModal) closeNoticeModal(); });
 }
 
-function showPage(page){
+function showPage(page, push=true){
   const map = { home:els.pageHome, item:els.pageItem, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
+  const target = map[page] ? page : "home";
+  if(push && currentPage && currentPage !== target){
+    appBackStack.push(currentPage);
+    appBackStack = appBackStack.slice(-20);
+    try{ history.pushState({hubPage:target}, "", getCleanAppUrl() + "#" + target); }catch(err){}
+  }
+  currentPage = target;
   Object.values(map).filter(Boolean).forEach(el=>el.classList.remove("show"));
-  (map[page] || els.pageHome).classList.add("show");
-  if(els.mainNav) els.mainNav.classList.toggle("home-mode", page === "home");
+  (map[target] || els.pageHome).classList.add("show");
+  document.body.classList.toggle("view-home", target === "home");
+  document.body.classList.toggle("view-nonhome", target !== "home");
+  if(els.mainNav) els.mainNav.classList.toggle("home-mode", target === "home");
   [els.navItem,els.navSpecTable,els.navInquiry,els.navDept,els.navProcess].filter(Boolean).forEach(btn=>btn.classList.remove("active"));
-  if(page==="item") els.navItem.classList.add("active");
-  if(page==="specTable"){ els.navSpecTable.classList.add("active"); prefetchSpecCategoryFirstImages(); }
-  if(page==="inquiry") els.navInquiry.classList.add("active");
-  if(page==="dept") els.navDept.classList.add("active");
-  if(page==="process") els.navProcess.classList.add("active");
+  if(target==="item") els.navItem.classList.add("active");
+  if(target==="specTable"){ els.navSpecTable.classList.add("active"); prefetchSpecCategoryFirstImages(); }
+  if(target==="inquiry") els.navInquiry.classList.add("active");
+  if(target==="dept") els.navDept.classList.add("active");
+  if(target==="process") els.navProcess.classList.add("active");
+  if(target==="home") renderHomeDashboard();
   window.scrollTo({top:0,behavior:"smooth"});
 }
+
+function handleAppBack(){
+  if(els.imageModal && els.imageModal.classList.contains("show")){ closeImageModal(); return; }
+  if(els.specViewer && els.specViewer.classList.contains("show")){ closeSpecViewer(); return; }
+  const prev = appBackStack.length ? appBackStack.pop() : "home";
+  showPage(prev || "home", false);
+}
+
 
 function showStatus(msg,type="warn"){
   els.status.textContent = msg;
@@ -1000,9 +1004,55 @@ function rebuildIndex(){
   });
 }
 
+
+function renderHomeDashboard(){
+  if(!els.pageHome) return;
+  const hs = DB.homeSettings || {};
+  if(els.homeGreeting) els.homeGreeting.textContent = hs.mainGreeting || hs.메인인사 || hs.greeting || "안녕하세요 👋";
+  if(els.homeSub) els.homeSub.textContent = hs.subGreeting || hs.서브문구 || hs.subtitle || "오늘도 빠르고 정확하게 업무를 지원합니다.";
+  renderHomeUpdateDot();
+  renderRecentList();
+}
+function renderHomeUpdateDot(){
+  if(!els.homeBellDot) return;
+  const latest = latestUpdateId();
+  const seen = localStorage.getItem(UPDATE_SEEN_KEY) || "";
+  els.homeBellDot.classList.toggle("show", !!latest && latest !== seen);
+}
+function latestUpdateId(){
+  const rows = Array.isArray(DB.notices) ? DB.notices : [];
+  if(!rows.length) return "";
+  return rows.map(n=>[n.date,n.type,n.title,n.body].filter(Boolean).join("|")).sort().pop() || "";
+}
+function markUpdatesSeen(){ const latest = latestUpdateId(); if(latest) localStorage.setItem(UPDATE_SEEN_KEY, latest); renderHomeUpdateDot(); }
+function getRecentViews(){ try{ return JSON.parse(localStorage.getItem(HOME_RECENT_KEY) || "[]").filter(Boolean); }catch(e){ return []; } }
+function saveRecentViews(list){ try{ localStorage.setItem(HOME_RECENT_KEY, JSON.stringify(list.slice(0,10))); }catch(e){} }
+function addRecentView(entry){ if(!entry || !entry.id) return; const list=getRecentViews().filter(x=>x&&x.id!==entry.id); list.unshift(Object.assign({},entry,{time:Date.now()})); saveRecentViews(list); renderRecentList(); }
+function toggleRecentList(){ recentExpanded = !recentExpanded; renderRecentList(); }
+function renderRecentList(){
+  if(!els.homeRecentList) return;
+  const list=getRecentViews().slice(0,recentExpanded?10:3);
+  els.homeRecentList.classList.toggle("expanded",recentExpanded);
+  if(els.homeRecentToggle) els.homeRecentToggle.textContent=recentExpanded?"접기":"전체보기(최근 10개) ›";
+  if(!list.length){ els.homeRecentList.innerHTML=`<div class="home-empty">최근 조회한 아이템, 스펙 비교, 프로세스가 없습니다.</div>`; return; }
+  els.homeRecentList.innerHTML=list.map(r=>renderRecentItem(r)).join("");
+  els.homeRecentList.querySelectorAll(".home-recent-item").forEach(btn=>btn.addEventListener("click",()=>openRecentView(btn.dataset.id)));
+}
+function renderRecentItem(r){
+  const isItem=String(r.type||"")==="item";
+  const thumb=isItem&&r.image?`<img src="${esc(r.image)}" alt="${esc(r.title||'최근 조회')}" onerror="this.remove();">`:`<span>${esc(recentIcon(r.type))}</span>`;
+  return `<button class="home-recent-item" type="button" data-id="${esc(r.id)}"><div class="home-recent-thumb">${thumb}</div><div class="home-recent-content"><div class="home-recent-type">${esc(recentTypeLabel(r.type))}</div><div class="home-recent-title">${esc(r.title||"최근 조회")}</div><div class="home-recent-sub">${esc(r.subtitle||"")}</div></div><div class="home-recent-arrow">›</div></button>`;
+}
+function recentIcon(type){ if(type==="spec") return "▦"; if(type==="process") return "☷"; return "⌕"; }
+function recentTypeLabel(type){ if(type==="spec") return "스펙 비교"; if(type==="process") return "프로세스"; return "아이템"; }
+function openRecentView(id){ const recent=getRecentViews().find(r=>r.id===id); if(!recent) return; if(recent.type==="item"){ showPage("item"); if(els.itemInput) els.itemInput.value=recent.itemNo||recent.title||""; searchItem(false); return;} if(recent.type==="spec"){ showPage("specTable"); return;} if(recent.type==="process"){ showPage("process"); return;} }
+function runHomeSearch(){ const q=String(els.homeSearchInput?.value||"").trim(); showPage("item"); if(els.itemInput) els.itemInput.value=q; if(q) searchItem(false); else renderQuickList(""); }
+function categoryIconForLabel(label){ const v=String(label||""); if(v.includes("TV")) return "▭"; if(v.includes("에어컨")) return "▯"; if(v.includes("냉장고")) return "▥"; if(v.includes("세탁")) return "◉"; if(v.includes("김치")) return "▤"; if(v.includes("소형")) return "♙"; return "전체"; }
+function categoryIconForItem(item){ return categoryIconForLabel(itemCategoryGroup(item)); }
+
 function renderAll(){
   renderHomeDashboard();
-  renderNotice(false);
+  renderNotice();
   renderItemCategoryChips();
   renderQuickList(els.itemInput.value);
   renderDeptSelectors();
@@ -1100,7 +1150,7 @@ function renderItemCategoryChips(){
   });
   els.itemCategoryChips.innerHTML = ITEM_CATEGORY_FILTERS.map(cat => `
     <button class="item-cat-btn ${selectedItemCategoryFilter===cat.key?"active":""}" type="button" data-key="${esc(cat.key)}">
-      <span>${esc(cat.label)}</span><span class="cat-count">${counts[cat.key] || 0}</span>
+      <span class="cat-icon">${esc(categoryIconForLabel(cat.label))}</span><span>${esc(cat.label)}</span><span class="cat-count">${counts[cat.key] || 0}</span>
     </button>`).join("");
   updateItemCountPill();
 }
@@ -1155,15 +1205,16 @@ function renderQuickList(query=""){
     return;
   }
   els.quickList.innerHTML = rows.map(item=>{
-    const img = getProductImageUrls(item)[0] || "";
+    const thumb = getProductImageUrls(item)[0] || "";
+    const tag = itemCategoryGroup(item);
     return `
-    <button class="quick-item" type="button" data-item="${esc(item.itemNo)}">
-      <div class="quick-thumb">${img ? `<img src="${esc(img)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('□'))" />` : "□"}</div>
-      <div class="quick-meta">
+    <button class="quick-item oneui-item-card" type="button" data-item="${esc(item.itemNo)}">
+      <div class="quick-thumb">${thumb ? `<img src="${esc(thumb)}" alt="${esc(safe(item.modelName,'제품 이미지'))}" loading="lazy" onerror="this.remove();">` : `<span>${esc(categoryIconForItem(item))}</span>`}</div>
+      <div class="quick-info">
         <div class="quick-no">${styledText(item.itemNo,"-",styleOf(item,"itemNo"))}</div>
-        <div class="quick-name">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}</div>
-        <div class="info-sub">${styledText(item.productName || "","",styleOf(item,"productName"))}</div>
-        <span class="quick-tag">${styledText(item.category,"품목",styleOf(item,"category"))}</span>
+        <div class="quick-model">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}</div>
+        <div class="quick-prod">${styledText(item.productName || item.category,"",styleOf(item,item.productName?"productName":"category"))}</div>
+        <span class="quick-tag">${esc(tag)}</span>
       </div>
       <div class="quick-arrow">›</div>
     </button>`;
@@ -1293,131 +1344,29 @@ function renderDetailTabs(){
 }
 
 
+function renderNotice(){
+  const notices = Array.isArray(DB.notices)
+    ? DB.notices.filter(n => safe(n.title,"") || safe(n.body,""))
+    : [];
 
-function runHomeSearch(){
-  const q = safe(els.homeSearchInput && els.homeSearchInput.value, "");
-  showPage("item");
-  if(els.itemInput){
-    els.itemInput.value = q;
-    if(q) searchItem(false); else renderQuickList("");
-    setTimeout(()=>els.itemInput.focus(),120);
-  }
-}
-
-function renderHomeDashboard(){
-  const settings = DB.homeSettings || {};
-  if(els.homeGreeting) els.homeGreeting.textContent = safe(settings.mainGreeting || settings.greeting || settings.homeTitle, "안녕하세요 👋");
-  if(els.homeSub) els.homeSub.textContent = safe(settings.subGreeting || settings.subtitle || settings.homeSub, "오늘도 빠르고 정확하게 업무를 지원합니다.");
-  renderHomeRecent();
-  updateHomeBellDot();
-}
-
-function getRecentList(){
-  try{ return JSON.parse(localStorage.getItem(HOME_RECENT_KEY) || "[]").filter(Boolean); }catch(e){ return []; }
-}
-function saveRecentList(list){
-  try{ localStorage.setItem(HOME_RECENT_KEY, JSON.stringify(list.slice(0, HOME_RECENT_LIMIT))); }catch(e){}
-}
-function addRecentView(entry){
-  if(!entry || !entry.type || !entry.title) return;
-  const list = getRecentList();
-  const id = entry.id || `${entry.type}:${entry.title}`;
-  const next = [{...entry, id, ts:Date.now()}].concat(list.filter(x => x && x.id !== id)).slice(0, HOME_RECENT_LIMIT);
-  saveRecentList(next);
-  renderHomeRecent();
-}
-function renderHomeRecent(){
-  if(!els.homeRecentList) return;
-  const list = getRecentList().slice(0, HOME_RECENT_LIMIT);
-  const expanded = els.homeRecentList.classList.contains("expanded");
-  const visible = expanded ? list : list.slice(0,3);
-  if(els.homeRecentToggle) els.homeRecentToggle.textContent = expanded ? "접기" : "전체보기(최근 10개) ›";
-  if(!visible.length){
-    els.homeRecentList.innerHTML = `<div class="home-empty">최근 조회 내역이 없습니다.<br/>아이템, 스펙 비교, 프로세스를 열면 여기에 표시됩니다.</div>`;
-    return;
-  }
-  els.homeRecentList.innerHTML = visible.map(r=>{
-    const item = r.itemNo ? itemMap.get(normalize(r.itemNo)) : null;
-    const img = r.image || (item ? (getProductImageUrls(item)[0] || "") : "");
-    const icon = r.type === "item" ? "⌕" : (r.type === "spec" ? "⚖" : "☷");
-    return `<button class="home-recent-item" type="button" data-type="${esc(r.type)}" data-id="${esc(r.id||"")}" data-item="${esc(r.itemNo||"")}" data-key="${esc(r.key||"")}">
-      <div class="home-recent-thumb">${img ? `<img src="${esc(img)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${icon}'))" />` : icon}</div>
-      <div class="home-recent-content">
-        <div class="home-recent-type">${r.type === "item" ? "아이템" : r.type === "spec" ? "스펙 비교" : "프로세스"}</div>
-        <div class="home-recent-title">${esc(r.title)}</div>
-        <div class="home-recent-sub">${esc(r.subtitle || "")}</div>
-      </div><div class="home-recent-arrow">›</div>
-    </button>`;
-  }).join("");
-  els.homeRecentList.querySelectorAll(".home-recent-item").forEach(btn=>btn.addEventListener("click",()=>openRecentItem(btn)));
-}
-function toggleRecentList(){
-  if(!els.homeRecentList) return;
-  els.homeRecentList.classList.toggle("expanded");
-  renderHomeRecent();
-}
-function openRecentItem(btn){
-  const type = btn.dataset.type;
-  if(type === "item"){
-    showPage("item");
-    if(els.itemInput) els.itemInput.value = btn.dataset.item || "";
-    if(btn.dataset.item) searchItem(false);
-  }else if(type === "spec"){
-    showPage("specTable");
-    const cat = SPEC_CATEGORY_IMAGES.find(c => c.key === btn.dataset.key || c.label === btn.dataset.key);
-    if(cat) openSpecCategoryViewer(cat);
-  }else if(type === "process"){
-    showPage("process");
-    if(els.processSearch) els.processSearch.value = btn.dataset.key || btn.querySelector(".home-recent-title")?.textContent || "";
-    renderProcesses();
-  }
-}
-function getRecentNotices(){
-  const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth()-3);
-  return (Array.isArray(DB.notices) ? DB.notices : []).filter(n=>{
-    if(!(safe(n.title,"") || safe(n.body,""))) return false;
-    const d = parseNoticeDate(n.date);
-    return !d || d >= cutoff;
-  });
-}
-function parseNoticeDate(v){
-  const s = String(v || "").trim();
-  const m = s.match(/(\d{4})\D{0,3}(\d{1,2})\D{0,3}(\d{1,2})/);
-  if(!m) return null;
-  return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
-}
-function latestNoticeKey(){
-  return getRecentNotices().map(n=>[n.date,n.type,n.title,n.body].map(x=>safe(x,"")).join("|")).sort().join("§");
-}
-function updateHomeBellDot(){
-  if(!els.homeBellDot) return;
-  const key = latestNoticeKey();
-  const seen = localStorage.getItem(UPDATE_SEEN_KEY) || "";
-  els.homeBellDot.classList.toggle("show", !!key && key !== seen);
-}
-function markUpdatesSeen(){
-  try{ localStorage.setItem(UPDATE_SEEN_KEY, latestNoticeKey()); }catch(e){}
-  updateHomeBellDot();
-}
-
-function renderNotice(openWhenCalled=false){
-  const notices = getRecentNotices();
+  // 공지사항은 메인 화면 카드로 노출하지 않고, 내용이 있을 때만 팝업으로 표시합니다.
   if(!notices.length){
     if(els.noticeModalList) els.noticeModalList.innerHTML = "";
-    updateHomeBellDot();
+    noticePopupOpened = false;
+    closeNoticeModal();
     return;
   }
+
   if(els.noticeModalList){
-    if(els.noticeModalSub) els.noticeModalSub.textContent = `${notices.length}건 표시 · 최근 3개월 기준`;
+    els.noticeModalSub.textContent = `${notices.length}건 표시 · 닫기 전까지 확인`;
     els.noticeModalList.innerHTML = notices.map(n=>`
       <div class="notice-modal-item">
         <div class="notice-modal-item-title">${styledText(n.title,"공지사항",styleOf(n,"title"))}</div>
         <div class="notice-modal-item-body">${styledText(n.body,"",styleOf(n,"body"))}</div>
         ${n.date || n.type ? `<div class="notice-modal-meta">${styledText(n.type,"",styleOf(n,"type"))}${n.type&&n.date?" · ":""}${styledText(n.date,"",styleOf(n,"date"))}</div>` : ``}
       </div>`).join("");
+    if(!noticePopupOpened) openNoticeModal();
   }
-  updateHomeBellDot();
-  if(openWhenCalled) openNoticeModal();
 }
 
 function openNoticeModal(){
@@ -1624,7 +1573,7 @@ function renderProcesses(){
   els.processList.innerHTML = rows.map((r,i)=>{
     const img = convertDriveImageUrl(r.imageUrl || "");
     return `<div class="info-card process-card">
-      <button class="process-question" type="button" data-title="${esc(r.title||"")}" data-type="${esc(r.type||"")}" data-key="${esc(r.title||r.keywords||"")}">
+      <button class="process-question" type="button">
         <div class="process-question-row">
           <div>
             <div class="info-title">${i+1}. ${styledText(r.title,"제목 미등록",styleOf(r,"title"))}</div>
@@ -1636,12 +1585,13 @@ function renderProcesses(){
       <div class="process-body">${img ? `<img class="process-img" src="${esc(img)}" alt="프로세스 이미지" loading="lazy" onerror="this.style.display='none'" />` : ""}<div class="process-answer-content">${styledText(r.body,"내용 미등록",styleOf(r,"body"))}</div></div>
     </div>`;
   }).join("");
-  els.processList.querySelectorAll(".process-question").forEach(btn=>{
+  els.processList.querySelectorAll(".process-question").forEach((btn,idx)=>{
     btn.addEventListener("click",()=>{
       const card = btn.closest(".process-card");
       card.classList.toggle("open");
+      const r = rows[idx];
+      if(r && card.classList.contains("open")) addRecentView({ type:"process", id:`process:${r.type || ''}:${r.title || idx}`, title:r.title || "프로세스", subtitle:r.type || "프로세스" });
       const toggle = card.querySelector(".process-toggle");
-      if(card.classList.contains("open")) addRecentView({ type:"process", id:`process:${btn.dataset.title || btn.dataset.key}`, key:btn.dataset.key || btn.dataset.title, title:btn.dataset.title || "프로세스", subtitle:btn.dataset.type || "프로세스" });
       if(toggle) toggle.textContent = card.classList.contains("open") ? "답변 닫기" : "답변 보기";
     });
   });
@@ -2293,7 +2243,7 @@ function closeSpecHelp(){
 
 async function openSpecCategoryViewer(cat){
   if(!cat) return;
-  addRecentView({ type:"spec", id:`spec:${cat.key || cat.label}`, key:cat.key || cat.label, title:`${cat.label} 스펙 비교`, subtitle:"스펙 비교 이미지" });
+  addRecentView({ type:"spec", id:`spec:${cat.key || cat.label}`, title:`${cat.label || cat.key} 스펙 비교`, subtitle:"스펙 비교" });
   currentSpecCategoryKey = cat.key || "";
   const hasSpecHelp = !!SPEC_TERM_GUIDES[currentSpecCategoryKey];
   if(els.specHelpGuide) els.specHelpGuide.style.display = hasSpecHelp ? "flex" : "none";
