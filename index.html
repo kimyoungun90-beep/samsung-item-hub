@@ -390,7 +390,7 @@ body.view-nonhome .app{padding-top:0;}
     .item-detail-content-title{font-size:17px;font-weight:1000;color:#07152d;margin-bottom:10px;}
     .item-detail-content-body{white-space:pre-line;font-size:14px;font-weight:850;line-height:1.65;color:#334155;word-break:keep-all;}
     .item-detail-empty{color:#94a3b8;font-weight:900;}
-    .aircon-part-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 0 12px;}
+    .aircon-part-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:7px;margin:0 0 12px;}
     .aircon-part-btn{min-height:42px;border:1px solid #dce7f4;border-radius:16px;background:#f7fbff;color:#52647c;font-size:13px;font-weight:1000;box-shadow:0 7px 18px rgba(15,55,100,.04);}
     .aircon-part-btn.active{background:linear-gradient(180deg,#0f67d8,#084ea9);border-color:#0f67d8;color:#fff;box-shadow:0 12px 24px rgba(11,99,206,.20);}
     .aircon-part-empty{border:1px dashed #cbd5e1;border-radius:18px;background:#f8fbff;color:#64748b;padding:18px 14px;text-align:center;font-size:13px;font-weight:900;line-height:1.55;}
@@ -410,7 +410,7 @@ body.view-nonhome .app{padding-top:0;}
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v92</span></div></div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v93</span></div></div>
         <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
       <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
@@ -631,7 +631,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v92",
+  APP_VERSION: "v93",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -647,7 +647,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v92"
+  SPEC_IMAGE_CACHE_BUST: "v93"
 };
 
 const DETAIL_TABS = [
@@ -708,7 +708,7 @@ let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], h
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v92";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v93";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -1307,7 +1307,7 @@ function saveStableAirconSpecSnapshot(db){
 }
 
 function renderAppVersion(){
-  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v92";
+  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v93";
 }
 
 function rememberDbUpdateVersion(version){
@@ -1907,13 +1907,15 @@ function restoreAirconSpecForItem(item){
   return restored;
 }
 
-const AIRCON_SPEC_PART_ORDER = ["스탠드","벽걸이","실외기"];
+const AIRCON_SPEC_PART_ORDER = ["스탠드","벽걸이","실외기","창문형"];
 
 function normalizeAirconSpecPart(value){
-  const text = safe(value, "").replace(/\s+/g, "");
+  const text = safe(value, "").replace(/\s+/g, "").toLowerCase();
   if(!text) return "스탠드";
-  if(text.includes("벽걸")) return "벽걸이";
-  if(text.includes("실외")) return "실외기";
+  if(text.includes("창문") || text.includes("윈도우핏") || text.includes("window")) return "창문형";
+  if(text.includes("벽걸") || text.includes("wall")) return "벽걸이";
+  if(text.includes("실외") || text.includes("outdoor")) return "실외기";
+  if(text.includes("스탠드") || text.includes("stand")) return "스탠드";
   return "스탠드";
 }
 
@@ -1924,7 +1926,9 @@ function getAvailableAirconSpecParts(item){
     if(!safe(row?.question, "") && !safe(row?.answer, "")) return;
     found.add(normalizeAirconSpecPart(row?.productPart || row?.part));
   });
-  if(safe(item?.spec, "")) found.add("스탠드");
+  // 구조화 스펙이 하나라도 있으면 그 제품구분만 표시합니다.
+  // 따라서 벽걸이 단독/창문형 단독 상품에 불필요한 스탠드 탭이 생기지 않습니다.
+  if(found.size === 0 && safe(item?.spec, "")) found.add("스탠드");
   return AIRCON_SPEC_PART_ORDER.filter(part=>found.has(part));
 }
 
