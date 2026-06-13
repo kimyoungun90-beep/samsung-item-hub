@@ -410,7 +410,7 @@ body.view-nonhome .app{padding-top:0;}
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다.</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v91</span></div></div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v92</span></div></div>
         <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
       <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
@@ -631,7 +631,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v91",
+  APP_VERSION: "v92",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -647,7 +647,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v91"
+  SPEC_IMAGE_CACHE_BUST: "v92"
 };
 
 const DETAIL_TABS = [
@@ -708,7 +708,7 @@ let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], h
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v91";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v92";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -1307,7 +1307,7 @@ function saveStableAirconSpecSnapshot(db){
 }
 
 function renderAppVersion(){
-  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v91";
+  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v92";
 }
 
 function rememberDbUpdateVersion(version){
@@ -1404,8 +1404,8 @@ function rebuildIndex(){
 function renderHomeDashboard(){
   if(!els.pageHome) return;
   const hs = DB.homeSettings || {};
-  if(els.homeGreeting) els.homeGreeting.textContent = hs.mainGreeting || hs.메인인사 || hs.homeGreeting || hs.greeting || "안녕하세요 👋";
-  if(els.homeSub) els.homeSub.textContent = hs.subGreeting || hs.서브문구 || hs.homeSub || hs.subtitle || "오늘도 빠르고 정확하게 업무를 지원합니다.";
+  if(els.homeGreeting) els.homeGreeting.textContent = hs.mainGreeting || hs.메인 || hs.메인인사 || hs.homeGreeting || hs.greeting || "안녕하세요 👋";
+  if(els.homeSub) els.homeSub.textContent = hs.subGreeting || hs.내용 || hs.서브문구 || hs.homeSub || hs.subtitle || "오늘도 빠르고 정확하게 업무를 지원합니다";
   renderAppVersion();
   renderHomeUpdateDot();
   renderRecentList();
