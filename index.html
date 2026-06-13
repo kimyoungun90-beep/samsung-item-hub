@@ -84,6 +84,48 @@
 
     .spec-help-guide{display:none;align-items:center;justify-content:center;gap:7px;padding:10px 12px 0;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.55) 100%);font-size:12px;font-weight:900;color:#475569;word-break:keep-all}.spec-help-guide-text{line-height:1.25;text-align:center}.spec-help-btn{border:0;border-radius:999px;background:#dcfce7;color:#14532d;min-height:36px;min-width:56px;padding:0 14px;font-size:13px;font-weight:1000;white-space:nowrap;box-shadow:inset 0 0 0 1px #bbf7d0;display:inline-flex;align-items:center;justify-content:center;text-align:center}.spec-help-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.48);padding:16px}.spec-help-modal.show{display:flex}.spec-help-panel{width:100%;max-width:560px;max-height:82vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);border:1px solid #e2e8f0}.spec-help-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 16px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.spec-help-title{font-size:18px;font-weight:1000;color:#0f172a;letter-spacing:-.3px}.spec-help-close{border:0;border-radius:999px;background:#0f172a;color:#fff;width:42px;height:42px;font-size:22px;font-weight:1000}.spec-help-list{display:grid;gap:10px;padding:14px 16px 18px}.spec-help-item{border:1px solid #e2e8f0;border-radius:16px;padding:12px 13px;background:#f8fafc}.spec-help-term{font-size:14px;font-weight:1000;color:#0f172a;margin-bottom:5px}.spec-help-desc{font-size:13px;font-weight:800;color:#475569;line-height:1.55;word-break:keep-all}.spec-help-hint{padding:0 16px 16px;color:#64748b;font-size:12px;font-weight:850;line-height:1.45;word-break:keep-all}@media (max-width:640px){.spec-help-guide{padding:9px 8px 0;gap:5px;font-size:11px}.spec-help-btn{min-height:34px;min-width:52px;padding:0 10px;font-size:12px}.spec-help-modal{padding:10px}.spec-help-panel{border-radius:22px;max-height:84vh}.spec-help-title{font-size:17px}.spec-help-close{width:40px;height:40px}}
 
+
+
+    /* v94 프로세스 검색: 모바일 One UI 단일 구조 */
+    .process-shell{display:grid;gap:18px}
+    .process-search-wrap{position:relative}
+    .process-search-box{display:flex;align-items:center;gap:8px;border:1px solid #dbe4f0;background:#fff;border-radius:18px;min-height:54px;padding:5px 6px 5px 16px;box-shadow:0 8px 20px rgba(15,23,42,.05)}
+    .process-search-box:focus-within{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10),0 10px 24px rgba(15,23,42,.06)}
+    .process-search-icon{width:22px;height:22px;color:#64748b;flex:0 0 auto}
+    .process-search-box input{flex:1;min-width:0;border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important;min-height:42px!important;padding:0 4px!important;font-size:15px!important;font-weight:850!important;color:#0f172a}
+    .process-search-box input::placeholder{color:#94a3b8;font-weight:750}
+    .process-search-submit{width:44px;height:44px;border:0;border-radius:14px;background:#0f172a;color:#fff;display:grid;place-items:center;flex:0 0 auto;box-shadow:0 8px 18px rgba(15,23,42,.16)}
+    .process-search-submit svg{width:20px;height:20px}
+    .process-suggest{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:45;display:none;background:rgba(255,255,255,.98);border:1px solid #dbe4f0;border-radius:18px;box-shadow:0 18px 42px rgba(15,23,42,.16);overflow:hidden;padding:6px}
+    .process-suggest.show{display:grid}
+    .process-suggest-btn{width:100%;border:0;background:#fff;border-radius:13px;padding:11px 12px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;color:#0f172a}
+    .process-suggest-btn:active,.process-suggest-btn:hover{background:#eff6ff}
+    .process-suggest-title{font-size:14px;font-weight:950;line-height:1.35;word-break:keep-all}
+    .process-suggest-type{font-size:11px;font-weight:950;color:#2563eb;background:#eff6ff;border-radius:999px;padding:5px 8px;white-space:nowrap}
+    .process-section{display:none}.process-section.show{display:block}
+    .process-block-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .process-block-title{font-size:15px;font-weight:1000;color:#0f172a;letter-spacing:-.25px}
+    .process-block-action{border:0;background:#f1f5f9;color:#475569;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:1000}
+    .process-recommend-chips{display:flex;flex-wrap:wrap;gap:7px}
+    .process-recommend-chip{border:1px solid #dbeafe;background:#f8fbff;color:#1d4ed8;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:950;line-height:1.1}
+    .process-type-list{display:grid;border:1px solid #e2e8f0;border-radius:20px;background:#fff;overflow:hidden;box-shadow:0 10px 26px rgba(15,23,42,.05)}
+    .process-type-row{width:100%;border:0;border-top:1px solid #eef2f7;background:#fff;padding:12px 13px;display:flex;align-items:center;gap:12px;text-align:left;color:#0f172a}
+    .process-type-row:first-child{border-top:0}.process-type-row:active{background:#f8fafc}
+    .process-type-icon,.process-card-icon{width:42px;height:42px;border-radius:14px;background:#eff6ff;color:#2563eb;display:grid;place-items:center;flex:0 0 auto}
+    .process-type-icon svg,.process-card-icon svg{width:23px;height:23px}
+    .process-type-text{flex:1;min-width:0}.process-type-name{font-size:15px;font-weight:1000;line-height:1.3}.process-type-desc{margin-top:3px;color:#64748b;font-size:11px;font-weight:800;line-height:1.35}
+    .process-type-count{font-size:11px;font-weight:1000;color:#64748b;background:#f1f5f9;border-radius:999px;padding:6px 8px;white-space:nowrap}.process-type-arrow{color:#94a3b8;font-size:22px;font-weight:700}
+    .process-results-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.process-results-title{font-size:15px;font-weight:1000;color:#0f172a}.process-results-count{font-size:11px;font-weight:1000;color:#2563eb;background:#eff6ff;border-radius:999px;padding:6px 9px}
+    #processList.list{gap:8px}
+    #processList .process-card{padding:0;border-radius:18px;overflow:hidden;box-shadow:0 7px 18px rgba(15,23,42,.035)}
+    #processList .process-question{padding:12px 13px}
+    #processList .process-question-row{align-items:center}
+    .process-card-main{display:flex;align-items:center;gap:11px;min-width:0;flex:1}.process-card-copy{min-width:0;flex:1}
+    #processList .info-title{font-size:15px;line-height:1.35}.process-card-snippet{margin-top:4px;color:#64748b;font-size:11px;font-weight:800;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all}
+    .process-card-side{display:flex;align-items:center;gap:7px;flex:0 0 auto}.process-card-side .type-chip{font-size:10px;padding:5px 7px;background:#eff6ff;color:#2563eb}.process-card-chevron{font-size:22px;color:#94a3b8;transition:transform .18s ease}.process-card.open .process-card-chevron{transform:rotate(90deg)}
+    #processList .process-body{margin:0;border:0;border-top:1px solid #eef2f7;border-radius:0;background:#f8fafc;padding:13px 14px 15px}
+    .process-no-result{border:1px dashed #cbd5e1;border-radius:18px;padding:22px 16px;text-align:center;background:#f8fafc;color:#64748b;font-size:13px;font-weight:850;line-height:1.55}
+
     @media(max-width:390px){h1{font-size:25px}.search-box{display:grid}.search-btn{width:100%}.tabs,.process-tabs,.cost-grid,.selector-grid,.form-row-2{grid-template-columns:1fr}.kv-row{grid-template-columns:68px 1fr}.nav button{font-size:12px}}
 
 
@@ -410,7 +452,7 @@ body.view-nonhome .app{padding-top:0;}
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v93</span></div></div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v94</span></div></div>
         <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
       <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
@@ -556,13 +598,35 @@ body.view-nonhome .app{padding-top:0;}
 
   <section id="pageProcess" class="page">
     <article class="card">
-      <div class="card-inner">
-        <div class="section-title"><div><h2>코스트코 프로세스 검색</h2><small>구분은 그대로 두고, 제목/내용/키워드로 빠르게 검색합니다.</small></div><span id="processCountPill" class="pill">0건</span></div>
-        <div class="toolbar">
-          <input id="processSearch" name="q_process_plain" type="search" placeholder="예: 세탁기, 드럼세탁기, 배송, VOC, 설치" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
-          <div id="processChips" class="chips"></div>
+      <div class="card-inner process-shell">
+        <div class="section-title"><div><h2>프로세스 검색</h2><small>제목과 내용에 포함된 글자로 빠르게 찾아보세요.</small></div><span id="processCountPill" class="pill">0건</span></div>
+
+        <div class="process-search-wrap">
+          <div class="process-search-box">
+            <svg class="process-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="processSearch" name="q_process_plain" type="search" placeholder="프로세스명, 내용으로 검색" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
+            <button id="processSearchBtn" class="process-search-submit" type="button" aria-label="프로세스 검색"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          </div>
+          <div id="processSuggest" class="process-suggest" role="listbox" aria-label="관련 프로세스"></div>
         </div>
-        <div id="processList" class="list"></div>
+
+        <section id="processRecommendSection" class="process-section">
+          <div class="process-block-head"><div class="process-block-title">추천 검색어</div></div>
+          <div id="processRecommendChips" class="process-recommend-chips"></div>
+        </section>
+
+        <section id="processTypeSection" class="process-section show">
+          <div class="process-block-head"><div class="process-block-title">프로세스 유형</div></div>
+          <div id="processTypeList" class="process-type-list"></div>
+        </section>
+
+        <section id="processResultSection" class="process-section">
+          <div class="process-results-meta">
+            <div id="processResultTitle" class="process-results-title">검색 결과</div>
+            <div style="display:flex;align-items:center;gap:7px"><span id="processResultCount" class="process-results-count">0건</span><button id="processTypeResetBtn" class="process-block-action" type="button">유형 보기</button></div>
+          </div>
+          <div id="processList" class="list"></div>
+        </section>
       </div>
     </article>
   </section>
@@ -631,7 +695,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v93",
+  APP_VERSION: "v94",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -647,7 +711,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v93"
+  SPEC_IMAGE_CACHE_BUST: "v94"
 };
 
 const DETAIL_TABS = [
@@ -704,11 +768,11 @@ const SPEC_TERM_GUIDES = {
   ]
 };
 
-let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
+let DB = { items:[], departments:[], processes:[], processRecommendations:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v93";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v94";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -743,6 +807,12 @@ let specTapMoved = false;
 let deptFilter = "전체";
 let deptInteracted = false;
 let processFilter = "전체";
+let processSuggestions = [];
+let processSuggestionOpen = false;
+let processRecommendationLoadedAt = 0;
+let processRecommendationLoading = false;
+let processPendingOpenIndex = null;
+const processSearchLogTimes = new Map();
 let compareFilter = "전체";
 let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
@@ -758,7 +828,7 @@ const els = {
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
   deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"),
-  processSearch:$("processSearch"), processChips:$("processChips"), processList:$("processList"), processCountPill:$("processCountPill"),
+  processSearch:$("processSearch"), processSearchBtn:$("processSearchBtn"), processSuggest:$("processSuggest"), processRecommendSection:$("processRecommendSection"), processRecommendChips:$("processRecommendChips"), processTypeSection:$("processTypeSection"), processTypeList:$("processTypeList"), processResultSection:$("processResultSection"), processResultTitle:$("processResultTitle"), processResultCount:$("processResultCount"), processTypeResetBtn:$("processTypeResetBtn"), processList:$("processList"), processCountPill:$("processCountPill"),
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
   inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"),
   imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption"),
@@ -772,7 +842,7 @@ function init(){
   bindEvents();
   renderDetailTabs();
   renderDeptChips();
-  renderProcessChips();
+  renderProcessScreen(false);
   renderItemCategoryChips();
   renderSpecCategoryCards();
   prefetchSpecCategoryFirstImages();
@@ -857,7 +927,22 @@ function bindEvents(){
   els.deptSearch.addEventListener("input",debounce(()=>{ deptInteracted = true; renderDepartments(); },120));
   els.storeSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.storeSelect.value) els.logisticsSelect.value=""; renderDepartments(); });
   els.logisticsSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.logisticsSelect.value) els.storeSelect.value=""; renderDepartments(); });
-  els.processSearch.addEventListener("input",debounce(renderProcesses,120));
+  els.processSearch.addEventListener("input",debounce(()=>{
+    processFilter = "전체";
+    renderProcessScreen(true);
+  },90));
+  els.processSearch.addEventListener("focus",()=>renderProcessSuggestions());
+  els.processSearch.addEventListener("keydown",(e)=>{ if(e.key === "Enter"){ e.preventDefault(); runProcessSearch("검색"); } });
+  if(els.processSearchBtn) els.processSearchBtn.addEventListener("click",()=>runProcessSearch("검색"));
+  if(els.processTypeResetBtn) els.processTypeResetBtn.addEventListener("click",()=>{
+    processFilter = "전체";
+    if(els.processSearch) els.processSearch.value = "";
+    hideProcessSuggestions();
+    renderProcessScreen(false);
+  });
+  document.addEventListener("click",(e)=>{
+    if(!e.target.closest(".process-search-wrap")) hideProcessSuggestions();
+  });
   els.inquirySubmitBtn.addEventListener("click",submitInquiry);
   els.detailBox.addEventListener("click",(e)=>{
     const specBtn = e.target.closest(".spec-open-btn");
@@ -993,7 +1078,11 @@ function showPage(page, push=true){
   if(target==="specTable"){ els.navSpecTable.classList.add("active"); prefetchSpecCategoryFirstImages(); }
   if(target==="inquiry") els.navInquiry.classList.add("active");
   if(target==="dept") els.navDept.classList.add("active");
-  if(target==="process") els.navProcess.classList.add("active");
+  if(target==="process"){
+    els.navProcess.classList.add("active");
+    renderProcessScreen(false);
+    fetchProcessRecommendations();
+  }
   if(target==="home") renderHomeDashboard();
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -1052,6 +1141,7 @@ function loadFromCache(){
     const cached = readBestLocalCache();
     if(!cached || !cached.data) return false;
     DB = cached.data;
+    if(!Array.isArray(DB.processRecommendations)) DB.processRecommendations = [];
     restoreStableAirconSpecSnapshot(DB);
     bootstrapReady = true;
     rebuildIndex();
@@ -1180,6 +1270,7 @@ async function loadBootstrap(force, options={}){
       items: Array.isArray(data.items) ? data.items : [],
       departments: Array.isArray(data.departments) ? data.departments : [],
       processes: Array.isArray(data.processes) ? data.processes : [],
+      processRecommendations: Array.isArray(data.processRecommendations) ? data.processRecommendations : [],
       specCompare: Array.isArray(data.specCompare) ? data.specCompare : [],
       notices: Array.isArray(data.notices) ? data.notices : [],
       homeSettings: data.homeSettings || {},
@@ -1307,7 +1398,7 @@ function saveStableAirconSpecSnapshot(db){
 }
 
 function renderAppVersion(){
-  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v93";
+  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v94";
 }
 
 function rememberDbUpdateVersion(version){
@@ -1533,8 +1624,7 @@ function renderAll(){
   prefetchSpecCategoryFirstImages();
   renderCompareChips();
   renderSpecCompare();
-  renderProcessChips();
-  renderProcesses();
+  renderProcessScreen(false);
 }
 
 function searchItem(showError=true){
@@ -2199,57 +2289,271 @@ function renderDepartments(){
     </div>`).join("");
 }
 
-function renderProcessChips(){
-  const base = ["전체","시연 모드","배송","설치","VOC","기타"];
-  const extra = uniqueSorted(DB.processes.map(r=>safe(r.type,"")).filter(Boolean)).filter(v=>!base.includes(v));
-  const chips = base.concat(extra);
-  els.processChips.innerHTML = chips.map(ch=>`<button class="chip ${processFilter===ch?"active":""}" type="button" data-chip="${esc(ch)}">${esc(ch)}</button>`).join("");
-  els.processChips.querySelectorAll(".chip").forEach(btn=>{
-    btn.addEventListener("click",()=>{ processFilter = btn.dataset.chip; renderProcessChips(); renderProcesses(); });
-  });
+function processLocaleCompare(a,b){
+  return String(a||"").localeCompare(String(b||""), "ko", { numeric:true, sensitivity:"base" });
 }
 
-function renderProcesses(){
-  const q = normalizeText(els.processSearch.value);
-  let rows = DB.processes.slice();
-  if(processFilter !== "전체"){
-    rows = rows.filter(r => safe(r.type,"") === processFilter);
+function processTypeIconSvg(type){
+  const key = safe(type, "기타");
+  if(key === "전체") return `<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="4" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="14" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/></svg>`;
+  if(key.includes("시연")) return `<svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m10 8.5 5 2.5-5 2.5v-5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 20h6M12 16.5V20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  if(key.includes("배송")) return `<svg viewBox="0 0 24 24" fill="none"><path d="M3.5 6h10v10h-10V6Zm10 3h4l3 3v4h-7V9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/></svg>`;
+  if(key.includes("설치")) return `<svg viewBox="0 0 24 24" fill="none"><path d="m14.5 5.5 4 4-9.8 9.8a2.1 2.1 0 0 1-3 0l-1-1a2.1 2.1 0 0 1 0-3l9.8-9.8Z" stroke="currentColor" stroke-width="1.8"/><path d="m13 7 4 4M4 5l5 5M7 3 3 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  if(key.includes("VOC")) return `<svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h16v11H9l-5 3v-14Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8" cy="11" r="1" fill="currentColor"/><circle cx="12" cy="11" r="1" fill="currentColor"/><circle cx="16" cy="11" r="1" fill="currentColor"/></svg>`;
+  if(key.includes("가전")) return `<svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3.5" width="14" height="17" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M5 8h14" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="14" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="5.8" r=".8" fill="currentColor"/></svg>`;
+  return `<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18" cy="12" r="1.7" fill="currentColor"/></svg>`;
+}
+
+function getProcessTypes(){
+  const preferred = ["시연 모드","배송","설치","VOC","가전제품","기타"];
+  const counts = new Map();
+  (DB.processes || []).forEach(row=>{
+    const type = safe(row.type,"기타");
+    counts.set(type, (counts.get(type)||0)+1);
+  });
+  const extras = Array.from(counts.keys()).filter(v=>!preferred.includes(v)).sort(processLocaleCompare);
+  return ["전체", ...preferred.filter(v=>counts.has(v)), ...extras].map(type=>({
+    type,
+    count:type === "전체" ? (DB.processes||[]).length : (counts.get(type)||0)
+  })).filter(row=>row.count > 0);
+}
+
+function processTypeDescription(type){
+  const map = {
+    "전체":"등록된 전체 업무 절차",
+    "시연 모드":"매장 시연과 진열 관련 절차",
+    "배송":"배송 일정과 인계 관련 절차",
+    "설치":"제품 설치와 철거 관련 절차",
+    "VOC":"회원 불편과 요청 처리 절차",
+    "가전제품":"제품별 확인이 필요한 절차",
+    "기타":"그 외 업무 처리 절차"
+  };
+  return map[type] || `${type} 관련 업무 절차`;
+}
+
+function matchProcesses(query, typeFilter="전체"){
+  const q = normalizeText(query);
+  let rows = (DB.processes || []).map((row,index)=>({ ...row, _dbIndex:index }));
+  if(typeFilter && typeFilter !== "전체") rows = rows.filter(row=>safe(row.type,"기타") === typeFilter);
+  if(!q) return rows.sort((a,b)=>processLocaleCompare(a.title,b.title));
+  return rows.map(row=>{
+    const title = normalizeText(row.title);
+    const body = normalizeText(row.body);
+    let rank = 99;
+    if(title.startsWith(q)) rank = 0;
+    else if(title.includes(q)) rank = 1;
+    else if(body.includes(q)) rank = 2;
+    return { ...row, _rank:rank };
+  }).filter(row=>row._rank < 99).sort((a,b)=>a._rank-b._rank || processLocaleCompare(a.title,b.title));
+}
+
+function renderProcessRecommendations(){
+  const terms = Array.isArray(DB.processRecommendations) ? DB.processRecommendations.filter(Boolean).slice(0,8) : [];
+  if(!els.processRecommendSection || !els.processRecommendChips) return;
+  if(!terms.length){
+    els.processRecommendSection.classList.remove("show");
+    els.processRecommendChips.innerHTML = "";
+    return;
   }
-  if(q){
-    rows = rows.filter(r => normalizeText([r.type,r.title,r.body,r.keywords].join(" ")).includes(q));
-  }
-  els.processCountPill.textContent = `${rows.length}건`;
-  if(!rows.length){ els.processList.innerHTML = `<div class="empty">검색 조건에 맞는 프로세스가 없습니다.</div>`; return; }
-  els.processList.innerHTML = rows.map((r,i)=>{
-    const img = convertDriveImageUrl(r.imageUrl || "");
-    return `<div class="info-card process-card">
-      <button class="process-question" type="button">
-        <div class="process-question-row">
-          <div>
-            <div class="info-title">${i+1}. ${styledText(r.title,"제목 미등록",styleOf(r,"title"))}</div>
-            <div class="info-sub">${styledText(r.keywords,"클릭하면 답변이 열립니다.",styleOf(r,"keywords"))}</div>
-          </div>
-          <div><span class="pill type-chip">${styledText(r.type,"프로세스",styleOf(r,"type"))}</span><div class="process-toggle">답변 보기</div></div>
-        </div>
-      </button>
-      <div class="process-body">${img ? `<img class="process-img" src="${esc(img)}" alt="프로세스 이미지" loading="lazy" onerror="this.style.display='none'" />` : ""}<div class="process-answer-content">${styledText(r.body,"내용 미등록",styleOf(r,"body"))}</div></div>
-    </div>`;
-  }).join("");
-  els.processList.querySelectorAll(".process-question").forEach((btn,idx)=>{
+  els.processRecommendSection.classList.add("show");
+  els.processRecommendChips.innerHTML = terms.map(term=>`<button class="process-recommend-chip" type="button" data-term="${esc(term)}">${esc(term)}</button>`).join("");
+  els.processRecommendChips.querySelectorAll(".process-recommend-chip").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      const card = btn.closest(".process-card");
-      card.classList.toggle("open");
-      const r = rows[idx];
-      if(r && card.classList.contains("open")){
-        queueViewLog("프로세스", [safe(r.type,""), safe(r.title,"")].filter(Boolean).join(" · "), "");
-        addRecentView({ type:"process", id:`process:${r.type || ''}:${r.title || idx}`, title:r.title || "프로세스", subtitle:r.type || "프로세스" });
-      }
-      const toggle = card.querySelector(".process-toggle");
-      if(toggle) toggle.textContent = card.classList.contains("open") ? "답변 닫기" : "답변 보기";
+      const term = btn.dataset.term || "";
+      els.processSearch.value = term;
+      processFilter = "전체";
+      hideProcessSuggestions();
+      const rows = renderProcessScreen(false);
+      queueProcessSearchLog(term, rows.length, "", "추천 검색어");
     });
   });
 }
 
+function renderProcessTypes(){
+  if(!els.processTypeList) return;
+  const types = getProcessTypes();
+  els.processTypeList.innerHTML = types.map(({type,count})=>`<button class="process-type-row" type="button" data-type="${esc(type)}">
+    <span class="process-type-icon">${processTypeIconSvg(type)}</span>
+    <span class="process-type-text"><span class="process-type-name">${esc(type === "전체" ? "전체 프로세스" : type)}</span><span class="process-type-desc">${esc(processTypeDescription(type))}</span></span>
+    <span class="process-type-count">${count}건</span><span class="process-type-arrow">›</span>
+  </button>`).join("");
+  els.processTypeList.querySelectorAll(".process-type-row").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      processFilter = btn.dataset.type || "전체";
+      els.processSearch.value = "";
+      hideProcessSuggestions();
+      renderProcessScreen(false);
+    });
+  });
+}
+
+function renderProcessSuggestions(){
+  if(!els.processSuggest || !els.processSearch) return;
+  const raw = els.processSearch.value.trim();
+  if(!raw){ hideProcessSuggestions(); return; }
+  processSuggestions = matchProcesses(raw, "전체").slice(0,8);
+  if(!processSuggestions.length){ hideProcessSuggestions(); return; }
+  els.processSuggest.innerHTML = processSuggestions.map(row=>`<button class="process-suggest-btn" type="button" data-index="${row._dbIndex}" role="option"><span class="process-suggest-title">${esc(row.title || "제목 미등록")}</span><span class="process-suggest-type">${esc(row.type || "기타")}</span></button>`).join("");
+  els.processSuggest.classList.add("show");
+  processSuggestionOpen = true;
+  els.processSuggest.querySelectorAll(".process-suggest-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const idx = Number(btn.dataset.index);
+      const row = (DB.processes || [])[idx];
+      if(!row) return;
+      const typed = els.processSearch.value.trim();
+      els.processSearch.value = row.title || typed;
+      processFilter = "전체";
+      processPendingOpenIndex = idx;
+      hideProcessSuggestions();
+      const rows = renderProcessScreen(false);
+      queueProcessSearchLog(typed || row.title, rows.length, row.title || "", "자동완성 선택");
+    });
+  });
+}
+
+function hideProcessSuggestions(){
+  if(els.processSuggest){ els.processSuggest.classList.remove("show"); els.processSuggest.innerHTML = ""; }
+  processSuggestionOpen = false;
+}
+
+function runProcessSearch(action="검색"){
+  const term = els.processSearch ? els.processSearch.value.trim() : "";
+  if(!term){
+    processFilter = "전체";
+    hideProcessSuggestions();
+    renderProcessScreen(false);
+    return;
+  }
+  processFilter = "전체";
+  hideProcessSuggestions();
+  const rows = renderProcessScreen(false);
+  queueProcessSearchLog(term, rows.length, "", action);
+}
+
+function renderProcessScreen(showSuggestions=false){
+  const raw = els.processSearch ? els.processSearch.value.trim() : "";
+  const searching = Boolean(raw);
+  const typeSelected = !searching && processFilter !== "전체";
+  const rows = searching ? matchProcesses(raw,"전체") : (typeSelected ? matchProcesses("",processFilter) : []);
+
+  if(els.processCountPill) els.processCountPill.textContent = `${(DB.processes||[]).length}건`;
+  renderProcessRecommendations();
+  renderProcessTypes();
+
+  if(els.processTypeSection) els.processTypeSection.classList.toggle("show", !searching && !typeSelected);
+  if(els.processResultSection) els.processResultSection.classList.toggle("show", searching || typeSelected);
+
+  if(searching || typeSelected){
+    if(els.processResultTitle) els.processResultTitle.textContent = searching ? `“${raw}” 검색 결과` : `${processFilter} 프로세스`;
+    if(els.processResultCount) els.processResultCount.textContent = `${rows.length}건`;
+    renderProcesses(rows);
+  }else if(els.processList){
+    els.processList.innerHTML = "";
+  }
+
+  if(showSuggestions && searching) renderProcessSuggestions();
+  else if(!searching) hideProcessSuggestions();
+  return rows;
+}
+
+function processSnippet(body){
+  const text = String(body || "").replace(/\s+/g," ").trim();
+  return text || "눌러서 상세 절차를 확인하세요.";
+}
+
+function renderProcesses(rowsArg){
+  const rows = Array.isArray(rowsArg) ? rowsArg : [];
+  if(!els.processList) return;
+  if(!rows.length){
+    els.processList.innerHTML = `<div class="process-no-result">검색 조건에 맞는 프로세스가 없습니다.<br>다른 글자로 다시 검색해 주세요.</div>`;
+    return;
+  }
+  els.processList.innerHTML = rows.map(row=>{
+    const img = convertDriveImageUrl(row.imageUrl || "");
+    return `<div class="info-card process-card" data-process-index="${row._dbIndex}">
+      <button class="process-question" type="button">
+        <div class="process-question-row">
+          <div class="process-card-main"><span class="process-card-icon">${processTypeIconSvg(row.type)}</span><span class="process-card-copy"><span class="info-title">${styledText(row.title,"제목 미등록",styleOf(row,"title"))}</span><span class="process-card-snippet">${esc(processSnippet(row.body))}</span></span></div>
+          <div class="process-card-side"><span class="pill type-chip">${styledText(row.type,"기타",styleOf(row,"type"))}</span><span class="process-card-chevron">›</span></div>
+        </div>
+      </button>
+      <div class="process-body">${img ? `<img class="process-img" src="${esc(img)}" alt="프로세스 이미지" loading="lazy" onerror="this.style.display='none'" />` : ""}<div class="process-answer-content">${styledText(row.body,"내용 미등록",styleOf(row,"body"))}</div></div>
+    </div>`;
+  }).join("");
+
+  els.processList.querySelectorAll(".process-card").forEach(card=>{
+    const idx = Number(card.dataset.processIndex);
+    const row = (DB.processes || [])[idx];
+    const btn = card.querySelector(".process-question");
+    if(!btn || !row) return;
+    btn.addEventListener("click",()=>toggleProcessCard(card,row));
+  });
+
+  if(processPendingOpenIndex !== null){
+    const card = els.processList.querySelector(`[data-process-index="${processPendingOpenIndex}"]`);
+    const row = (DB.processes || [])[processPendingOpenIndex];
+    if(card && row){
+      toggleProcessCard(card,row,true);
+      setTimeout(()=>card.scrollIntoView({ behavior:"smooth", block:"center" }),80);
+    }
+    processPendingOpenIndex = null;
+  }
+}
+
+function toggleProcessCard(card,row,forceOpen=false){
+  if(!card || !row) return;
+  const nextOpen = forceOpen ? true : !card.classList.contains("open");
+  card.classList.toggle("open", nextOpen);
+  if(nextOpen){
+    queueViewLog("프로세스", [safe(row.type,""), safe(row.title,"")].filter(Boolean).join(" · "), "");
+    addRecentView({ type:"process", id:`process:${row.type || ''}:${row.title || row._dbIndex || ''}`, title:row.title || "프로세스", subtitle:row.type || "프로세스" });
+    const typed = els.processSearch ? els.processSearch.value.trim() : "";
+    const currentRows = matchProcesses(typed, typed ? "전체" : processFilter);
+    queueProcessSearchLog(typed || row.title, currentRows.length || 1, row.title || "", "프로세스 열기");
+  }
+}
+
+function queueProcessSearchLog(term,resultCount=0,selectedProcess="",action="검색"){
+  const cleanTerm = String(term || "").trim().replace(/\s+/g," ").slice(0,80);
+  const cleanSelected = String(selectedProcess || "").trim().replace(/\s+/g," ").slice(0,160);
+  if(!cleanTerm && !cleanSelected) return;
+  const key = `${normalizeText(cleanTerm)}|${normalizeText(cleanSelected)}|${action}`;
+  const now = Date.now();
+  const prev = processSearchLogTimes.get(key) || 0;
+  if(now - prev < 1800) return;
+  processSearchLogTimes.set(key,now);
+  const qs = new URLSearchParams({ action:"logProcessSearch", term:cleanTerm, resultCount:String(Math.max(0,Number(resultCount)||0)), selectedProcess:cleanSelected, source:String(action||"검색").slice(0,30), _:String(now) }).toString();
+  const url = `${CONFIG.APPS_SCRIPT_URL}?${qs}`;
+  try{ fetch(url,{ method:"GET",mode:"no-cors",cache:"no-store",keepalive:true }).catch(()=>{}); }
+  catch(e){ try{ const img = new Image(); img.src = url; }catch(err){} }
+  if(cleanSelected && cleanSelected.length >= 2) addProcessRecommendationOptimistic(cleanSelected);
+  else if(cleanTerm.length >= 2 && Number(resultCount)>0) addProcessRecommendationOptimistic(cleanTerm);
+  setTimeout(()=>fetchProcessRecommendations(true),1400);
+}
+
+function addProcessRecommendationOptimistic(term){
+  const clean = String(term||"").trim();
+  if(clean.length < 2) return;
+  const current = Array.isArray(DB.processRecommendations) ? DB.processRecommendations : [];
+  DB.processRecommendations = [clean, ...current.filter(v=>normalizeText(v)!==normalizeText(clean))].slice(0,8);
+  renderProcessRecommendations();
+}
+
+async function fetchProcessRecommendations(force=false){
+  if(processRecommendationLoading) return;
+  const now = Date.now();
+  if(!force && now - processRecommendationLoadedAt < 60000){ renderProcessRecommendations(); return; }
+  processRecommendationLoading = true;
+  try{
+    const data = await apiGet({ action:"processRecommendations", _:now });
+    if(data && data.ok !== false && Array.isArray(data.recommendations)){
+      DB.processRecommendations = data.recommendations.filter(Boolean).slice(0,8);
+      processRecommendationLoadedAt = Date.now();
+      renderProcessRecommendations();
+    }
+  }catch(e){}finally{ processRecommendationLoading = false; }
+}
 
 function openImageModal(images, startIndex=0, caption="이미지 확대 보기"){
   const list = Array.isArray(images) ? images.filter(Boolean) : [images].filter(Boolean);
