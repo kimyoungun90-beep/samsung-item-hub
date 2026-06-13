@@ -410,7 +410,7 @@ body.view-nonhome .app{padding-top:0;}
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다.</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v87</span></div></div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다.</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v88</span></div></div>
         <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
       <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
@@ -631,26 +631,28 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v87",
+  APP_VERSION: "v88",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwtnE_Bwm4YwwBHdg-38aelzvlnR0ryZKo9zwLwVjkiehVFdaboxDBFdS8NsAg3ZeGhZQ/exec",
-  CACHE_KEY: "costco_item_operation_hub_cache_v87",
-  LEGACY_CACHE_KEYS: Array.from({length: 14}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
+  CACHE_KEY: "costco_item_operation_hub_cache_v88",
+  LEGACY_CACHE_KEYS: [
+    ...Array.from({length: 39}, (_, i)=>`costco_item_operation_hub_v${49+i}_cache`),
+    ...Array.from({length: 39}, (_, i)=>`costco_item_operation_hub_cache_v${49+i}`)
+  ],
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v87"
+  SPEC_IMAGE_CACHE_BUST: "v88"
 };
 
 const DETAIL_TABS = [
   { key:"spec", label:"스펙" },
   { key:"feature", label:"기능" },
-  { key:"promoDate", label:"행사일/예정일" },
   { key:"wallModel", label:"벽걸이 모델명/설치비" },
   { key:"cost", label:"이전설치/철거 비용" }
 ];
@@ -704,8 +706,8 @@ const SPEC_TERM_GUIDES = {
 
 let DB = { items:[], departments:[], processes:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v87";
-const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version_v87";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v88";
+const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version_v88";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
 let bootstrapLoading = false;
@@ -1038,7 +1040,7 @@ function readBestLocalCache(){
   try{
     for(let i=0;i<localStorage.length;i++){
       const k = localStorage.key(i);
-      if(/^costco_item_operation_hub_v\d+_cache$/.test(k || "")) keys.add(k);
+      if(/^costco_item_operation_hub_(?:v\d+_cache|cache_v\d+)$/.test(k || "")) keys.add(k);
     }
   }catch(e){}
 
@@ -1061,6 +1063,8 @@ async function loadBootstrap(force, options={}){
   const silent = options && options.silent === true;
   const auto = options && options.auto === true;
   const selectedItemNoBefore = selectedItem ? normalizeItemNo(selectedItem.itemNo) : "";
+  const previousDb = DB;
+  const previousVersion = safe(previousDb?.updateVersion || previousDb?.homeSettings?.updateVersion, "");
   try{
     if(!silent){
       showStatus(force ? "구글시트 최신 DB를 다시 불러오는 중입니다." : "구글시트 DB를 불러오는 중입니다.", "warn");
@@ -1070,7 +1074,9 @@ async function loadBootstrap(force, options={}){
 
     const data = await apiGet({ action:"bootstrap", refresh: force ? "1" : "0", _: Date.now() });
     if(!data || data.ok === false) throw new Error(data?.message || "bootstrap error");
-    DB = {
+    if(!Array.isArray(data.items) || !data.items.length) throw new Error("items payload is empty");
+
+    const incomingDb = {
       items: Array.isArray(data.items) ? data.items : [],
       departments: Array.isArray(data.departments) ? data.departments : [],
       processes: Array.isArray(data.processes) ? data.processes : [],
@@ -1080,10 +1086,23 @@ async function loadBootstrap(force, options={}){
       updateVersion: safe(data.updateVersion || data.homeSettings?.updateVersion, ""),
       updatedAt: data.updatedAt || formatToday()
     };
-    localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({ savedAt:Date.now(), data:DB }));
-    rememberDbUpdateVersion(DB.updateVersion);
+
+    // 동일한 DB 버전에서 일시적으로 스펙 행이 빠진 응답이 들어오면,
+    // 화면에 이미 정상 표시 중인 스펙을 유지해 깜빡임/미등록 오표시를 막습니다.
+    preserveStableSpecRows(incomingDb, previousDb, previousVersion);
+
+    DB = incomingDb;
     rebuildIndex();
     if(selectedItemNoBefore) selectedItem = itemMap.get(normalize(selectedItemNoBefore)) || selectedItem;
+
+    // 저장 공간 부족이 발생해도 새 DB 화면 반영 자체가 중단되지 않도록 분리합니다.
+    try{
+      localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({ savedAt:Date.now(), data:DB }));
+    }catch(cacheError){
+      console.warn("DB cache save skipped", cacheError);
+    }
+    rememberDbUpdateVersion(DB.updateVersion);
+
     renderAll();
     if(currentPage === "item" && selectedItem) renderProduct(selectedItem);
     if(currentPage === "itemDetail" && selectedItem) renderItemTextDetail();
@@ -1109,11 +1128,41 @@ async function loadBootstrap(force, options={}){
     return false;
   }finally{
     bootstrapLoading = false;
+    if(currentPage === "itemDetail" && selectedItem) renderItemTextDetail();
   }
 }
 
+function preserveStableSpecRows(incomingDb, previousDb, previousVersion=""){
+  if(!incomingDb || !previousDb || !Array.isArray(incomingDb.items) || !Array.isArray(previousDb.items)) return;
+  const incomingVersion = safe(incomingDb.updateVersion || incomingDb.homeSettings?.updateVersion, "");
+  if(incomingVersion && previousVersion && incomingVersion !== previousVersion) return;
+
+  const previousByNo = new Map();
+  previousDb.items.forEach(item=>{
+    const no = normalizeItemNo(item?.itemNo);
+    if(no) previousByNo.set(no, item);
+  });
+
+  incomingDb.items = incomingDb.items.map(item=>{
+    const no = normalizeItemNo(item?.itemNo);
+    const prev = no ? previousByNo.get(no) : null;
+    const nextRows = Array.isArray(item?.specRows) ? item.specRows : [];
+    const prevRows = Array.isArray(prev?.specRows) ? prev.specRows : [];
+    if(!prevRows.length) return item;
+    if(!nextRows.length) return { ...item, specRows: prevRows };
+
+    // 에어컨은 구성별 데이터가 일부만 누락돼 버튼이 사라지는 경우까지 방지합니다.
+    if(itemCategoryGroup(item) === "에어컨"){
+      const nextParts = new Set(nextRows.map(r=>normalizeAirconSpecPart(r?.productPart || r?.part)));
+      const missingRows = prevRows.filter(r=>!nextParts.has(normalizeAirconSpecPart(r?.productPart || r?.part)));
+      if(missingRows.length) return { ...item, specRows:[...nextRows, ...missingRows] };
+    }
+    return item;
+  });
+}
+
 function renderAppVersion(){
-  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v87";
+  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v88";
 }
 
 function rememberDbUpdateVersion(version){
@@ -1678,18 +1727,55 @@ function openItemDetailPage(item){
   if(!item) return;
   selectedItem = item;
   itemDetailTab = "spec";
-  selectedAirconSpecPart = "스탠드";
+  selectedAirconSpecPart = getAvailableAirconSpecParts(item)[0] || "스탠드";
   queueViewLog("스펙", viewTargetForItem(item), item.itemNo || "");
   renderItemTextDetail();
   showPage("itemDetail");
+}
+
+const AIRCON_SPEC_PART_ORDER = ["스탠드","벽걸이","실외기"];
+
+function normalizeAirconSpecPart(value){
+  const text = safe(value, "").replace(/\s+/g, "");
+  if(!text) return "스탠드";
+  if(text.includes("벽걸")) return "벽걸이";
+  if(text.includes("실외")) return "실외기";
+  return "스탠드";
+}
+
+function getAvailableAirconSpecParts(item){
+  const found = new Set();
+  const rows = Array.isArray(item?.specRows) ? item.specRows : [];
+  rows.forEach(row=>{
+    if(!safe(row?.question, "") && !safe(row?.answer, "")) return;
+    found.add(normalizeAirconSpecPart(row?.productPart || row?.part));
+  });
+  if(safe(item?.spec, "")) found.add("스탠드");
+  return AIRCON_SPEC_PART_ORDER.filter(part=>found.has(part));
+}
+
+function ensureSelectedAirconSpecPart(item){
+  const parts = getAvailableAirconSpecParts(item);
+  if(parts.length && !parts.includes(selectedAirconSpecPart)) selectedAirconSpecPart = parts[0];
+  return parts;
+}
+
+function renderAirconSpecLoading(){
+  return `<div class="item-detail-content">
+    <div class="item-detail-content-title">스펙 확인 중</div>
+    <div class="item-detail-content-body item-detail-empty">최신 에어컨 스펙 데이터를 불러오는 중입니다.<br>현재 화면을 유지한 채 완료되면 자동으로 다시 표시됩니다.</div>
+  </div>`;
 }
 
 function renderStructuredSpecContent(item, airconPart=""){
   let rows = Array.isArray(item?.specRows) ? item.specRows.filter(r=>safe(r.question,"") || safe(r.answer,"")) : [];
   const isAircon = itemCategoryGroup(item) === "에어컨";
   if(isAircon){
-    const wanted = airconPart || "스탠드";
-    rows = rows.filter(r=>safe(r.productPart || r.part || "스탠드","스탠드") === wanted);
+    const availableParts = getAvailableAirconSpecParts(item);
+    if(!availableParts.length && bootstrapLoading) return renderAirconSpecLoading();
+    const wanted = availableParts.includes(airconPart) ? airconPart : (availableParts[0] || "스탠드");
+    rows = rows.filter(r=>normalizeAirconSpecPart(r.productPart || r.part) === wanted);
+    airconPart = wanted;
   }
   if(!rows.length){
     const legacy = safe(item?.spec,"");
@@ -1699,9 +1785,9 @@ function renderStructuredSpecContent(item, airconPart=""){
         <div class="item-detail-content-body">${styledText(legacy,"",styleOf(item,"spec"))}</div>
       </div>`;
     }
-    const partText = isAircon ? `${airconPart || "스탠드"} 스펙이 등록되지 않았습니다.<br>` : "";
+    const partText = isAircon && airconPart ? `${airconPart} 스펙이 등록되지 않았습니다.<br>` : "";
     return `<div class="item-detail-content">
-      <div class="item-detail-content-title">${isAircon ? `${airconPart || "스탠드"} 스펙` : "스펙"}</div>
+      <div class="item-detail-content-title">${isAircon && airconPart ? `${airconPart} 스펙` : "스펙"}</div>
       <div class="item-detail-content-body item-detail-empty">${partText}구글시트의 카테고리별 스펙 시트에 내용을 입력하세요.<br>에어컨은 A열 아이템번호, B열 제품구분, C열 구분번호, D열 질문, E열 답으로 입력합니다.</div>
     </div>`;
   }
@@ -1734,9 +1820,10 @@ function renderItemTextDetail(){
   const thumb = thumbCandidates[0] || getItemThumbnailUrl(item) || "";
   const active = ITEM_DETAIL_TABS.find(t=>t.key===itemDetailTab) || ITEM_DETAIL_TABS[0];
   const isAircon = itemCategoryGroup(item) === "에어컨";
-  const partTabs = isAircon && active.key === "spec" ? `
+  const availableAirconParts = isAircon ? ensureSelectedAirconSpecPart(item) : [];
+  const partTabs = isAircon && active.key === "spec" && availableAirconParts.length ? `
     <div class="aircon-part-tabs" aria-label="에어컨 구성별 스펙">
-      ${["스탠드","실외기","벽걸이"].map(part=>`<button class="aircon-part-btn ${selectedAirconSpecPart===part?"active":""}" type="button" data-part="${part}">${part}</button>`).join("")}
+      ${availableAirconParts.map(part=>`<button class="aircon-part-btn ${selectedAirconSpecPart===part?"active":""}" type="button" data-part="${part}">${part}</button>`).join("")}
     </div>` : "";
   els.itemDetailContent.innerHTML = `
     <div class="item-detail-hero">
@@ -1814,42 +1901,6 @@ function closeNoticeModal(){
   if(!els.imageModal.classList.contains("show") && !els.specViewer.classList.contains("show")) document.body.style.overflow = "";
 }
 
-function renderEventScheduleBox(item, tabLabel){
-  const promoDate = safe(item?.promoDate, "등록된 예정일이 없습니다.");
-  const events = Array.isArray(item?.operationEvents) ? item.operationEvents : [];
-  const eventHtml = events.length ? events.map(ev=>{
-    const period = [safe(ev.eventStart,""), safe(ev.eventEnd,"")].filter(Boolean).join(" ~ ");
-    const price = safe(ev.salePrice,"") || safe(ev.finalPrice,"");
-    const priceStyle = ev.salePrice ? styleOf(ev,"salePrice") : styleOf(ev,"finalPrice");
-    const rows = [
-      period ? { label:"기간: ", value:period, style:mergeTextStyles(styleOf(ev,"eventStart"), styleOf(ev,"eventEnd")) } : null,
-      ev.eventModel ? { label:"행사모델: ", value:safe(ev.eventModel,""), style:styleOf(ev,"eventModel") } : null,
-      ev.beforePrice ? { label:"기존가: ", value:safe(ev.beforePrice,""), style:styleOf(ev,"beforePrice") } : null,
-      price ? { label:"행사가: ", value:price, style:priceStyle } : null,
-      ev.note ? { label:"", value:safe(ev.note,""), style:styleOf(ev,"note") } : null
-    ].filter(Boolean);
-    return `<div class="event-item">
-      <div class="event-item-title">${styledText(ev.eventName,"행사",styleOf(ev,"eventName"))}</div>
-      ${rows.map(r=>`<div class="event-row">${esc(r.label)}${styledText(r.value,"",r.style)}</div>`).join("")}
-    </div>`;
-  }).join("") : `<div class="event-empty">등록된 행사일이 없습니다.</div>`;
-
-  els.detailBox.innerHTML = `
-    <div class="detail-title">${esc(tabLabel)}</div>
-    <div class="event-schedule-grid">
-      <div class="event-box">
-        <div class="event-box-label">행사일</div>
-        <div class="event-box-value">${eventHtml}</div>
-      </div>
-      <div class="event-box">
-        <div class="event-box-label">예정일</div>
-        <div class="event-box-value">${styledText(promoDate,"등록된 예정일이 없습니다.",styleOf(item,"promoDate"))}</div>
-        <div class="promo-warning">※ 행사 변동이 발생될 수 있으며 예정일 안내 시 필히 코스트코 콜센터 확인 후 재방문 안내 해주세요.</div>
-      </div>
-    </div>
-  `;
-}
-
 function renderDetailBox(){
   if(!selectedItem || !selectedTab){
     els.detailBox.innerHTML = "";
@@ -1868,10 +1919,6 @@ function renderDetailBox(){
     selectedTab = "";
     renderDetailTabs();
     renderDetailBox();
-    return;
-  }
-  if(selectedTab === "promoDate"){
-    renderEventScheduleBox(selectedItem, tab.label);
     return;
   }
   if(selectedTab === "wallModel"){
