@@ -86,7 +86,7 @@
 
 
 
-    /* v96 프로세스 검색: 모바일 One UI 단일 구조 */
+    /* v97 프로세스 검색: 모바일 One UI 단일 구조 */
     .process-shell{display:grid;gap:18px}
     .process-search-wrap{position:relative}
     .process-search-box{display:flex;align-items:center;gap:8px;border:1px solid #dbe4f0;background:#fff;border-radius:18px;min-height:54px;padding:5px 6px 5px 16px;box-shadow:0 8px 20px rgba(15,23,42,.05)}
@@ -463,6 +463,68 @@ body.view-nonhome .app{padding-top:0;}
     @media(max-width:430px){.item-detail-hero{grid-template-columns:76px 1fr;gap:11px}.item-detail-thumb{width:76px;height:92px}.item-detail-tabs{gap:7px}.item-detail-tab{min-height:44px;font-size:13px;border-radius:16px}.photo-arrow{font-size:48px !important;width:36px !important;}}
   </style>
 
+
+  <style id="v97-layout-fix">
+    html,body{max-width:100%;overflow-x:clip}
+    .app{width:100%;max-width:540px;overflow-x:clip}
+    body.view-nonhome .app{
+      padding-top:max(22px,calc(env(safe-area-inset-top,0px) + 18px)) !important;
+      padding-left:14px !important;
+      padding-right:14px !important;
+    }
+    #pageDept,#pageInquiry,#pageProcess,
+    #pageDept>.card,#pageInquiry>.card,#pageProcess>.card,
+    #pageDept .card-inner,#pageInquiry .card-inner,#pageProcess .card-inner{
+      width:100%;max-width:100%;min-width:0;
+    }
+    #pageDept>.card,#pageInquiry>.card,#pageProcess>.card{margin-top:4px;overflow:hidden}
+    #pageDept .card-inner,#pageInquiry .card-inner,#pageProcess .card-inner{padding:18px 16px}
+    #pageProcess .process-shell,
+    #pageProcess .process-search-wrap,
+    #pageProcess .process-search-box,
+    #pageProcess .process-section,
+    #pageProcess .process-type-list,
+    #pageProcess .process-results-meta,
+    #pageProcess #processList,
+    #pageProcess .process-detail-section,
+    #pageProcess .process-detail-shell,
+    #pageProcess #processDetailView{
+      width:100%;max-width:100%;min-width:0;
+    }
+    #pageProcess .section-title{width:100%;min-width:0;align-items:flex-start}
+    #pageProcess .section-title>div{flex:1;min-width:0}
+    #pageProcess .section-title h2,#pageProcess .section-title small{max-width:100%;overflow-wrap:anywhere}
+    #pageProcess #processCountPill{flex:0 0 auto;margin-left:4px}
+    #pageProcess .process-search-box{overflow:hidden;padding-right:6px}
+    #pageProcess .process-search-box input{min-width:0;width:100%}
+    #pageProcess .process-search-submit{width:44px;min-width:44px;max-width:44px;flex:0 0 44px}
+    #pageProcess .process-recommend-chips{max-width:100%;overflow:hidden}
+    #pageProcess .process-recommend-chip{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    #pageProcess .process-type-row{width:100%;max-width:100%;min-width:0;overflow:hidden}
+    #pageProcess .process-type-text{min-width:0}
+    #pageProcess .process-type-name,#pageProcess .process-type-desc{display:block;max-width:100%;overflow-wrap:anywhere}
+    #pageProcess .process-results-meta{align-items:flex-start;flex-wrap:wrap}
+    #pageProcess .process-results-title{flex:1 1 180px;min-width:0;overflow-wrap:anywhere}
+    #pageProcess .process-results-meta>div:last-child{flex:0 0 auto;max-width:100%}
+    #pageProcess #processList .process-card{width:100%;max-width:100%;min-width:0}
+    #pageProcess .process-card-main,#pageProcess .process-card-copy{min-width:0}
+    #pageProcess .process-card-side{flex:0 0 auto}
+    #pageProcess .process-detail-head{padding-top:2px}
+    #pageProcess .process-detail-title-row{display:block}
+    #pageProcess .process-detail-title{font-size:19px;line-height:1.42;letter-spacing:-.35px;max-width:100%;overflow-wrap:anywhere}
+    #pageProcess .process-detail-title span{font-size:inherit !important;line-height:inherit !important}
+    #pageProcess .process-detail-searchbadge{display:none !important}
+    #pageProcess .process-detail-hero,#pageProcess .process-detail-card,#pageProcess .process-detail-caution{width:100%;max-width:100%;min-width:0}
+    @media(max-width:430px){
+      body.view-nonhome .app{padding-left:12px !important;padding-right:12px !important}
+      #pageDept .card-inner,#pageInquiry .card-inner,#pageProcess .card-inner{padding:18px 14px}
+      #pageProcess .process-detail-title{font-size:18px}
+      #pageProcess .process-detail-hero{padding:16px}
+      #pageProcess .process-detail-card{padding:16px}
+      #pageProcess .process-detail-step{grid-template-columns:42px minmax(0,1fr);gap:11px;padding:16px 13px}
+      #pageProcess .process-detail-step-num{width:38px;height:38px;font-size:18px}
+    }
+  </style>
 </head>
 <body>
 <main class="app">
@@ -476,7 +538,7 @@ body.view-nonhome .app{padding-top:0;}
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v96</span></div></div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v97</span></div></div>
         <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
       <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
@@ -726,7 +788,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v96",
+  APP_VERSION: "v97",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -742,7 +804,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v96"
+  SPEC_IMAGE_CACHE_BUST: "v97"
 };
 
 const DETAIL_TABS = [
@@ -803,7 +865,7 @@ let DB = { items:[], departments:[], processes:[], processRecommendations:[], sp
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v96";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v97";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -1448,7 +1510,7 @@ function saveStableAirconSpecSnapshot(db){
 }
 
 function renderAppVersion(){
-  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v96";
+  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v97";
 }
 
 function rememberDbUpdateVersion(version){
@@ -2667,7 +2729,7 @@ function renderProcessDetail(row){
   els.processDetailView.innerHTML = `
     <div class="process-detail-hero">
       <span class="process-detail-chip">${chipSvg}${esc(type)}</span>
-      <div class="process-detail-title-row"><div class="process-detail-title">${styledText(row.title,"제목 미등록",styleOf(row,"title"))}</div><span class="process-detail-searchbadge"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></div>
+      <div class="process-detail-title-row"><div class="process-detail-title">${esc(row.title || "제목 미등록")}</div></div>
     </div>
     <div class="process-detail-hero process-detail-summary"><div class="process-detail-summary-icon">📋</div><div><div class="process-detail-summary-title">핵심 요약</div><div class="process-detail-summary-body">${styledText(summary,"",styleOf(row,"summary"))}</div></div></div>
     <div class="process-detail-card"><div class="process-detail-card-head"><span class="process-detail-check">✓</span><span class="title">답변</span></div>${stepsHtml}</div>
