@@ -86,7 +86,68 @@
 
 
 
-    /* v97 프로세스 검색: 모바일 One UI 단일 구조 */
+
+    /* v98 업무지원부서: 아이콘 탭 + 유형별 간편 검색 */
+    .dept-shell{display:grid;gap:14px}
+    .dept-icon-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+    .dept-icon-tab{border:1px solid #dbe4f0;background:#fff;color:#475569;border-radius:19px;min-height:82px;padding:10px 5px;display:grid;place-items:center;align-content:center;gap:7px;font-size:12px;font-weight:1000;box-shadow:0 7px 18px rgba(15,23,42,.035)}
+    .dept-icon-tab.active{background:linear-gradient(180deg,#1769e8,#0f4fc3);color:#fff;border-color:#1769e8;box-shadow:0 12px 26px rgba(37,99,235,.22)}
+    .dept-icon-tab[data-type="물류"].active{background:linear-gradient(180deg,#22a45d,#128144);border-color:#22a45d;box-shadow:0 12px 26px rgba(22,163,74,.20)}
+    .dept-icon-tab[data-type="서비스"].active{background:linear-gradient(180deg,#7668e8,#5747c9);border-color:#7668e8;box-shadow:0 12px 26px rgba(99,102,241,.20)}
+    .dept-icon-tab[data-type="지도 보기"].active{background:linear-gradient(180deg,#0f766e,#0b5f59);border-color:#0f766e;box-shadow:0 12px 26px rgba(15,118,110,.22)}
+    .dept-tab-icon{width:38px;height:38px;border-radius:14px;background:#eff6ff;color:#2563eb;display:grid;place-items:center}
+    .dept-icon-tab.active .dept-tab-icon{background:rgba(255,255,255,.18);color:#fff}
+    .dept-tab-icon svg{width:23px;height:23px}
+    .dept-filter-panel{border:1px solid #dbe4f0;background:linear-gradient(180deg,#fff,#fbfdff);border-radius:23px;padding:15px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .dept-filter-panel.logistics{border-color:#ccebd9;background:linear-gradient(180deg,#fff,#f7fff9)}
+    .dept-filter-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .dept-filter-title-wrap{display:flex;align-items:center;gap:11px;min-width:0}
+    .dept-filter-icon{width:46px;height:46px;border-radius:16px;background:#eff6ff;color:#2563eb;display:grid;place-items:center;flex:0 0 auto}
+    .dept-filter-panel.logistics .dept-filter-icon{background:#dcfce7;color:#15803d}
+    .dept-filter-icon svg{width:25px;height:25px}
+    .dept-filter-title{font-size:18px;font-weight:1000;color:#0f172a;line-height:1.25}
+    .dept-filter-panel.logistics .dept-filter-title{color:#15803d}
+    .dept-filter-desc{margin-top:3px;color:#64748b;font-size:11px;font-weight:820;line-height:1.35}
+    .dept-store-select{width:min(48%,190px);min-width:132px;border:1px solid #bfdbfe;background:#f8fbff;border-radius:16px;min-height:46px;padding:0 38px 0 13px;font-size:13px;font-weight:950;color:#0f172a;outline:none}
+    .dept-filter-panel.logistics .dept-store-select{border-color:#bbf7d0;background:#f7fff9;color:#166534}
+    .dept-region-search{display:none;margin-top:13px;position:relative}
+    .dept-region-search.show{display:block}
+    .dept-region-search label{display:block;margin-bottom:7px;color:#166534;font-size:12px;font-weight:1000}
+    .dept-region-search input{width:100%;border:1px solid #bbf7d0;background:#fff;border-radius:16px;min-height:49px;padding:0 45px 0 14px;font-size:14px;font-weight:850;color:#0f172a;outline:none}
+    .dept-region-search input:focus{border-color:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.10)}
+    .dept-region-search svg{position:absolute;right:14px;bottom:14px;width:21px;height:21px;color:#15803d;pointer-events:none}
+    .dept-results-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 1px 0}
+    .dept-results-title{font-size:15px;font-weight:1000;color:#0f172a}
+    .dept-result-list{display:grid;gap:10px}
+    .dept-modern-card{border:1px solid #dbe4f0;border-radius:22px;background:#fff;padding:15px;box-shadow:0 8px 22px rgba(15,23,42,.04)}
+    .dept-modern-card.logistics{border-color:#ccebd9;background:linear-gradient(180deg,#fff,#fbfffc)}
+    .dept-modern-card.service{border-color:#ddd9ff;background:linear-gradient(180deg,#fff,#fbfaff)}
+    .dept-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .dept-card-place{font-size:17px;font-weight:1000;color:#0f172a;line-height:1.35;word-break:keep-all}
+    .dept-card-scope{margin-top:4px;color:#64748b;font-size:12px;font-weight:850;line-height:1.5;white-space:pre-line;word-break:keep-all}
+    .dept-type-badge{border-radius:999px;padding:7px 10px;background:#eff6ff;color:#2563eb;font-size:10px;font-weight:1000;white-space:nowrap}
+    .dept-modern-card.logistics .dept-type-badge{background:#dcfce7;color:#15803d}
+    .dept-modern-card.service .dept-type-badge{background:#ede9fe;color:#6d28d9}
+    .dept-detail-grid{border-top:1px dashed #dbe4f0;padding-top:11px;display:grid;gap:9px}
+    .dept-detail-row{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:start}
+    .dept-detail-label{color:#64748b;font-size:11px;font-weight:950}
+    .dept-detail-value{color:#0f172a;font-size:13px;font-weight:850;line-height:1.55;white-space:pre-line;word-break:keep-all}
+    .dept-phone-link{margin-top:13px;min-height:46px;border-radius:15px;background:#0f172a;color:#fff!important;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-size:14px;font-weight:1000}
+    .dept-modern-card.logistics .dept-phone-link{background:#15803d}
+    .dept-modern-card.service .dept-phone-link{background:#5b4fd6}
+    .dept-empty{border:1px dashed #cbd5e1;border-radius:20px;background:#f8fafc;color:#64748b;padding:22px 15px;text-align:center;font-size:13px;font-weight:850;line-height:1.55;word-break:keep-all}
+    .dept-map-panel{display:none;gap:12px}.dept-map-panel.show{display:grid}
+    .map-mode-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.map-mode-btn{border:1px solid #dbe4f0;background:#fff;color:#475569;border-radius:15px;min-height:43px;padding:7px;font-size:12px;font-weight:1000}.map-mode-btn.active{background:#0f766e;color:#fff;border-color:#0f766e}
+    .map-control-card{border:1px solid #dbe4f0;border-radius:20px;background:#fbfdff;padding:12px;display:grid;gap:9px}.map-select-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.map-select-row select{width:100%;border:1px solid #cbd5e1;border-radius:14px;min-height:45px;padding:0 34px 0 12px;background:#fff;color:#0f172a;font-size:12px;font-weight:900;outline:none}.map-zoom-btn{border:0;border-radius:14px;min-height:43px;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:1000}
+    .map-legend{display:flex;flex-wrap:wrap;gap:7px}.map-legend-item{display:inline-flex;align-items:center;gap:6px;border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:950;color:#475569}.map-legend-dot{width:10px;height:10px;border-radius:999px}.map-legend-dot.store{background:#2563eb}.map-legend-dot.tc{background:#16a34a}.map-legend-dot.coverage{background:#f59e0b}.map-legend-dot.base{background:#e2e8f0}
+    .korea-map-card{position:relative;border:1px solid #dbe4f0;border-radius:24px;background:linear-gradient(180deg,#f8fbff,#eef7ff);padding:10px;overflow:hidden;min-height:410px}.korea-map-svg{display:block;width:100%;height:auto;min-height:390px}.map-province{fill:#e8eef6;stroke:#fff;stroke-width:1.2;transition:fill .2s ease}.map-province.active{fill:var(--coverage-color,#f59e0b)}.map-province.metro-focus{stroke:#4338ca;stroke-width:2}.map-province-label{font-size:3px;font-weight:900;fill:#64748b;text-anchor:middle;pointer-events:none}.map-marker{cursor:pointer}.map-marker circle{stroke:#fff;stroke-width:1.2;filter:drop-shadow(0 1px 2px rgba(15,23,42,.25))}.map-marker text{font-size:2.5px;font-weight:1000;fill:#0f172a;paint-order:stroke;stroke:#fff;stroke-width:.7;stroke-linejoin:round}.map-marker.store circle{fill:#2563eb}.map-marker.tc circle{fill:#16a34a}.map-marker.selected circle{stroke:#0f172a;stroke-width:2}
+    .map-info-card{border:1px solid #dbe4f0;border-radius:22px;background:#fff;padding:15px;box-shadow:0 8px 22px rgba(15,23,42,.04)}.map-info-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.map-info-title{font-size:18px;font-weight:1000;color:#0f172a}.map-info-sub{margin-top:4px;color:#64748b;font-size:12px;font-weight:850;line-height:1.5}.map-info-badge{border-radius:999px;padding:7px 10px;background:#ecfdf5;color:#047857;font-size:10px;font-weight:1000;white-space:nowrap}.map-info-grid{display:grid;gap:8px;margin-top:12px}.map-info-row{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px}.map-info-key{color:#64748b;font-size:11px;font-weight:950}.map-info-value{color:#0f172a;font-size:13px;font-weight:850;line-height:1.55;word-break:keep-all}.map-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:13px}.map-action{border:0;border-radius:14px;min-height:43px;background:#0f172a;color:#fff;font-size:11px;font-weight:1000}.map-action.copy{background:#334155}.map-action.naver{background:#03c75a}.map-action.kakao{background:#fee500;color:#191919}.map-action:disabled{opacity:.42}
+    .map-linked-stores{margin-top:13px;border-top:1px dashed #dbe4f0;padding-top:11px}.map-linked-title{font-size:12px;font-weight:1000;color:#0f172a;margin-bottom:8px}.map-linked-chips{display:flex;flex-wrap:wrap;gap:6px}.map-linked-chip{border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:950}
+    .map-coverage-list{display:grid;gap:9px;margin-top:12px}.map-coverage-group{border:1px solid #e2e8f0;border-radius:18px;background:#fff;padding:11px}.map-coverage-province{font-size:12px;font-weight:1000;color:#0f172a;margin-bottom:8px}.map-area-chips{display:flex;flex-wrap:wrap;gap:6px}.map-area-chip{border-radius:999px;padding:7px 9px;background:#f1f5f9;color:#475569;font-size:10px;font-weight:950}.map-area-chip.active{background:var(--coverage-color,#f59e0b);color:#fff}.map-area-note{margin-top:7px;color:#b45309;font-size:10px;font-weight:850;line-height:1.45}
+    .metro-map{display:none;border:1px solid #dbe4f0;border-radius:22px;background:#f8fafc;padding:12px}.metro-map.show{display:grid;gap:11px}.metro-map-title{font-size:14px;font-weight:1000;color:#0f172a}.metro-grid-group{display:grid;gap:7px}.metro-grid-label{font-size:11px;font-weight:1000;color:#475569}.metro-grid{display:flex;flex-wrap:wrap;gap:5px}.metro-cell{border:1px solid #dbe4f0;background:#fff;color:#64748b;border-radius:10px;padding:7px 8px;font-size:9px;font-weight:950}.metro-cell.active{background:var(--coverage-color,#f59e0b);color:#fff;border-color:transparent}
+    @media(max-width:390px){.dept-icon-tabs{gap:4px}.dept-icon-tab{min-height:72px;font-size:9px;padding:7px 2px}.dept-tab-icon{width:32px;height:32px}.map-select-row{grid-template-columns:1fr}.map-actions{grid-template-columns:1fr}.dept-filter-head{align-items:flex-start;flex-direction:column}.dept-store-select{width:100%;max-width:none}.dept-detail-row{grid-template-columns:58px minmax(0,1fr)}}
+
+    /* v98 프로세스 검색: 모바일 One UI 단일 구조 */
     .process-shell{display:grid;gap:18px}
     .process-search-wrap{position:relative}
     .process-search-box{display:flex;align-items:center;gap:8px;border:1px solid #dbe4f0;background:#fff;border-radius:18px;min-height:54px;padding:5px 6px 5px 16px;box-shadow:0 8px 20px rgba(15,23,42,.05)}
@@ -463,68 +524,6 @@ body.view-nonhome .app{padding-top:0;}
     @media(max-width:430px){.item-detail-hero{grid-template-columns:76px 1fr;gap:11px}.item-detail-thumb{width:76px;height:92px}.item-detail-tabs{gap:7px}.item-detail-tab{min-height:44px;font-size:13px;border-radius:16px}.photo-arrow{font-size:48px !important;width:36px !important;}}
   </style>
 
-
-  <style id="v97-layout-fix">
-    html,body{max-width:100%;overflow-x:clip}
-    .app{width:100%;max-width:540px;overflow-x:clip}
-    body.view-nonhome .app{
-      padding-top:max(22px,calc(env(safe-area-inset-top,0px) + 18px)) !important;
-      padding-left:14px !important;
-      padding-right:14px !important;
-    }
-    #pageDept,#pageInquiry,#pageProcess,
-    #pageDept>.card,#pageInquiry>.card,#pageProcess>.card,
-    #pageDept .card-inner,#pageInquiry .card-inner,#pageProcess .card-inner{
-      width:100%;max-width:100%;min-width:0;
-    }
-    #pageDept>.card,#pageInquiry>.card,#pageProcess>.card{margin-top:4px;overflow:hidden}
-    #pageDept .card-inner,#pageInquiry .card-inner,#pageProcess .card-inner{padding:18px 16px}
-    #pageProcess .process-shell,
-    #pageProcess .process-search-wrap,
-    #pageProcess .process-search-box,
-    #pageProcess .process-section,
-    #pageProcess .process-type-list,
-    #pageProcess .process-results-meta,
-    #pageProcess #processList,
-    #pageProcess .process-detail-section,
-    #pageProcess .process-detail-shell,
-    #pageProcess #processDetailView{
-      width:100%;max-width:100%;min-width:0;
-    }
-    #pageProcess .section-title{width:100%;min-width:0;align-items:flex-start}
-    #pageProcess .section-title>div{flex:1;min-width:0}
-    #pageProcess .section-title h2,#pageProcess .section-title small{max-width:100%;overflow-wrap:anywhere}
-    #pageProcess #processCountPill{flex:0 0 auto;margin-left:4px}
-    #pageProcess .process-search-box{overflow:hidden;padding-right:6px}
-    #pageProcess .process-search-box input{min-width:0;width:100%}
-    #pageProcess .process-search-submit{width:44px;min-width:44px;max-width:44px;flex:0 0 44px}
-    #pageProcess .process-recommend-chips{max-width:100%;overflow:hidden}
-    #pageProcess .process-recommend-chip{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    #pageProcess .process-type-row{width:100%;max-width:100%;min-width:0;overflow:hidden}
-    #pageProcess .process-type-text{min-width:0}
-    #pageProcess .process-type-name,#pageProcess .process-type-desc{display:block;max-width:100%;overflow-wrap:anywhere}
-    #pageProcess .process-results-meta{align-items:flex-start;flex-wrap:wrap}
-    #pageProcess .process-results-title{flex:1 1 180px;min-width:0;overflow-wrap:anywhere}
-    #pageProcess .process-results-meta>div:last-child{flex:0 0 auto;max-width:100%}
-    #pageProcess #processList .process-card{width:100%;max-width:100%;min-width:0}
-    #pageProcess .process-card-main,#pageProcess .process-card-copy{min-width:0}
-    #pageProcess .process-card-side{flex:0 0 auto}
-    #pageProcess .process-detail-head{padding-top:2px}
-    #pageProcess .process-detail-title-row{display:block}
-    #pageProcess .process-detail-title{font-size:19px;line-height:1.42;letter-spacing:-.35px;max-width:100%;overflow-wrap:anywhere}
-    #pageProcess .process-detail-title span{font-size:inherit !important;line-height:inherit !important}
-    #pageProcess .process-detail-searchbadge{display:none !important}
-    #pageProcess .process-detail-hero,#pageProcess .process-detail-card,#pageProcess .process-detail-caution{width:100%;max-width:100%;min-width:0}
-    @media(max-width:430px){
-      body.view-nonhome .app{padding-left:12px !important;padding-right:12px !important}
-      #pageDept .card-inner,#pageInquiry .card-inner,#pageProcess .card-inner{padding:18px 14px}
-      #pageProcess .process-detail-title{font-size:18px}
-      #pageProcess .process-detail-hero{padding:16px}
-      #pageProcess .process-detail-card{padding:16px}
-      #pageProcess .process-detail-step{grid-template-columns:42px minmax(0,1fr);gap:11px;padding:16px 13px}
-      #pageProcess .process-detail-step-num{width:38px;height:38px;font-size:18px}
-    }
-  </style>
 </head>
 <body>
 <main class="app">
@@ -538,7 +537,7 @@ body.view-nonhome .app{padding-top:0;}
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v97</span></div></div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v98</span></div></div>
         <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
       <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
@@ -667,17 +666,45 @@ body.view-nonhome .app{padding-top:0;}
 
   <section id="pageDept" class="page">
     <article class="card">
-      <div class="card-inner">
-        <div class="section-title"><div><h2>업무지원부서 검색</h2><small>점포, 지역, 담당자, 연락처, 업무범위로 검색 가능합니다.</small></div><span id="deptCountPill" class="pill">0건</span></div>
-        <div class="selector-grid">
-          <select id="storeSelect"><option value="">점포 선택</option></select>
-          <select id="logisticsSelect"><option value="">물류 지역 선택</option></select>
+      <div class="card-inner dept-shell">
+        <div class="section-title"><div><h2>업무지원부서 검색</h2><small>업무 유형을 선택한 뒤 점포 또는 물류 지역으로 빠르게 찾아보세요.</small></div><span id="deptCountPill" class="pill">0건</span></div>
+        <div id="deptChips" class="dept-icon-tabs" aria-label="업무지원부서 유형"></div>
+
+        <div id="deptFilterPanel" class="dept-filter-panel">
+          <div class="dept-filter-head">
+            <div class="dept-filter-title-wrap">
+              <span id="deptFilterIcon" class="dept-filter-icon"></span>
+              <div><div id="deptFilterTitle" class="dept-filter-title">업무지원실</div><div id="deptFilterDesc" class="dept-filter-desc">점포를 선택하면 해당 연락처가 표시됩니다.</div></div>
+            </div>
+            <select id="storeSelect" class="dept-store-select"><option value="">점포 선택</option></select>
+          </div>
+          <div id="deptRegionSearch" class="dept-region-search">
+            <label for="deptSearch">물류 지역 검색</label>
+            <input id="deptSearch" name="q_dept_plain" type="search" placeholder="예: 대구, 인천, 양산" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <select id="logisticsSelect" hidden aria-hidden="true"><option value=""></option></select>
         </div>
-        <div class="toolbar">
-          <input id="deptSearch" name="q_dept_plain" type="search" placeholder="예: 대구, 물류, 주소 변경, 담당자명" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
-          <div id="deptChips" class="chips"></div>
+
+        <div class="dept-results-head"><div id="deptResultsTitle" class="dept-results-title">업무지원실 안내</div></div>
+        <div id="deptList" class="dept-result-list"></div>
+
+        <div id="deptMapPanel" class="dept-map-panel">
+          <div class="map-mode-tabs">
+            <button class="map-mode-btn active" type="button" data-map-mode="all">전체 보기</button>
+            <button class="map-mode-btn" type="button" data-map-mode="store">점포만 보기</button>
+            <button class="map-mode-btn" type="button" data-map-mode="coverage">물류 권역 보기</button>
+          </div>
+          <div class="map-control-card">
+            <div class="map-select-row"><select id="mapStoreSelect"><option value="">코스트코 점포 선택</option></select><select id="mapTcSelect"><option value="">물류 TC/DC 선택</option></select></div>
+            <button id="mapMetroToggle" class="map-zoom-btn" type="button">수도권 확대 보기</button>
+            <div class="map-legend"><span class="map-legend-item"><i class="map-legend-dot store"></i>코스트코 점포</span><span class="map-legend-item"><i class="map-legend-dot tc"></i>물류 TC/DC</span><span class="map-legend-item"><i class="map-legend-dot coverage"></i>선택 권역</span><span class="map-legend-item"><i class="map-legend-dot base"></i>기타 지역</span></div>
+          </div>
+          <div class="korea-map-card"><div id="koreaMap"></div></div>
+          <div id="metroMap" class="metro-map"></div>
+          <div id="mapInfo"></div>
+          <div id="mapCoverageList" class="map-coverage-list"></div>
         </div>
-        <div id="deptList" class="list"></div>
       </div>
     </article>
   </section>
@@ -788,7 +815,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v97",
+  APP_VERSION: "v98",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -804,7 +831,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v97"
+  SPEC_IMAGE_CACHE_BUST: "v98"
 };
 
 const DETAIL_TABS = [
@@ -861,11 +888,11 @@ const SPEC_TERM_GUIDES = {
   ]
 };
 
-let DB = { items:[], departments:[], processes:[], processRecommendations:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
+let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]}, processes:[], processRecommendations:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v97";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v98";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -897,8 +924,12 @@ let specViewerCaption = "상세 스펙";
 let specTapStartX = 0;
 let specTapStartY = 0;
 let specTapMoved = false;
-let deptFilter = "전체";
+let deptFilter = "업무지원실";
 let deptInteracted = false;
+let mapMode = "all";
+let mapSelectedStore = "";
+let mapSelectedTc = "";
+let mapMetroOpen = false;
 let processFilter = "전체";
 let processSuggestions = [];
 let processSuggestionOpen = false;
@@ -924,7 +955,7 @@ const els = {
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
-  deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"),
+  deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"), deptFilterPanel:$("deptFilterPanel"), deptFilterIcon:$("deptFilterIcon"), deptFilterTitle:$("deptFilterTitle"), deptFilterDesc:$("deptFilterDesc"), deptRegionSearch:$("deptRegionSearch"), deptResultsTitle:$("deptResultsTitle"), deptMapPanel:$("deptMapPanel"), mapStoreSelect:$("mapStoreSelect"), mapTcSelect:$("mapTcSelect"), mapMetroToggle:$("mapMetroToggle"), koreaMap:$("koreaMap"), metroMap:$("metroMap"), mapInfo:$("mapInfo"), mapCoverageList:$("mapCoverageList"),
   processSearch:$("processSearch"), processSearchBtn:$("processSearchBtn"), processSearchWrap:$("processSearchWrap"), processPageHeading:$("processPageHeading"), processSuggest:$("processSuggest"), processRecommendSection:$("processRecommendSection"), processRecommendChips:$("processRecommendChips"), processTypeSection:$("processTypeSection"), processTypeList:$("processTypeList"), processResultSection:$("processResultSection"), processResultTitle:$("processResultTitle"), processResultCount:$("processResultCount"), processTypeResetBtn:$("processTypeResetBtn"), processList:$("processList"), processCountPill:$("processCountPill"), processDetailSection:$("processDetailSection"), processDetailView:$("processDetailView"),
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
   inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"),
@@ -939,6 +970,7 @@ function init(){
   bindEvents();
   renderDetailTabs();
   renderDeptChips();
+  renderDeptFilterPanel();
   renderProcessScreen(false);
   renderItemCategoryChips();
   renderSpecCategoryCards();
@@ -1023,8 +1055,11 @@ function bindEvents(){
     });
   }
   els.deptSearch.addEventListener("input",debounce(()=>{ deptInteracted = true; renderDepartments(); },120));
-  els.storeSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.storeSelect.value) els.logisticsSelect.value=""; renderDepartments(); });
-  els.logisticsSelect.addEventListener("change",()=>{ deptInteracted = true; if(els.logisticsSelect.value) els.storeSelect.value=""; renderDepartments(); });
+  els.storeSelect.addEventListener("change",()=>{ deptInteracted = true; renderDepartments(); });
+  if(els.mapStoreSelect) els.mapStoreSelect.addEventListener("change",()=>{mapSelectedStore=els.mapStoreSelect.value||"";const st=getMapDataSafe().stores.find(r=>r.name===mapSelectedStore);if(st?.tc)mapSelectedTc=st.tc;mapMode=mapSelectedStore?"store":"all";renderMapPanel();});
+  if(els.mapTcSelect) els.mapTcSelect.addEventListener("change",()=>{mapSelectedTc=els.mapTcSelect.value||"";mapSelectedStore="";mapMode=mapSelectedTc?"coverage":"all";renderMapPanel();});
+  if(els.mapMetroToggle) els.mapMetroToggle.addEventListener("click",()=>{mapMetroOpen=!mapMetroOpen;renderMapPanel();});
+  if(els.deptMapPanel) els.deptMapPanel.addEventListener("click",e=>{const btn=e.target.closest("[data-map-mode]");if(!btn)return;mapMode=btn.dataset.mapMode||"all";if(mapMode==="all"){mapSelectedStore="";mapSelectedTc="";}else if(mapMode==="store"){mapSelectedTc="";}else if(mapMode==="coverage"){mapSelectedStore="";}renderMapPanel();});
   els.processSearch.addEventListener("input",debounce(()=>{
     processFilter = "전체";
     if(els.processSearch.value.trim() && processViewMode === "home") pushProcessHistory("results");
@@ -1182,7 +1217,7 @@ function showPage(page, push=true){
   if(target==="item") els.navItem.classList.add("active");
   if(target==="specTable"){ els.navSpecTable.classList.add("active"); prefetchSpecCategoryFirstImages(); }
   if(target==="inquiry") els.navInquiry.classList.add("active");
-  if(target==="dept") els.navDept.classList.add("active");
+  if(target==="dept"){ els.navDept.classList.add("active"); renderDeptFilterPanel(); }
   if(target==="process"){
     els.navProcess.classList.add("active");
     renderProcessCurrentView(false);
@@ -1381,6 +1416,7 @@ async function loadBootstrap(force, options={}){
     const incomingDb = {
       items: Array.isArray(data.items) ? data.items : [],
       departments: Array.isArray(data.departments) ? data.departments : [],
+      mapData: data.mapData && typeof data.mapData === "object" ? data.mapData : {stores:[],logistics:[],coverage:[]},
       processes: Array.isArray(data.processes) ? data.processes : [],
       processRecommendations: Array.isArray(data.processRecommendations) ? data.processRecommendations : [],
       specCompare: Array.isArray(data.specCompare) ? data.specCompare : [],
@@ -1510,7 +1546,7 @@ function saveStableAirconSpecSnapshot(db){
 }
 
 function renderAppVersion(){
-  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v97";
+  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v98";
 }
 
 function rememberDbUpdateVersion(version){
@@ -1773,6 +1809,7 @@ function renderAll(){
   renderItemCategoryChips();
   renderQuickList(els.itemInput.value);
   renderDeptSelectors();
+  renderDeptFilterPanel();
   renderDepartments();
   renderSpecCategoryCards();
   prefetchSpecCategoryFirstImages();
@@ -2383,66 +2420,212 @@ function renderDetailBox(){
   els.detailBox.innerHTML = `<div class="detail-title">${tab.label}</div><div class="detail-body">${styledText(body,"",styleOf(selectedItem,selectedTab))}</div>`;
 }
 
+function deptTypeIconSvg(type){
+  if(type === "업무지원실") return `<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 6V4h8v2M8 10h8M8 14h3M14 14h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  if(type === "물류") return `<svg viewBox="0 0 24 24" fill="none"><path d="M3.5 6h10v10h-10V6Zm10 3h4l3 3v4h-7V9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/></svg>`;
+  if(type === "서비스") return `<svg viewBox="0 0 24 24" fill="none"><path d="M6 12a6 6 0 0 1 12 0v5a2 2 0 0 1-2 2h-2v-6h4M6 19H5a2 2 0 0 1-2-2v-5h3v7Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 20h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  if(type === "지도 보기") return `<svg viewBox="0 0 24 24" fill="none"><path d="m4 6 5-2 6 2 5-2v14l-5 2-6-2-5 2V6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.8"/></svg>`;
+  return `<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18" cy="12" r="1.7" fill="currentColor"/></svg>`;
+}
+
 function renderDeptChips(){
-  const chips = ["전체","업무지원실","물류","서비스","기타"];
-  els.deptChips.innerHTML = chips.map(ch=>`<button class="chip ${deptFilter===ch?"active":""}" type="button" data-chip="${ch}">${ch}</button>`).join("");
-  els.deptChips.querySelectorAll(".chip").forEach(btn=>{
-    btn.addEventListener("click",()=>{ deptInteracted = true; deptFilter = btn.dataset.chip; renderDeptChips(); renderDepartments(); });
+  const chips = ["업무지원실","물류","서비스","기타","지도 보기"];
+  els.deptChips.innerHTML = chips.map(ch=>`<button class="dept-icon-tab ${deptFilter===ch?"active":""}" type="button" data-type="${ch}"><span class="dept-tab-icon">${deptTypeIconSvg(ch)}</span><span>${ch}</span></button>`).join("");
+  els.deptChips.querySelectorAll(".dept-icon-tab").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      deptFilter = btn.dataset.type || "업무지원실";
+      deptInteracted = false;
+      if(els.storeSelect) els.storeSelect.value = "";
+      if(els.deptSearch) els.deptSearch.value = "";
+      renderDeptChips();
+      renderDeptFilterPanel();
+      renderDepartments();
+    });
   });
 }
 
 function renderDeptSelectors(){
-  const storeNow = els.storeSelect.value;
-  const logisticsNow = els.logisticsSelect.value;
-  const stores = uniqueSorted(DB.departments.filter(r=>!isLogisticsDept(r)).map(r=>safe(r.place,"")).filter(Boolean));
-  const logistics = uniqueSorted(DB.departments.filter(r=>isLogisticsDept(r)).map(r=>safe(r.place,"")).filter(Boolean));
-  els.storeSelect.innerHTML = `<option value="">점포 선택</option>` + stores.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
-  els.logisticsSelect.innerHTML = `<option value="">물류 지역 선택</option>` + logistics.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
-  if(stores.includes(storeNow)) els.storeSelect.value = storeNow;
-  if(logistics.includes(logisticsNow)) els.logisticsSelect.value = logisticsNow;
+  const storeNow = els.storeSelect ? els.storeSelect.value : "";
+  const stores = uniqueSorted(DB.departments.filter(r=>!isLogisticsDept(r) && displayDeptType(r)==="업무지원실").map(r=>safe(r.place,"")).filter(Boolean));
+  if(els.storeSelect){
+    els.storeSelect.innerHTML = `<option value="">점포 선택</option>` + stores.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
+    if(stores.includes(storeNow)) els.storeSelect.value = storeNow;
+  }
+}
+
+function renderDeptFilterPanel(){
+  if(!els.deptFilterPanel) return;
+  const type = deptFilter || "업무지원실";
+  const isMap = type === "지도 보기";
+  els.deptFilterPanel.style.display = isMap ? "none" : "block";
+  if(els.deptMapPanel) els.deptMapPanel.classList.toggle("show", isMap);
+  const resultsHead = els.deptResultsTitle ? els.deptResultsTitle.closest(".dept-results-head") : null;
+  if(resultsHead) resultsHead.style.display = isMap ? "none" : "flex";
+  if(els.deptList) els.deptList.style.display = isMap ? "none" : "grid";
+  els.deptFilterPanel.classList.toggle("logistics", type === "물류");
+  if(els.deptFilterIcon) els.deptFilterIcon.innerHTML = deptTypeIconSvg(type);
+  if(els.deptFilterTitle) els.deptFilterTitle.textContent = type;
+  const descriptions = {
+    "업무지원실":"점포를 선택하면 해당 업무지원실 연락처가 표시됩니다.",
+    "물류":"점포를 선택하거나 담당 물류 지역을 직접 검색하세요.",
+    "서비스":"등록된 서비스 관련 문의처를 확인하세요.",
+    "기타":"추가 등록된 기타 지원 부서를 확인하세요.",
+    "지도 보기":"전국 코스트코 점포와 물류 권역을 확인하세요."
+  };
+  if(els.deptFilterDesc) els.deptFilterDesc.textContent = descriptions[type] || "필요한 연락처를 확인하세요.";
+  if(els.storeSelect){
+    els.storeSelect.style.display = (type === "업무지원실" || type === "물류") ? "block" : "none";
+    els.storeSelect.setAttribute("aria-label", type === "물류" ? "물류 담당 점포 선택" : "업무지원실 점포 선택");
+  }
+  if(els.deptRegionSearch) els.deptRegionSearch.classList.toggle("show", type === "물류");
+  if(els.deptResultsTitle) els.deptResultsTitle.textContent = `${type} 안내`;
+}
+
+function deptRowSearchText(r){
+  return normalizeText([r.type,r.place,r.deptName,r.phone,r.scope,r.note,r.keywords].join(" "));
 }
 
 function renderDepartments(){
-  const q = normalizeText(els.deptSearch.value);
-  const selectedStore = els.storeSelect.value;
-  const selectedLogistics = els.logisticsSelect.value;
-  let rows = DB.departments.slice();
-
-  if(selectedStore){ rows = rows.filter(r => !isLogisticsDept(r) && safe(r.place,"") === selectedStore); }
-  if(selectedLogistics){ rows = rows.filter(r => isLogisticsDept(r) && safe(r.place,"") === selectedLogistics); }
-
-  if(deptFilter !== "전체"){
-    rows = rows.filter(r => displayDeptType(r) === deptFilter);
+  const type = deptFilter || "업무지원실";
+  if(type === "지도 보기"){
+    if(els.deptCountPill){ const md = DB.mapData || {}; els.deptCountPill.textContent = `${(md.stores||[]).length + (md.logistics||[]).length}개 거점`; }
+    renderMapPanel();
+    return;
   }
-  if(q){
-    rows = rows.filter(r => normalizeText([r.type,r.place,r.deptName,r.manager,r.phone,r.scope,r.note,r.keywords].join(" ")).includes(q));
+  const q = normalizeText(els.deptSearch ? els.deptSearch.value : "");
+  const selectedStore = els.storeSelect ? els.storeSelect.value : "";
+  let rows = DB.departments.filter(r=>displayDeptType(r) === type);
+
+  if(type === "업무지원실" && selectedStore){
+    rows = rows.filter(r=>safe(r.place,"") === selectedStore);
+  }else if(type === "물류"){
+    if(selectedStore){
+      const sq = normalizeText(selectedStore);
+      rows = rows.filter(r=>deptRowSearchText(r).includes(sq));
+    }
+    if(q) rows = rows.filter(r=>deptRowSearchText(r).includes(q));
   }
 
-  const hasDeptCondition = !!q || !!selectedStore || !!selectedLogistics || (deptInteracted && deptFilter !== "전체");
-  if(!hasDeptCondition){
-    els.deptCountPill.textContent = `${DB.departments.length}건`;
-    els.deptList.innerHTML = `<div class="empty">점포 또는 물류 지역을 선택하거나, 상단 검색창에 담당자/연락처/업무 키워드를 입력하면 필요한 연락처만 표시됩니다.</div>`;
+  const typeTotal = DB.departments.filter(r=>displayDeptType(r) === type).length;
+  if(els.deptCountPill) els.deptCountPill.textContent = `${typeTotal}건`;
+
+  const needsStore = type === "업무지원실" && !selectedStore;
+  const needsLogisticsCondition = type === "물류" && !selectedStore && !q;
+  if(needsStore){
+    els.deptList.innerHTML = `<div class="dept-empty">위의 <b>점포 선택</b>에서 점포를 고르면<br>해당 업무지원실 연락처가 표시됩니다.</div>`;
+    return;
+  }
+  if(needsLogisticsCondition){
+    els.deptList.innerHTML = `<div class="dept-empty">점포를 선택하거나 <b>물류 지역</b>을 입력하면<br>관련 물류 연락처가 표시됩니다.<br><span style="font-size:11px">점포별 물류 연결은 시트의 검색키워드에 점포명을 입력하면 됩니다.</span></div>`;
+    return;
+  }
+  if(!rows.length){
+    const emptyMsg = type === "기타" ? "현재 등록된 기타 지원 부서가 없습니다.<br>시트에 추가하면 자동으로 표시됩니다." : "선택한 조건에 맞는 연락처가 없습니다.";
+    els.deptList.innerHTML = `<div class="dept-empty">${emptyMsg}</div>`;
     return;
   }
 
-  els.deptCountPill.textContent = `${rows.length}건`;
-  if(!rows.length){ els.deptList.innerHTML = `<div class="empty">검색 조건에 맞는 업무지원부서가 없습니다.</div>`; return; }
-  els.deptList.innerHTML = rows.map(r=>`
-    <div class="info-card">
-      <div class="info-top">
-        <div><div class="info-title">${styledText(r.place || r.deptName,"미등록",styleOf(r,r.place?"place":"deptName"))}</div><div class="info-sub">${styledText(r.scope || r.keywords,"업무범위 미등록",styleOf(r,r.scope?"scope":"keywords"))}</div></div>
-        <span class="pill ok">${styledText(displayDeptType(r),"",styleOf(r,"type"))}</span>
+  els.deptList.innerHTML = rows.map(r=>{
+    const rowType = displayDeptType(r);
+    const cardClass = rowType === "물류" ? "logistics" : rowType === "서비스" ? "service" : "";
+    const title = r.place || r.deptName || rowType;
+    return `<div class="dept-modern-card ${cardClass}">
+      <div class="dept-card-head">
+        <div><div class="dept-card-place">${styledText(title,"미등록",styleOf(r,r.place?"place":"deptName"))}</div>${r.scope ? `<div class="dept-card-scope">${styledText(r.scope,"",styleOf(r,"scope"))}</div>` : ""}</div>
+        <span class="dept-type-badge">${esc(rowType)}</span>
       </div>
-      <div class="kv">
-        <div class="kv-row"><div class="key">부서</div><div class="val">${styledText(r.deptName,"-",styleOf(r,"deptName"))}</div></div>
-        <div class="kv-row"><div class="key">담당자</div><div class="val">${styledText(r.manager,"-",styleOf(r,"manager"))}</div></div>
-        <div class="kv-row"><div class="key">연락처</div><div class="val">${styledText(r.phone,"-",styleOf(r,"phone"))}</div></div>
-        ${r.note ? `<div class="kv-row"><div class="key">비고</div><div class="val">${styledText(r.note,"",styleOf(r,"note"))}</div></div>` : ""}
+      <div class="dept-detail-grid">
+        ${r.deptName && r.deptName !== title ? `<div class="dept-detail-row"><div class="dept-detail-label">부서</div><div class="dept-detail-value">${styledText(r.deptName,"-",styleOf(r,"deptName"))}</div></div>` : ""}
+        <div class="dept-detail-row"><div class="dept-detail-label">연락처</div><div class="dept-detail-value">${styledText(r.phone,"-",styleOf(r,"phone"))}</div></div>
+        ${r.note ? `<div class="dept-detail-row"><div class="dept-detail-label">이용 안내</div><div class="dept-detail-value">${styledText(r.note,"",styleOf(r,"note"))}</div></div>` : ""}
       </div>
-      ${r.phone ? `<a class="phone-link" href="tel:${String(r.phone).replace(/[^0-9+]/g,"")}">전화 연결</a>` : ""}
-    </div>`).join("");
+      ${r.phone ? `<a class="dept-phone-link" href="tel:${String(r.phone).replace(/[^0-9+]/g,"")}">☎ 전화 연결</a>` : ""}
+    </div>`;
+  }).join("");
 }
 
+
+function getMapDataSafe(){
+  const md = DB.mapData && typeof DB.mapData === "object" ? DB.mapData : {};
+  return { stores:Array.isArray(md.stores)?md.stores:[], logistics:Array.isArray(md.logistics)?md.logistics:[], coverage:Array.isArray(md.coverage)?md.coverage:[] };
+}
+function normalizeProvinceName(v){
+  const s = String(v||"").replace(/특별자치도|특별자치시|광역시|특별시|도/g,"").trim();
+  const map={"서울":"서울","경기":"경기","인천":"인천","강원":"강원","충북":"충북","충청북":"충북","충남":"충남","충청남":"충남","세종":"세종","대전":"대전","경북":"경북","경상북":"경북","대구":"대구","울산":"울산","부산":"부산","경남":"경남","경상남":"경남","전북":"전북","전라북":"전북","광주":"광주","전남":"전남","전라남":"전남","제주":"제주"};
+  return map[s]||s;
+}
+function mapProvinceShapes(){
+  return [
+    ["강원","48,5 75,6 90,23 78,40 57,36 50,20"],["경기","28,15 48,12 57,24 54,39 38,42 26,31"],["서울","38,23 47,22 49,28 40,30"],["인천","25,23 37,22 38,31 27,33"],["충북","46,38 61,35 69,48 61,58 47,55"],["충남","28,36 47,38 48,56 38,64 24,54"],["세종","42,47 48,46 49,52 43,54"],["대전","45,54 52,53 53,59 46,61"],["경북","61,39 82,37 91,55 82,70 62,65 55,54"],["대구","66,57 73,56 75,64 67,66"],["전북","30,59 48,58 57,67 48,75 29,72"],["경남","50,68 68,65 79,72 72,88 53,89 43,78"],["울산","76,68 84,66 87,75 79,79"],["부산","69,82 79,78 83,87 74,91"],["광주","35,75 43,74 45,82 36,84"],["전남","20,70 35,70 51,80 48,94 28,97 15,84"],["제주","27,102 48,100 52,107 31,109"]
+  ];
+}
+function mapQueryUrl(provider, query){
+  const q=encodeURIComponent(query||"");
+  return provider==="naver" ? `https://map.naver.com/p/search/${q}` : `https://map.kakao.com/link/search/${q}`;
+}
+function renderMapPanel(){
+  if(!els.deptMapPanel) return;
+  const md=getMapDataSafe();
+  if(els.mapStoreSelect){
+    const current=mapSelectedStore;
+    els.mapStoreSelect.innerHTML=`<option value="">코스트코 점포 선택</option>`+md.stores.slice().sort((a,b)=>processLocaleCompare(a.name,b.name)).map(r=>`<option value="${esc(r.name)}">${esc(r.name)}</option>`).join("");
+    if(md.stores.some(r=>r.name===current)) els.mapStoreSelect.value=current;
+  }
+  if(els.mapTcSelect){
+    const current=mapSelectedTc;
+    els.mapTcSelect.innerHTML=`<option value="">물류 TC/DC 선택</option>`+md.logistics.slice().sort((a,b)=>processLocaleCompare(a.name,b.name)).map(r=>`<option value="${esc(r.name)}">${esc(r.name)}</option>`).join("");
+    if(md.logistics.some(r=>r.name===current)) els.mapTcSelect.value=current;
+  }
+  els.deptMapPanel.querySelectorAll(".map-mode-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.mapMode===mapMode));
+  if(els.mapMetroToggle) els.mapMetroToggle.textContent=mapMetroOpen?"전국 보기로 돌아가기":"수도권 확대 보기";
+  renderKoreaMap(); renderMetroMap(); renderMapInfo(); renderMapCoverageList();
+}
+function renderKoreaMap(){
+  if(!els.koreaMap) return;
+  const md=getMapDataSafe();
+  const selectedTc=md.logistics.find(r=>r.name===mapSelectedTc);
+  const color=selectedTc?.color||"#f59e0b";
+  const provinces=new Set(md.coverage.filter(r=>!mapSelectedTc||r.tc===mapSelectedTc).map(r=>normalizeProvinceName(r.province)).filter(Boolean));
+  const shapes=mapProvinceShapes().map(([name,points])=>`<polygon class="map-province ${mapSelectedTc&&provinces.has(name)?"active":""} ${mapMetroOpen&&["서울","경기","인천"].includes(name)?"metro-focus":""}" data-province="${name}" points="${points}" style="--coverage-color:${color}"/><text class="map-province-label" x="${points.split(" ").reduce((s,p)=>s+Number(p.split(",")[0]),0)/points.split(" ").length}" y="${points.split(" ").reduce((s,p)=>s+Number(p.split(",")[1]),0)/points.split(" ").length}">${name}</text>`).join("");
+  const showStores=mapMode!=="coverage";
+  const showTc=mapMode!=="store";
+  const stores=showStores?md.stores.filter(r=>!mapSelectedStore||r.name===mapSelectedStore):[];
+  const tcs=showTc?md.logistics.filter(r=>!mapSelectedTc||r.name===mapSelectedTc):[];
+  const storeMarks=stores.map(r=>`<g class="map-marker store ${mapSelectedStore===r.name?"selected":""}" data-store="${esc(r.name)}" transform="translate(${Number(r.x)||0} ${Number(r.y)||0})"><circle r="2.7"/><text x="3.5" y="1">${esc(r.name.replace(/점$/,""))}</text></g>`).join("");
+  const tcMarks=tcs.map(r=>`<g class="map-marker tc ${mapSelectedTc===r.name?"selected":""}" data-tc="${esc(r.name)}" transform="translate(${Number(r.x)||0} ${Number(r.y)||0})"><circle r="3.1" style="fill:${esc(r.color||"#16a34a")}"/><text x="3.8" y="1">${esc(r.name)}</text></g>`).join("");
+  els.koreaMap.innerHTML=`<svg class="korea-map-svg" viewBox="10 0 85 112" role="img" aria-label="전국 코스트코 및 물류 권역 지도">${shapes}${storeMarks}${tcMarks}</svg>`;
+  els.koreaMap.querySelectorAll("[data-store]").forEach(el=>el.addEventListener("click",()=>{mapSelectedStore=el.dataset.store||""; const st=md.stores.find(r=>r.name===mapSelectedStore); if(st?.tc) mapSelectedTc=st.tc; mapMode="store"; renderMapPanel();}));
+  els.koreaMap.querySelectorAll("[data-tc]").forEach(el=>el.addEventListener("click",()=>{mapSelectedTc=el.dataset.tc||""; mapSelectedStore=""; mapMode="coverage"; renderMapPanel();}));
+}
+function renderMetroMap(){
+  if(!els.metroMap) return;
+  els.metroMap.classList.toggle("show",mapMetroOpen);
+  if(!mapMetroOpen){els.metroMap.innerHTML="";return;}
+  const md=getMapDataSafe(); const selectedTc=md.logistics.find(r=>r.name===mapSelectedTc); const color=selectedTc?.color||"#f59e0b";
+  const provinces=["서울","경기","인천"];
+  const all={}; provinces.forEach(p=>all[p]=[]);
+  md.coverage.forEach(r=>{const p=normalizeProvinceName(r.province); if(all[p]&&!all[p].includes(r.area))all[p].push(r.area);});
+  els.metroMap.innerHTML=`<div class="metro-map-title">수도권 관할 확대</div>`+provinces.map(p=>`<div class="metro-grid-group"><div class="metro-grid-label">${p}</div><div class="metro-grid">${all[p].sort(processLocaleCompare).map(area=>{const active=md.coverage.some(r=>r.tc===mapSelectedTc&&normalizeProvinceName(r.province)===p&&r.area===area);return `<span class="metro-cell ${active?"active":""}" style="--coverage-color:${color}">${esc(area)}</span>`}).join("")}</div></div>`).join("");
+}
+function renderMapInfo(){
+  if(!els.mapInfo) return;
+  const md=getMapDataSafe();
+  const store=md.stores.find(r=>r.name===mapSelectedStore);
+  const tc=md.logistics.find(r=>r.name===mapSelectedTc);
+  const row=store||tc;
+  if(!row){els.mapInfo.innerHTML=`<div class="dept-empty">지도에서 코스트코 점포 또는 물류 TC/DC를 선택하면<br>주소, 연락처, 연결 점포를 확인할 수 있습니다.</div>`;return;}
+  const isStore=Boolean(store); const query=[row.name,row.address].filter(Boolean).join(" "); const linked=isStore?[]:md.stores.filter(s=>s.tc===row.name);
+  els.mapInfo.innerHTML=`<div class="map-info-card"><div class="map-info-head"><div><div class="map-info-title">${esc(row.name)}</div><div class="map-info-sub">${isStore?"코스트코 점포":"삼성 물류 TC/DC"}</div></div><span class="map-info-badge">${isStore?"점포":"물류"}</span></div><div class="map-info-grid"><div class="map-info-row"><div class="map-info-key">주소</div><div class="map-info-value">${esc(row.address||"시트에 주소를 입력해 주세요.")}</div></div>${row.phone?`<div class="map-info-row"><div class="map-info-key">연락처</div><div class="map-info-value">${esc(row.phone)}</div></div>`:""}${isStore&&row.tc?`<div class="map-info-row"><div class="map-info-key">담당 물류</div><div class="map-info-value">${esc(row.tc)}</div></div>`:""}</div><div class="map-actions"><button class="map-action copy" type="button" data-copy-address="${esc(row.address||"")}" ${row.address?"":"disabled"}>주소 복사</button><button class="map-action naver" type="button" data-map-link="${esc(mapQueryUrl("naver",query))}">네이버지도</button><button class="map-action kakao" type="button" data-map-link="${esc(mapQueryUrl("kakao",query))}">카카오맵</button></div>${linked.length?`<div class="map-linked-stores"><div class="map-linked-title">연결 코스트코 점포</div><div class="map-linked-chips">${linked.map(s=>`<button class="map-linked-chip" type="button" data-linked-store="${esc(s.name)}">${esc(s.name)}</button>`).join("")}</div></div>`:""}</div>`;
+  els.mapInfo.querySelectorAll("[data-map-link]").forEach(btn=>btn.addEventListener("click",()=>window.open(btn.dataset.mapLink,"_blank","noopener")));
+  els.mapInfo.querySelectorAll("[data-copy-address]").forEach(btn=>btn.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(btn.dataset.copyAddress||"");btn.textContent="복사 완료";setTimeout(()=>btn.textContent="주소 복사",1200)}catch(e){}}));
+  els.mapInfo.querySelectorAll("[data-linked-store]").forEach(btn=>btn.addEventListener("click",()=>{mapSelectedStore=btn.dataset.linkedStore||"";mapMode="store";renderMapPanel();}));
+}
+function renderMapCoverageList(){
+  if(!els.mapCoverageList) return;
+  const md=getMapDataSafe(); const tc=md.logistics.find(r=>r.name===mapSelectedTc); if(!tc){els.mapCoverageList.innerHTML="";return;}
+  const color=tc.color||"#f59e0b"; const grouped={}; md.coverage.filter(r=>r.tc===tc.name).forEach(r=>{const p=normalizeProvinceName(r.province)||"기타";(grouped[p]||(grouped[p]=[])).push(r);});
+  els.mapCoverageList.innerHTML=Object.entries(grouped).map(([p,rows])=>`<div class="map-coverage-group"><div class="map-coverage-province">${esc(p)}</div><div class="map-area-chips">${rows.map(r=>`<span class="map-area-chip active" style="--coverage-color:${color}">${esc(r.area)}</span>`).join("")}</div>${rows.some(r=>r.note)?`<div class="map-area-note">${esc(uniqueArray(rows.map(r=>r.note).filter(Boolean)).join(" · "))}</div>`:""}</div>`).join("");
+}
 function processLocaleCompare(a,b){
   return String(a||"").localeCompare(String(b||""), "ko", { numeric:true, sensitivity:"base" });
 }
@@ -2729,7 +2912,7 @@ function renderProcessDetail(row){
   els.processDetailView.innerHTML = `
     <div class="process-detail-hero">
       <span class="process-detail-chip">${chipSvg}${esc(type)}</span>
-      <div class="process-detail-title-row"><div class="process-detail-title">${esc(row.title || "제목 미등록")}</div></div>
+      <div class="process-detail-title-row"><div class="process-detail-title">${styledText(row.title,"제목 미등록",styleOf(row,"title"))}</div><span class="process-detail-searchbadge"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></div>
     </div>
     <div class="process-detail-hero process-detail-summary"><div class="process-detail-summary-icon">📋</div><div><div class="process-detail-summary-title">핵심 요약</div><div class="process-detail-summary-body">${styledText(summary,"",styleOf(row,"summary"))}</div></div></div>
     <div class="process-detail-card"><div class="process-detail-card-head"><span class="process-detail-check">✓</span><span class="title">답변</span></div>${stepsHtml}</div>
