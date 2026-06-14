@@ -87,7 +87,7 @@
 
 
 
-    /* v98 업무지원부서: 아이콘 탭 + 유형별 간편 검색 */
+    /* v100 업무지원부서: 아이콘 탭 + 유형별 간편 검색 */
     .dept-shell{display:grid;gap:14px}
     .dept-icon-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
     .dept-icon-tab{border:1px solid #dbe4f0;background:#fff;color:#475569;border-radius:19px;min-height:82px;padding:10px 5px;display:grid;place-items:center;align-content:center;gap:7px;font-size:12px;font-weight:1000;box-shadow:0 7px 18px rgba(15,23,42,.035)}
@@ -136,18 +136,19 @@
     .dept-modern-card.logistics .dept-phone-link{background:#15803d}
     .dept-modern-card.service .dept-phone-link{background:#5b4fd6}
     .dept-empty{border:1px dashed #cbd5e1;border-radius:20px;background:#f8fafc;color:#64748b;padding:22px 15px;text-align:center;font-size:13px;font-weight:850;line-height:1.55;word-break:keep-all}
-    .dept-map-panel{display:none;gap:12px}.dept-map-panel.show{display:grid}
-    .map-mode-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.map-mode-btn{border:1px solid #dbe4f0;background:#fff;color:#475569;border-radius:15px;min-height:43px;padding:7px;font-size:12px;font-weight:1000}.map-mode-btn.active{background:#0f766e;color:#fff;border-color:#0f766e}
-    .map-control-card{border:1px solid #dbe4f0;border-radius:20px;background:#fbfdff;padding:12px;display:grid;gap:9px}.map-select-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.map-select-row select{width:100%;border:1px solid #cbd5e1;border-radius:14px;min-height:45px;padding:0 34px 0 12px;background:#fff;color:#0f172a;font-size:12px;font-weight:900;outline:none}.map-zoom-btn{border:0;border-radius:14px;min-height:43px;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:1000}
-    .map-legend{display:flex;flex-wrap:wrap;gap:7px}.map-legend-item{display:inline-flex;align-items:center;gap:6px;border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:950;color:#475569}.map-legend-dot{width:10px;height:10px;border-radius:999px}.map-legend-dot.store{background:#2563eb}.map-legend-dot.tc{background:#16a34a}.map-legend-dot.coverage{background:#f59e0b}.map-legend-dot.base{background:#e2e8f0}
-    .korea-map-card{position:relative;border:1px solid #dbe4f0;border-radius:24px;background:linear-gradient(180deg,#f8fbff,#eef7ff);padding:10px;overflow:hidden;min-height:410px}.korea-map-svg{display:block;width:100%;height:auto;min-height:390px}.map-province{fill:#e8eef6;stroke:#fff;stroke-width:1.2;transition:fill .2s ease}.map-province.active{fill:var(--coverage-color,#f59e0b)}.map-province.metro-focus{stroke:#4338ca;stroke-width:2}.map-province-label{font-size:3px;font-weight:900;fill:#64748b;text-anchor:middle;pointer-events:none}.map-marker{cursor:pointer}.map-marker circle{stroke:#fff;stroke-width:1.2;filter:drop-shadow(0 1px 2px rgba(15,23,42,.25))}.map-marker text{font-size:2.5px;font-weight:1000;fill:#0f172a;paint-order:stroke;stroke:#fff;stroke-width:.7;stroke-linejoin:round}.map-marker.store circle{fill:#2563eb}.map-marker.tc circle{fill:#16a34a}.map-marker.selected circle{stroke:#0f172a;stroke-width:2}
-    .map-info-card{border:1px solid #dbe4f0;border-radius:22px;background:#fff;padding:15px;box-shadow:0 8px 22px rgba(15,23,42,.04)}.map-info-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.map-info-title{font-size:18px;font-weight:1000;color:#0f172a}.map-info-sub{margin-top:4px;color:#64748b;font-size:12px;font-weight:850;line-height:1.5}.map-info-badge{border-radius:999px;padding:7px 10px;background:#ecfdf5;color:#047857;font-size:10px;font-weight:1000;white-space:nowrap}.map-info-grid{display:grid;gap:8px;margin-top:12px}.map-info-row{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px}.map-info-key{color:#64748b;font-size:11px;font-weight:950}.map-info-value{color:#0f172a;font-size:13px;font-weight:850;line-height:1.55;word-break:keep-all}.map-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:13px}.map-action{border:0;border-radius:14px;min-height:43px;background:#0f172a;color:#fff;font-size:11px;font-weight:1000}.map-action.copy{background:#334155}.map-action.naver{background:#03c75a}.map-action.kakao{background:#fee500;color:#191919}.map-action:disabled{opacity:.42}
-    .map-linked-stores{margin-top:13px;border-top:1px dashed #dbe4f0;padding-top:11px}.map-linked-title{font-size:12px;font-weight:1000;color:#0f172a;margin-bottom:8px}.map-linked-chips{display:flex;flex-wrap:wrap;gap:6px}.map-linked-chip{border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:950}
-    .map-coverage-list{display:grid;gap:9px;margin-top:12px}.map-coverage-group{border:1px solid #e2e8f0;border-radius:18px;background:#fff;padding:11px}.map-coverage-province{font-size:12px;font-weight:1000;color:#0f172a;margin-bottom:8px}.map-area-chips{display:flex;flex-wrap:wrap;gap:6px}.map-area-chip{border-radius:999px;padding:7px 9px;background:#f1f5f9;color:#475569;font-size:10px;font-weight:950}.map-area-chip.active{background:var(--coverage-color,#f59e0b);color:#fff}.map-area-note{margin-top:7px;color:#b45309;font-size:10px;font-weight:850;line-height:1.45}
-    .metro-map{display:none;border:1px solid #dbe4f0;border-radius:22px;background:#f8fafc;padding:12px}.metro-map.show{display:grid;gap:11px}.metro-map-title{font-size:14px;font-weight:1000;color:#0f172a}.metro-grid-group{display:grid;gap:7px}.metro-grid-label{font-size:11px;font-weight:1000;color:#475569}.metro-grid{display:flex;flex-wrap:wrap;gap:5px}.metro-cell{border:1px solid #dbe4f0;background:#fff;color:#64748b;border-radius:10px;padding:7px 8px;font-size:9px;font-weight:950}.metro-cell.active{background:var(--coverage-color,#f59e0b);color:#fff;border-color:transparent}
-    @media(max-width:390px){.dept-icon-tabs{gap:4px}.dept-icon-tab{min-height:72px;font-size:9px;padding:7px 2px}.dept-tab-icon{width:32px;height:32px}.map-select-row{grid-template-columns:1fr}.map-actions{grid-template-columns:1fr}.dept-filter-head{align-items:flex-start;flex-direction:column}.dept-store-select{width:100%;max-width:none}.dept-detail-row{grid-template-columns:58px minmax(0,1fr)}}
+    .dept-map-panel{display:none;gap:14px}.dept-map-panel.show{display:grid}
+    .map-screen-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 2px 0}.map-screen-title{font-size:24px;font-weight:1000;color:#0f172a;letter-spacing:-.7px}.map-screen-sub{margin-top:4px;color:#64748b;font-size:12px;font-weight:850}.map-reset-btn{width:44px;height:44px;border:1px solid #dbe4f0;border-radius:16px;background:#fff;color:#0f172a;font-size:24px;font-weight:1000;box-shadow:0 7px 18px rgba(15,23,42,.06)}
+    .map-filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 5px;scrollbar-width:none}.map-filter-scroll::-webkit-scrollbar{display:none}.map-mode-btn{border:1px solid #dbe4f0;background:#fff;color:#475569;border-radius:999px;min-height:44px;padding:0 15px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:1000;white-space:nowrap;box-shadow:0 5px 14px rgba(15,23,42,.035)}.map-mode-btn.active{background:#0f172a;color:#fff;border-color:#0f172a;box-shadow:0 10px 20px rgba(15,23,42,.18)}.map-mode-btn[data-map-mode="coverage"].active{background:linear-gradient(180deg,#32a754,#18853a);border-color:#239447;box-shadow:0 10px 22px rgba(22,163,74,.25)}.map-mode-symbol{width:20px;height:20px;border-radius:999px;display:grid;place-items:center;background:#f1f5f9;color:#64748b;font-size:11px}.map-mode-btn.active .map-mode-symbol{background:rgba(255,255,255,.17);color:#fff}.map-mode-symbol.store{color:#7a8595}.map-mode-symbol.center{color:#2563eb}.map-mode-symbol.tc{color:#7c3aed}.map-mode-symbol.coverage{color:#16a34a}
+    .map-selection-bar{display:none;border:1px solid #dbe4f0;border-radius:20px;background:linear-gradient(180deg,#fff,#fbfdff);padding:11px;box-shadow:0 8px 22px rgba(15,23,42,.04)}.map-selection-bar.show{display:block}.map-select-wrap{display:none}.map-select-wrap.show{display:block}.map-select-wrap select{width:100%;border:1px solid #cbd5e1;border-radius:15px;min-height:48px;padding:0 40px 0 14px;background:#fff;color:#0f172a;font-size:13px;font-weight:950;outline:none}.map-select-hint{margin-top:7px;color:#64748b;font-size:10px;font-weight:850;line-height:1.45}
+    .korea-map-card{position:relative;border:1px solid #cfe0f2;border-radius:28px;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.58),transparent 34%),linear-gradient(180deg,#dff0ff 0%,#c7e5fb 55%,#dbf0ff 100%);overflow:hidden;min-height:520px;box-shadow:0 18px 42px rgba(48,107,158,.14)}.korea-map-card:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.23),transparent 40%);pointer-events:none}.korea-map-svg{display:block;width:100%;height:520px}.map-country-shadow{fill:rgba(56,96,122,.11);filter:blur(2px)}.map-province{fill:#f8faf7;stroke:#d9e2e7;stroke-width:.75;transition:fill .2s ease,stroke .2s ease}.map-province.active{fill:#dff2df;stroke:#65b96a;stroke-width:1.15}.map-island{fill:#f8faf7;stroke:#d9e2e7;stroke-width:.7}.map-island.active{fill:#dff2df;stroke:#65b96a;stroke-width:1.15}.map-island-label{font-size:2.2px;font-weight:950;fill:#566273;text-anchor:middle;paint-order:stroke;stroke:#fff;stroke-width:.4}.map-province.metro-focus{stroke:#22a95a;stroke-width:1.4}.map-province-label{font-size:3.1px;font-weight:950;fill:#566273;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:.45;stroke-linejoin:round}.map-ocean-label{font-size:3px;font-weight:900;fill:#2680c4;opacity:.8}.map-connection{fill:none;stroke:#0f766e;stroke-width:.65;stroke-dasharray:2 1.3;opacity:.8}.map-marker{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:transform .15s ease}.map-marker:hover{transform:scale(1.08)}.map-marker .pin{stroke:#fff;stroke-width:.8;filter:drop-shadow(0 1.2px 1.6px rgba(15,23,42,.28))}.map-marker.store .pin{fill:#8b8f99}.map-marker.center .pin{fill:#2563eb}.map-marker.tc .pin{fill:#7c3aed}.map-marker.selected .pin{fill:#159447;stroke:#fff;stroke-width:1.25}.map-marker .pin-hole{fill:#fff}.map-marker text{font-size:2.55px;font-weight:1000;fill:#0f172a;paint-order:stroke;stroke:#fff;stroke-width:.8;stroke-linejoin:round}.map-marker.selected text{fill:#0b5f32}.map-zoom-control{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:grid;border:1px solid #dbe4f0;border-radius:18px;background:rgba(255,255,255,.94);overflow:hidden;box-shadow:0 10px 28px rgba(15,23,42,.14);z-index:3}.map-zoom-control button{width:48px;height:50px;border:0;background:transparent;color:#0f172a;font-size:25px;font-weight:500}.map-zoom-control button+button{border-top:1px solid #e2e8f0}.map-metro-float{position:absolute;right:14px;top:14px;border:1px solid #c7d8ee;border-radius:999px;background:rgba(255,255,255,.95);color:#1559b7;min-height:40px;padding:0 14px;font-size:11px;font-weight:1000;box-shadow:0 8px 20px rgba(15,23,42,.11);z-index:3}.map-watermark{position:absolute;left:14px;bottom:12px;color:#5f89aa;font-size:9px;font-weight:850;opacity:.72}
+    .map-detail-layout{display:grid;gap:12px}.map-detail-layout.metro-open{grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr);align-items:stretch}.metro-map{display:none;border:1px solid #dbe4f0;border-radius:24px;background:#fff;padding:14px;box-shadow:0 10px 26px rgba(15,23,42,.05)}.metro-map.show{display:grid;gap:11px}.metro-map-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.metro-map-title{font-size:16px;font-weight:1000;color:#0f172a}.metro-map-close{border:0;border-radius:999px;background:#f1f5f9;color:#475569;width:34px;height:34px;font-size:18px;font-weight:1000}.metro-canvas{position:relative;min-height:330px;border:1px solid #dbe4f0;border-radius:20px;background:linear-gradient(180deg,#f8fbff,#edf7ff);overflow:hidden}.metro-base-svg{position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px)}.metro-base-region{fill:#eef2f4;stroke:#cbd5e1;stroke-width:1}.metro-base-region.active{fill:#dff2df;stroke:#57ad63;stroke-width:1.4}.metro-region-label{font-size:7px;font-weight:1000;fill:#334155;text-anchor:middle}.metro-area-cloud{position:absolute;inset:14px;display:flex;align-content:center;justify-content:center;align-items:center;flex-wrap:wrap;gap:5px;padding:42px 16px 18px}.metro-cell{border:1px solid rgba(34,139,72,.22);background:rgba(255,255,255,.88);color:#475569;border-radius:999px;padding:6px 8px;font-size:9px;font-weight:950;backdrop-filter:blur(3px)}.metro-cell.active{background:#208f48;color:#fff;border-color:#208f48}.metro-empty{display:grid;place-items:center;min-height:250px;color:#64748b;font-size:12px;font-weight:850;text-align:center;line-height:1.55}
+    .map-info-card{height:100%;box-sizing:border-box;border:1px solid #dbe4f0;border-radius:24px;background:#fff;padding:16px;box-shadow:0 10px 26px rgba(15,23,42,.05)}.map-info-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.map-info-title{font-size:20px;font-weight:1000;color:#0f172a}.map-info-sub{margin-top:4px;color:#64748b;font-size:11px;font-weight:850;line-height:1.5}.map-info-badge{border-radius:999px;padding:7px 10px;background:#ecfdf5;color:#047857;font-size:10px;font-weight:1000;white-space:nowrap}.map-info-grid{display:grid;gap:9px;margin-top:13px;padding-top:12px;border-top:1px solid #e2e8f0}.map-info-row{display:grid;grid-template-columns:67px minmax(0,1fr);gap:10px}.map-info-key{color:#64748b;font-size:11px;font-weight:950}.map-info-value{color:#0f172a;font-size:13px;font-weight:850;line-height:1.55;word-break:keep-all}.map-linked-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e2f1e5;background:#f4fbf6;border-radius:15px;padding:10px 11px;margin-top:11px}.map-linked-summary strong{font-size:19px;color:#168543}.map-actions{display:grid;grid-template-columns:1fr;gap:7px;margin-top:13px}.map-action{border:1px solid #dbe4f0;border-radius:14px;min-height:44px;background:#fff;color:#0f172a;font-size:12px;font-weight:1000}.map-action.copy{color:#334155}.map-action.naver{color:#08a64a}.map-action.kakao{color:#6f5600}.map-action:disabled{opacity:.42}.map-linked-stores{margin-top:13px;border-top:1px dashed #dbe4f0;padding-top:11px}.map-linked-title{font-size:12px;font-weight:1000;color:#0f172a;margin-bottom:8px}.map-linked-chips{display:flex;flex-wrap:wrap;gap:6px}.map-linked-chip{border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:950}
+    .map-coverage-list{display:grid;gap:9px}.map-coverage-group{border:1px solid #e2e8f0;border-radius:18px;background:#fff;padding:11px}.map-coverage-province{font-size:12px;font-weight:1000;color:#0f172a;margin-bottom:8px}.map-area-chips{display:flex;flex-wrap:wrap;gap:6px}.map-area-chip{border-radius:999px;padding:7px 9px;background:#f1f5f9;color:#475569;font-size:10px;font-weight:950}.map-area-chip.active{background:#208f48;color:#fff}.map-area-note{margin-top:7px;color:#b45309;font-size:10px;font-weight:850;line-height:1.45}
+    .map-legend{display:flex;flex-wrap:wrap;gap:10px;border:1px solid #dbe4f0;border-radius:18px;background:#fff;padding:11px 12px}.map-legend-item{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:950;color:#64748b}.map-legend-pin{width:11px;height:14px;clip-path:polygon(50% 100%,10% 55%,10% 27%,25% 8%,50% 0,75% 8%,90% 27%,90% 55%);background:#8b8f99}.map-legend-pin.selected{background:#159447}.map-legend-pin.center{background:#2563eb}.map-legend-pin.tc{background:#7c3aed}.map-legend-area{width:15px;height:12px;border-radius:3px;background:#dff2df;border:1px solid #65b96a}.map-disclaimer{display:flex;align-items:flex-start;gap:7px;color:#64748b;font-size:10px;font-weight:850;line-height:1.45;padding:0 3px}
+    @media(max-width:640px){.map-detail-layout.metro-open{grid-template-columns:1fr}.korea-map-card{min-height:475px}.korea-map-svg{height:475px}.map-screen-title{font-size:22px}.map-mode-btn{padding:0 13px}.map-info-card{height:auto}}
+    @media(max-width:390px){.dept-icon-tabs{gap:4px}.dept-icon-tab{min-height:72px;font-size:9px;padding:7px 2px}.dept-tab-icon{width:32px;height:32px}.dept-filter-head{align-items:flex-start;flex-direction:column}.dept-store-select{width:100%;max-width:none}.dept-detail-row{grid-template-columns:58px minmax(0,1fr)}.korea-map-card{min-height:445px}.korea-map-svg{height:445px}.map-zoom-control button{width:43px;height:46px}.map-metro-float{font-size:10px;padding:0 11px}.map-actions{grid-template-columns:1fr}}
 
-    /* v98 프로세스 검색: 모바일 One UI 단일 구조 */
+    /* v100 프로세스 검색: 모바일 One UI 단일 구조 */
     .process-shell{display:grid;gap:18px}
     .process-search-wrap{position:relative}
     .process-search-box{display:flex;align-items:center;gap:8px;border:1px solid #dbe4f0;background:#fff;border-radius:18px;min-height:54px;padding:5px 6px 5px 16px;box-shadow:0 8px 20px rgba(15,23,42,.05)}
@@ -537,7 +538,7 @@ body.view-nonhome .app{padding-top:0;}
   <section id="pageHome" class="page home-dashboard show">
     <article class="home-card">
       <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v98</span></div></div>
+        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v100</span></div></div>
         <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
       </div>
       <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
@@ -690,20 +691,27 @@ body.view-nonhome .app{padding-top:0;}
         <div id="deptList" class="dept-result-list"></div>
 
         <div id="deptMapPanel" class="dept-map-panel">
-          <div class="map-mode-tabs">
-            <button class="map-mode-btn active" type="button" data-map-mode="all">전체 보기</button>
-            <button class="map-mode-btn" type="button" data-map-mode="store">점포만 보기</button>
-            <button class="map-mode-btn" type="button" data-map-mode="coverage">물류 권역 보기</button>
+          <div class="map-screen-head"><div><div class="map-screen-title">지도 보기</div><div class="map-screen-sub">전국 코스트코 점포와 삼성 물류 거점을 확인하세요.</div></div><button id="mapResetBtn" class="map-reset-btn" type="button" aria-label="지도 초기화">◎</button></div>
+          <div class="map-filter-scroll" aria-label="지도 표시 유형">
+            <button class="map-mode-btn active" type="button" data-map-mode="all"><span class="map-mode-symbol">●</span>전체</button>
+            <button class="map-mode-btn" type="button" data-map-mode="store"><span class="map-mode-symbol store">●</span>점포</button>
+            <button class="map-mode-btn" type="button" data-map-mode="tc"><span class="map-mode-symbol tc">●</span>TC</button>
+            <button class="map-mode-btn" type="button" data-map-mode="coverage"><span class="map-mode-symbol coverage">✓</span>해당 물류 권역만</button>
           </div>
-          <div class="map-control-card">
-            <div class="map-select-row"><select id="mapStoreSelect"><option value="">코스트코 점포 선택</option></select><select id="mapTcSelect"><option value="">물류 TC/DC 선택</option></select></div>
-            <button id="mapMetroToggle" class="map-zoom-btn" type="button">수도권 확대 보기</button>
-            <div class="map-legend"><span class="map-legend-item"><i class="map-legend-dot store"></i>코스트코 점포</span><span class="map-legend-item"><i class="map-legend-dot tc"></i>물류 TC/DC</span><span class="map-legend-item"><i class="map-legend-dot coverage"></i>선택 권역</span><span class="map-legend-item"><i class="map-legend-dot base"></i>기타 지역</span></div>
+          <div id="mapSelectionBar" class="map-selection-bar">
+            <div id="mapStoreSelectWrap" class="map-select-wrap"><select id="mapStoreSelect"><option value="">코스트코 점포 선택</option></select><div class="map-select-hint">점포를 선택하면 담당 TC와 연결 위치를 함께 표시합니다.</div></div>
+            <div id="mapTcSelectWrap" class="map-select-wrap"><select id="mapTcSelect"><option value="">물류 TC/DC 선택</option></select><div class="map-select-hint">TC를 선택하면 연결 점포와 관할 지역을 함께 표시합니다.</div></div>
           </div>
-          <div class="korea-map-card"><div id="koreaMap"></div></div>
-          <div id="metroMap" class="metro-map"></div>
-          <div id="mapInfo"></div>
+          <div class="korea-map-card">
+            <button id="mapMetroToggle" class="map-metro-float" type="button">⌗ 수도권 확대 보기</button>
+            <div id="koreaMap"></div>
+            <div class="map-zoom-control"><button id="mapZoomIn" type="button" aria-label="지도 확대">+</button><button id="mapZoomOut" type="button" aria-label="지도 축소">−</button></div>
+            <div class="map-watermark">코스트코 점포 · 삼성 물류 TC/DC</div>
+          </div>
+          <div id="mapDetailLayout" class="map-detail-layout"><div id="metroMap" class="metro-map"></div><div id="mapInfo"></div></div>
           <div id="mapCoverageList" class="map-coverage-list"></div>
+          <div class="map-legend"><span class="map-legend-item"><i class="map-legend-pin selected"></i>선택된 TC</span><span class="map-legend-item"><i class="map-legend-pin tc"></i>TC</span><span class="map-legend-item"><i class="map-legend-pin"></i>점포</span><span class="map-legend-item"><i class="map-legend-area"></i>해당 물류 권역</span></div>
+          <div class="map-disclaimer"><span>ⓘ</span><span>지도 위치와 권역 표시는 현장 확인용이며 실제 위치·관할과 다를 수 있습니다.</span></div>
         </div>
       </div>
     </article>
@@ -815,7 +823,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v98",
+  APP_VERSION: "v100",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -831,7 +839,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v98"
+  SPEC_IMAGE_CACHE_BUST: "v100"
 };
 
 const DETAIL_TABS = [
@@ -892,7 +900,7 @@ let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v98";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v100";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -930,6 +938,7 @@ let mapMode = "all";
 let mapSelectedStore = "";
 let mapSelectedTc = "";
 let mapMetroOpen = false;
+let mapZoom = 1;
 let processFilter = "전체";
 let processSuggestions = [];
 let processSuggestionOpen = false;
@@ -955,7 +964,7 @@ const els = {
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
-  deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"), deptFilterPanel:$("deptFilterPanel"), deptFilterIcon:$("deptFilterIcon"), deptFilterTitle:$("deptFilterTitle"), deptFilterDesc:$("deptFilterDesc"), deptRegionSearch:$("deptRegionSearch"), deptResultsTitle:$("deptResultsTitle"), deptMapPanel:$("deptMapPanel"), mapStoreSelect:$("mapStoreSelect"), mapTcSelect:$("mapTcSelect"), mapMetroToggle:$("mapMetroToggle"), koreaMap:$("koreaMap"), metroMap:$("metroMap"), mapInfo:$("mapInfo"), mapCoverageList:$("mapCoverageList"),
+  deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"), deptFilterPanel:$("deptFilterPanel"), deptFilterIcon:$("deptFilterIcon"), deptFilterTitle:$("deptFilterTitle"), deptFilterDesc:$("deptFilterDesc"), deptRegionSearch:$("deptRegionSearch"), deptResultsTitle:$("deptResultsTitle"), deptMapPanel:$("deptMapPanel"), mapSelectionBar:$("mapSelectionBar"), mapStoreSelectWrap:$("mapStoreSelectWrap"), mapTcSelectWrap:$("mapTcSelectWrap"), mapStoreSelect:$("mapStoreSelect"), mapTcSelect:$("mapTcSelect"), mapMetroToggle:$("mapMetroToggle"), mapResetBtn:$("mapResetBtn"), mapZoomIn:$("mapZoomIn"), mapZoomOut:$("mapZoomOut"), koreaMap:$("koreaMap"), metroMap:$("metroMap"), mapDetailLayout:$("mapDetailLayout"), mapInfo:$("mapInfo"), mapCoverageList:$("mapCoverageList"),
   processSearch:$("processSearch"), processSearchBtn:$("processSearchBtn"), processSearchWrap:$("processSearchWrap"), processPageHeading:$("processPageHeading"), processSuggest:$("processSuggest"), processRecommendSection:$("processRecommendSection"), processRecommendChips:$("processRecommendChips"), processTypeSection:$("processTypeSection"), processTypeList:$("processTypeList"), processResultSection:$("processResultSection"), processResultTitle:$("processResultTitle"), processResultCount:$("processResultCount"), processTypeResetBtn:$("processTypeResetBtn"), processList:$("processList"), processCountPill:$("processCountPill"), processDetailSection:$("processDetailSection"), processDetailView:$("processDetailView"),
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
   inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"),
@@ -1056,10 +1065,13 @@ function bindEvents(){
   }
   els.deptSearch.addEventListener("input",debounce(()=>{ deptInteracted = true; renderDepartments(); },120));
   els.storeSelect.addEventListener("change",()=>{ deptInteracted = true; renderDepartments(); });
-  if(els.mapStoreSelect) els.mapStoreSelect.addEventListener("change",()=>{mapSelectedStore=els.mapStoreSelect.value||"";const st=getMapDataSafe().stores.find(r=>r.name===mapSelectedStore);if(st?.tc)mapSelectedTc=st.tc;mapMode=mapSelectedStore?"store":"all";renderMapPanel();});
-  if(els.mapTcSelect) els.mapTcSelect.addEventListener("change",()=>{mapSelectedTc=els.mapTcSelect.value||"";mapSelectedStore="";mapMode=mapSelectedTc?"coverage":"all";renderMapPanel();});
+  if(els.mapStoreSelect) els.mapStoreSelect.addEventListener("change",()=>{mapSelectedStore=els.mapStoreSelect.value||"";const st=getMapDataSafe().stores.find(r=>r.name===mapSelectedStore);mapSelectedTc=st?.tc||"";mapMode="store";mapZoom=mapSelectedStore?1.12:1;renderMapPanel();});
+  if(els.mapTcSelect) els.mapTcSelect.addEventListener("change",()=>{mapSelectedTc=els.mapTcSelect.value||"";mapSelectedStore="";if(!mapSelectedTc&&mapMode==="coverage")mapMetroOpen=false;renderMapPanel();});
   if(els.mapMetroToggle) els.mapMetroToggle.addEventListener("click",()=>{mapMetroOpen=!mapMetroOpen;renderMapPanel();});
-  if(els.deptMapPanel) els.deptMapPanel.addEventListener("click",e=>{const btn=e.target.closest("[data-map-mode]");if(!btn)return;mapMode=btn.dataset.mapMode||"all";if(mapMode==="all"){mapSelectedStore="";mapSelectedTc="";}else if(mapMode==="store"){mapSelectedTc="";}else if(mapMode==="coverage"){mapSelectedStore="";}renderMapPanel();});
+  if(els.mapResetBtn) els.mapResetBtn.addEventListener("click",resetMapView);
+  if(els.mapZoomIn) els.mapZoomIn.addEventListener("click",()=>{mapZoom=Math.min(1.45,Number((mapZoom+.15).toFixed(2)));renderKoreaMap();});
+  if(els.mapZoomOut) els.mapZoomOut.addEventListener("click",()=>{mapZoom=Math.max(1,Number((mapZoom-.15).toFixed(2)));renderKoreaMap();});
+  if(els.deptMapPanel) els.deptMapPanel.addEventListener("click",e=>{const btn=e.target.closest("[data-map-mode]");if(!btn)return;const next=btn.dataset.mapMode||"all";mapMode=next;if(next==="all"){mapSelectedStore="";mapSelectedTc="";mapMetroOpen=false;mapZoom=1;}else if(next==="store"){mapSelectedTc="";mapMetroOpen=false;}else if(next==="tc"){mapSelectedStore="";mapMetroOpen=false;}else if(next==="coverage"){mapSelectedStore="";}renderMapPanel();});
   els.processSearch.addEventListener("input",debounce(()=>{
     processFilter = "전체";
     if(els.processSearch.value.trim() && processViewMode === "home") pushProcessHistory("results");
@@ -1546,7 +1558,7 @@ function saveStableAirconSpecSnapshot(db){
 }
 
 function renderAppVersion(){
-  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v98";
+  if(els.homeAppVersion) els.homeAppVersion.textContent = CONFIG.APP_VERSION || "v100";
 }
 
 function rememberDbUpdateVersion(version){
@@ -2554,18 +2566,46 @@ function normalizeProvinceName(v){
   const map={"서울":"서울","경기":"경기","인천":"인천","강원":"강원","충북":"충북","충청북":"충북","충남":"충남","충청남":"충남","세종":"세종","대전":"대전","경북":"경북","경상북":"경북","대구":"대구","울산":"울산","부산":"부산","경남":"경남","경상남":"경남","전북":"전북","전라북":"전북","광주":"광주","전남":"전남","전라남":"전남","제주":"제주"};
   return map[s]||s;
 }
+function mapLogisticsKind(row){
+  return "tc";
+}
 function mapProvinceShapes(){
   return [
-    ["강원","48,5 75,6 90,23 78,40 57,36 50,20"],["경기","28,15 48,12 57,24 54,39 38,42 26,31"],["서울","38,23 47,22 49,28 40,30"],["인천","25,23 37,22 38,31 27,33"],["충북","46,38 61,35 69,48 61,58 47,55"],["충남","28,36 47,38 48,56 38,64 24,54"],["세종","42,47 48,46 49,52 43,54"],["대전","45,54 52,53 53,59 46,61"],["경북","61,39 82,37 91,55 82,70 62,65 55,54"],["대구","66,57 73,56 75,64 67,66"],["전북","30,59 48,58 57,67 48,75 29,72"],["경남","50,68 68,65 79,72 72,88 53,89 43,78"],["울산","76,68 84,66 87,75 79,79"],["부산","69,82 79,78 83,87 74,91"],["광주","35,75 43,74 45,82 36,84"],["전남","20,70 35,70 51,80 48,94 28,97 15,84"],["제주","27,102 48,100 52,107 31,109"]
+    ["강원","48,5 72,5 88,20 86,34 78,43 61,39 51,27"],
+    ["경기","29,15 47,11 57,22 55,38 39,43 26,33"],
+    ["서울","38,23 47,22 49,28 40,30"],
+    ["인천","24,23 37,22 38,32 27,34"],
+    ["충북","47,38 62,35 70,48 62,59 48,56"],
+    ["충남","27,36 47,38 48,57 38,65 23,55"],
+    ["세종","42,47 48,46 49,53 43,55"],
+    ["대전","45,54 52,53 53,60 46,62"],
+    ["경북","62,39 82,37 91,54 84,69 72,72 62,65 55,54"],
+    ["대구","66,57 74,56 76,64 68,67"],
+    ["전북","29,59 48,58 58,68 49,76 29,73"],
+    ["경남","50,68 69,65 80,72 73,88 54,90 43,79"],
+    ["울산","76,68 84,66 87,75 79,79"],
+    ["부산","69,82 79,78 83,87 74,92"],
+    ["광주","35,75 43,74 45,82 36,85"],
+    ["전남","20,70 35,70 51,80 48,95 28,98 15,85"],
+    ["제주","27,103 48,101 52,108 31,111"]
   ];
 }
 function mapQueryUrl(provider, query){
   const q=encodeURIComponent(query||"");
   return provider==="naver" ? `https://map.naver.com/p/search/${q}` : `https://map.kakao.com/link/search/${q}`;
 }
+function resetMapView(){
+  mapMode="all";
+  mapSelectedStore="";
+  mapSelectedTc="";
+  mapMetroOpen=false;
+  mapZoom=1;
+  renderMapPanel();
+}
 function renderMapPanel(){
   if(!els.deptMapPanel) return;
   const md=getMapDataSafe();
+  const tcRows=md.logistics;
   if(els.mapStoreSelect){
     const current=mapSelectedStore;
     els.mapStoreSelect.innerHTML=`<option value="">코스트코 점포 선택</option>`+md.stores.slice().sort((a,b)=>processLocaleCompare(a.name,b.name)).map(r=>`<option value="${esc(r.name)}">${esc(r.name)}</option>`).join("");
@@ -2573,39 +2613,104 @@ function renderMapPanel(){
   }
   if(els.mapTcSelect){
     const current=mapSelectedTc;
-    els.mapTcSelect.innerHTML=`<option value="">물류 TC/DC 선택</option>`+md.logistics.slice().sort((a,b)=>processLocaleCompare(a.name,b.name)).map(r=>`<option value="${esc(r.name)}">${esc(r.name)}</option>`).join("");
-    if(md.logistics.some(r=>r.name===current)) els.mapTcSelect.value=current;
+    const pool=(mapMode==="tc"||mapMode==="coverage")?tcRows:md.logistics;
+    const label=mapMode==="tc"?"TC 선택":"담당 TC 선택";
+    els.mapTcSelect.innerHTML=`<option value="">${label}</option>`+pool.slice().sort((a,b)=>processLocaleCompare(a.name,b.name)).map(r=>`<option value="${esc(r.name)}">${esc(r.name)}</option>`).join("");
+    if(pool.some(r=>r.name===current)) els.mapTcSelect.value=current; else if(current && mapMode!=="all") mapSelectedTc="";
   }
+  const needStore=mapMode==="store";
+  const needTc=["tc","coverage"].includes(mapMode);
+  if(els.mapSelectionBar) els.mapSelectionBar.classList.toggle("show",needStore||needTc);
+  if(els.mapStoreSelectWrap) els.mapStoreSelectWrap.classList.toggle("show",needStore);
+  if(els.mapTcSelectWrap) els.mapTcSelectWrap.classList.toggle("show",needTc);
   els.deptMapPanel.querySelectorAll(".map-mode-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.mapMode===mapMode));
-  if(els.mapMetroToggle) els.mapMetroToggle.textContent=mapMetroOpen?"전국 보기로 돌아가기":"수도권 확대 보기";
-  renderKoreaMap(); renderMetroMap(); renderMapInfo(); renderMapCoverageList();
+  if(els.mapMetroToggle) els.mapMetroToggle.textContent=mapMetroOpen?"⌗ 수도권 닫기":"⌗ 수도권 확대 보기";
+  if(els.mapDetailLayout) els.mapDetailLayout.classList.toggle("metro-open",mapMetroOpen);
+  renderKoreaMap();
+  renderMetroMap();
+  renderMapInfo();
+  renderMapCoverageList();
+}
+function mapMarkerMarkup(row,kind,selected=false,showLabel=true){
+  const x=Number(row.x)||0, y=Number(row.y)||0;
+  const label=String(row.name||"").replace(/점$/,'');
+  const cls=kind==="store"?"store":"tc";
+  const attr=kind==="store"?`data-store="${esc(row.name)}"`:`data-tc="${esc(row.name)}"`;
+  return `<g class="map-marker ${cls} ${selected?"selected":""}" ${attr} transform="translate(${x} ${y})"><path class="pin" d="M0,-5.2 C-3.1,-5.2 -5.3,-3 -5.3,-.2 C-5.3,3.3 0,8.5 0,8.5 C0,8.5 5.3,3.3 5.3,-.2 C5.3,-3 3.1,-5.2 0,-5.2Z"/><circle class="pin-hole" cx="0" cy="-.5" r="1.7"/>${showLabel?`<text x="6.2" y="1.2">${esc(label)}</text>`:""}</g>`;
 }
 function renderKoreaMap(){
   if(!els.koreaMap) return;
   const md=getMapDataSafe();
   const selectedTc=md.logistics.find(r=>r.name===mapSelectedTc);
-  const color=selectedTc?.color||"#f59e0b";
-  const provinces=new Set(md.coverage.filter(r=>!mapSelectedTc||r.tc===mapSelectedTc).map(r=>normalizeProvinceName(r.province)).filter(Boolean));
-  const shapes=mapProvinceShapes().map(([name,points])=>`<polygon class="map-province ${mapSelectedTc&&provinces.has(name)?"active":""} ${mapMetroOpen&&["서울","경기","인천"].includes(name)?"metro-focus":""}" data-province="${name}" points="${points}" style="--coverage-color:${color}"/><text class="map-province-label" x="${points.split(" ").reduce((s,p)=>s+Number(p.split(",")[0]),0)/points.split(" ").length}" y="${points.split(" ").reduce((s,p)=>s+Number(p.split(",")[1]),0)/points.split(" ").length}">${name}</text>`).join("");
-  const showStores=mapMode!=="coverage";
-  const showTc=mapMode!=="store";
-  const stores=showStores?md.stores.filter(r=>!mapSelectedStore||r.name===mapSelectedStore):[];
-  const tcs=showTc?md.logistics.filter(r=>!mapSelectedTc||r.name===mapSelectedTc):[];
-  const storeMarks=stores.map(r=>`<g class="map-marker store ${mapSelectedStore===r.name?"selected":""}" data-store="${esc(r.name)}" transform="translate(${Number(r.x)||0} ${Number(r.y)||0})"><circle r="2.7"/><text x="3.5" y="1">${esc(r.name.replace(/점$/,""))}</text></g>`).join("");
-  const tcMarks=tcs.map(r=>`<g class="map-marker tc ${mapSelectedTc===r.name?"selected":""}" data-tc="${esc(r.name)}" transform="translate(${Number(r.x)||0} ${Number(r.y)||0})"><circle r="3.1" style="fill:${esc(r.color||"#16a34a")}"/><text x="3.8" y="1">${esc(r.name)}</text></g>`).join("");
-  els.koreaMap.innerHTML=`<svg class="korea-map-svg" viewBox="10 0 85 112" role="img" aria-label="전국 코스트코 및 물류 권역 지도">${shapes}${storeMarks}${tcMarks}</svg>`;
-  els.koreaMap.querySelectorAll("[data-store]").forEach(el=>el.addEventListener("click",()=>{mapSelectedStore=el.dataset.store||""; const st=md.stores.find(r=>r.name===mapSelectedStore); if(st?.tc) mapSelectedTc=st.tc; mapMode="store"; renderMapPanel();}));
-  els.koreaMap.querySelectorAll("[data-tc]").forEach(el=>el.addEventListener("click",()=>{mapSelectedTc=el.dataset.tc||""; mapSelectedStore=""; mapMode="coverage"; renderMapPanel();}));
+  const selectedStore=md.stores.find(r=>r.name===mapSelectedStore);
+  const coverageRows=mapSelectedTc?md.coverage.filter(r=>r.tc===mapSelectedTc):[];
+  const provinces=new Set(coverageRows.map(r=>normalizeProvinceName(r.province)).filter(Boolean));
+  const color="#dff2df";
+  const shapes=mapProvinceShapes().map(([name,points])=>{
+    const pts=points.split(" ");
+    const cx=pts.reduce((s,p)=>s+Number(p.split(",")[0]),0)/pts.length;
+    const cy=pts.reduce((s,p)=>s+Number(p.split(",")[1]),0)/pts.length;
+    const active=mapMode==="coverage"&&mapSelectedTc&&provinces.has(name);
+    return `<polygon class="map-province ${active?"active":""} ${mapMetroOpen&&["서울","경기","인천"].includes(name)?"metro-focus":""}" data-province="${name}" points="${points}"/><text class="map-province-label" x="${cx}" y="${cy}">${name}</text>`;
+  }).join("");
+  const activeAreas=new Set(coverageRows.map(r=>normalizeText(r.area||"")));
+  const islandDefs=[
+    {name:"강화",cx:20.5,cy:24.5,rx:1.8,ry:2.2,keys:["강화군","강화도"]},
+    {name:"울릉",cx:96,cy:52,rx:1.2,ry:1.5,keys:["울릉군","울릉도"]},
+    {name:"거제",cx:66,cy:94,rx:1.7,ry:2.1,keys:["거제시","거제도"]},
+    {name:"남해",cx:53,cy:95,rx:1.6,ry:1.5,keys:["남해군","남해도"]},
+    {name:"신안",cx:12,cy:87,rx:2.6,ry:2.0,keys:["신안군"]},
+    {name:"진도",cx:18,cy:98,rx:1.8,ry:1.5,keys:["진도군","진도"]},
+    {name:"완도",cx:34,cy:100,rx:2.0,ry:1.5,keys:["완도군","완도"]}
+  ];
+  const islands=islandDefs.map(v=>{const active=mapMode==="coverage"&&mapSelectedTc&&v.keys.some(k=>activeAreas.has(normalizeText(k)));return `<ellipse class="map-island ${active?"active":""}" cx="${v.cx}" cy="${v.cy}" rx="${v.rx}" ry="${v.ry}"/><text class="map-island-label" x="${v.cx}" y="${v.cy+.7}">${v.name}</text>`;}).join("");
+  let stores=[]; let logistics=[];
+  if(mapMode==="all"){
+    stores=md.stores;
+    logistics=md.logistics;
+  }else if(mapMode==="store"){
+    stores=mapSelectedStore?md.stores.filter(r=>r.name===mapSelectedStore):md.stores;
+    if(selectedStore?.tc) logistics=md.logistics.filter(r=>r.name===selectedStore.tc);
+  }else if(mapMode==="tc"){
+    logistics=md.logistics.filter(r=>mapLogisticsKind(r)==="tc" && (!mapSelectedTc||r.name===mapSelectedTc));
+  }else if(mapMode==="coverage"){
+    logistics=mapSelectedTc?md.logistics.filter(r=>r.name===mapSelectedTc):md.logistics.filter(r=>mapLogisticsKind(r)==="tc");
+    stores=mapSelectedTc?md.stores.filter(r=>r.tc===mapSelectedTc):[];
+  }
+  const connector=(selectedStore&&selectedTc)?`<path class="map-connection" d="M${Number(selectedStore.x)||0},${Number(selectedStore.y)||0} L${Number(selectedTc.x)||0},${Number(selectedTc.y)||0}"/>`:"";
+  const labelAll = mapMode !== "all";
+  const storeMarks=stores.map(r=>mapMarkerMarkup(r,"store",mapSelectedStore===r.name,labelAll||mapSelectedStore===r.name)).join("");
+  const logisticsMarks=logistics.map(r=>mapMarkerMarkup(r,mapLogisticsKind(r),mapSelectedTc===r.name,labelAll||mapSelectedTc===r.name)).join("");
+  const zoom=Math.max(1,Math.min(1.45,mapZoom||1));
+  const vbW=100/zoom, vbH=118/zoom, vbX=(100-vbW)/2, vbY=(118-vbH)/2;
+  els.koreaMap.innerHTML=`<svg class="korea-map-svg" viewBox="${vbX} ${vbY} ${vbW} ${vbH}" role="img" aria-label="전국 코스트코 및 물류 권역 지도"><text class="map-ocean-label" x="9" y="57">황해</text><text class="map-ocean-label" x="91" y="54">동해</text><text class="map-ocean-label" x="56" y="113">남해</text><path class="map-country-shadow" d="M30 6 C44 1 70 2 86 19 C94 32 90 52 87 64 C83 80 77 93 66 101 C54 106 42 105 31 99 C21 94 14 84 12 73 C10 62 14 50 19 42 C23 34 20 22 26 13 C27 10 28 8 30 6Z" transform="translate(1.2 1.5)"/>${shapes}${islands}${connector}${storeMarks}${logisticsMarks}</svg>`;
+  els.koreaMap.querySelectorAll("[data-store]").forEach(el=>el.addEventListener("click",()=>{
+    mapSelectedStore=el.dataset.store||"";
+    const st=md.stores.find(r=>r.name===mapSelectedStore);
+    mapSelectedTc=st?.tc||"";
+    mapMode="store";
+    renderMapPanel();
+  }));
+  els.koreaMap.querySelectorAll("[data-tc]").forEach(el=>el.addEventListener("click",()=>{
+    mapSelectedTc=el.dataset.tc||"";
+    mapSelectedStore="";
+    mapMode="coverage";
+    const metro=md.coverage.some(r=>r.tc===mapSelectedTc&&["서울","경기","인천"].includes(normalizeProvinceName(r.province)));
+    if(metro) mapMetroOpen=true;
+    renderMapPanel();
+  }));
 }
 function renderMetroMap(){
   if(!els.metroMap) return;
   els.metroMap.classList.toggle("show",mapMetroOpen);
   if(!mapMetroOpen){els.metroMap.innerHTML="";return;}
-  const md=getMapDataSafe(); const selectedTc=md.logistics.find(r=>r.name===mapSelectedTc); const color=selectedTc?.color||"#f59e0b";
-  const provinces=["서울","경기","인천"];
-  const all={}; provinces.forEach(p=>all[p]=[]);
-  md.coverage.forEach(r=>{const p=normalizeProvinceName(r.province); if(all[p]&&!all[p].includes(r.area))all[p].push(r.area);});
-  els.metroMap.innerHTML=`<div class="metro-map-title">수도권 관할 확대</div>`+provinces.map(p=>`<div class="metro-grid-group"><div class="metro-grid-label">${p}</div><div class="metro-grid">${all[p].sort(processLocaleCompare).map(area=>{const active=md.coverage.some(r=>r.tc===mapSelectedTc&&normalizeProvinceName(r.province)===p&&r.area===area);return `<span class="metro-cell ${active?"active":""}" style="--coverage-color:${color}">${esc(area)}</span>`}).join("")}</div></div>`).join("");
+  const md=getMapDataSafe();
+  const rows=mapSelectedTc?md.coverage.filter(r=>r.tc===mapSelectedTc&&["서울","경기","인천"].includes(normalizeProvinceName(r.province))):[];
+  const activeProv=new Set(rows.map(r=>normalizeProvinceName(r.province)));
+  const areas=rows.slice().sort((a,b)=>processLocaleCompare(a.area,b.area));
+  els.metroMap.innerHTML=`<div class="metro-map-head"><div class="metro-map-title">수도권 확대 보기</div><button class="metro-map-close" type="button" aria-label="수도권 확대 닫기">×</button></div><div class="metro-canvas"><svg class="metro-base-svg" viewBox="0 0 100 100"><path class="metro-base-region ${activeProv.has("경기")?"active":""}" d="M20 12 L62 7 L89 27 L91 66 L71 91 L31 89 L10 62 L12 30Z"/><path class="metro-base-region ${activeProv.has("인천")?"active":""}" d="M8 39 L25 32 L31 58 L17 72 L5 61Z"/><path class="metro-base-region ${activeProv.has("서울")?"active":""}" d="M38 42 L62 39 L68 56 L50 66 L34 56Z"/><text class="metro-region-label" x="51" y="78">경기</text><text class="metro-region-label" x="17" y="55">인천</text><text class="metro-region-label" x="50" y="54">서울</text></svg><div class="metro-area-cloud">${areas.length?areas.map(r=>`<span class="metro-cell active">${esc(r.area)}</span>`).join(""):`<div class="metro-empty">수도권 관할 TC를 선택하면<br>시·군·구 권역이 표시됩니다.</div>`}</div></div>`;
+  const close=els.metroMap.querySelector(".metro-map-close");
+  if(close) close.addEventListener("click",()=>{mapMetroOpen=false;renderMapPanel();});
 }
 function renderMapInfo(){
   if(!els.mapInfo) return;
@@ -2613,18 +2718,29 @@ function renderMapInfo(){
   const store=md.stores.find(r=>r.name===mapSelectedStore);
   const tc=md.logistics.find(r=>r.name===mapSelectedTc);
   const row=store||tc;
-  if(!row){els.mapInfo.innerHTML=`<div class="dept-empty">지도에서 코스트코 점포 또는 물류 TC/DC를 선택하면<br>주소, 연락처, 연결 점포를 확인할 수 있습니다.</div>`;return;}
-  const isStore=Boolean(store); const query=[row.name,row.address].filter(Boolean).join(" "); const linked=isStore?[]:md.stores.filter(s=>s.tc===row.name);
-  els.mapInfo.innerHTML=`<div class="map-info-card"><div class="map-info-head"><div><div class="map-info-title">${esc(row.name)}</div><div class="map-info-sub">${isStore?"코스트코 점포":"삼성 물류 TC/DC"}</div></div><span class="map-info-badge">${isStore?"점포":"물류"}</span></div><div class="map-info-grid"><div class="map-info-row"><div class="map-info-key">주소</div><div class="map-info-value">${esc(row.address||"시트에 주소를 입력해 주세요.")}</div></div>${row.phone?`<div class="map-info-row"><div class="map-info-key">연락처</div><div class="map-info-value">${esc(row.phone)}</div></div>`:""}${isStore&&row.tc?`<div class="map-info-row"><div class="map-info-key">담당 물류</div><div class="map-info-value">${esc(row.tc)}</div></div>`:""}</div><div class="map-actions"><button class="map-action copy" type="button" data-copy-address="${esc(row.address||"")}" ${row.address?"":"disabled"}>주소 복사</button><button class="map-action naver" type="button" data-map-link="${esc(mapQueryUrl("naver",query))}">네이버지도</button><button class="map-action kakao" type="button" data-map-link="${esc(mapQueryUrl("kakao",query))}">카카오맵</button></div>${linked.length?`<div class="map-linked-stores"><div class="map-linked-title">연결 코스트코 점포</div><div class="map-linked-chips">${linked.map(s=>`<button class="map-linked-chip" type="button" data-linked-store="${esc(s.name)}">${esc(s.name)}</button>`).join("")}</div></div>`:""}</div>`;
+  if(!row){
+    els.mapInfo.innerHTML=`<div class="dept-empty">지도에서 점포 또는 물류 거점을 선택하면<br>주소, 연락처, 연결 점포를 확인할 수 있습니다.</div>`;
+    return;
+  }
+  const isStore=Boolean(store);
+  const kind=isStore?"store":mapLogisticsKind(row);
+  const kindLabel=isStore?"코스트코 점포":"삼성 물류 TC";
+  const query=[row.name,row.address].filter(Boolean).join(" ");
+  const linked=isStore?[]:md.stores.filter(s=>s.tc===row.name);
+  const addressText=row.address||"주소 입력 전";
+  els.mapInfo.innerHTML=`<div class="map-info-card"><div class="map-info-head"><div><div class="map-info-title">${esc(row.name)}</div><div class="map-info-sub">${kindLabel}</div></div><span class="map-info-badge">${isStore?"점포":"TC"}</span></div><div class="map-info-grid"><div class="map-info-row"><div class="map-info-key">연락처</div><div class="map-info-value">${esc(row.phone||"미등록")}</div></div><div class="map-info-row"><div class="map-info-key">주소</div><div class="map-info-value">${esc(addressText)}</div></div>${isStore&&row.tc?`<div class="map-info-row"><div class="map-info-key">담당 물류</div><div class="map-info-value">${esc(row.tc)}</div></div>`:""}</div>${!isStore?`<div class="map-linked-summary"><span>연결 점포</span><strong>${linked.length}개</strong></div>`:""}<div class="map-actions"><button class="map-action copy" type="button" data-copy-address="${esc(row.address||"")}" ${row.address?"":"disabled"}>▣ 주소 복사</button><button class="map-action naver" type="button" data-map-link="${esc(mapQueryUrl("naver",query))}">N 네이버지도</button><button class="map-action kakao" type="button" data-map-link="${esc(mapQueryUrl("kakao",query))}">● 카카오맵</button></div>${linked.length?`<div class="map-linked-stores"><div class="map-linked-title">연결 코스트코 점포</div><div class="map-linked-chips">${linked.map(s=>`<button class="map-linked-chip" type="button" data-linked-store="${esc(s.name)}">${esc(s.name)}</button>`).join("")}</div></div>`:""}</div>`;
   els.mapInfo.querySelectorAll("[data-map-link]").forEach(btn=>btn.addEventListener("click",()=>window.open(btn.dataset.mapLink,"_blank","noopener")));
-  els.mapInfo.querySelectorAll("[data-copy-address]").forEach(btn=>btn.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(btn.dataset.copyAddress||"");btn.textContent="복사 완료";setTimeout(()=>btn.textContent="주소 복사",1200)}catch(e){}}));
-  els.mapInfo.querySelectorAll("[data-linked-store]").forEach(btn=>btn.addEventListener("click",()=>{mapSelectedStore=btn.dataset.linkedStore||"";mapMode="store";renderMapPanel();}));
+  els.mapInfo.querySelectorAll("[data-copy-address]").forEach(btn=>btn.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(btn.dataset.copyAddress||"");btn.textContent="복사 완료";setTimeout(()=>btn.textContent="▣ 주소 복사",1200)}catch(e){}}));
+  els.mapInfo.querySelectorAll("[data-linked-store]").forEach(btn=>btn.addEventListener("click",()=>{mapSelectedStore=btn.dataset.linkedStore||"";const st=md.stores.find(r=>r.name===mapSelectedStore);mapSelectedTc=st?.tc||mapSelectedTc;mapMode="store";renderMapPanel();}));
 }
 function renderMapCoverageList(){
   if(!els.mapCoverageList) return;
-  const md=getMapDataSafe(); const tc=md.logistics.find(r=>r.name===mapSelectedTc); if(!tc){els.mapCoverageList.innerHTML="";return;}
-  const color=tc.color||"#f59e0b"; const grouped={}; md.coverage.filter(r=>r.tc===tc.name).forEach(r=>{const p=normalizeProvinceName(r.province)||"기타";(grouped[p]||(grouped[p]=[])).push(r);});
-  els.mapCoverageList.innerHTML=Object.entries(grouped).map(([p,rows])=>`<div class="map-coverage-group"><div class="map-coverage-province">${esc(p)}</div><div class="map-area-chips">${rows.map(r=>`<span class="map-area-chip active" style="--coverage-color:${color}">${esc(r.area)}</span>`).join("")}</div>${rows.some(r=>r.note)?`<div class="map-area-note">${esc(uniqueArray(rows.map(r=>r.note).filter(Boolean)).join(" · "))}</div>`:""}</div>`).join("");
+  const md=getMapDataSafe();
+  const tc=md.logistics.find(r=>r.name===mapSelectedTc);
+  if(!tc||mapMode!=="coverage"){els.mapCoverageList.innerHTML="";return;}
+  const grouped={};
+  md.coverage.filter(r=>r.tc===tc.name).forEach(r=>{const p=normalizeProvinceName(r.province)||"기타";(grouped[p]||(grouped[p]=[])).push(r);});
+  els.mapCoverageList.innerHTML=Object.entries(grouped).map(([p,rows])=>`<div class="map-coverage-group"><div class="map-coverage-province">${esc(p)}</div><div class="map-area-chips">${rows.map(r=>`<span class="map-area-chip active">${esc(r.area)}</span>`).join("")}</div>${rows.some(r=>r.note)?`<div class="map-area-note">${esc(uniqueArray(rows.map(r=>r.note).filter(Boolean)).join(" · "))}</div>`:""}</div>`).join("");
 }
 function processLocaleCompare(a,b){
   return String(a||"").localeCompare(String(b||""), "ko", { numeric:true, sensitivity:"base" });
