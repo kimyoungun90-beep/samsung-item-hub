@@ -743,20 +743,67 @@ body.view-nonhome .app{padding-top:0;}
   </section>
 
   <section id="pageHome" class="page home-dashboard show">
-    <article class="home-card">
-      <div class="home-top">
-        <div class="home-head"><div><h1 id="homeGreeting" class="home-title">안녕하세요 👋</h1><p id="homeSub" class="home-sub">오늘도 빠르고 정확하게 업무를 지원합니다</p></div><div class="home-bell-wrap"><button id="homeBellBtn" class="home-bell" type="button" aria-label="최근 업데이트">🔔<span id="homeBellDot" class="home-bell-dot"></span></button><span id="homeAppVersion" class="home-app-version">v110</span></div></div>
-        <div class="home-search"><input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" /><button id="homeSearchBtn" type="button" aria-label="검색">⌕</button></div>
+    <article class="home-card home-premium-card">
+      <div class="home-premium-hero">
+        <div class="home-premium-head">
+          <div class="home-premium-copy">
+            <h1 id="homeGreeting" class="home-title">아이템 허브</h1>
+            <p id="homeSub" class="home-sub">오늘도 효율적인 업무를 응원합니다.</p>
+            <div class="home-system-status"><span class="home-system-dot"></span><span>시스템 정상 운영 중</span></div>
+          </div>
+          <button id="homeBellBtn" class="home-guidance-card" type="button" aria-label="공지사항 확인">
+            <span class="home-guidance-kicker">GUIDANCE</span>
+            <strong id="homeNoticeTitle" class="home-guidance-title">공지사항</strong>
+            <span id="homeNoticeBody" class="home-guidance-body">새로운 안내를 확인하세요.</span>
+            <span class="home-guidance-more">자세히 보기 <b>›</b></span>
+            <span class="home-guidance-visual" aria-hidden="true">
+              <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span id="homeBellDot" class="home-bell-dot"></span>
+            <span id="homeAppVersion" class="home-app-version">v111</span>
+          </button>
+        </div>
+        <div class="home-search">
+          <span class="home-search-leading" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" />
+          <button id="homeSearchBtn" type="button" aria-label="검색"><svg viewBox="0 0 24 24" fill="none"><path d="M7 5H5v4M17 5h2v4M7 19H5v-4M17 19h2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        </div>
       </div>
-      <div class="home-block"><div class="home-block-title">바로가기</div><div class="home-quick-grid">
-        <button class="home-quick" type="button" data-page="item"><span class="home-quick-icon">⌕</span><span>아이템 조회</span></button>
-        <button class="home-quick" type="button" data-page="specTable"><span class="home-quick-icon">⚖</span><span>스펙 비교</span></button>
-        <button class="home-quick" type="button" data-page="process"><span class="home-quick-icon"><svg class="v110-home-process-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="4" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="14" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="6" height="6" rx="1.4" stroke="currentColor" stroke-width="1.8"/></svg></span><span>프로세스</span></button>
-        <button class="home-quick" type="button" data-page="dept"><span class="home-quick-icon">☏</span><span>업무지원</span></button>
-        <button class="home-quick" type="button" data-page="inquiry"><span class="home-quick-icon">☰</span><span>문의</span></button>
-        <button class="home-quick" type="button" data-action="notice"><span class="home-quick-icon">☊</span><span>공지사항</span></button>
-      </div></div>
-      <div class="home-block" style="padding-top:0"><div class="home-recent-head"><div class="home-block-title">최근 조회</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(최근 10개) ›</button></div><div id="homeRecentList" class="home-recent-list"></div><button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button></div>
+
+      <div class="home-block home-menu-block">
+        <div class="home-quick-grid">
+          <button class="home-quick" type="button" data-page="item">
+            <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.9"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span>
+            <span class="home-quick-copy"><strong>아이템 조회</strong><small>상세 정보 확인</small></span><span class="home-quick-arrow">›</span>
+          </button>
+          <button class="home-quick" type="button" data-page="specTable">
+            <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M5 7h14M7 7l-4 7h8L7 7Zm10 0-4 7h8l-4-7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+            <span class="home-quick-copy"><strong>스펙 비교</strong><small>모델 비교 분석</small></span><span class="home-quick-arrow">›</span>
+          </button>
+          <button class="home-quick" type="button" data-page="process">
+            <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="14" y="4" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="4" y="14" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="14" y="14" width="6" height="6" rx="1.5" fill="currentColor"/></svg></span>
+            <span class="home-quick-copy"><strong>프로세스</strong><small>업무 프로세스</small></span><span class="home-quick-arrow">›</span>
+          </button>
+          <button class="home-quick" type="button" data-page="dept">
+            <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13v-2a7 7 0 0 1 14 0v2M5 13H3.5A1.5 1.5 0 0 0 2 14.5v3A1.5 1.5 0 0 0 3.5 19H6v-6H5Zm14 0h1.5a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5H18v-6h1ZM18 19c0 1.1-.9 2-2 2h-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="home-quick-copy"><strong>업무지원</strong><small>가이드 · 양식</small></span><span class="home-quick-arrow">›</span>
+          </button>
+          <button class="home-quick" type="button" data-page="inquiry">
+            <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h16v11H9l-5 3v-14Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8" cy="11" r="1" fill="currentColor"/><circle cx="12" cy="11" r="1" fill="currentColor"/><circle cx="16" cy="11" r="1" fill="currentColor"/></svg></span>
+            <span class="home-quick-copy"><strong>문의</strong><small>Q&amp;A · 요청</small></span><span class="home-quick-arrow">›</span>
+          </button>
+          <button class="home-quick" type="button" data-action="notice">
+            <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M7 9a5 5 0 0 1 10 0c0 6 2.5 6 2.5 8H4.5C4.5 15 7 15 7 9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="home-quick-copy"><strong>공지사항</strong><small>전체 공지 확인</small></span><span class="home-quick-arrow">›</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="home-block home-recent-block">
+        <div class="home-recent-head"><div class="home-block-title">최근 본 품목</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(최근 10개) ›</button></div>
+        <div id="homeRecentList" class="home-recent-list"></div>
+        <button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button>
+      </div>
     </article>
   </section>
 
@@ -1040,7 +1087,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v110",
+  APP_VERSION: "v111",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1056,7 +1103,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v110"
+  SPEC_IMAGE_CACHE_BUST: "v111"
 };
 
 const DETAIL_TABS = [
@@ -1118,7 +1165,7 @@ let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v110";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v111";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -1178,7 +1225,7 @@ const $ = (id)=>document.getElementById(id);
 const els = {
   status:$("status"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageHome:$("pageHome"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
+  pageHome:$("pageHome"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
@@ -1873,9 +1920,15 @@ function rebuildIndex(){
 
 function renderHomeDashboard(){
   if(!els.pageHome) return;
-  const hs = DB.homeSettings || {};
-  if(els.homeGreeting) els.homeGreeting.textContent = hs.mainGreeting || hs.메인 || hs.메인인사 || hs.homeGreeting || hs.greeting || "안녕하세요 👋";
-  if(els.homeSub) els.homeSub.textContent = hs.subGreeting || hs.내용 || hs.서브문구 || hs.homeSub || hs.subtitle || "오늘도 빠르고 정확하게 업무를 지원합니다";
+  if(els.homeGreeting) els.homeGreeting.textContent = "아이템 허브";
+  if(els.homeSub) els.homeSub.textContent = "오늘도 효율적인 업무를 응원합니다.";
+  const notices = Array.isArray(DB.notices) ? DB.notices.filter(n=>safe(n?.title,"") || safe(n?.body,"")) : [];
+  const notice = notices[0] || {};
+  if(els.homeNoticeTitle) els.homeNoticeTitle.textContent = safe(notice.title,"공지사항");
+  if(els.homeNoticeBody){
+    const body = safe(notice.body,"새로운 안내를 확인하세요.").replace(/\s+/g," ").trim();
+    els.homeNoticeBody.textContent = body.length > 54 ? body.slice(0,54) + "…" : body;
+  }
   renderAppVersion();
   renderHomeUpdateDot();
   renderRecentList();
@@ -5171,7 +5224,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v110';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v111';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -5306,10 +5359,70 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v110';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v111';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
+
+
+<style id="v111-home-premium-style">
+/* v111 홈 UI: 프리미엄 네이비 헤더 + 2열 대형 메뉴 */
+body.view-home{background:linear-gradient(180deg,#eef6ff 0%,#f7faff 42%,#f4f8ff 100%)}
+body.view-home .app{max-width:760px;padding:0 14px 92px}
+body.view-home .hero{display:none!important}
+body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none;margin:0}
+.home-premium-hero{position:relative;margin:0 -14px 0;padding:34px 28px 42px;color:#fff;background:radial-gradient(circle at 86% 12%,rgba(29,117,255,.34),transparent 28%),linear-gradient(135deg,#071b46 0%,#082b69 55%,#063c93 100%);overflow:visible}
+.home-premium-hero:before,.home-premium-hero:after{content:"";position:absolute;pointer-events:none;border-radius:50%;border:1px solid rgba(89,151,255,.24)}
+.home-premium-hero:before{width:470px;height:210px;right:-145px;bottom:-100px;transform:rotate(-9deg)}
+.home-premium-hero:after{width:420px;height:160px;right:-110px;bottom:-94px;transform:rotate(-13deg)}
+.home-premium-head{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(205px,41%);gap:22px;align-items:stretch}
+.home-premium-copy{display:flex;flex-direction:column;justify-content:center;min-width:0;padding:10px 0}
+.home-premium-copy .home-title{margin:0;color:#fff;font-size:40px;line-height:1.05;letter-spacing:-1.7px;font-weight:1000}
+.home-premium-copy .home-sub{margin:14px 0 0;color:rgba(255,255,255,.88);font-size:17px;line-height:1.4;font-weight:800}
+.home-system-status{display:flex;align-items:center;gap:9px;margin-top:15px;color:rgba(255,255,255,.92);font-size:13px;font-weight:900}
+.home-system-dot{width:10px;height:10px;border-radius:50%;background:#18df73;box-shadow:0 0 0 4px rgba(24,223,115,.12)}
+.home-guidance-card{position:relative;min-height:180px;border:1px solid rgba(255,255,255,.22);border-radius:24px;padding:20px 92px 18px 20px;text-align:left;color:#fff;background:linear-gradient(145deg,rgba(6,25,68,.58),rgba(8,38,91,.86));box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 18px 38px rgba(0,10,34,.22);overflow:hidden;cursor:pointer}
+.home-guidance-card:active{transform:scale(.99)}
+.home-guidance-kicker{display:inline-flex;border:1px solid rgba(255,255,255,.38);border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;letter-spacing:.5px;color:#dceaff}
+.home-guidance-title{display:block;margin-top:12px;font-size:18px;line-height:1.3;font-weight:1000;letter-spacing:-.35px}
+.home-guidance-body{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin-top:9px;color:rgba(255,255,255,.78);font-size:12px;line-height:1.55;font-weight:760;word-break:keep-all}
+.home-guidance-more{display:block;margin-top:12px;color:#fff;font-size:12px;font-weight:950}.home-guidance-more b{font-size:18px;vertical-align:-1px}
+.home-guidance-visual{position:absolute;right:10px;bottom:12px;width:82px;height:82px;filter:drop-shadow(0 12px 14px rgba(0,0,0,.18))}.home-guidance-visual svg{display:block;width:100%;height:100%}
+.home-guidance-card .home-app-version{position:absolute;right:15px;top:15px;color:rgba(255,255,255,.7);font-size:10px;font-weight:1000}
+.home-guidance-card .home-bell-dot{top:12px;right:12px;width:9px;height:9px;border:2px solid #123877;background:#ff6b32}
+.home-premium-hero .home-search{position:relative;z-index:4;transform:translateY(73px);display:grid;grid-template-columns:36px minmax(0,1fr) 54px;align-items:center;gap:8px;min-height:76px;margin-top:22px;padding:0 10px 0 22px;border:1px solid rgba(219,232,248,.98);border-radius:27px;background:#fff;box-shadow:0 22px 48px rgba(8,31,72,.2)}
+.home-search-leading{display:grid;place-items:center;color:#0b2250}.home-search-leading svg{width:28px;height:28px}
+.home-premium-hero .home-search input{font-size:17px;font-weight:800;color:#0b1c3b}.home-premium-hero .home-search input::placeholder{color:#8fa0b7}
+.home-premium-hero .home-search button{display:grid;place-items:center;width:54px;height:54px;border-radius:19px;background:linear-gradient(180deg,#0c6df0,#0755c8);color:#fff;box-shadow:0 12px 25px rgba(0,90,220,.28)}
+.home-premium-hero .home-search button svg{width:27px;height:27px}
+.home-menu-block{padding:106px 0 18px}
+.home-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.home-quick{display:grid;grid-template-columns:68px minmax(0,1fr) 18px;align-items:center;gap:16px;min-height:128px;padding:20px 18px;border:1px solid #dde8f5;border-radius:25px;text-align:left;background:rgba(255,255,255,.98);box-shadow:0 16px 32px rgba(25,63,110,.07);color:#091a3a}
+.home-quick:hover{border-color:#bfd4ee;box-shadow:0 18px 38px rgba(25,63,110,.1)}
+.home-quick-icon{width:68px;height:68px;border-radius:50%;background:linear-gradient(180deg,#f3f8ff,#eaf3ff);color:#0962da;display:grid;place-items:center}
+.home-quick-icon svg{width:34px;height:34px}.home-quick-copy{display:block;min-width:0}.home-quick-copy strong{display:block;font-size:19px;line-height:1.25;font-weight:1000;letter-spacing:-.45px}.home-quick-copy small{display:block;margin-top:8px;color:#667b98;font-size:13px;line-height:1.3;font-weight:800}.home-quick-arrow{color:#6f86a3;font-size:28px;font-weight:500;line-height:1}
+.home-recent-block{padding:28px 0 0}.home-recent-head{padding:0 3px;margin-bottom:13px}.home-recent-head .home-block-title{font-size:20px;letter-spacing:-.5px}.home-recent-toggle{font-size:13px;color:#667b98}
+.home-recent-list{gap:0;max-height:338px;border:1px solid #dde8f5;border-radius:25px;background:#fff;overflow:hidden;box-shadow:0 16px 34px rgba(25,63,110,.06)}
+.home-recent-list.expanded{max-height:720px;padding-right:0;overflow-y:auto}
+.home-recent-item{grid-template-columns:92px minmax(0,1fr) 18px!important;min-height:116px!important;padding:15px 18px!important;border:0!important;border-radius:0!important;box-shadow:none!important;border-bottom:1px solid #edf2f8!important;background:#fff!important}
+.home-recent-item:last-child{border-bottom:0!important}.home-recent-thumb{width:92px!important;height:76px!important;border-radius:13px!important;background:#f5f8fc!important}.home-recent-title{font-size:17px!important}.home-recent-sub{margin-top:7px;font-size:13px!important;line-height:1.35!important}.home-recent-arrow{font-size:26px;color:#7890ad}
+.home-empty{border:0;border-radius:0;background:#fff;padding:24px}
+.home-refresh{width:auto;min-width:156px;margin:18px 0 0 auto;padding:0 22px;background:#071b3d;color:#fff;box-shadow:0 12px 28px rgba(7,27,61,.22)}
+@media(max-width:620px){
+ body.view-home .app{padding-left:10px;padding-right:10px}
+ .home-premium-hero{margin-left:-10px;margin-right:-10px;padding:26px 16px 36px}
+ .home-premium-head{grid-template-columns:minmax(0,1fr) minmax(158px,43%);gap:12px}
+ .home-premium-copy .home-title{font-size:31px}.home-premium-copy .home-sub{font-size:13px;margin-top:10px}.home-system-status{font-size:11px;margin-top:11px}
+ .home-guidance-card{min-height:150px;border-radius:20px;padding:15px 66px 14px 14px}.home-guidance-title{font-size:14px;margin-top:9px}.home-guidance-body{font-size:10px;margin-top:6px;-webkit-line-clamp:2}.home-guidance-more{font-size:10px;margin-top:8px}.home-guidance-visual{width:62px;height:62px;right:5px;bottom:8px}.home-guidance-card .home-app-version{font-size:9px;right:9px;top:9px}.home-guidance-kicker{font-size:8px;padding:4px 7px}
+ .home-premium-hero .home-search{transform:translateY(64px);min-height:66px;border-radius:23px;grid-template-columns:29px minmax(0,1fr) 48px;padding-left:16px}.home-premium-hero .home-search input{font-size:14px}.home-premium-hero .home-search button{width:48px;height:48px;border-radius:17px}
+ .home-menu-block{padding-top:90px}.home-quick{grid-template-columns:54px minmax(0,1fr) 14px;gap:11px;min-height:108px;padding:15px 12px;border-radius:21px}.home-quick-icon{width:54px;height:54px}.home-quick-icon svg{width:29px;height:29px}.home-quick-copy strong{font-size:16px}.home-quick-copy small{font-size:11px;margin-top:6px}.home-quick-arrow{font-size:23px}
+ .home-recent-item{grid-template-columns:72px minmax(0,1fr) 14px!important;min-height:98px!important;padding:12px!important}.home-recent-thumb{width:72px!important;height:64px!important}.home-recent-title{font-size:15px!important}.home-recent-sub{font-size:11px!important}.home-recent-head .home-block-title{font-size:18px}.home-recent-toggle{font-size:11px}
+}
+@media(max-width:390px){
+ .home-premium-head{grid-template-columns:minmax(0,1fr) 150px}.home-guidance-body{display:none}.home-guidance-card{min-height:130px;padding-right:58px}.home-guidance-title{font-size:13px}.home-premium-copy .home-title{font-size:28px}
+ .home-quick-grid{gap:8px}.home-quick{grid-template-columns:46px minmax(0,1fr) 12px;gap:8px;min-height:96px;padding:13px 9px}.home-quick-icon{width:46px;height:46px}.home-quick-icon svg{width:25px;height:25px}.home-quick-copy strong{font-size:14px}.home-quick-copy small{font-size:10px}.home-quick-arrow{font-size:20px}
+}
+</style>
 
 </body>
 </html>
