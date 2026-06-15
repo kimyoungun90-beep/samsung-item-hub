@@ -760,7 +760,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v114</span>
+            <span id="homeAppVersion" class="home-app-version">v115</span>
           </button>
         </div>
         <div class="home-search">
@@ -772,6 +772,13 @@ body.view-nonhome .app{padding-top:0;}
       </div>
 
       <div class="home-block home-menu-block">
+        <div class="home-favorite-shortcut-row">
+          <button id="homeFavoriteShortcut" class="home-favorite-shortcut" type="button" aria-label="즐겨찾기 목록 열기">
+            <span class="home-favorite-shortcut-icon" aria-hidden="true">★</span>
+            <span class="home-favorite-shortcut-copy"><strong>즐겨찾기</strong><small id="homeFavoriteCount">0개</small></span>
+            <span class="home-favorite-shortcut-arrow" aria-hidden="true">›</span>
+          </button>
+        </div>
         <div class="home-quick-grid">
           <button class="home-quick" type="button" data-page="item">
             <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.9"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span>
@@ -800,11 +807,29 @@ body.view-nonhome .app{padding-top:0;}
         </div>
       </div>
 
-      <div class="home-block home-recent-block home-favorite-block">
-        <div class="home-recent-head home-favorite-head"><div class="home-block-title"><span class="home-favorite-title-star" aria-hidden="true">★</span> 즐겨찾기</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(0개) ›</button></div>
-        <div id="homeRecentList" class="home-recent-list home-favorite-list"></div>
+      <div class="home-block home-recent-block">
+        <div class="home-recent-head"><div class="home-block-title">최근 본 품목</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(최근 10개) ›</button></div>
+        <div id="homeRecentList" class="home-recent-list"></div>
         <button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button>
       </div>
+    </article>
+  </section>
+
+  <section id="pageFavorites" class="page">
+    <div class="page-topbar">
+      <button class="page-icon-btn page-back-btn" type="button" aria-label="뒤로">‹</button>
+      <div class="page-topbar-title">즐겨찾기</div>
+      <span class="page-topbar-spacer" aria-hidden="true"></span>
+    </div>
+    <article class="favorite-page-shell">
+      <div class="favorite-page-head">
+        <div>
+          <div class="favorite-page-title">즐겨찾기 품목</div>
+          <div class="favorite-page-sub">별표를 누른 품목을 한곳에서 확인할 수 있습니다.</div>
+        </div>
+        <span id="favoritePageCount" class="favorite-page-count">0개</span>
+      </div>
+      <div id="favoritePageList" class="favorite-page-list"></div>
     </article>
   </section>
 
@@ -1052,6 +1077,14 @@ body.view-nonhome .app{padding-top:0;}
   <button id="globalHomeBottom" class="global-action global-home-bottom" type="button" aria-label="홈"><span class="global-home-icon">⌂</span><span class="global-home-label">홈</span></button>
   <footer class="footer">Google Sheets DB 연결형 · PWA App Shell Cache · Local Data Cache</footer>
 </main>
+<div id="dbRefreshModal" class="db-refresh-modal" aria-hidden="true">
+  <div class="db-refresh-panel" role="dialog" aria-modal="true" aria-labelledby="dbRefreshTitle">
+    <div class="db-refresh-spinner" aria-hidden="true"></div>
+    <div id="dbRefreshTitle" class="db-refresh-title">현재 새로고침 중입니다.</div>
+    <div id="dbRefreshMessage" class="db-refresh-message">잠시만 기다려 주세요.</div>
+  </div>
+</div>
+
 <div id="imageModal" class="image-modal" aria-hidden="true">
   <div class="image-modal-inner">
     <button id="imageModalClose" class="image-modal-close" type="button" aria-label="닫기">×</button>
@@ -1097,7 +1130,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v114",
+  APP_VERSION: "v115",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1113,7 +1146,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v114"
+  SPEC_IMAGE_CACHE_BUST: "v115"
 };
 
 const DETAIL_TABS = [
@@ -1181,6 +1214,7 @@ const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
 let bootstrapLoading = false;
+let manualRefreshPromise = null;
 let bootstrapReady = false;
 let appHiddenAt = 0;
 let lastVersionCheckAt = 0;
@@ -1235,7 +1269,7 @@ const $ = (id)=>document.getElementById(id);
 const els = {
   status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageHome:$("pageHome"), pageNotice:$("pageNotice"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
+  pageHome:$("pageHome"), pageFavorites:$("pageFavorites"), pageNotice:$("pageNotice"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), favoritePageList:$("favoritePageList"), favoritePageCount:$("favoritePageCount"), homeFavoriteShortcut:$("homeFavoriteShortcut"), homeFavoriteCount:$("homeFavoriteCount"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"), dbRefreshModal:$("dbRefreshModal"), dbRefreshMessage:$("dbRefreshMessage"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), itemFavoriteBtn:$("itemFavoriteBtn"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
@@ -1276,8 +1310,8 @@ function bindEvents(){
   if(els.globalBackTop) els.globalBackTop.addEventListener("click",handleAppBack);
   if(els.globalBackBottom) els.globalBackBottom.addEventListener("click",handleAppBack);
   if(els.globalHomeBottom) els.globalHomeBottom.addEventListener("click",goHomeNow);
-  if(els.globalRefreshTop) els.globalRefreshTop.addEventListener("click",()=>loadBootstrap(true));
-  if(els.itemPageRefreshBtn) els.itemPageRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+  if(els.globalRefreshTop) els.globalRefreshTop.addEventListener("click",()=>runManualDbRefresh());
+  if(els.itemPageRefreshBtn) els.itemPageRefreshBtn.addEventListener("click",()=>runManualDbRefresh());
   if(els.homeSearchBtn) els.homeSearchBtn.addEventListener("click",runHomeSearch);
   if(els.homeSearchInput){
     els.homeSearchInput.addEventListener("input",debounce(()=>renderHomeSearchSuggestions(els.homeSearchInput.value),70));
@@ -1294,8 +1328,9 @@ function bindEvents(){
     });
   }
   if(els.homeBellBtn) els.homeBellBtn.addEventListener("click",openNoticePage);
-  if(els.homeRefreshBtn) els.homeRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
-  if(els.noticePageRefreshBtn) els.noticePageRefreshBtn.addEventListener("click",()=>loadBootstrap(true).then(()=>renderNoticePage()));
+  if(els.homeFavoriteShortcut) els.homeFavoriteShortcut.addEventListener("click",openFavoritesPage);
+  if(els.homeRefreshBtn) els.homeRefreshBtn.addEventListener("click",()=>runManualDbRefresh());
+  if(els.noticePageRefreshBtn) els.noticePageRefreshBtn.addEventListener("click",()=>runManualDbRefresh(()=>renderNoticePage()));
   document.addEventListener("visibilitychange",()=>{
     if(document.hidden){
       appHiddenAt = Date.now();
@@ -1493,12 +1528,12 @@ function bindEvents(){
       history.replaceState({hubBase:true}, "", getCleanAppUrl());
     }
   }catch(err){}
-  els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
-  els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+  els.topRefreshBtn.addEventListener("click",()=>runManualDbRefresh());
+  els.floatRefreshBtn.addEventListener("click",()=>runManualDbRefresh());
 }
 
 function showPage(page, push=true){
-  const map = { home:els.pageHome, notice:els.pageNotice, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
+  const map = { home:els.pageHome, favorites:els.pageFavorites, notice:els.pageNotice, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
   const target = map[page] ? page : "home";
   if(push && currentPage && currentPage !== target){
     appBackStack.push(currentPage);
@@ -1526,6 +1561,7 @@ function showPage(page, push=true){
     fetchProcessRecommendations();
   }
   if(target==="home") renderHomeDashboard();
+  if(target==="favorites") renderFavoritePage();
   if(target==="notice") renderNoticePage();
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -1694,6 +1730,56 @@ function readBestLocalCache(){
     return savedRows.length ? { ...item, specRows:savedRows } : item;
   });
   return best;
+}
+
+function delayMs(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
+function setManualRefreshBusy(busy){
+  [els.homeRefreshBtn,els.floatRefreshBtn,els.topRefreshBtn,els.globalRefreshTop,els.itemPageRefreshBtn,els.noticePageRefreshBtn].filter(Boolean).forEach(button=>{
+    button.disabled = !!busy;
+    button.setAttribute("aria-busy", busy ? "true" : "false");
+  });
+}
+function openDbRefreshModal(message="잠시만 기다려 주세요."){
+  if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = message;
+  if(els.dbRefreshModal){
+    els.dbRefreshModal.classList.add("show");
+    els.dbRefreshModal.setAttribute("aria-hidden","false");
+  }
+  document.body.classList.add("db-refresh-open");
+  setManualRefreshBusy(true);
+}
+function closeDbRefreshModal(){
+  if(els.dbRefreshModal){
+    els.dbRefreshModal.classList.remove("show");
+    els.dbRefreshModal.setAttribute("aria-hidden","true");
+  }
+  document.body.classList.remove("db-refresh-open");
+  setManualRefreshBusy(false);
+}
+async function waitForBootstrapIdle(maxWaitMs=20000){
+  const started = Date.now();
+  while(bootstrapLoading && Date.now()-started < maxWaitMs) await delayMs(120);
+}
+function runManualDbRefresh(afterSuccess){
+  if(manualRefreshPromise) return manualRefreshPromise;
+  openDbRefreshModal("잠시만 기다려 주세요.");
+  const shownAt = Date.now();
+  manualRefreshPromise = (async()=>{
+    await waitForBootstrapIdle();
+    const ok = await loadBootstrap(true, { manual:true });
+    const elapsed = Date.now()-shownAt;
+    if(elapsed < 900) await delayMs(900-elapsed);
+    if(ok){
+      if(typeof afterSuccess === "function") afterSuccess();
+      closeDbRefreshModal();
+      return true;
+    }
+    if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "새로고침에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+    await delayMs(1500);
+    closeDbRefreshModal();
+    return false;
+  })().finally(()=>{ manualRefreshPromise = null; });
+  return manualRefreshPromise;
 }
 
 async function loadBootstrap(force, options={}){
@@ -1982,6 +2068,7 @@ function renderHomeDashboard(){
   }
   renderAppVersion();
   renderHomeUpdateDot();
+  renderFavoriteShortcut();
   renderRecentList();
 }
 function renderHomeUpdateDot(){
@@ -2027,8 +2114,41 @@ function addRecentView(entry){
   const list=getRecentViews().filter(x=>x&&x.id!==entry.id);
   list.unshift(Object.assign({},entry,{time:Date.now()}));
   saveRecentViews(list);
-  // 최근 조회 기록은 기존대로 보관하되, 홈에는 즐겨찾기 품목만 표시합니다.
-  renderFavoriteList();
+  renderRecentList();
+}
+function toggleRecentList(){ recentExpanded = !recentExpanded; renderRecentList(); }
+function renderRecentList(){
+  if(!els.homeRecentList) return;
+  const all=getRecentViews().slice(0,10);
+  if(recentExpanded && all.length <= 3) recentExpanded = false;
+  const list=all.slice(0,recentExpanded?10:3);
+  els.homeRecentList.classList.toggle("expanded",recentExpanded);
+  if(els.homeRecentToggle){
+    els.homeRecentToggle.textContent=recentExpanded?"접기":"전체보기(최근 10개) ›";
+    els.homeRecentToggle.disabled = all.length <= 3;
+    els.homeRecentToggle.classList.toggle("disabled", all.length <= 3);
+  }
+  if(!list.length){
+    els.homeRecentList.innerHTML=`<div class="home-empty">최근 조회한 아이템, 스펙 비교, 프로세스가 없습니다.</div>`;
+    return;
+  }
+  els.homeRecentList.innerHTML=list.map(r=>renderRecentItem(r)).join("");
+  els.homeRecentList.querySelectorAll(".home-recent-item").forEach(card=>{
+    const open=()=>openRecentView(card.dataset.id);
+    card.addEventListener("click",open);
+    card.addEventListener("keydown",event=>{
+      if(event.key === "Enter" || event.key === " "){ event.preventDefault(); open(); }
+    });
+  });
+  bindItemFavoriteButtons(els.homeRecentList);
+}
+function renderRecentItem(r){
+  const isItem=String(r.type||"")==="item";
+  const item = isItem ? findItemForRecent(r) : null;
+  const thumbCandidates = item ? getItemThumbnailCandidates(item) : uniqueArray([r.thumbImage].filter(Boolean));
+  const thumb=isItem&&thumbCandidates.length?thumbImageHTML(thumbCandidates[0], r.title||'최근 조회', thumbCandidates[1]||""):recentIcon(r.type);
+  const star=item?favoriteStarButton(item,"home-recent-favorite-btn"):"";
+  return `<div class="home-recent-item ${star?"has-favorite":""}" role="button" tabindex="0" data-id="${esc(r.id)}"><div class="home-recent-thumb">${thumb}</div><div class="home-recent-content"><div class="home-recent-type">${esc(recentTypeLabel(r.type))}</div><div class="home-recent-title">${esc(r.title||"최근 조회")}</div><div class="home-recent-sub">${esc(r.subtitle||"")}</div></div>${star}<div class="home-recent-arrow">›</div></div>`;
 }
 
 function favoriteKeyForItem(item){
@@ -2068,9 +2188,7 @@ function getFavoriteItemKeys(){
 function saveFavoriteItemKeys(keys){
   try{ localStorage.setItem(ITEM_FAVORITES_KEY, JSON.stringify(uniqueArray((keys || []).filter(Boolean)))); }catch(e){}
 }
-function getFavoriteItems(){
-  return getFavoriteItemKeys().map(favoriteItemFromKey).filter(Boolean);
-}
+function getFavoriteItems(){ return getFavoriteItemKeys().map(favoriteItemFromKey).filter(Boolean); }
 function isItemFavorite(itemOrKey){
   const key = favoriteKeyFromValue(itemOrKey);
   return !!key && getFavoriteItemKeys().includes(key);
@@ -2124,47 +2242,49 @@ function toggleItemFavorite(itemOrKey){
   const next = exists ? current.filter(row=>row!==key) : [key, ...current.filter(row=>row!==key)];
   saveFavoriteItemKeys(next);
   refreshFavoriteButtonStates();
-  renderFavoriteList();
+  renderFavoriteShortcut();
+  renderFavoritePage();
   if(els.homeSearchInput && els.homeSearchSuggestions?.classList.contains("show")) renderHomeSearchSuggestions(els.homeSearchInput.value);
   if(els.itemFavoriteBtn && selectedItem) syncItemFavoriteButton(els.itemFavoriteBtn, selectedItem);
 }
-function toggleRecentList(){ recentExpanded = !recentExpanded; renderFavoriteList(); }
-function renderRecentList(){ renderFavoriteList(); }
-function renderFavoriteList(){
-  if(!els.homeRecentList) return;
-  const all = getFavoriteItems();
-  if(recentExpanded && all.length <= 3) recentExpanded = false;
-  const list = all.slice(0, recentExpanded ? all.length : 3);
-  els.homeRecentList.classList.toggle("expanded", recentExpanded);
-  if(els.homeRecentToggle){
-    els.homeRecentToggle.textContent = recentExpanded ? "접기" : `전체보기(${all.length}개) ›`;
-    els.homeRecentToggle.disabled = all.length <= 3;
-    els.homeRecentToggle.classList.toggle("disabled", all.length <= 3);
-  }
-  if(!all.length){
-    els.homeRecentList.innerHTML = `<div class="home-empty home-favorite-empty"><span class="home-empty-star" aria-hidden="true">☆</span><strong>즐겨찾기한 품목이 없습니다.</strong><small>아이템 목록이나 검색 결과의 별표를 눌러 추가해 주세요.</small></div>`;
+function renderFavoriteShortcut(){
+  const count = getFavoriteItems().length;
+  if(els.homeFavoriteCount) els.homeFavoriteCount.textContent = `${count}개`;
+  if(els.homeFavoriteShortcut) els.homeFavoriteShortcut.classList.toggle("has-items", count > 0);
+}
+function openFavoritesPage(){
+  hideHomeSearchSuggestions();
+  renderFavoritePage();
+  showPage("favorites");
+}
+function renderFavoritePage(){
+  if(!els.favoritePageList) return;
+  const items = getFavoriteItems();
+  if(els.favoritePageCount) els.favoritePageCount.textContent = `${items.length}개`;
+  if(!items.length){
+    els.favoritePageList.innerHTML = `<div class="favorite-page-empty"><span aria-hidden="true">☆</span><strong>즐겨찾기한 품목이 없습니다.</strong><small>아이템 목록이나 검색 결과의 별표를 눌러 추가해 주세요.</small></div>`;
     return;
   }
-  els.homeRecentList.innerHTML = list.map(item=>renderFavoriteItem(item)).join("");
-  els.homeRecentList.querySelectorAll("[data-favorite-open]").forEach(card=>{
+  els.favoritePageList.innerHTML = items.map(renderFavoritePageItem).join("");
+  els.favoritePageList.querySelectorAll("[data-favorite-open]").forEach(card=>{
     const open = ()=>openFavoriteItem(card.dataset.favoriteOpen || "");
     card.addEventListener("click",open);
     card.addEventListener("keydown",event=>{
       if(event.key === "Enter" || event.key === " "){ event.preventDefault(); open(); }
     });
   });
-  bindItemFavoriteButtons(els.homeRecentList);
+  bindItemFavoriteButtons(els.favoritePageList);
 }
-function renderFavoriteItem(item){
+function renderFavoritePageItem(item){
   const key = favoriteKeyForItem(item);
   const thumbCandidates = getItemThumbnailCandidates(item);
   const thumb = thumbCandidates.length ? thumbImageHTML(thumbCandidates[0], safe(item.modelName,"즐겨찾기 품목"), thumbCandidates[1]||"") : categoryIconImageHTML(categoryIconForItem(item), "thumb-icon-img");
-  return `<div class="home-recent-item home-favorite-item" role="button" tabindex="0" data-favorite-open="${esc(key)}">
-    <div class="home-recent-thumb">${thumb}</div>
-    <div class="home-recent-content"><div class="home-recent-title">${styledText(item.itemNo,"아이템번호 미등록",styleOf(item,"itemNo"))}</div><div class="home-recent-sub">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}${item.productName?` · ${styledText(item.productName,"",styleOf(item,"productName"))}`:""}</div></div>
-    ${favoriteStarButton(item,"home-favorite-star-btn")}
-    <div class="home-recent-arrow">›</div>
-  </div>`;
+  return `<article class="favorite-page-item" role="button" tabindex="0" data-favorite-open="${esc(key)}">
+    <div class="favorite-page-thumb">${thumb}</div>
+    <div class="favorite-page-copy"><div class="favorite-page-item-no">${styledText(item.itemNo,"아이템번호 미등록",styleOf(item,"itemNo"))}</div><div class="favorite-page-item-model">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}</div>${item.productName?`<div class="favorite-page-item-name">${styledText(item.productName,"",styleOf(item,"productName"))}</div>`:""}</div>
+    ${favoriteStarButton(item,"favorite-page-star")}
+    <div class="favorite-page-arrow" aria-hidden="true">›</div>
+  </article>`;
 }
 function openFavoriteItem(key){
   const item = favoriteItemFromKey(key);
@@ -2372,6 +2492,7 @@ function categoryIconForItem(item){ return itemCategoryGroup(item); }
 
 function renderAll(){
   renderHomeDashboard();
+  renderFavoritePage();
   if(els.homeSearchInput?.value) renderHomeSearchSuggestions(els.homeSearchInput.value);
   renderNotice();
   renderItemCategoryChips();
@@ -5482,7 +5603,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v114';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v115';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -5617,7 +5738,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v114';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v115';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -5744,6 +5865,36 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
  .home-favorite-item .item-favorite-btn{width:32px;height:32px;border-radius:11px;font-size:20px}
  .item-detail-hero{padding-right:52px}.item-detail-favorite-btn{right:10px;top:10px;width:36px;height:36px;border-radius:13px;font-size:22px}
 }
+</style>
+
+<style id="v115-favorites-refresh-style">
+/* v115: 스펙 비교 상단 반높이 즐겨찾기 카드 + 즐겨찾기 전용 페이지 + DB 새로고침 대기창 */
+.home-favorite-shortcut-row{display:flex;justify-content:flex-end;margin:0 0 12px}
+.home-favorite-shortcut{width:calc((100% - 12px)/2);min-height:58px;border:1px solid #dbe7f5;border-radius:21px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:0 10px 25px rgba(15,55,100,.06);display:grid;grid-template-columns:42px minmax(0,1fr) 16px;align-items:center;gap:10px;padding:8px 13px;color:#07152d;text-align:left;cursor:pointer;touch-action:manipulation}
+.home-favorite-shortcut:active{transform:scale(.985)}
+.home-favorite-shortcut-icon{width:40px;height:40px;border-radius:15px;background:#fff8df;color:#f2a900;display:grid;place-items:center;font-size:24px;font-weight:1000}
+.home-favorite-shortcut-copy{min-width:0}.home-favorite-shortcut-copy strong{display:block;font-size:15px;font-weight:1000;letter-spacing:-.35px}.home-favorite-shortcut-copy small{display:block;margin-top:3px;color:#7a8da7;font-size:10px;font-weight:950}
+.home-favorite-shortcut-arrow{color:#6f86a3;font-size:22px;line-height:1}.home-favorite-shortcut.has-items{border-color:#f3d985;background:linear-gradient(180deg,#fffdf5,#fff)}
+.page-topbar-spacer{width:40px;height:40px;display:block}
+.favorite-page-shell{margin-top:12px;border:1px solid #dbe7f5;border-radius:28px;background:#fff;padding:20px;box-shadow:0 18px 42px rgba(15,55,100,.08)}
+.favorite-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid #e8eef6}
+.favorite-page-title{font-size:22px;font-weight:1000;color:#07152d;letter-spacing:-.6px}.favorite-page-sub{margin-top:6px;color:#6b7a90;font-size:13px;font-weight:850;line-height:1.5}
+.favorite-page-count{flex:0 0 auto;border:1px solid #f0d98a;border-radius:999px;background:#fff8df;color:#b87400;padding:8px 12px;font-size:12px;font-weight:1000}
+.favorite-page-list{display:grid;gap:10px;padding-top:16px}
+.favorite-page-item{border:1px solid #dfe8f4;border-radius:20px;background:linear-gradient(180deg,#fff,#fbfdff);padding:12px;display:grid;grid-template-columns:78px minmax(0,1fr) 38px 16px;align-items:center;gap:12px;box-shadow:0 9px 22px rgba(15,55,100,.045);cursor:pointer}
+.favorite-page-item:focus-visible{outline:3px solid rgba(29,117,255,.24);outline-offset:2px}.favorite-page-thumb{width:78px;height:74px;border-radius:14px;background:#f4f8fd;display:grid;place-items:center;overflow:hidden}.favorite-page-thumb img{width:100%;height:100%;object-fit:contain}.favorite-page-copy{min-width:0}.favorite-page-item-no{font-size:15px;font-weight:1000;color:#07152d}.favorite-page-item-model{margin-top:4px;font-size:14px;font-weight:950;color:#1d2d44;word-break:break-word}.favorite-page-item-name{margin-top:4px;font-size:12px;font-weight:800;color:#71839b;line-height:1.35;word-break:keep-all}.favorite-page-star{width:36px;height:36px;border-radius:13px;font-size:22px;box-shadow:none}.favorite-page-arrow{font-size:24px;color:#8192a9}
+.favorite-page-empty{border:1px dashed #cbd5e1;border-radius:20px;background:#f8fbff;padding:38px 18px;display:grid;justify-items:center;gap:8px;text-align:center}.favorite-page-empty>span{font-size:38px;color:#9db0c8}.favorite-page-empty strong{font-size:15px;color:#263b57}.favorite-page-empty small{font-size:12px;color:#7b8da5;font-weight:850;line-height:1.5}
+.home-recent-item.has-favorite{grid-template-columns:92px minmax(0,1fr) 38px 18px!important;cursor:pointer}.home-recent-favorite-btn{width:36px;height:36px;border-radius:13px;font-size:22px;box-shadow:none}
+.db-refresh-modal{position:fixed;inset:0;z-index:20000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(4,16,38,.46);backdrop-filter:blur(8px)}.db-refresh-modal.show{display:flex}.db-refresh-panel{width:min(340px,calc(100vw - 44px));border:1px solid rgba(255,255,255,.75);border-radius:26px;background:rgba(255,255,255,.98);padding:28px 24px;text-align:center;box-shadow:0 26px 70px rgba(4,16,38,.28)}
+.db-refresh-spinner{width:46px;height:46px;margin:0 auto 17px;border:5px solid #dbeafe;border-top-color:#1268d7;border-radius:50%;animation:dbRefreshSpin .8s linear infinite}.db-refresh-title{font-size:19px;font-weight:1000;color:#07152d;letter-spacing:-.45px}.db-refresh-message{margin-top:9px;color:#667b98;font-size:13px;font-weight:850;line-height:1.55}.db-refresh-open{overflow:hidden!important}.home-refresh:disabled,.floating-refresh:disabled,.refresh-btn:disabled,.page-icon-btn:disabled{opacity:.58;cursor:wait}
+@keyframes dbRefreshSpin{to{transform:rotate(360deg)}}
+@media(max-width:620px){
+ .home-favorite-shortcut-row{margin-bottom:8px}.home-favorite-shortcut{width:calc((100% - 12px)/2);min-height:54px;border-radius:19px;grid-template-columns:36px minmax(0,1fr) 12px;gap:8px;padding:7px 10px}.home-favorite-shortcut-icon{width:36px;height:36px;border-radius:13px;font-size:21px}.home-favorite-shortcut-copy strong{font-size:13px}.home-favorite-shortcut-copy small{font-size:9px}.home-favorite-shortcut-arrow{font-size:19px}
+ .favorite-page-shell{padding:15px;border-radius:23px}.favorite-page-title{font-size:19px}.favorite-page-item{grid-template-columns:64px minmax(0,1fr) 34px 13px;gap:9px;padding:10px;border-radius:18px}.favorite-page-thumb{width:64px;height:62px}.favorite-page-item-no{font-size:13px}.favorite-page-item-model{font-size:12px}.favorite-page-item-name{font-size:10px}.favorite-page-star{width:32px;height:32px;border-radius:11px;font-size:20px}.favorite-page-arrow{font-size:21px}
+ .home-recent-item.has-favorite{grid-template-columns:72px minmax(0,1fr) 32px 14px!important}.home-recent-favorite-btn{width:32px;height:32px;border-radius:11px;font-size:20px}
+ .db-refresh-panel{border-radius:23px;padding:25px 20px}.db-refresh-title{font-size:17px}.db-refresh-message{font-size:12px}
+}
+@media(max-width:390px){.home-favorite-shortcut{width:calc((100% - 8px)/2)}}
 </style>
 
 </body>
