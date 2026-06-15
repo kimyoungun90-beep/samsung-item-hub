@@ -760,7 +760,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v115</span>
+            <span id="homeAppVersion" class="home-app-version">v116</span>
           </button>
         </div>
         <div class="home-search">
@@ -824,8 +824,8 @@ body.view-nonhome .app{padding-top:0;}
     <article class="favorite-page-shell">
       <div class="favorite-page-head">
         <div>
-          <div class="favorite-page-title">즐겨찾기 품목</div>
-          <div class="favorite-page-sub">별표를 누른 품목을 한곳에서 확인할 수 있습니다.</div>
+          <div class="favorite-page-title">즐겨찾기 목록</div>
+          <div class="favorite-page-sub">아이템·스펙 비교·프로세스·공지사항을 한곳에서 확인할 수 있습니다.</div>
         </div>
         <span id="favoritePageCount" class="favorite-page-count">0개</span>
       </div>
@@ -849,6 +849,15 @@ body.view-nonhome .app{padding-top:0;}
       </div>
       <div id="noticePageList" class="notice-page-list"></div>
     </article>
+  </section>
+
+  <section id="pageNoticeDetail" class="page">
+    <div class="page-topbar">
+      <button class="page-icon-btn page-back-btn" type="button" aria-label="뒤로">‹</button>
+      <div class="page-topbar-title">공지사항 상세</div>
+      <span class="page-topbar-spacer" aria-hidden="true"></span>
+    </div>
+    <article id="noticeDetailContent" class="notice-detail-shell"></article>
   </section>
 
   <nav id="mainNav" class="nav home-mode">
@@ -1080,8 +1089,8 @@ body.view-nonhome .app{padding-top:0;}
 <div id="dbRefreshModal" class="db-refresh-modal" aria-hidden="true">
   <div class="db-refresh-panel" role="dialog" aria-modal="true" aria-labelledby="dbRefreshTitle">
     <div class="db-refresh-spinner" aria-hidden="true"></div>
-    <div id="dbRefreshTitle" class="db-refresh-title">현재 새로고침 중입니다.</div>
-    <div id="dbRefreshMessage" class="db-refresh-message">잠시만 기다려 주세요.</div>
+    <div id="dbRefreshTitle" class="db-refresh-title">현재 새로 고침 중입니다.</div>
+    <div id="dbRefreshMessage" class="db-refresh-message">1~2분 정도 소요되니 잠시만 기다려주세요.</div>
   </div>
 </div>
 
@@ -1130,7 +1139,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v115",
+  APP_VERSION: "v116",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1146,7 +1155,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v115"
+  SPEC_IMAGE_CACHE_BUST: "v116"
 };
 
 const DETAIL_TABS = [
@@ -1207,6 +1216,7 @@ const FALLBACK_MAP_DATA = {"stores":[{"name":"양재점","address":"서울특별
 let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]}, processes:[], processRecommendations:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const ITEM_FAVORITES_KEY = "costco_item_hub_item_favorites_v1";
+const CONTENT_FAVORITES_KEY = "costco_item_hub_content_favorites_v1";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
 const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v113";
@@ -1216,6 +1226,7 @@ let updateSignalTimer = 0;
 let bootstrapLoading = false;
 let manualRefreshPromise = null;
 let bootstrapReady = false;
+let selectedNotice = null;
 let appHiddenAt = 0;
 let lastVersionCheckAt = 0;
 const recentViewLogTimes = new Map();
@@ -1269,7 +1280,7 @@ const $ = (id)=>document.getElementById(id);
 const els = {
   status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageHome:$("pageHome"), pageFavorites:$("pageFavorites"), pageNotice:$("pageNotice"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), favoritePageList:$("favoritePageList"), favoritePageCount:$("favoritePageCount"), homeFavoriteShortcut:$("homeFavoriteShortcut"), homeFavoriteCount:$("homeFavoriteCount"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"), dbRefreshModal:$("dbRefreshModal"), dbRefreshMessage:$("dbRefreshMessage"),
+  pageHome:$("pageHome"), pageFavorites:$("pageFavorites"), pageNotice:$("pageNotice"), pageNoticeDetail:$("pageNoticeDetail"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), noticeDetailContent:$("noticeDetailContent"), favoritePageList:$("favoritePageList"), favoritePageCount:$("favoritePageCount"), homeFavoriteShortcut:$("homeFavoriteShortcut"), homeFavoriteCount:$("homeFavoriteCount"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"), dbRefreshModal:$("dbRefreshModal"), dbRefreshMessage:$("dbRefreshMessage"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), itemFavoriteBtn:$("itemFavoriteBtn"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
@@ -1533,7 +1544,7 @@ function bindEvents(){
 }
 
 function showPage(page, push=true){
-  const map = { home:els.pageHome, favorites:els.pageFavorites, notice:els.pageNotice, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
+  const map = { home:els.pageHome, favorites:els.pageFavorites, notice:els.pageNotice, noticeDetail:els.pageNoticeDetail, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
   const target = map[page] ? page : "home";
   if(push && currentPage && currentPage !== target){
     appBackStack.push(currentPage);
@@ -1563,6 +1574,7 @@ function showPage(page, push=true){
   if(target==="home") renderHomeDashboard();
   if(target==="favorites") renderFavoritePage();
   if(target==="notice") renderNoticePage();
+  if(target==="noticeDetail") renderNoticeDetail();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -1739,7 +1751,7 @@ function setManualRefreshBusy(busy){
     button.setAttribute("aria-busy", busy ? "true" : "false");
   });
 }
-function openDbRefreshModal(message="잠시만 기다려 주세요."){
+function openDbRefreshModal(message="1~2분 정도 소요되니 잠시만 기다려주세요."){
   if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = message;
   if(els.dbRefreshModal){
     els.dbRefreshModal.classList.add("show");
@@ -1756,26 +1768,38 @@ function closeDbRefreshModal(){
   document.body.classList.remove("db-refresh-open");
   setManualRefreshBusy(false);
 }
-async function waitForBootstrapIdle(maxWaitMs=20000){
+async function waitForBootstrapIdle(maxWaitMs=150000){
   const started = Date.now();
-  while(bootstrapLoading && Date.now()-started < maxWaitMs) await delayMs(120);
+  while(bootstrapLoading && Date.now()-started < maxWaitMs) await delayMs(180);
+  return !bootstrapLoading;
 }
 function runManualDbRefresh(afterSuccess){
   if(manualRefreshPromise) return manualRefreshPromise;
-  openDbRefreshModal("잠시만 기다려 주세요.");
+  openDbRefreshModal("1~2분 정도 소요되니 잠시만 기다려주세요.");
   const shownAt = Date.now();
   manualRefreshPromise = (async()=>{
-    await waitForBootstrapIdle();
-    const ok = await loadBootstrap(true, { manual:true });
+    const idle = await waitForBootstrapIdle(150000);
+    if(!idle){
+      if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "기존 DB 연결을 마무리하고 있습니다. 잠시만 더 기다려주세요.";
+      await waitForBootstrapIdle(60000);
+    }
+
+    let ok = await loadBootstrap(true, { manual:true });
+    if(!ok && navigator.onLine){
+      if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "최신 DB 연결을 다시 확인하고 있습니다. 잠시만 기다려주세요.";
+      await delayMs(1200);
+      ok = await loadBootstrap(false, { manual:true });
+    }
+
     const elapsed = Date.now()-shownAt;
-    if(elapsed < 900) await delayMs(900-elapsed);
+    if(elapsed < 1200) await delayMs(1200-elapsed);
     if(ok){
       if(typeof afterSuccess === "function") afterSuccess();
       closeDbRefreshModal();
       return true;
     }
-    if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "새로고침에 실패했습니다. 잠시 후 다시 시도해 주세요.";
-    await delayMs(1500);
+    if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "DB 연결이 지연되고 있습니다. 잠시 후 다시 눌러 주세요.";
+    await delayMs(2200);
     closeDbRefreshModal();
     return false;
   })().finally(()=>{ manualRefreshPromise = null; });
@@ -1995,23 +2019,35 @@ function queueViewLog(type, target="", itemNo=""){
 async function apiGet(params){
   const qs = new URLSearchParams(params).toString();
   const url = `${CONFIG.APPS_SCRIPT_URL}?${qs}`;
+  const isBootstrap = params && params.action === "bootstrap";
+  const isForcedBootstrap = isBootstrap && String(params.refresh || "") === "1";
+  const timeoutMs = isForcedBootstrap ? 150000 : (isBootstrap ? 120000 : 60000);
+
+  // Apps Script 웹앱은 다른 도메인에서 fetch CORS가 불안정할 수 있어
+  // callback을 지원하는 JSONP를 먼저 사용합니다. 대용량 DB 새로고침은 최대 150초까지 기다립니다.
   try{
-    const res = await fetch(url, { method:"GET", cache:"no-store" });
-    if(!res.ok) throw new Error("fetch response error");
-    return await res.json();
-  }catch(fetchError){
-    return await jsonp(url);
+    return await jsonp(url, timeoutMs);
+  }catch(jsonpError){
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timer = controller ? setTimeout(()=>controller.abort(), timeoutMs) : 0;
+    try{
+      const res = await fetch(url, { method:"GET", cache:"no-store", signal:controller?.signal });
+      if(!res.ok) throw new Error("fetch response error");
+      return await res.json();
+    }finally{
+      if(timer) clearTimeout(timer);
+    }
   }
 }
 
-function jsonp(url){
+function jsonp(url, timeoutMs=60000){
   return new Promise((resolve,reject)=>{
     const cb = `__costcoHubCb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     const s = document.createElement("script");
     const sep = url.includes("?") ? "&" : "?";
     s.src = `${url}${sep}callback=${cb}`;
     s.async = true;
-    const timer = setTimeout(()=>{cleanup();reject(new Error("JSONP timeout"));},15000);
+    const timer = setTimeout(()=>{cleanup();reject(new Error("JSONP timeout"));},Math.max(10000,Number(timeoutMs)||60000));
     function cleanup(){ clearTimeout(timer); delete window[cb]; s.remove(); }
     window[cb] = (data)=>{ cleanup(); resolve(data); };
     s.onerror = ()=>{ cleanup(); reject(new Error("JSONP error")); };
@@ -2091,15 +2127,50 @@ function renderNoticePage(){
     els.noticePageList.innerHTML = `<div class="notice-page-empty">등록된 공지사항이 없습니다.</div>`;
     return;
   }
-  els.noticePageList.innerHTML = notices.map(n=>`
-    <article class="notice-page-item">
-      <div class="notice-page-item-head">
+  els.noticePageList.innerHTML = notices.map(n=>{
+    const key = noticeFavoriteKey(n);
+    return `<article class="notice-page-item notice-list-row" data-notice-key="${esc(key)}">
+      <button class="notice-list-open" type="button" data-notice-open="${esc(key)}">
         <div class="notice-page-item-title">${styledText(n.title,"공지사항",styleOf(n,"title"))}</div>
-        ${n.type ? `<span class="notice-page-type">${styledText(n.type,"",styleOf(n,"type"))}</span>` : ``}
+        <div class="notice-page-date">${styledText(n.date,"작성일 미등록",styleOf(n,"date"))}</div>
+      </button>
+      ${contentFavoriteStarButton("notice",key,"notice-list-star")}
+      <span class="notice-list-arrow" aria-hidden="true">›</span>
+    </article>`;
+  }).join("");
+  els.noticePageList.querySelectorAll("[data-notice-open]").forEach(button=>{
+    button.addEventListener("click",()=>openNoticeDetailByKey(button.dataset.noticeOpen || ""));
+  });
+  bindContentFavoriteButtons(els.noticePageList);
+}
+function renderNoticeDetail(){
+  if(!els.noticeDetailContent) return;
+  const notice = selectedNotice;
+  if(!notice){
+    els.noticeDetailContent.innerHTML = `<div class="notice-page-empty">선택한 공지사항을 찾을 수 없습니다.</div>`;
+    return;
+  }
+  const key = noticeFavoriteKey(notice);
+  els.noticeDetailContent.innerHTML = `
+    <div class="notice-detail-head">
+      <div class="notice-detail-heading">
+        <div class="notice-detail-title">${styledText(notice.title,"공지사항",styleOf(notice,"title"))}</div>
+        <div class="notice-detail-date">${styledText(notice.date,"작성일 미등록",styleOf(notice,"date"))}</div>
       </div>
-      <div class="notice-page-item-body">${styledText(n.body,"",styleOf(n,"body"))}</div>
-      ${n.date ? `<div class="notice-page-date">${styledText(n.date,"",styleOf(n,"date"))}</div>` : ``}
-    </article>`).join("");
+      ${contentFavoriteStarButton("notice",key,"notice-detail-star")}
+    </div>
+    <div class="notice-detail-divider"></div>
+    <div class="notice-detail-body">${styledText(notice.body,"내용이 등록되지 않았습니다.",styleOf(notice,"body"))}</div>
+  `;
+  bindContentFavoriteButtons(els.noticeDetailContent);
+}
+function openNoticeDetailByKey(key){
+  const notice = findNoticeByFavoriteKey(key);
+  if(!notice) return;
+  selectedNotice = notice;
+  markUpdatesSeen();
+  addRecentView({ type:"notice", id:`notice:${key}`, title:notice.title || "공지사항", subtitle:notice.date || "공지사항" });
+  showPage("noticeDetail");
 }
 function openNoticePage(){
   hideHomeSearchSuggestions();
@@ -2141,13 +2212,35 @@ function renderRecentList(){
     });
   });
   bindItemFavoriteButtons(els.homeRecentList);
+  bindContentFavoriteButtons(els.homeRecentList);
+}
+function recentContentFavorite(r){
+  const type = String(r?.type || "");
+  if(type === "spec"){
+    const key = String(r.id || "").replace(/^spec:/,"");
+    return key ? {type:"spec",key} : null;
+  }
+  if(type === "process"){
+    const row = (DB.processes || []).find(item=>normalizeText(item.title || "")===normalizeText(r.title || "") && (!r.subtitle || normalizeText(item.type || "")===normalizeText(r.subtitle || "")))
+      || (DB.processes || []).find(item=>normalizeText(item.title || "")===normalizeText(r.title || ""));
+    return row ? {type:"process",key:processFavoriteKey(row)} : null;
+  }
+  if(type === "notice"){
+    const row = publicNotices().find(item=>normalizeText(item.title || "")===normalizeText(r.title || "") && (!r.subtitle || normalizeText(item.date || "")===normalizeText(r.subtitle || "")))
+      || publicNotices().find(item=>normalizeText(item.title || "")===normalizeText(r.title || ""));
+    return row ? {type:"notice",key:noticeFavoriteKey(row)} : null;
+  }
+  return null;
 }
 function renderRecentItem(r){
   const isItem=String(r.type||"")==="item";
   const item = isItem ? findItemForRecent(r) : null;
+  const contentFavorite = !isItem ? recentContentFavorite(r) : null;
   const thumbCandidates = item ? getItemThumbnailCandidates(item) : uniqueArray([r.thumbImage].filter(Boolean));
   const thumb=isItem&&thumbCandidates.length?thumbImageHTML(thumbCandidates[0], r.title||'최근 조회', thumbCandidates[1]||""):recentIcon(r.type);
-  const star=item?favoriteStarButton(item,"home-recent-favorite-btn"):"";
+  const star=item
+    ? favoriteStarButton(item,"home-recent-favorite-btn")
+    : (contentFavorite ? contentFavoriteStarButton(contentFavorite.type,contentFavorite.key,"home-recent-favorite-btn") : "");
   return `<div class="home-recent-item ${star?"has-favorite":""}" role="button" tabindex="0" data-id="${esc(r.id)}"><div class="home-recent-thumb">${thumb}</div><div class="home-recent-content"><div class="home-recent-type">${esc(recentTypeLabel(r.type))}</div><div class="home-recent-title">${esc(r.title||"최근 조회")}</div><div class="home-recent-sub">${esc(r.subtitle||"")}</div></div>${star}<div class="home-recent-arrow">›</div></div>`;
 }
 
@@ -2247,8 +2340,112 @@ function toggleItemFavorite(itemOrKey){
   if(els.homeSearchInput && els.homeSearchSuggestions?.classList.contains("show")) renderHomeSearchSuggestions(els.homeSearchInput.value);
   if(els.itemFavoriteBtn && selectedItem) syncItemFavoriteButton(els.itemFavoriteBtn, selectedItem);
 }
+function processFavoriteKey(row){
+  if(!row) return "";
+  return `${normalizeText(row.type || "기타")}||${normalizeText(row.title || "")}`;
+}
+function noticeFavoriteKey(row){
+  if(!row) return "";
+  return `${normalizeText(row.date || "")}||${normalizeText(row.title || "")}`;
+}
+function findProcessByFavoriteKey(key){
+  const wanted = String(key || "");
+  return (DB.processes || []).find(row=>processFavoriteKey(row) === wanted) || null;
+}
+function findNoticeByFavoriteKey(key){
+  const wanted = String(key || "");
+  return publicNotices().find(row=>noticeFavoriteKey(row) === wanted) || null;
+}
+function getContentFavorites(){
+  try{
+    const rows = JSON.parse(localStorage.getItem(CONTENT_FAVORITES_KEY) || "[]");
+    return Array.isArray(rows) ? rows.filter(row=>row && row.type && row.key) : [];
+  }catch(e){ return []; }
+}
+function saveContentFavorites(rows){
+  try{ localStorage.setItem(CONTENT_FAVORITES_KEY, JSON.stringify((rows || []).filter(row=>row && row.type && row.key).slice(0,200))); }catch(e){}
+}
+function resolveContentFavorite(entry){
+  if(!entry) return null;
+  const type = String(entry.type || "");
+  const key = String(entry.key || "");
+  if(type === "spec"){
+    const cat = SPEC_CATEGORY_IMAGES.find(row=>String(row.key) === key);
+    return cat ? { type, key, title:`${cat.label} 스펙 비교`, subtitle:cat.desc || "스펙 비교", source:cat } : (entry.title ? entry : null);
+  }
+  if(type === "process"){
+    const row = findProcessByFavoriteKey(key);
+    return row ? { type, key, title:row.title || "프로세스", subtitle:row.type || "프로세스", source:row } : (entry.title ? entry : null);
+  }
+  if(type === "notice"){
+    const row = findNoticeByFavoriteKey(key);
+    return row ? { type, key, title:row.title || "공지사항", subtitle:row.date || "작성일 미등록", source:row } : (entry.title ? entry : null);
+  }
+  return null;
+}
+function getFavoriteContentEntries(){
+  return getContentFavorites().map(resolveContentFavorite).filter(Boolean);
+}
+function contentFavoriteMeta(type,key){
+  return resolveContentFavorite({type:String(type||""),key:String(key||"")});
+}
+function isContentFavorite(type,key){
+  const t = String(type || "");
+  const k = String(key || "");
+  return !!t && !!k && getContentFavorites().some(row=>row.type===t && row.key===k);
+}
+function contentFavoriteStarButton(type,key,extraClass=""){
+  if(!type || !key) return "";
+  const active = isContentFavorite(type,key);
+  return `<button class="item-favorite-btn content-favorite-btn ${esc(extraClass)} ${active?"active":""}" type="button" data-content-favorite-type="${esc(type)}" data-content-favorite-key="${esc(key)}" aria-label="${active?"즐겨찾기 해제":"즐겨찾기 추가"}" aria-pressed="${active?"true":"false"}"><span aria-hidden="true">${active?"★":"☆"}</span></button>`;
+}
+function bindContentFavoriteButtons(root=document){
+  if(!root || !root.querySelectorAll) return;
+  root.querySelectorAll("[data-content-favorite-type][data-content-favorite-key]").forEach(button=>{
+    if(button.dataset.contentFavoriteBound === "1") return;
+    button.dataset.contentFavoriteBound = "1";
+    button.addEventListener("click",event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      toggleContentFavorite(button.dataset.contentFavoriteType || "", button.dataset.contentFavoriteKey || "");
+    });
+  });
+}
+function refreshContentFavoriteButtonStates(){
+  document.querySelectorAll("[data-content-favorite-type][data-content-favorite-key]").forEach(button=>{
+    const active = isContentFavorite(button.dataset.contentFavoriteType || "", button.dataset.contentFavoriteKey || "");
+    button.classList.toggle("active",active);
+    button.setAttribute("aria-label",active ? "즐겨찾기 해제" : "즐겨찾기 추가");
+    button.setAttribute("aria-pressed",active ? "true" : "false");
+    const icon = button.querySelector("span");
+    if(icon) icon.textContent = active ? "★" : "☆";
+  });
+}
+function toggleContentFavorite(type,key){
+  const t = String(type || "");
+  const k = String(key || "");
+  if(!t || !k) return;
+  const rows = getContentFavorites();
+  const exists = rows.some(row=>row.type===t && row.key===k);
+  let next;
+  if(exists){
+    next = rows.filter(row=>!(row.type===t && row.key===k));
+  }else{
+    const meta = contentFavoriteMeta(t,k) || {type:t,key:k,title:"즐겨찾기",subtitle:""};
+    next = [{type:t,key:k,title:meta.title || "즐겨찾기",subtitle:meta.subtitle || ""}, ...rows.filter(row=>!(row.type===t && row.key===k))];
+  }
+  saveContentFavorites(next);
+  refreshContentFavoriteButtonStates();
+  renderFavoriteShortcut();
+  renderFavoritePage();
+  if(currentPage === "notice") renderNoticePage();
+  if(currentPage === "noticeDetail") renderNoticeDetail();
+  if(currentPage === "process") renderProcessCurrentView(false);
+  if(currentPage === "specTable") renderSpecCategoryCards();
+  renderRecentList();
+}
 function renderFavoriteShortcut(){
-  const count = getFavoriteItems().length;
+  const count = getFavoriteItems().length + getFavoriteContentEntries().length;
   if(els.homeFavoriteCount) els.homeFavoriteCount.textContent = `${count}개`;
   if(els.homeFavoriteShortcut) els.homeFavoriteShortcut.classList.toggle("has-items", count > 0);
 }
@@ -2257,15 +2454,33 @@ function openFavoritesPage(){
   renderFavoritePage();
   showPage("favorites");
 }
+function favoriteGroupHtml(label, rowsHtml, count){
+  if(!count) return "";
+  return `<section class="favorite-group"><div class="favorite-group-head"><strong>${esc(label)}</strong><span>${count}개</span></div><div class="favorite-group-list">${rowsHtml}</div></section>`;
+}
 function renderFavoritePage(){
   if(!els.favoritePageList) return;
   const items = getFavoriteItems();
-  if(els.favoritePageCount) els.favoritePageCount.textContent = `${items.length}개`;
-  if(!items.length){
-    els.favoritePageList.innerHTML = `<div class="favorite-page-empty"><span aria-hidden="true">☆</span><strong>즐겨찾기한 품목이 없습니다.</strong><small>아이템 목록이나 검색 결과의 별표를 눌러 추가해 주세요.</small></div>`;
+  const content = getFavoriteContentEntries();
+  const total = items.length + content.length;
+  if(els.favoritePageCount) els.favoritePageCount.textContent = `${total}개`;
+  if(!total){
+    els.favoritePageList.innerHTML = `<div class="favorite-page-empty"><span aria-hidden="true">☆</span><strong>즐겨찾기한 내용이 없습니다.</strong><small>아이템·스펙 비교·프로세스·공지사항의 별표를 눌러 추가해 주세요.</small></div>`;
     return;
   }
-  els.favoritePageList.innerHTML = items.map(renderFavoritePageItem).join("");
+
+  const contentGroups = {
+    spec:content.filter(row=>row.type==="spec"),
+    process:content.filter(row=>row.type==="process"),
+    notice:content.filter(row=>row.type==="notice")
+  };
+  els.favoritePageList.innerHTML = [
+    favoriteGroupHtml("아이템 조회",items.map(renderFavoritePageItem).join(""),items.length),
+    favoriteGroupHtml("스펙 비교",contentGroups.spec.map(renderContentFavoriteItem).join(""),contentGroups.spec.length),
+    favoriteGroupHtml("프로세스",contentGroups.process.map(renderContentFavoriteItem).join(""),contentGroups.process.length),
+    favoriteGroupHtml("공지사항",contentGroups.notice.map(renderContentFavoriteItem).join(""),contentGroups.notice.length)
+  ].join("");
+
   els.favoritePageList.querySelectorAll("[data-favorite-open]").forEach(card=>{
     const open = ()=>openFavoriteItem(card.dataset.favoriteOpen || "");
     card.addEventListener("click",open);
@@ -2273,7 +2488,15 @@ function renderFavoritePage(){
       if(event.key === "Enter" || event.key === " "){ event.preventDefault(); open(); }
     });
   });
+  els.favoritePageList.querySelectorAll("[data-content-open-type][data-content-open-key]").forEach(card=>{
+    const open = ()=>openContentFavorite(card.dataset.contentOpenType || "",card.dataset.contentOpenKey || "");
+    card.addEventListener("click",open);
+    card.addEventListener("keydown",event=>{
+      if(event.key === "Enter" || event.key === " "){ event.preventDefault(); open(); }
+    });
+  });
   bindItemFavoriteButtons(els.favoritePageList);
+  bindContentFavoriteButtons(els.favoritePageList);
 }
 function renderFavoritePageItem(item){
   const key = favoriteKeyForItem(item);
@@ -2286,6 +2509,26 @@ function renderFavoritePageItem(item){
     <div class="favorite-page-arrow" aria-hidden="true">›</div>
   </article>`;
 }
+function contentFavoriteIcon(type){
+  if(type==="spec") return "⚖";
+  if(type==="process") return "☷";
+  if(type==="notice") return "🔔";
+  return "★";
+}
+function contentFavoriteLabel(type){
+  if(type==="spec") return "스펙 비교";
+  if(type==="process") return "프로세스";
+  if(type==="notice") return "공지사항";
+  return "즐겨찾기";
+}
+function renderContentFavoriteItem(entry){
+  return `<article class="favorite-content-item" role="button" tabindex="0" data-content-open-type="${esc(entry.type)}" data-content-open-key="${esc(entry.key)}">
+    <div class="favorite-content-icon" aria-hidden="true">${contentFavoriteIcon(entry.type)}</div>
+    <div class="favorite-content-copy"><div class="favorite-content-type">${contentFavoriteLabel(entry.type)}</div><div class="favorite-content-title">${esc(entry.title || "즐겨찾기")}</div><div class="favorite-content-sub">${esc(entry.subtitle || "")}</div></div>
+    ${contentFavoriteStarButton(entry.type,entry.key,"favorite-page-star")}
+    <div class="favorite-page-arrow" aria-hidden="true">›</div>
+  </article>`;
+}
 function openFavoriteItem(key){
   const item = favoriteItemFromKey(key);
   if(!item) return;
@@ -2295,6 +2538,25 @@ function openFavoriteItem(key){
   quickListCurrentPage = 1;
   searchItem(false);
 }
+function openContentFavorite(type,key){
+  if(type === "spec"){
+    const cat = SPEC_CATEGORY_IMAGES.find(row=>String(row.key)===String(key));
+    if(!cat) return;
+    showPage("specTable");
+    setTimeout(()=>openSpecCategoryViewer(cat),0);
+    return;
+  }
+  if(type === "process"){
+    const row = findProcessByFavoriteKey(key);
+    if(!row) return;
+    openProcessHome();
+    setTimeout(()=>openProcessDetail(row),0);
+    return;
+  }
+  if(type === "notice"){
+    openNoticeDetailByKey(key);
+  }
+}
 function findItemForRecent(r){
   if(!r) return null;
   const itemNo = normalizeItemNo(r.itemNo || String(r.id||"").replace(/^item:/,""));
@@ -2303,7 +2565,7 @@ function findItemForRecent(r){
   return (DB.items || []).find(item => normalizeText(item.modelName) === title || normalizeText(item.itemNo) === title) || null;
 }
 function recentIcon(type){ if(type==="spec") return `<span class="home-quick-icon">⚖</span>`; if(type==="process") return `<span class="home-quick-icon">☷</span>`; if(type==="notice") return `<span class="home-quick-icon">☊</span>`; return `<span class="home-quick-icon">⌕</span>`; }
-function recentTypeLabel(type){ if(type==="spec") return "스펙 비교"; if(type==="process") return "프로세스"; return "아이템"; }
+function recentTypeLabel(type){ if(type==="spec") return "스펙 비교"; if(type==="process") return "프로세스"; if(type==="notice") return "공지사항"; return "아이템"; }
 function resetItemCategoryFilter(){
   selectedItemCategoryFilter = "전체";
   quickListCurrentPage = 1;
@@ -2319,8 +2581,26 @@ function openRecentView(id){
     searchItem(false);
     return;
   }
-  if(recent.type==="spec"){ showPage("specTable"); return;}
-  if(recent.type==="process"){ openProcessHome(); return;}
+  if(recent.type==="spec"){
+    const key=String(recent.id||"").replace(/^spec:/,"");
+    const cat=SPEC_CATEGORY_IMAGES.find(row=>String(row.key)===key);
+    showPage("specTable");
+    if(cat) setTimeout(()=>openSpecCategoryViewer(cat),0);
+    return;
+  }
+  if(recent.type==="process"){
+    const content=recentContentFavorite(recent);
+    const row=content ? findProcessByFavoriteKey(content.key) : null;
+    openProcessHome();
+    if(row) setTimeout(()=>openProcessDetail(row),0);
+    return;
+  }
+  if(recent.type==="notice"){
+    const content=recentContentFavorite(recent);
+    if(content) openNoticeDetailByKey(content.key);
+    else openNoticePage();
+    return;
+  }
 }
 function homeSuggestionScore(item, q){
   const no = normalizeText(item?.itemNo || "");
@@ -3618,14 +3898,18 @@ function renderProcesses(rowsArg){
     els.processList.innerHTML = `<div class="process-no-result">검색 조건에 맞는 프로세스가 없습니다.<br>다른 글자로 다시 검색해 주세요.</div>`;
     return;
   }
-  els.processList.innerHTML = rows.map(row=>`<div class="info-card process-card" data-process-index="${row._dbIndex}">
+  els.processList.innerHTML = rows.map(row=>{
+    const favoriteKey = processFavoriteKey(row);
+    return `<div class="info-card process-card" data-process-index="${row._dbIndex}">
       <button class="process-question" type="button">
         <div class="process-question-row">
           <div class="process-card-main"><span class="process-card-icon">${processTypeIconSvg(row.type)}</span><span class="process-card-copy"><span class="info-title">${styledText(row.title,"제목 미등록",styleOf(row,"title"))}</span><span class="process-card-snippet">${esc(processSnippet(row))}</span></span></div>
           <div class="process-card-side"><span class="pill type-chip">${styledText(row.type,"기타",styleOf(row,"type"))}</span><span class="process-card-chevron">›</span></div>
         </div>
       </button>
-    </div>`).join("");
+      ${contentFavoriteStarButton("process",favoriteKey,"process-card-star")}
+    </div>`;
+  }).join("");
 
   els.processList.querySelectorAll(".process-card").forEach(card=>{
     const idx = Number(card.dataset.processIndex);
@@ -3634,6 +3918,7 @@ function renderProcesses(rowsArg){
     if(!btn || !row) return;
     btn.addEventListener("click",()=>openProcessDetail(row));
   });
+  bindContentFavoriteButtons(els.processList);
 }
 
 function baseTextStyle(style){
@@ -3697,15 +3982,17 @@ function renderProcessDetail(row){
   const caution = safe(row.caution, "");
   const chipSvg = processTypeIconSvg(type);
   const stepsHtml = steps.length ? steps.map(step=>`<div class="process-detail-step"><div class="process-detail-step-num">${step.num}</div><div><div class="process-detail-step-title">${styledText(step.title,"",step.titleStyle)}</div>${step.body ? `<div class="process-detail-step-body">${styledText(step.body,"",step.bodyStyle)}</div>` : ``}</div></div>`).join("") : `<div class="process-no-result">등록된 답변 단계가 없습니다.</div>`;
+  const favoriteKey = processFavoriteKey(row);
   els.processDetailView.innerHTML = `
     <div class="process-detail-hero">
-      <span class="process-detail-chip">${chipSvg}${esc(type)}</span>
+      <div class="process-detail-topline"><span class="process-detail-chip">${chipSvg}${esc(type)}</span>${contentFavoriteStarButton("process",favoriteKey,"process-detail-star")}</div>
       <div class="process-detail-title-row"><div class="process-detail-title">${styledText(row.title,"제목 미등록",styleOf(row,"title"))}</div><span class="process-detail-searchbadge"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></div>
     </div>
     <div class="process-detail-hero process-detail-summary"><div class="process-detail-summary-icon">📋</div><div><div class="process-detail-summary-title">핵심 요약</div><div class="process-detail-summary-body">${styledText(summary,"",styleOf(row,"summary"))}</div></div></div>
     <div class="process-detail-card"><div class="process-detail-card-head"><span class="process-detail-check">✓</span><span class="title">답변</span></div>${stepsHtml}</div>
     ${caution ? `<div class="process-detail-caution"><div class="process-detail-caution-icon">⚠️</div><div><div class="process-detail-caution-title">주의 사항</div><div class="process-detail-caution-body">${styledText(caution,"",styleOf(row,"caution"))}</div></div></div>` : ``}
   `;
+  bindContentFavoriteButtons(els.processDetailView);
 }
 
 function compressProcessRecommendationTerm(term){
@@ -4248,22 +4535,26 @@ function updateSpecViewerControls(){
 function renderSpecCategoryCards(){
   if(!els.specCategoryGrid) return;
   els.specCategoryGrid.innerHTML = SPEC_CATEGORY_IMAGES.map(cat=>`
-    <button class="spec-category-card" type="button" data-key="${esc(cat.key)}">
-      <div class="spec-category-left">
-        <div class="spec-category-icon">${esc(cat.icon)}</div>
-        <div>
-          <div class="spec-category-title">${esc(cat.label)} 스펙 비교</div>
-          <div class="spec-category-desc">${esc(cat.desc)}</div>
+    <article class="spec-category-card" data-key="${esc(cat.key)}">
+      <button class="spec-category-open" type="button" data-spec-open="${esc(cat.key)}">
+        <div class="spec-category-left">
+          <div class="spec-category-icon">${esc(cat.icon)}</div>
+          <div>
+            <div class="spec-category-title">${esc(cat.label)} 스펙 비교</div>
+            <div class="spec-category-desc">${esc(cat.desc)}</div>
+          </div>
         </div>
-      </div>
-      <div class="spec-category-arrow">›</div>
-    </button>`).join("");
-  els.specCategoryGrid.querySelectorAll(".spec-category-card").forEach(btn=>{
+        <div class="spec-category-arrow">›</div>
+      </button>
+      ${contentFavoriteStarButton("spec",cat.key,"spec-category-star")}
+    </article>`).join("");
+  els.specCategoryGrid.querySelectorAll("[data-spec-open]").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      const cat = SPEC_CATEGORY_IMAGES.find(x=>x.key === btn.dataset.key);
+      const cat = SPEC_CATEGORY_IMAGES.find(x=>x.key === btn.dataset.specOpen);
       if(cat) openSpecCategoryViewer(cat);
     });
   });
+  bindContentFavoriteButtons(els.specCategoryGrid);
 }
 
 function getSpecCategoryCandidateUrls(cat){
@@ -5544,8 +5835,9 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
   renderProcesses=function(rowsArg){
     const rows=Array.isArray(rowsArg)?rowsArg:[];if(!els.processList)return;if(!rows.length){els.processList.innerHTML='<div class="process-no-result">검색 조건에 맞는 프로세스가 없습니다.<br>다른 글자로 다시 검색해 주세요.</div>';return;}
-    els.processList.innerHTML=rows.map(row=>{const t=processCategory(row.type);return `<div class="info-card process-card" data-process-index="${row._dbIndex}"><button class="process-question" type="button"><div class="process-question-row"><div class="process-card-main"><span class="process-card-icon">${processTypeIconSvg(t)}</span><span class="process-card-copy"><span class="info-title">${styledText(row.title,'제목 미등록',styleOf(row,'title'))}</span><span class="process-card-snippet">${esc(processSnippet(row))}</span></span></div><div class="process-card-side"><span class="pill type-chip">${esc(t)}</span><span class="process-card-chevron">›</span></div></div></button></div>`;}).join('');
+    els.processList.innerHTML=rows.map(row=>{const t=processCategory(row.type),favoriteKey=processFavoriteKey(row);return `<div class="info-card process-card" data-process-index="${row._dbIndex}"><button class="process-question" type="button"><div class="process-question-row"><div class="process-card-main"><span class="process-card-icon">${processTypeIconSvg(t)}</span><span class="process-card-copy"><span class="info-title">${styledText(row.title,'제목 미등록',styleOf(row,'title'))}</span><span class="process-card-snippet">${esc(processSnippet(row))}</span></span></div><div class="process-card-side"><span class="pill type-chip">${esc(t)}</span><span class="process-card-chevron">›</span></div></div></button>${contentFavoriteStarButton('process',favoriteKey,'process-card-star')}</div>`;}).join('');
     els.processList.querySelectorAll('.process-card').forEach(card=>{const row=(DB.processes||[])[Number(card.dataset.processIndex)];card.querySelector('.process-question')?.addEventListener('click',()=>row&&openProcessDetail(row));});
+    bindContentFavoriteButtons(els.processList);
   };
 
   // 업무지원부서 물류 검색: 점포→담당 TC, 지역명→TC 단일 결과
@@ -5603,7 +5895,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v115';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v116';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -5738,7 +6030,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v115';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v116';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -5867,8 +6159,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 }
 </style>
 
-<style id="v115-favorites-refresh-style">
-/* v115: 스펙 비교 상단 반높이 즐겨찾기 카드 + 즐겨찾기 전용 페이지 + DB 새로고침 대기창 */
+<style id="v116-favorites-refresh-style">
+/* v116: 스펙 비교 상단 반높이 즐겨찾기 카드 + 즐겨찾기 전용 페이지 + DB 새로고침 대기창 */
 .home-favorite-shortcut-row{display:flex;justify-content:flex-end;margin:0 0 12px}
 .home-favorite-shortcut{width:calc((100% - 12px)/2);min-height:58px;border:1px solid #dbe7f5;border-radius:21px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:0 10px 25px rgba(15,55,100,.06);display:grid;grid-template-columns:42px minmax(0,1fr) 16px;align-items:center;gap:10px;padding:8px 13px;color:#07152d;text-align:left;cursor:pointer;touch-action:manipulation}
 .home-favorite-shortcut:active{transform:scale(.985)}
@@ -5895,6 +6187,57 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
  .db-refresh-panel{border-radius:23px;padding:25px 20px}.db-refresh-title{font-size:17px}.db-refresh-message{font-size:12px}
 }
 @media(max-width:390px){.home-favorite-shortcut{width:calc((100% - 8px)/2)}}
+</style>
+
+
+<style id="v116-content-favorites-notice-refresh-style">
+/* v116: 콘텐츠 즐겨찾기 · 공지 목록/상세 분리 · 장시간 DB 새로고침 안정화 */
+.favorite-page-list{display:grid;gap:16px;padding-top:16px}
+.favorite-group{display:grid;gap:9px}
+.favorite-group-head{display:flex;align-items:center;justify-content:space-between;padding:0 3px}
+.favorite-group-head strong{font-size:14px;font-weight:1000;color:#07152d}
+.favorite-group-head span{font-size:11px;font-weight:950;color:#7890ad}
+.favorite-group-list{display:grid;gap:9px}
+.favorite-content-item{border:1px solid #dfe8f4;border-radius:20px;background:linear-gradient(180deg,#fff,#fbfdff);padding:12px;display:grid;grid-template-columns:54px minmax(0,1fr) 38px 16px;align-items:center;gap:11px;box-shadow:0 9px 22px rgba(15,55,100,.045);cursor:pointer}
+.favorite-content-item:focus-visible{outline:3px solid rgba(29,117,255,.24);outline-offset:2px}
+.favorite-content-icon{width:54px;height:54px;border-radius:17px;background:#eef6ff;color:#0b63ce;display:grid;place-items:center;font-size:24px;font-weight:1000}
+.favorite-content-copy{min-width:0}.favorite-content-type{color:#0b63ce;font-size:10px;font-weight:1000}.favorite-content-title{margin-top:3px;color:#07152d;font-size:14px;font-weight:1000;line-height:1.35;word-break:keep-all}.favorite-content-sub{margin-top:4px;color:#71839b;font-size:11px;font-weight:850;line-height:1.35;word-break:keep-all}
+
+.spec-category-card{position:relative;display:grid!important;grid-template-columns:minmax(0,1fr) 42px!important;align-items:center!important;padding:0!important;overflow:hidden}
+.spec-category-open{width:100%;min-width:0;border:0;background:transparent;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;color:inherit}
+.spec-category-star{width:36px;height:36px;border-radius:13px;font-size:22px;box-shadow:none;margin-right:10px}
+.spec-category-card>.spec-category-open .spec-category-arrow{margin-left:auto}
+
+#processList .process-card{position:relative;padding-right:48px!important}
+#processList .process-card .process-question{width:100%}
+.process-card-star{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:12px;font-size:21px;box-shadow:none;z-index:2}
+.process-card-star:active{transform:translateY(-50%) scale(.92)}
+.process-detail-topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.process-detail-star{width:38px;height:38px;border-radius:14px;font-size:23px;box-shadow:none}
+
+.notice-page-list{display:grid;gap:10px;padding-top:16px}
+.notice-page-item.notice-list-row{padding:0;display:grid;grid-template-columns:minmax(0,1fr) 38px 16px;align-items:center;gap:8px;overflow:hidden}
+.notice-list-open{min-width:0;border:0;background:transparent;padding:16px;text-align:left;color:inherit}
+.notice-list-row .notice-page-item-title{font-size:16px;font-weight:1000;color:#07152d;line-height:1.4;word-break:keep-all}
+.notice-list-row .notice-page-date{margin:7px 0 0;padding:0;border:0;color:#7b8da5;font-size:11px;font-weight:900}
+.notice-list-star{width:36px;height:36px;border-radius:13px;font-size:22px;box-shadow:none}
+.notice-list-arrow{color:#8192a9;font-size:23px;font-weight:1000;margin-right:10px}
+.notice-detail-shell{margin-top:12px;border:1px solid #dbe7f5;border-radius:28px;background:#fff;padding:22px;box-shadow:0 18px 42px rgba(15,55,100,.08)}
+.notice-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.notice-detail-heading{min-width:0}.notice-detail-title{font-size:23px;font-weight:1000;color:#07152d;line-height:1.38;letter-spacing:-.5px;word-break:keep-all}.notice-detail-date{margin-top:9px;color:#7b8da5;font-size:12px;font-weight:900}
+.notice-detail-star{width:40px;height:40px;border-radius:15px;font-size:24px;box-shadow:none}
+.notice-detail-divider{height:1px;background:#e7eef7;margin:20px 0}
+.notice-detail-body{color:#24364e;font-size:15px;font-weight:800;line-height:1.85;white-space:pre-line;word-break:keep-all}
+
+@media(max-width:620px){
+  .favorite-content-item{grid-template-columns:46px minmax(0,1fr) 32px 13px;gap:8px;padding:10px;border-radius:18px}
+  .favorite-content-icon{width:46px;height:46px;border-radius:15px;font-size:21px}.favorite-content-title{font-size:12px}.favorite-content-sub{font-size:10px}
+  .spec-category-open{padding:12px}.spec-category-star{width:32px;height:32px;border-radius:11px;font-size:20px;margin-right:8px}
+  #processList .process-card{padding-right:42px!important}.process-card-star{right:6px;width:30px;height:30px;border-radius:10px;font-size:19px}
+  .process-detail-star{width:34px;height:34px;border-radius:12px;font-size:21px}
+  .notice-list-open{padding:14px}.notice-list-row .notice-page-item-title{font-size:14px}.notice-list-star{width:32px;height:32px;border-radius:11px;font-size:20px}.notice-list-arrow{font-size:20px;margin-right:7px}
+  .notice-detail-shell{padding:18px;border-radius:23px}.notice-detail-title{font-size:20px}.notice-detail-body{font-size:14px;line-height:1.8}.notice-detail-star{width:36px;height:36px;border-radius:13px;font-size:22px}
+}
 </style>
 
 </body>
