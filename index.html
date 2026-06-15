@@ -760,7 +760,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v117</span>
+            <span id="homeAppVersion" class="home-app-version">v119</span>
           </button>
         </div>
         <div class="home-search">
@@ -1102,6 +1102,7 @@ body.view-nonhome .app{padding-top:0;}
     <div class="db-refresh-spinner" aria-hidden="true"></div>
     <div id="dbRefreshTitle" class="db-refresh-title">현재 새로 고침 중입니다.</div>
     <div id="dbRefreshMessage" class="db-refresh-message">1~2분 정도 소요되니 잠시만 기다려주세요.</div>
+    <button id="dbRefreshStopBtn" class="db-refresh-stop-btn" type="button">새로고침 중지</button>
   </div>
 </div>
 
@@ -1150,7 +1151,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v117",
+  APP_VERSION: "v119",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1166,7 +1167,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v117"
+  SPEC_IMAGE_CACHE_BUST: "v119"
 };
 
 const DETAIL_TABS = [
@@ -1236,6 +1237,7 @@ const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
 let bootstrapLoading = false;
 let manualRefreshPromise = null;
+let manualRefreshController = null;
 let pendingManualRefreshAfterSuccess = null;
 let bootstrapReady = false;
 let selectedNotice = null;
@@ -1244,6 +1246,7 @@ let lastVersionCheckAt = 0;
 const recentViewLogTimes = new Map();
 let currentPage = "home";
 let appBackStack = [];
+const APP_ROUTE_PAGES = new Set(["home","favorites","notice","noticeDetail","item","itemDetail","specTable","inquiry","dept","process"]);
 let recentExpanded = false;
 let itemMap = new Map();
 let selectedItemCategoryFilter = "전체";
@@ -1258,6 +1261,8 @@ let currentImageUrls = [];
 let modalImageUrls = [];
 let modalImageIndex = 0;
 let modalCaptionBase = "이미지 확대 보기";
+let modalHistoryPushed = false;
+let specHistoryPushed = false;
 let specViewerUrls = [];
 let specViewerIndex = 0;
 let specViewerCaption = "상세 스펙";
@@ -1292,7 +1297,7 @@ const $ = (id)=>document.getElementById(id);
 const els = {
   status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageHome:$("pageHome"), pageFavorites:$("pageFavorites"), pageNotice:$("pageNotice"), pageNoticeDetail:$("pageNoticeDetail"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), noticeDetailContent:$("noticeDetailContent"), favoritePageList:$("favoritePageList"), favoritePageCount:$("favoritePageCount"), homeFavoriteShortcut:$("homeFavoriteShortcut"), homeFavoriteCount:$("homeFavoriteCount"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"), dbRefreshConfirmModal:$("dbRefreshConfirmModal"), dbRefreshConfirmBtn:$("dbRefreshConfirmBtn"), dbRefreshCancelBtn:$("dbRefreshCancelBtn"), dbRefreshModal:$("dbRefreshModal"), dbRefreshMessage:$("dbRefreshMessage"),
+  pageHome:$("pageHome"), pageFavorites:$("pageFavorites"), pageNotice:$("pageNotice"), pageNoticeDetail:$("pageNoticeDetail"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), noticeDetailContent:$("noticeDetailContent"), favoritePageList:$("favoritePageList"), favoritePageCount:$("favoritePageCount"), homeFavoriteShortcut:$("homeFavoriteShortcut"), homeFavoriteCount:$("homeFavoriteCount"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"), dbRefreshConfirmModal:$("dbRefreshConfirmModal"), dbRefreshConfirmBtn:$("dbRefreshConfirmBtn"), dbRefreshCancelBtn:$("dbRefreshCancelBtn"), dbRefreshModal:$("dbRefreshModal"), dbRefreshMessage:$("dbRefreshMessage"), dbRefreshStopBtn:$("dbRefreshStopBtn"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), itemFavoriteBtn:$("itemFavoriteBtn"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
@@ -1335,6 +1340,7 @@ function bindEvents(){
   if(els.globalHomeBottom) els.globalHomeBottom.addEventListener("click",goHomeNow);
   if(els.dbRefreshConfirmBtn) els.dbRefreshConfirmBtn.addEventListener("click",confirmManualDbRefresh);
   if(els.dbRefreshCancelBtn) els.dbRefreshCancelBtn.addEventListener("click",closeDbRefreshConfirmModal);
+  if(els.dbRefreshStopBtn) els.dbRefreshStopBtn.addEventListener("click",stopManualDbRefresh);
   if(els.dbRefreshConfirmModal) els.dbRefreshConfirmModal.addEventListener("click",event=>{
     if(event.target === els.dbRefreshConfirmModal) closeDbRefreshConfirmModal();
   });
@@ -1539,38 +1545,90 @@ function bindEvents(){
       closeSpecViewer(true);
       return;
     }
-    const statePage = e.state && e.state.hubPage;
+
+    const state = e.state || {};
+    const statePage = state.hubPage || (state.hubBase ? "home" : "");
+    if(statePage === "home" || state.hubBase){
+      appBackStack = [];
+      showPage("home", false);
+      return;
+    }
     if(statePage === "process"){
-      restoreProcessHistoryState(e.state || {});
+      restoreRouteTrail(state);
+      restoreProcessHistoryState(state);
       showPage("process", false);
       return;
     }
-    if(statePage){
+    if(APP_ROUTE_PAGES.has(statePage)){
+      restoreRouteTrail(state);
       showPage(statePage, false);
       return;
     }
-    if(currentPage !== "home" || appBackStack.length){
-      const prev = appBackStack.length ? appBackStack.pop() : "home";
-      showPage(prev || "home", false);
-    }
+    appBackStack = [];
+    showPage("home", false);
+    replaceHomeHistoryState();
   });
-  try{
-    if(!history.state || !history.state.hubBase){
-      history.replaceState({hubBase:true}, "", getCleanAppUrl());
-    }
-  }catch(err){}
+  ensureInitialHistoryState();
   els.topRefreshBtn.addEventListener("click",()=>requestManualDbRefresh());
   els.floatRefreshBtn.addEventListener("click",()=>requestManualDbRefresh());
+}
+
+
+function normalizeRouteTrail(trail){
+  if(!Array.isArray(trail)) return [];
+  return trail
+    .map(value=>String(value||""))
+    .filter(value=>APP_ROUTE_PAGES.has(value) && value !== "itemDetail" && value !== "noticeDetail")
+    .slice(-20);
+}
+
+function restoreRouteTrail(state){
+  appBackStack = normalizeRouteTrail(state && state.hubTrail);
+}
+
+function currentRouteState(page=currentPage){
+  const target = APP_ROUTE_PAGES.has(page) ? page : "home";
+  if(target === "home") return { hubBase:true, hubPage:"home", hubTrail:[] };
+  if(target === "process") return { ...processHistoryState(processViewMode || "home"), hubTrail:appBackStack.slice() };
+  return { hubPage:target, hubTrail:appBackStack.slice() };
+}
+
+function ensureInitialHistoryState(){
+  try{
+    const state = history.state || {};
+    if(state.hubPage || state.hubBase || state.hubOverlay) return;
+    history.replaceState({hubBase:true,hubPage:"home",hubTrail:[]}, "", getCleanAppUrl());
+  }catch(err){}
+}
+
+function replaceHomeHistoryState(){
+  try{ history.replaceState({hubBase:true,hubPage:"home",hubTrail:[]}, "", getCleanAppUrl()); }catch(err){}
+}
+
+function replaceCurrentRouteState(){
+  try{
+    const state = currentRouteState(currentPage);
+    history.replaceState(state, "", currentPage === "home" ? getCleanAppUrl() : getCleanAppUrl() + "#" + currentPage);
+  }catch(err){}
+}
+
+function routeFallbackParent(page){
+  if(page === "itemDetail") return "item";
+  if(page === "noticeDetail") return "notice";
+  return "home";
 }
 
 function showPage(page, push=true){
   const map = { home:els.pageHome, favorites:els.pageFavorites, notice:els.pageNotice, noticeDetail:els.pageNoticeDetail, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
   const target = map[page] ? page : "home";
   if(push && currentPage && currentPage !== target){
-    appBackStack.push(currentPage);
-    appBackStack = appBackStack.slice(-20);
+    const nextTrail = appBackStack.slice();
+    if(nextTrail[nextTrail.length-1] !== currentPage) nextTrail.push(currentPage);
+    appBackStack = normalizeRouteTrail(nextTrail);
     try{
-      const state = target === "process" ? processHistoryState("home") : {hubPage:target};
+      const state = target === "process"
+        ? { ...processHistoryState("home"), hubTrail:appBackStack.slice() }
+        : { hubPage:target, hubTrail:appBackStack.slice() };
       history.pushState(state, "", getCleanAppUrl() + "#" + target);
     }catch(err){}
   }
@@ -1601,14 +1659,23 @@ function showPage(page, push=true){
 function handleAppBack(){
   if(els.imageModal && els.imageModal.classList.contains("show")){ closeImageModal(); return; }
   if(els.specViewer && els.specViewer.classList.contains("show")){ closeSpecViewer(); return; }
-  if(currentPage === "process" && processViewMode !== "home"){
-    try{ history.back(); return; }catch(err){}
-    resetProcessView(true);
-    renderProcessCurrentView(false);
+
+  if(currentPage === "home"){
+    appBackStack = [];
+    replaceHomeHistoryState();
     return;
   }
-  const prev = appBackStack.length ? appBackStack.pop() : "home";
-  showPage(prev || "home", false);
+
+  const state = history.state || {};
+  const isCurrentRoute = state.hubPage === currentPage || (currentPage === "process" && state.hubPage === "process");
+  if(isCurrentRoute){
+    try{ history.back(); return; }catch(err){}
+  }
+
+  const fallback = appBackStack.length ? appBackStack.pop() : routeFallbackParent(currentPage);
+  showPage(fallback || "home", false);
+  if(currentPage === "home") replaceHomeHistoryState();
+  else replaceCurrentRouteState();
 }
 
 function resetItemLookup(){
@@ -1636,8 +1703,8 @@ function goHomeNow(){
   appBackStack = [];
   resetItemLookup();
   resetProcessView(true);
-  clearOverlayUrl();
   showPage("home", false);
+  replaceHomeHistoryState();
 }
 
 function restoreHomeAfterResume(){
@@ -1765,6 +1832,10 @@ function readBestLocalCache(){
 }
 
 function delayMs(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
+function createAbortError(){
+  try{ return new DOMException("요청이 중지되었습니다.","AbortError"); }
+  catch(e){ const err = new Error("요청이 중지되었습니다."); err.name = "AbortError"; return err; }
+}
 function setManualRefreshBusy(busy){
   [els.homeRefreshBtn,els.floatRefreshBtn,els.topRefreshBtn,els.globalRefreshTop,els.itemPageRefreshBtn,els.noticePageRefreshBtn].filter(Boolean).forEach(button=>{
     button.disabled = !!busy;
@@ -1806,6 +1877,10 @@ function requestManualDbRefresh(afterSuccess){
 }
 function openDbRefreshModal(message="1~2분 정도 소요되니 잠시만 기다려주세요."){
   if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = message;
+  if(els.dbRefreshStopBtn){
+    els.dbRefreshStopBtn.disabled = false;
+    els.dbRefreshStopBtn.textContent = "새로고침 중지";
+  }
   if(els.dbRefreshModal){
     els.dbRefreshModal.classList.add("show");
     els.dbRefreshModal.setAttribute("aria-hidden","false");
@@ -1821,45 +1896,71 @@ function closeDbRefreshModal(){
   document.body.classList.remove("db-refresh-open");
   setManualRefreshBusy(false);
 }
-async function waitForBootstrapIdle(maxWaitMs=150000){
+function stopManualDbRefresh(){
+  if(!manualRefreshPromise){ closeDbRefreshModal(); return; }
+  if(els.dbRefreshStopBtn){
+    els.dbRefreshStopBtn.disabled = true;
+    els.dbRefreshStopBtn.textContent = "중지 중";
+  }
+  try{ manualRefreshController?.abort(); }catch(e){}
+  closeDbRefreshModal();
+  showStatus("DB 새로고침을 중지했습니다. 기존 저장 DB를 계속 사용합니다.","warn");
+  setTimeout(hideStatus,2200);
+}
+async function waitForBootstrapIdle(maxWaitMs=150000, signal=null){
   const started = Date.now();
-  while(bootstrapLoading && Date.now()-started < maxWaitMs) await delayMs(180);
-  return !bootstrapLoading;
+  while(bootstrapLoading && Date.now()-started < maxWaitMs){
+    if(signal?.aborted) return false;
+    await delayMs(180);
+  }
+  return !bootstrapLoading && !signal?.aborted;
 }
 function runManualDbRefresh(afterSuccess){
   if(manualRefreshPromise) return manualRefreshPromise;
+  manualRefreshController = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const signal = manualRefreshController?.signal || null;
   openDbRefreshModal("1~2분 정도 소요되니 잠시만 기다려주세요.");
   const shownAt = Date.now();
   manualRefreshPromise = (async()=>{
-    const idle = await waitForBootstrapIdle(150000);
+    const idle = await waitForBootstrapIdle(150000, signal);
+    if(signal?.aborted) return false;
     if(!idle){
       if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "기존 DB 연결을 마무리하고 있습니다. 잠시만 더 기다려주세요.";
-      await waitForBootstrapIdle(60000);
+      await waitForBootstrapIdle(60000, signal);
     }
+    if(signal?.aborted) return false;
 
-    let ok = await loadBootstrap(true, { manual:true });
+    let ok = await loadBootstrap(true, { manual:true, signal });
+    if(signal?.aborted) return false;
     if(!ok && navigator.onLine){
       if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "최신 DB 연결을 다시 확인하고 있습니다. 잠시만 기다려주세요.";
       await delayMs(1200);
-      ok = await loadBootstrap(false, { manual:true });
+      if(signal?.aborted) return false;
+      ok = await loadBootstrap(false, { manual:true, signal });
     }
+    if(signal?.aborted) return false;
 
     const elapsed = Date.now()-shownAt;
     if(elapsed < 1200) await delayMs(1200-elapsed);
+    if(signal?.aborted) return false;
     if(ok){
       if(typeof afterSuccess === "function") afterSuccess();
-      closeDbRefreshModal();
       return true;
     }
     if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "DB 연결이 지연되고 있습니다. 잠시 후 다시 눌러 주세요.";
     await delayMs(2200);
-    closeDbRefreshModal();
     return false;
-  })().finally(()=>{ manualRefreshPromise = null; });
+  })().finally(()=>{
+    closeDbRefreshModal();
+    manualRefreshPromise = null;
+    manualRefreshController = null;
+  });
   return manualRefreshPromise;
 }
 
 async function loadBootstrap(force, options={}){
+  const signal = options && options.signal ? options.signal : null;
+  if(signal?.aborted) return false;
   if(bootstrapLoading) return false;
   bootstrapLoading = true;
   const silent = options && options.silent === true;
@@ -1874,7 +1975,8 @@ async function loadBootstrap(force, options={}){
       els.syncText.textContent = auto ? "업데이트 신호 감지 · 최신 DB 반영 중" : "저장 DB 즉시 표시 · 최신 DB 확인 중";
     }
 
-    const data = await apiGet({ action:"bootstrap", refresh: force ? "1" : "0", _: Date.now() });
+    const data = await apiGet({ action:"bootstrap", refresh: force ? "1" : "0", _: Date.now() }, { signal });
+    if(signal?.aborted) throw createAbortError();
     if(!data || data.ok === false) throw new Error(data?.message || "bootstrap error");
     if(!Array.isArray(data.items) || !data.items.length) throw new Error("items payload is empty");
 
@@ -1923,6 +2025,7 @@ async function loadBootstrap(force, options={}){
     }
     return true;
   }catch(e){
+    if(signal?.aborted || e?.name === "AbortError") return false;
     console.error(e);
     if(silent){
       els.syncText.textContent = "저장 DB 표시 중 · 최신 DB 연결 대기";
@@ -2069,7 +2172,9 @@ function queueViewLog(type, target="", itemNo=""){
   }
 }
 
-async function apiGet(params){
+async function apiGet(params, options={}){
+  const externalSignal = options && options.signal ? options.signal : null;
+  if(externalSignal?.aborted) throw createAbortError();
   const qs = new URLSearchParams(params).toString();
   const url = `${CONFIG.APPS_SCRIPT_URL}?${qs}`;
   const isBootstrap = params && params.action === "bootstrap";
@@ -2079,29 +2184,43 @@ async function apiGet(params){
   // Apps Script 웹앱은 다른 도메인에서 fetch CORS가 불안정할 수 있어
   // callback을 지원하는 JSONP를 먼저 사용합니다. 대용량 DB 새로고침은 최대 150초까지 기다립니다.
   try{
-    return await jsonp(url, timeoutMs);
+    return await jsonp(url, timeoutMs, externalSignal);
   }catch(jsonpError){
+    if(externalSignal?.aborted || jsonpError?.name === "AbortError") throw createAbortError();
     const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const abortFromOutside = ()=>controller?.abort();
+    if(externalSignal) externalSignal.addEventListener("abort",abortFromOutside,{once:true});
     const timer = controller ? setTimeout(()=>controller.abort(), timeoutMs) : 0;
     try{
       const res = await fetch(url, { method:"GET", cache:"no-store", signal:controller?.signal });
       if(!res.ok) throw new Error("fetch response error");
-      return await res.json();
+      const data = await res.json();
+      if(externalSignal?.aborted) throw createAbortError();
+      return data;
     }finally{
       if(timer) clearTimeout(timer);
+      if(externalSignal) externalSignal.removeEventListener("abort",abortFromOutside);
     }
   }
 }
 
-function jsonp(url, timeoutMs=60000){
+function jsonp(url, timeoutMs=60000, signal=null){
   return new Promise((resolve,reject)=>{
+    if(signal?.aborted){ reject(createAbortError()); return; }
     const cb = `__costcoHubCb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     const s = document.createElement("script");
     const sep = url.includes("?") ? "&" : "?";
     s.src = `${url}${sep}callback=${cb}`;
     s.async = true;
+    const onAbort = ()=>{ cleanup(); reject(createAbortError()); };
     const timer = setTimeout(()=>{cleanup();reject(new Error("JSONP timeout"));},Math.max(10000,Number(timeoutMs)||60000));
-    function cleanup(){ clearTimeout(timer); delete window[cb]; s.remove(); }
+    function cleanup(){
+      clearTimeout(timer);
+      if(signal) signal.removeEventListener("abort",onAbort);
+      try{ delete window[cb]; }catch(e){ window[cb] = undefined; }
+      s.remove();
+    }
+    if(signal) signal.addEventListener("abort",onAbort,{once:true});
     window[cb] = (data)=>{ cleanup(); resolve(data); };
     s.onerror = ()=>{ cleanup(); reject(new Error("JSONP error")); };
     document.body.appendChild(s);
@@ -2749,6 +2868,7 @@ function resetProcessView(clearSearch=true){
 function processHistoryState(view=processViewMode){
   return {
     hubPage:"process",
+    hubTrail:appBackStack.slice(),
     processView:view || "home",
     processQuery:els.processSearch ? els.processSearch.value.trim() : "",
     processFilter:processFilter || "전체",
@@ -4112,7 +4232,7 @@ function openImageModal(images, startIndex=0, caption="이미지 확대 보기")
   els.imageModal.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
   if(!modalHistoryPushed){
-    try{ history.pushState({hubOverlay:"image", t:Date.now()}, "", getCleanAppUrl() + "#image"); modalHistoryPushed = true; }catch(err){}
+    try{ history.pushState({hubOverlay:"image", hubPage:currentPage, hubTrail:appBackStack.slice(), t:Date.now()}, "", getCleanAppUrl() + "#image"); modalHistoryPushed = true; }catch(err){}
   }
 }
 
@@ -4154,9 +4274,7 @@ function getCleanAppUrl(){
 function pushSpecHistory(){
   try{
     const clean = getCleanAppUrl();
-    // 휴대폰 뒤로가기 버튼이 앱 종료로 빠지지 않도록, 상세 스펙 앞에 안전용 base state를 하나 더 쌓음
-    history.pushState({hubBase:true, t:Date.now()}, "", clean);
-    history.pushState({hubOverlay:"spec", t:Date.now()}, "", clean + "#spec");
+    history.pushState({hubOverlay:"spec", hubPage:currentPage, hubTrail:appBackStack.slice(), t:Date.now()}, "", clean + "#spec");
     specHistoryPushed = true;
   }catch(err){
     specHistoryPushed = false;
@@ -4164,7 +4282,7 @@ function pushSpecHistory(){
 }
 
 function clearOverlayUrl(){
-  try{ history.replaceState({hubBase:true, t:Date.now()}, "", getCleanAppUrl()); }catch(err){}
+  replaceCurrentRouteState();
 }
 
 function getConfiguredSpecImageUrls(item){
@@ -4543,6 +4661,9 @@ async function openSpecViewer(item){
 
 function closeSpecViewer(fromPop=false){
   closeSpecHelp();
+  if(!fromPop && specHistoryPushed){
+    try{ history.back(); return; }catch(err){}
+  }
   specHistoryPushed = false;
   els.specViewer.classList.remove("show");
   els.specViewer.setAttribute("aria-hidden","true");
@@ -4551,7 +4672,6 @@ function closeSpecViewer(fromPop=false){
   els.specDots.innerHTML = "";
   specViewerUrls = [];
   if(!els.imageModal.classList.contains("show")) document.body.style.overflow = "";
-  if(!fromPop) clearOverlayUrl();
 }
 
 function goSpecViewer(index, smooth=true){
@@ -5948,7 +6068,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v117';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v119';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -6083,7 +6203,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v117';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v119';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -6212,8 +6332,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 }
 </style>
 
-<style id="v117-favorites-refresh-style">
-/* v117: 스펙 비교 상단 반높이 즐겨찾기 카드 + 즐겨찾기 전용 페이지 + DB 새로고침 대기창 */
+<style id="v119-favorites-refresh-style">
+/* v119: 스펙 비교 상단 반높이 즐겨찾기 카드 + 즐겨찾기 전용 페이지 + DB 새로고침 대기창 */
 .home-favorite-shortcut-row{display:flex;justify-content:flex-end;margin:0 0 12px}
 .home-favorite-shortcut{width:calc((100% - 12px)/2);min-height:58px;border:1px solid #dbe7f5;border-radius:21px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:0 10px 25px rgba(15,55,100,.06);display:grid;grid-template-columns:42px minmax(0,1fr) 16px;align-items:center;gap:10px;padding:8px 13px;color:#07152d;text-align:left;cursor:pointer;touch-action:manipulation}
 .home-favorite-shortcut:active{transform:scale(.985)}
@@ -6232,21 +6352,21 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 .home-recent-item.has-favorite{grid-template-columns:92px minmax(0,1fr) 38px 18px!important;cursor:pointer}.home-recent-favorite-btn{width:36px;height:36px;border-radius:13px;font-size:22px;box-shadow:none}
 .db-refresh-confirm-modal{position:fixed;inset:0;z-index:20010;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(4,16,38,.48);backdrop-filter:blur(9px)}.db-refresh-confirm-modal.show{display:flex}.db-refresh-confirm-panel{width:min(350px,calc(100vw - 44px));border:1px solid rgba(255,255,255,.78);border-radius:28px;background:rgba(255,255,255,.99);padding:27px 22px 21px;text-align:center;box-shadow:0 28px 74px rgba(4,16,38,.30)}.db-refresh-confirm-icon{width:54px;height:54px;margin:0 auto 15px;border-radius:19px;background:#edf6ff;color:#0b63ce;display:grid;place-items:center;font-size:30px;font-weight:1000}.db-refresh-confirm-title{font-size:20px;font-weight:1000;color:#07152d;letter-spacing:-.5px}.db-refresh-confirm-message{margin-top:12px;color:#526780;font-size:14px;font-weight:850;line-height:1.7;word-break:keep-all}.db-refresh-confirm-message strong{color:#0b63ce;font-weight:1000}.db-refresh-confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}.db-refresh-confirm-btn{min-height:48px;border-radius:17px;font-size:14px;font-weight:1000}.db-refresh-confirm-btn.cancel{border:1px solid #dce7f4;background:#f5f8fc;color:#475569}.db-refresh-confirm-btn.confirm{border:0;background:#0b63ce;color:#fff;box-shadow:0 12px 26px rgba(11,99,206,.24)}.db-refresh-confirm-btn:active{transform:scale(.98)}.db-refresh-confirm-open{overflow:hidden!important}
 .db-refresh-modal{position:fixed;inset:0;z-index:20000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(4,16,38,.46);backdrop-filter:blur(8px)}.db-refresh-modal.show{display:flex}.db-refresh-panel{width:min(340px,calc(100vw - 44px));border:1px solid rgba(255,255,255,.75);border-radius:26px;background:rgba(255,255,255,.98);padding:28px 24px;text-align:center;box-shadow:0 26px 70px rgba(4,16,38,.28)}
-.db-refresh-spinner{width:46px;height:46px;margin:0 auto 17px;border:5px solid #dbeafe;border-top-color:#1268d7;border-radius:50%;animation:dbRefreshSpin .8s linear infinite}.db-refresh-title{font-size:19px;font-weight:1000;color:#07152d;letter-spacing:-.45px}.db-refresh-message{margin-top:9px;color:#667b98;font-size:13px;font-weight:850;line-height:1.55}.db-refresh-open{overflow:hidden!important}.home-refresh:disabled,.floating-refresh:disabled,.refresh-btn:disabled,.page-icon-btn:disabled{opacity:.58;cursor:wait}
+.db-refresh-spinner{width:46px;height:46px;margin:0 auto 17px;border:5px solid #dbeafe;border-top-color:#1268d7;border-radius:50%;animation:dbRefreshSpin .8s linear infinite}.db-refresh-title{font-size:19px;font-weight:1000;color:#07152d;letter-spacing:-.45px}.db-refresh-message{margin-top:9px;color:#667b98;font-size:13px;font-weight:850;line-height:1.55}.db-refresh-stop-btn{width:100%;min-height:46px;margin-top:18px;border:1px solid #d9e4f2;border-radius:16px;background:#f4f7fb;color:#334155;font-size:14px;font-weight:1000}.db-refresh-stop-btn:active{transform:scale(.98)}.db-refresh-stop-btn:disabled{opacity:.55;cursor:wait}.db-refresh-open{overflow:hidden!important}.home-refresh:disabled,.floating-refresh:disabled,.refresh-btn:disabled,.page-icon-btn:disabled{opacity:.58;cursor:wait}
 @keyframes dbRefreshSpin{to{transform:rotate(360deg)}}
 @media(max-width:620px){
  .home-favorite-shortcut-row{margin-bottom:8px}.home-favorite-shortcut{width:calc((100% - 12px)/2);min-height:54px;border-radius:19px;grid-template-columns:36px minmax(0,1fr) 12px;gap:8px;padding:7px 10px}.home-favorite-shortcut-icon{width:36px;height:36px;border-radius:13px;font-size:21px}.home-favorite-shortcut-copy strong{font-size:13px}.home-favorite-shortcut-copy small{font-size:9px}.home-favorite-shortcut-arrow{font-size:19px}
  .favorite-page-shell{padding:15px;border-radius:23px}.favorite-page-title{font-size:19px}.favorite-page-item{grid-template-columns:64px minmax(0,1fr) 34px 13px;gap:9px;padding:10px;border-radius:18px}.favorite-page-thumb{width:64px;height:62px}.favorite-page-item-no{font-size:13px}.favorite-page-item-model{font-size:12px}.favorite-page-item-name{font-size:10px}.favorite-page-star{width:32px;height:32px;border-radius:11px;font-size:20px}.favorite-page-arrow{font-size:21px}
  .home-recent-item.has-favorite{grid-template-columns:72px minmax(0,1fr) 32px 14px!important}.home-recent-favorite-btn{width:32px;height:32px;border-radius:11px;font-size:20px}
  .db-refresh-confirm-panel{border-radius:23px;padding:24px 18px 18px}.db-refresh-confirm-title{font-size:18px}.db-refresh-confirm-message{font-size:13px}.db-refresh-confirm-btn{min-height:46px}
- .db-refresh-panel{border-radius:23px;padding:25px 20px}.db-refresh-title{font-size:17px}.db-refresh-message{font-size:12px}
+ .db-refresh-panel{border-radius:23px;padding:25px 20px}.db-refresh-title{font-size:17px}.db-refresh-message{font-size:12px}.db-refresh-stop-btn{min-height:44px;font-size:13px}
 }
 @media(max-width:390px){.home-favorite-shortcut{width:calc((100% - 8px)/2)}}
 </style>
 
 
-<style id="v117-content-favorites-notice-refresh-style">
-/* v117: 콘텐츠 즐겨찾기 · 공지 목록/상세 분리 · 장시간 DB 새로고침 안정화 */
+<style id="v119-content-favorites-notice-refresh-style">
+/* v119: 새로고침 중지 버튼 · 전체 화면 뒤로가기 경로 안정화 */
 .favorite-page-list{display:grid;gap:16px;padding-top:16px}
 .favorite-group{display:grid;gap:9px}
 .favorite-group-head{display:flex;align-items:center;justify-content:space-between;padding:0 3px}
@@ -6295,5 +6415,9 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 }
 </style>
 
+
+<style id="v119-navigation-history-style">
+/* v119: 홈/목록/상세/오버레이 전체 뒤로가기 이력 통합 */
+</style>
 </body>
 </html>
