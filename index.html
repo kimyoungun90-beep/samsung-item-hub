@@ -760,13 +760,14 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v111</span>
+            <span id="homeAppVersion" class="home-app-version">v114</span>
           </button>
         </div>
         <div class="home-search">
           <span class="home-search-leading" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-          <input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" data-lpignore="true" data-1p-ignore="true" />
+          <input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" aria-autocomplete="list" aria-controls="homeSearchSuggestions" aria-expanded="false" />
           <button id="homeSearchBtn" type="button" aria-label="검색"><svg viewBox="0 0 24 24" fill="none"><path d="M7 5H5v4M17 5h2v4M7 19H5v-4M17 19h2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <div id="homeSearchSuggestions" class="home-search-suggestions" role="listbox" aria-label="연관 아이템 검색 결과"></div>
         </div>
       </div>
 
@@ -799,11 +800,29 @@ body.view-nonhome .app{padding-top:0;}
         </div>
       </div>
 
-      <div class="home-block home-recent-block">
-        <div class="home-recent-head"><div class="home-block-title">최근 본 품목</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(최근 10개) ›</button></div>
-        <div id="homeRecentList" class="home-recent-list"></div>
+      <div class="home-block home-recent-block home-favorite-block">
+        <div class="home-recent-head home-favorite-head"><div class="home-block-title"><span class="home-favorite-title-star" aria-hidden="true">★</span> 즐겨찾기</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(0개) ›</button></div>
+        <div id="homeRecentList" class="home-recent-list home-favorite-list"></div>
         <button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button>
       </div>
+    </article>
+  </section>
+
+  <section id="pageNotice" class="page">
+    <div class="page-topbar">
+      <button class="page-icon-btn page-back-btn" type="button" aria-label="뒤로">‹</button>
+      <div class="page-topbar-title">공지사항</div>
+      <button id="noticePageRefreshBtn" class="page-icon-btn" type="button" aria-label="새로고침">↻</button>
+    </div>
+    <article class="notice-page-shell">
+      <div class="notice-page-head">
+        <div>
+          <div class="notice-page-title">전체 공지사항</div>
+          <div class="notice-page-sub">제품·프로세스·업무지원 변경사항을 확인하세요.</div>
+        </div>
+        <span id="noticePageCount" class="notice-page-count">0건</span>
+      </div>
+      <div id="noticePageList" class="notice-page-list"></div>
     </article>
   </section>
 
@@ -844,7 +863,10 @@ body.view-nonhome .app{padding-top:0;}
       <div class="card-inner">
         <div class="product-head">
           <div><div id="modelName" class="model">-</div><div id="productName" class="prod-name">-</div><div id="metaList" class="meta"></div></div>
-          <span id="itemPill" class="pill ok">-</span>
+          <div class="product-head-actions">
+            <button id="itemFavoriteBtn" class="item-favorite-btn product-favorite-btn" type="button" aria-label="즐겨찾기 추가" aria-pressed="false"><span aria-hidden="true">☆</span></button>
+            <span id="itemPill" class="pill ok">-</span>
+          </div>
         </div>
         <div id="detailTabs" class="tabs"></div>
         <div id="detailBox" class="detail-box"></div>
@@ -1030,18 +1052,6 @@ body.view-nonhome .app{padding-top:0;}
   <button id="globalHomeBottom" class="global-action global-home-bottom" type="button" aria-label="홈"><span class="global-home-icon">⌂</span><span class="global-home-label">홈</span></button>
   <footer class="footer">Google Sheets DB 연결형 · PWA App Shell Cache · Local Data Cache</footer>
 </main>
-<div id="noticeModal" class="notice-modal" aria-hidden="true">
-  <div class="notice-modal-panel" role="dialog" aria-modal="true" aria-label="공지사항">
-    <div class="notice-modal-head">
-      <div>
-        <div class="notice-modal-title">공지사항</div>
-        <div id="noticeModalSub" class="notice-modal-sub">프로세스 · 제품 · 업무지원 변동사항</div>
-      </div>
-      <button id="noticeModalClose" class="notice-modal-close" type="button" aria-label="닫기">×</button>
-    </div>
-    <div id="noticeModalList" class="notice-modal-list"></div>
-  </div>
-</div>
 <div id="imageModal" class="image-modal" aria-hidden="true">
   <div class="image-modal-inner">
     <button id="imageModalClose" class="image-modal-close" type="button" aria-label="닫기">×</button>
@@ -1087,7 +1097,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v111",
+  APP_VERSION: "v114",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1103,7 +1113,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v111"
+  SPEC_IMAGE_CACHE_BUST: "v114"
 };
 
 const DETAIL_TABS = [
@@ -1163,9 +1173,10 @@ const SPEC_TERM_GUIDES = {
 const FALLBACK_MAP_DATA = {"stores":[{"name":"양재점","address":"서울특별시 서초구 양재대로 159","tc":"남서울TC","x":44.0,"y":28.0,"phone":"1899-9900"},{"name":"양평점","address":"서울특별시 영등포구 선유로 156","tc":"서서울TC","x":38.0,"y":25.0,"phone":"1899-9900"},{"name":"상봉점","address":"서울특별시 중랑구 망우로 336","tc":"동서울TC","x":48.0,"y":24.0,"phone":"1899-9900"},{"name":"고척점","address":"서울특별시 구로구 경인로43길 49","tc":"인천TC","x":39.0,"y":27.0,"phone":"1899-9900"},{"name":"광명점","address":"경기도 광명시 일직로 40","tc":"인천TC","x":38.0,"y":30.0,"phone":"1899-9900"},{"name":"하남점","address":"경기도 하남시 미사강변한강로 209","tc":"동서울TC","x":50.0,"y":27.0,"phone":"1899-9900"},{"name":"의정부점","address":"경기도 의정부시 용민로 489","tc":"동서울TC","x":45.0,"y":18.0,"phone":"1899-9900"},{"name":"공세점","address":"경기도 용인시 기흥구 탑실로 38","tc":"평택TC","x":47.0,"y":38.0,"phone":"1899-9900"},{"name":"일산점","address":"경기도 고양시 일산동구 장백로 25","tc":"서서울TC","x":35.0,"y":21.0,"phone":"1899-9900"},{"name":"송도점","address":"인천광역시 연수구 컨벤시아대로 230","tc":"인천TC","x":31.0,"y":30.0,"phone":"1899-9900"},{"name":"청라점","address":"인천광역시 서구 첨단서로 188","tc":"인천TC","x":32.0,"y":25.0,"phone":"1899-9900"},{"name":"평택점","address":"경기도 평택시 경기대로 975","tc":"평택TC","x":46.0,"y":43.0,"phone":"1899-9900"},{"name":"천안점","address":"충청남도 천안시 서북구 3공단6로 77","tc":"아산TC","x":47.0,"y":48.0,"phone":"1899-9900"},{"name":"세종점","address":"세종특별자치시 종합운동장1로 14","tc":"세종TC","x":49.0,"y":50.0,"phone":"1899-9900"},{"name":"대전점","address":"대전광역시 중구 오류로 41","tc":"세종TC","x":50.0,"y":53.0,"phone":"1899-9900"},{"name":"대구점","address":"대구광역시 북구 검단로 97","tc":"대구TC","x":67.0,"y":64.0,"phone":"1899-9900"},{"name":"혁신점","address":"대구광역시 동구 첨단로 10","tc":"대구TC","x":70.0,"y":65.0,"phone":"1899-9900"},{"name":"울산점","address":"울산광역시 북구 진장유통로 78-12","tc":"울산TC","x":79.0,"y":74.0,"phone":"1899-9900"},{"name":"부산점","address":"부산광역시 수영구 구락로 137","tc":"양산TC","x":73.0,"y":83.0,"phone":"1899-9900"},{"name":"김해점","address":"경상남도 김해시 선천남로 16","tc":"양산TC","x":70.0,"y":80.0,"phone":"1899-9900"}],"logistics":[{"name":"서서울TC","address":"경기 고양시 일산서구 덕이로 256","phone":"1577-3913","x":34.0,"y":24.0,"kind":"TC"},{"name":"동서울TC","address":"경기도 남양주시 진접읍 양진로 980","phone":"1577-3914","x":49.0,"y":22.0,"kind":"TC"},{"name":"인천TC","address":"인천광역시 중구 항동7가 56","phone":"1577-3921","x":30.0,"y":28.0,"kind":"TC"},{"name":"평택TC","address":"경기 평택시 청북읍 어연리 687","phone":"1577-3922","x":46.0,"y":42.0,"kind":"TC"},{"name":"원주TC","address":"원주시 문막읍 원문로 2298-1","phone":"1577-3931","x":58.0,"y":37.0,"kind":"TC"},{"name":"강릉TC","address":"강원 강릉시 입암동 694-1","phone":"1577-3932","x":75.0,"y":34.0,"kind":"TC"},{"name":"남서울TC","address":"경기도 광주시 초월읍 무갑리 912-0","phone":"1899-9300","x":45.0,"y":29.0,"kind":"TC"},{"name":"대구TC","address":"대구 달서구 호산동 717번지","phone":"1577-3951","x":68.0,"y":64.0,"kind":"TC"},{"name":"양산TC","address":"경남 양산시 물금읍 증산리 936-4번지 한국복합물류단지 E동","phone":"1577-3961","x":72.0,"y":80.0,"kind":"TC"},{"name":"포항TC","address":"경북 포항시 기계면 새마을로 1296","phone":"1577-3953","x":80.0,"y":62.0,"kind":"TC"},{"name":"안동TC","address":"경북 안동시 풍산읍 유통단지길 32번지","phone":"1577-3954","x":70.0,"y":55.0,"kind":"TC"},{"name":"창원TC","address":"경남 함안군 칠원면 용산리 901-4번지","phone":"1577-3966","x":65.0,"y":79.0,"kind":"TC"},{"name":"울산TC","address":"울산광역시 울주군 삼남면 신안길 35-13","phone":"1577-3967","x":79.0,"y":74.0,"kind":"TC"},{"name":"사천TC","address":"사천시 축동면 탑리 910-3번지","phone":"1577-3960","x":58.0,"y":82.0,"kind":"TC"},{"name":"제주DC","address":"제주 제주시 화북일동 2140-1","phone":"1577-3971","x":42.0,"y":96.0,"kind":"TC"},{"name":"광주TC","address":"광주 북구 오룡동 1119번지 삼성제3공장","phone":"1577-3945","x":42.0,"y":77.0,"kind":"TC"},{"name":"세종TC","address":"세종시 부강면 연청로 745-46번지 중부복합물류터미널 B동","phone":"1577-3941","x":49.0,"y":51.0,"kind":"TC"},{"name":"아산TC","address":"충청남도 아산시 신창면 남성길 239","phone":"1577-3942","x":44.0,"y":47.0,"kind":"TC"},{"name":"익산TC","address":"전북 익산시 금마면 동고도리 1038-3","phone":"1577-3944","x":42.0,"y":65.0,"kind":"TC"},{"name":"순천TC","address":"전라남도 순천시 해룡면 여순로 1147","phone":"1577-3946","x":50.0,"y":82.0,"kind":"TC"},{"name":"목포TC","address":"전남 무안군 삼향읍 왕산리 175번지","phone":"1577-3947","x":34,"y":84,"kind":"TC"}],"coverage":[{"tc":"서서울TC","province":"서울","area":"강서구","note":""},{"tc":"서서울TC","province":"서울","area":"마포구","note":""},{"tc":"서서울TC","province":"서울","area":"용산구","note":""},{"tc":"서서울TC","province":"서울","area":"서대문구","note":""},{"tc":"서서울TC","province":"서울","area":"은평구","note":""},{"tc":"서서울TC","province":"서울","area":"종로구","note":""},{"tc":"서서울TC","province":"서울","area":"중구","note":""},{"tc":"서서울TC","province":"서울","area":"양천구","note":""},{"tc":"서서울TC","province":"서울","area":"영등포구","note":""},{"tc":"서서울TC","province":"서울","area":"동작구","note":""},{"tc":"서서울TC","province":"서울","area":"관악구","note":""},{"tc":"서서울TC","province":"경기","area":"고양시","note":""},{"tc":"서서울TC","province":"경기","area":"김포시","note":""},{"tc":"서서울TC","province":"경기","area":"파주시","note":""},{"tc":"서서울TC","province":"인천","area":"강화군","note":""},{"tc":"동서울TC","province":"서울","area":"강동구","note":""},{"tc":"동서울TC","province":"서울","area":"광진구","note":""},{"tc":"동서울TC","province":"서울","area":"노원구","note":""},{"tc":"동서울TC","province":"서울","area":"성동구","note":""},{"tc":"동서울TC","province":"서울","area":"중랑구","note":""},{"tc":"동서울TC","province":"서울","area":"동대문구","note":""},{"tc":"동서울TC","province":"서울","area":"강북구","note":""},{"tc":"동서울TC","province":"서울","area":"성북구","note":""},{"tc":"동서울TC","province":"서울","area":"도봉구","note":""},{"tc":"동서울TC","province":"경기","area":"하남시","note":""},{"tc":"동서울TC","province":"경기","area":"의정부시","note":""},{"tc":"동서울TC","province":"경기","area":"구리시","note":""},{"tc":"동서울TC","province":"경기","area":"남양주시","note":""},{"tc":"동서울TC","province":"경기","area":"동두천시","note":""},{"tc":"동서울TC","province":"경기","area":"포천시","note":""},{"tc":"동서울TC","province":"경기","area":"연천군","note":""},{"tc":"동서울TC","province":"경기","area":"양주시","note":""},{"tc":"동서울TC","province":"강원","area":"철원군","note":""},{"tc":"인천TC","province":"서울","area":"구로구","note":""},{"tc":"인천TC","province":"서울","area":"금천구","note":""},{"tc":"인천TC","province":"경기","area":"광명시","note":""},{"tc":"인천TC","province":"경기","area":"부천시","note":""},{"tc":"인천TC","province":"경기","area":"시흥시","note":""},{"tc":"인천TC","province":"경기","area":"안산시","note":""},{"tc":"인천TC","province":"인천","area":"중구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"동구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"미추홀구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"연수구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"남동구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"부평구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"계양구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"서구","note":"강화군 제외"},{"tc":"평택TC","province":"경기","area":"안양시","note":""},{"tc":"평택TC","province":"경기","area":"의왕시","note":""},{"tc":"평택TC","province":"경기","area":"군포시","note":""},{"tc":"평택TC","province":"경기","area":"과천시","note":""},{"tc":"평택TC","province":"경기","area":"오산시","note":""},{"tc":"평택TC","province":"경기","area":"화성시","note":""},{"tc":"평택TC","province":"경기","area":"수원시","note":""},{"tc":"평택TC","province":"경기","area":"용인시","note":""},{"tc":"평택TC","province":"경기","area":"평택시","note":""},{"tc":"평택TC","province":"경기","area":"안성시","note":""},{"tc":"원주TC","province":"강원","area":"원주시","note":""},{"tc":"원주TC","province":"강원","area":"영월군","note":""},{"tc":"원주TC","province":"강원","area":"인제군","note":""},{"tc":"원주TC","province":"강원","area":"횡성군","note":""},{"tc":"원주TC","province":"강원","area":"춘천시","note":""},{"tc":"원주TC","province":"강원","area":"화천군","note":""},{"tc":"원주TC","province":"강원","area":"양구군","note":""},{"tc":"원주TC","province":"강원","area":"홍천군","note":""},{"tc":"원주TC","province":"강원","area":"평창군","note":""},{"tc":"원주TC","province":"경기","area":"이천시","note":""},{"tc":"원주TC","province":"경기","area":"양평군","note":""},{"tc":"원주TC","province":"경기","area":"여주시","note":""},{"tc":"원주TC","province":"경기","area":"가평군","note":""},{"tc":"원주TC","province":"충북","area":"충주시","note":""},{"tc":"원주TC","province":"충북","area":"제천시","note":""},{"tc":"원주TC","province":"충북","area":"괴산군","note":""},{"tc":"원주TC","province":"충북","area":"단양군","note":""},{"tc":"원주TC","province":"충북","area":"음성군","note":""},{"tc":"강릉TC","province":"강원","area":"강릉시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"동해시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"삼척시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"속초시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"태백시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"고성군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"양양군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"정선군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"남서울TC","province":"서울","area":"송파구","note":""},{"tc":"남서울TC","province":"서울","area":"강남구","note":""},{"tc":"남서울TC","province":"서울","area":"서초구","note":""},{"tc":"남서울TC","province":"경기","area":"성남시","note":""},{"tc":"남서울TC","province":"경기","area":"광주시","note":""},{"tc":"대구TC","province":"대구","area":"대구광역시","note":""},{"tc":"대구TC","province":"경북","area":"경산시","note":""},{"tc":"대구TC","province":"경북","area":"김천시","note":""},{"tc":"대구TC","province":"경북","area":"구미시","note":""},{"tc":"대구TC","province":"경북","area":"칠곡군","note":""},{"tc":"대구TC","province":"경북","area":"고령군","note":""},{"tc":"대구TC","province":"경북","area":"성주군","note":""},{"tc":"대구TC","province":"경북","area":"청도군","note":""},{"tc":"대구TC","province":"경북","area":"군위군","note":""},{"tc":"대구TC","province":"경남","area":"거창군","note":""},{"tc":"양산TC","province":"부산","area":"부산광역시","note":""},{"tc":"양산TC","province":"경남","area":"양산시","note":""},{"tc":"양산TC","province":"경남","area":"김해시","note":""},{"tc":"양산TC","province":"경남","area":"밀양시","note":""},{"tc":"포항TC","province":"경북","area":"포항시","note":""},{"tc":"포항TC","province":"경북","area":"경주시","note":""},{"tc":"포항TC","province":"경북","area":"영덕군","note":""},{"tc":"포항TC","province":"경북","area":"울진군","note":""},{"tc":"포항TC","province":"경북","area":"영천시","note":""},{"tc":"포항TC","province":"경북","area":"울릉군","note":""},{"tc":"안동TC","province":"경북","area":"안동시","note":""},{"tc":"안동TC","province":"경북","area":"상주시","note":""},{"tc":"안동TC","province":"경북","area":"문경시","note":""},{"tc":"안동TC","province":"경북","area":"영주시","note":""},{"tc":"안동TC","province":"경북","area":"의성군","note":""},{"tc":"안동TC","province":"경북","area":"영양군","note":""},{"tc":"안동TC","province":"경북","area":"청송군","note":""},{"tc":"안동TC","province":"경북","area":"봉화군","note":""},{"tc":"안동TC","province":"경북","area":"예천군","note":""},{"tc":"창원TC","province":"경남","area":"창원시","note":""},{"tc":"창원TC","province":"경남","area":"의령군","note":""},{"tc":"창원TC","province":"경남","area":"함안군","note":""},{"tc":"창원TC","province":"경남","area":"합천군","note":""},{"tc":"창원TC","province":"경남","area":"창녕군","note":""},{"tc":"울산TC","province":"울산","area":"울산광역시","note":""},{"tc":"사천TC","province":"경남","area":"진주시","note":""},{"tc":"사천TC","province":"경남","area":"통영시","note":""},{"tc":"사천TC","province":"경남","area":"사천시","note":""},{"tc":"사천TC","province":"경남","area":"거제시","note":""},{"tc":"사천TC","province":"경남","area":"고성군","note":""},{"tc":"사천TC","province":"경남","area":"남해군","note":""},{"tc":"사천TC","province":"경남","area":"하동군","note":""},{"tc":"사천TC","province":"경남","area":"산청군","note":""},{"tc":"사천TC","province":"경남","area":"함양군","note":""},{"tc":"제주DC","province":"제주","area":"제주특별자치도","note":""},{"tc":"광주TC","province":"광주","area":"광주광역시","note":""},{"tc":"광주TC","province":"전남","area":"나주시","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"화순군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"담양군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"장성군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"곡성군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"영광군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"함평군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전북","area":"고창군","note":""},{"tc":"광주TC","province":"전북","area":"순창군","note":""},{"tc":"광주TC","province":"전북","area":"남원시","note":""},{"tc":"광주TC","province":"전북","area":"정읍시","note":""},{"tc":"세종TC","province":"대전","area":"대전광역시","note":""},{"tc":"세종TC","province":"세종","area":"세종특별자치시","note":""},{"tc":"세종TC","province":"충북","area":"청주시","note":""},{"tc":"세종TC","province":"충북","area":"보은군","note":""},{"tc":"세종TC","province":"충북","area":"영동군","note":""},{"tc":"세종TC","province":"충북","area":"옥천군","note":""},{"tc":"세종TC","province":"충북","area":"진천군","note":""},{"tc":"세종TC","province":"충북","area":"증평군","note":""},{"tc":"세종TC","province":"충남","area":"공주시","note":""},{"tc":"세종TC","province":"충남","area":"계룡시","note":""},{"tc":"세종TC","province":"충남","area":"금산군","note":""},{"tc":"세종TC","province":"충남","area":"청양군","note":""},{"tc":"세종TC","province":"전북","area":"무주군","note":""},{"tc":"아산TC","province":"충남","area":"아산시","note":""},{"tc":"아산TC","province":"충남","area":"천안시","note":""},{"tc":"아산TC","province":"충남","area":"서산시","note":""},{"tc":"아산TC","province":"충남","area":"보령시","note":""},{"tc":"아산TC","province":"충남","area":"당진군","note":""},{"tc":"아산TC","province":"충남","area":"예산군","note":""},{"tc":"아산TC","province":"충남","area":"태안군","note":""},{"tc":"아산TC","province":"충남","area":"홍성군","note":""},{"tc":"익산TC","province":"전북","area":"전주시","note":""},{"tc":"익산TC","province":"전북","area":"김제시","note":""},{"tc":"익산TC","province":"전북","area":"군산시","note":""},{"tc":"익산TC","province":"전북","area":"익산시","note":""},{"tc":"익산TC","province":"전북","area":"임실군","note":""},{"tc":"익산TC","province":"전북","area":"장수군","note":""},{"tc":"익산TC","province":"전북","area":"진안군","note":""},{"tc":"익산TC","province":"전북","area":"부안군","note":""},{"tc":"익산TC","province":"전북","area":"완주군","note":""},{"tc":"익산TC","province":"충남","area":"서천군","note":""},{"tc":"익산TC","province":"충남","area":"논산시","note":""},{"tc":"익산TC","province":"충남","area":"부여군","note":""},{"tc":"순천TC","province":"전남","area":"순천시","note":""},{"tc":"순천TC","province":"전남","area":"광양시","note":""},{"tc":"순천TC","province":"전남","area":"여수시","note":""},{"tc":"순천TC","province":"전남","area":"구례군","note":""},{"tc":"순천TC","province":"전남","area":"고흥군","note":""},{"tc":"순천TC","province":"전남","area":"보성군","note":""},{"tc":"목포TC","province":"전남","area":"목포시","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"무안군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"해남군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"진도군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"강진군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"영암군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"신안군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"장흥군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"완도군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"함평군","note":"함평읍·학교면·엄다면"}]};
 let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]}, processes:[], processRecommendations:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
+const ITEM_FAVORITES_KEY = "costco_item_hub_item_favorites_v1";
 const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
-const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v111";
+const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v113";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
@@ -1177,7 +1188,6 @@ const recentViewLogTimes = new Map();
 let currentPage = "home";
 let appBackStack = [];
 let recentExpanded = false;
-let noticePopupOpened = false;
 let itemMap = new Map();
 let selectedItemCategoryFilter = "전체";
 let selectedItem = null;
@@ -1223,12 +1233,12 @@ let specPrefetchStarted = false;
 
 const $ = (id)=>document.getElementById(id);
 const els = {
-  status:$("status"), noticeModal:$("noticeModal"), noticeModalList:$("noticeModalList"), noticeModalSub:$("noticeModalSub"), noticeModalClose:$("noticeModalClose"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
+  status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageHome:$("pageHome"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
+  pageHome:$("pageHome"), pageNotice:$("pageNotice"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
-  modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
+  modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), itemFavoriteBtn:$("itemFavoriteBtn"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
   deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"), deptFilterPanel:$("deptFilterPanel"), deptFilterIcon:$("deptFilterIcon"), deptFilterTitle:$("deptFilterTitle"), deptFilterDesc:$("deptFilterDesc"), deptRegionSearch:$("deptRegionSearch"), deptResultsTitle:$("deptResultsTitle"), deptMapPanel:$("deptMapPanel"), mapSelectionBar:$("mapSelectionBar"), mapStoreSelectWrap:$("mapStoreSelectWrap"), mapTcSelectWrap:$("mapTcSelectWrap"), mapStoreSelect:$("mapStoreSelect"), mapTcSelect:$("mapTcSelect"), mapMetroToggle:$("mapMetroToggle"), mapBackBtn:$("mapBackBtn"), mapResetBtn:$("mapResetBtn"), mapZoomIn:$("mapZoomIn"), mapZoomOut:$("mapZoomOut"), koreaMap:$("koreaMap"), metroMap:$("metroMap"), mapDetailLayout:$("mapDetailLayout"), mapInfo:$("mapInfo"), mapCoverageList:$("mapCoverageList"),
   processSearch:$("processSearch"), processSearchBtn:$("processSearchBtn"), processSearchWrap:$("processSearchWrap"), processPageHeading:$("processPageHeading"), processSuggest:$("processSuggest"), processRecommendSection:$("processRecommendSection"), processRecommendChips:$("processRecommendChips"), processTypeSection:$("processTypeSection"), processTypeList:$("processTypeList"), processResultSection:$("processResultSection"), processResultTitle:$("processResultTitle"), processResultCount:$("processResultCount"), processTypeResetBtn:$("processTypeResetBtn"), processList:$("processList"), processCountPill:$("processCountPill"), processDetailSection:$("processDetailSection"), processDetailView:$("processDetailView"),
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
@@ -1269,9 +1279,23 @@ function bindEvents(){
   if(els.globalRefreshTop) els.globalRefreshTop.addEventListener("click",()=>loadBootstrap(true));
   if(els.itemPageRefreshBtn) els.itemPageRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
   if(els.homeSearchBtn) els.homeSearchBtn.addEventListener("click",runHomeSearch);
-  if(els.homeSearchInput) els.homeSearchInput.addEventListener("keydown",e=>{ if(e.key === "Enter") runHomeSearch(); });
-  if(els.homeBellBtn) els.homeBellBtn.addEventListener("click",()=>{ markUpdatesSeen(); renderNotice(true); openNoticeModal(); });
+  if(els.homeSearchInput){
+    els.homeSearchInput.addEventListener("input",debounce(()=>renderHomeSearchSuggestions(els.homeSearchInput.value),70));
+    els.homeSearchInput.addEventListener("focus",()=>renderHomeSearchSuggestions(els.homeSearchInput.value));
+    els.homeSearchInput.addEventListener("keydown",e=>{
+      if(e.key === "Enter"){
+        e.preventDefault();
+        const first = els.homeSearchSuggestions?.querySelector(".home-search-suggestion");
+        if(first) openHomeSearchSuggestion(first.dataset.item || "");
+        else runHomeSearch();
+      }else if(e.key === "Escape"){
+        hideHomeSearchSuggestions();
+      }
+    });
+  }
+  if(els.homeBellBtn) els.homeBellBtn.addEventListener("click",openNoticePage);
   if(els.homeRefreshBtn) els.homeRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
+  if(els.noticePageRefreshBtn) els.noticePageRefreshBtn.addEventListener("click",()=>loadBootstrap(true).then(()=>renderNoticePage()));
   document.addEventListener("visibilitychange",()=>{
     if(document.hidden){
       appHiddenAt = Date.now();
@@ -1295,7 +1319,7 @@ function bindEvents(){
     if(page === "item") openItemLookupReset();
     else if(page === "process") openProcessHome();
     else if(page) showPage(page);
-    if(btn.dataset.action === "notice"){ markUpdatesSeen(); renderNotice(true); openNoticeModal(); }
+    if(btn.dataset.action === "notice") openNoticePage();
   }));
   els.navItem.addEventListener("click",openItemLookupReset);
   els.navSpecTable.addEventListener("click",()=>showPage("specTable"));
@@ -1352,6 +1376,7 @@ function bindEvents(){
   });
   document.addEventListener("click",(e)=>{
     if(!e.target.closest(".process-search-wrap")) hideProcessSuggestions();
+    if(!e.target.closest(".home-search")) hideHomeSearchSuggestions();
   });
   els.inquirySubmitBtn.addEventListener("click",submitInquiry);
   els.detailBox.addEventListener("click",(e)=>{
@@ -1470,12 +1495,10 @@ function bindEvents(){
   }catch(err){}
   els.topRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
   els.floatRefreshBtn.addEventListener("click",()=>loadBootstrap(true));
-  if(els.noticeModalClose) els.noticeModalClose.addEventListener("click",closeNoticeModal);
-  if(els.noticeModal) els.noticeModal.addEventListener("click",(e)=>{ if(e.target === els.noticeModal) closeNoticeModal(); });
 }
 
 function showPage(page, push=true){
-  const map = { home:els.pageHome, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
+  const map = { home:els.pageHome, notice:els.pageNotice, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
   const target = map[page] ? page : "home";
   if(push && currentPage && currentPage !== target){
     appBackStack.push(currentPage);
@@ -1486,6 +1509,7 @@ function showPage(page, push=true){
     }catch(err){}
   }
   currentPage = target;
+  if(target !== "home") hideHomeSearchSuggestions();
   Object.values(map).filter(Boolean).forEach(el=>el.classList.remove("show"));
   (map[target] || els.pageHome).classList.add("show");
   document.body.classList.toggle("view-home", target === "home");
@@ -1502,6 +1526,7 @@ function showPage(page, push=true){
     fetchProcessRecommendations();
   }
   if(target==="home") renderHomeDashboard();
+  if(target==="notice") renderNoticePage();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -1537,8 +1562,7 @@ function openItemLookupReset(){
 }
 
 function goHomeNow(){
-  try{ noticePopupOpened = false; }catch(err){}
-  if(els.noticeModal && els.noticeModal.classList.contains("show")) closeNoticeModal();
+  hideHomeSearchSuggestions();
   if(els.imageModal && els.imageModal.classList.contains("show")) closeImageModal(true);
   if(els.specViewer && els.specViewer.classList.contains("show")) closeSpecViewer(true);
   appBackStack = [];
@@ -1918,11 +1942,38 @@ function rebuildIndex(){
 }
 
 
+function normalizeHomeSettingKey(value){
+  return normalizeText(value).replace(/\s+/g,"");
+}
+function isHomeSettingNotice(row){
+  const type = normalizeHomeSettingKey(row?.type || "");
+  return ["홈설정","홈화면설정","대시보드설정"].includes(type);
+}
+function publicNotices(){
+  return Array.isArray(DB.notices)
+    ? DB.notices.filter(n => !isHomeSettingNotice(n) && (safe(n?.title,"") || safe(n?.body,"")))
+    : [];
+}
+function homeNoticeSetting(keys, fallback){
+  // 이전 공지사항 시트 기반 설정이 남아 있는 구버전 캐시를 위한 예비값입니다.
+  const wanted = new Set(keys.map(normalizeHomeSettingKey));
+  const rows = Array.isArray(DB.notices) ? DB.notices : [];
+  const row = rows.find(n => isHomeSettingNotice(n) && wanted.has(normalizeHomeSettingKey(n?.title || "")));
+  return safe(row?.body, fallback);
+}
+function homeSheetSetting(key, fallback){
+  const settings = DB.homeSettings && typeof DB.homeSettings === "object" ? DB.homeSettings : {};
+  const direct = safe(settings[key], "");
+  if(direct) return direct;
+  if(key === "mainGreeting") return homeNoticeSetting(["메인명","메인","홈메인명","홈제목"], fallback);
+  if(key === "subGreeting") return homeNoticeSetting(["서브","서브문구","홈서브","부제"], fallback);
+  return fallback;
+}
 function renderHomeDashboard(){
   if(!els.pageHome) return;
-  if(els.homeGreeting) els.homeGreeting.textContent = "아이템 허브";
-  if(els.homeSub) els.homeSub.textContent = "오늘도 효율적인 업무를 응원합니다.";
-  const notices = Array.isArray(DB.notices) ? DB.notices.filter(n=>safe(n?.title,"") || safe(n?.body,"")) : [];
+  if(els.homeGreeting) els.homeGreeting.textContent = homeSheetSetting("mainGreeting", "아이템 허브");
+  if(els.homeSub) els.homeSub.textContent = homeSheetSetting("subGreeting", "오늘도 효율적인 업무를 응원합니다.");
+  const notices = publicNotices();
   const notice = notices[0] || {};
   if(els.homeNoticeTitle) els.homeNoticeTitle.textContent = safe(notice.title,"공지사항");
   if(els.homeNoticeBody){
@@ -1940,30 +1991,189 @@ function renderHomeUpdateDot(){
   els.homeBellDot.classList.toggle("show", !!latest && latest !== seen);
 }
 function latestUpdateId(){
-  const rows = Array.isArray(DB.notices) ? DB.notices : [];
+  const rows = publicNotices();
   if(!rows.length) return "";
   return rows.map(n=>[n.date,n.type,n.title,n.body].filter(Boolean).join("|")).sort().pop() || "";
 }
 function markUpdatesSeen(){ const latest = latestUpdateId(); if(latest) localStorage.setItem(UPDATE_SEEN_KEY, latest); renderHomeUpdateDot(); }
+function renderNoticePage(){
+  const notices = publicNotices();
+  if(els.noticePageCount) els.noticePageCount.textContent = `${notices.length}건`;
+  if(!els.noticePageList) return;
+  if(!notices.length){
+    els.noticePageList.innerHTML = `<div class="notice-page-empty">등록된 공지사항이 없습니다.</div>`;
+    return;
+  }
+  els.noticePageList.innerHTML = notices.map(n=>`
+    <article class="notice-page-item">
+      <div class="notice-page-item-head">
+        <div class="notice-page-item-title">${styledText(n.title,"공지사항",styleOf(n,"title"))}</div>
+        ${n.type ? `<span class="notice-page-type">${styledText(n.type,"",styleOf(n,"type"))}</span>` : ``}
+      </div>
+      <div class="notice-page-item-body">${styledText(n.body,"",styleOf(n,"body"))}</div>
+      ${n.date ? `<div class="notice-page-date">${styledText(n.date,"",styleOf(n,"date"))}</div>` : ``}
+    </article>`).join("");
+}
+function openNoticePage(){
+  hideHomeSearchSuggestions();
+  markUpdatesSeen();
+  renderNoticePage();
+  showPage("notice");
+}
 function getRecentViews(){ try{ return JSON.parse(localStorage.getItem(HOME_RECENT_KEY) || "[]").filter(Boolean); }catch(e){ return []; } }
 function saveRecentViews(list){ try{ localStorage.setItem(HOME_RECENT_KEY, JSON.stringify(list.slice(0,10))); }catch(e){} }
-function addRecentView(entry){ if(!entry || !entry.id) return; const list=getRecentViews().filter(x=>x&&x.id!==entry.id); list.unshift(Object.assign({},entry,{time:Date.now()})); saveRecentViews(list); renderRecentList(); }
-function toggleRecentList(){ recentExpanded = !recentExpanded; renderRecentList(); }
-function renderRecentList(){
-  if(!els.homeRecentList) return;
-  const list=getRecentViews().slice(0,recentExpanded?10:3);
-  els.homeRecentList.classList.toggle("expanded",recentExpanded);
-  if(els.homeRecentToggle) els.homeRecentToggle.textContent=recentExpanded?"접기":"전체보기(최근 10개) ›";
-  if(!list.length){ els.homeRecentList.innerHTML=`<div class="home-empty">최근 조회한 아이템, 스펙 비교, 프로세스가 없습니다.</div>`; return; }
-  els.homeRecentList.innerHTML=list.map(r=>renderRecentItem(r)).join("");
-  els.homeRecentList.querySelectorAll(".home-recent-item").forEach(btn=>btn.addEventListener("click",()=>openRecentView(btn.dataset.id)));
+function addRecentView(entry){
+  if(!entry || !entry.id) return;
+  const list=getRecentViews().filter(x=>x&&x.id!==entry.id);
+  list.unshift(Object.assign({},entry,{time:Date.now()}));
+  saveRecentViews(list);
+  // 최근 조회 기록은 기존대로 보관하되, 홈에는 즐겨찾기 품목만 표시합니다.
+  renderFavoriteList();
 }
-function renderRecentItem(r){
-  const isItem=String(r.type||"")==="item";
-  const item = isItem ? findItemForRecent(r) : null;
-  const thumbCandidates = item ? getItemThumbnailCandidates(item) : uniqueArray([r.thumbImage].filter(Boolean));
-  const thumb=isItem&&thumbCandidates.length?thumbImageHTML(thumbCandidates[0], r.title||'최근 조회', thumbCandidates[1]||""):recentIcon(r.type);
-  return `<button class="home-recent-item" type="button" data-id="${esc(r.id)}"><div class="home-recent-thumb">${thumb}</div><div class="home-recent-content"><div class="home-recent-type">${esc(recentTypeLabel(r.type))}</div><div class="home-recent-title">${esc(r.title||"최근 조회")}</div><div class="home-recent-sub">${esc(r.subtitle||"")}</div></div><div class="home-recent-arrow">›</div></button>`;
+
+function favoriteKeyForItem(item){
+  if(!item) return "";
+  const no = normalizeItemNo(item.itemNo || "");
+  if(no) return `no:${no}`;
+  const model = normalizeText(item.modelName || "");
+  return model ? `model:${model}` : "";
+}
+function favoriteItemFromKey(key){
+  const value = String(key || "");
+  if(!value) return null;
+  if(value.startsWith("no:")){
+    const no = value.slice(3);
+    return (DB.items || []).find(item=>normalizeItemNo(item.itemNo)===no) || null;
+  }
+  if(value.startsWith("model:")){
+    const model = value.slice(6);
+    return (DB.items || []).find(item=>normalizeText(item.modelName)===model) || null;
+  }
+  const normalized = normalizeText(value);
+  return (DB.items || []).find(item=>normalizeText(item.itemNo)===normalized || normalizeText(item.modelName)===normalized) || null;
+}
+function favoriteKeyFromValue(value){
+  if(value && typeof value === "object") return favoriteKeyForItem(value);
+  const raw = String(value || "");
+  if(raw.startsWith("no:") || raw.startsWith("model:")) return raw;
+  const item = favoriteItemFromKey(raw);
+  return item ? favoriteKeyForItem(item) : "";
+}
+function getFavoriteItemKeys(){
+  try{
+    const rows = JSON.parse(localStorage.getItem(ITEM_FAVORITES_KEY) || "[]");
+    return Array.isArray(rows) ? uniqueArray(rows.map(String).filter(Boolean)) : [];
+  }catch(e){ return []; }
+}
+function saveFavoriteItemKeys(keys){
+  try{ localStorage.setItem(ITEM_FAVORITES_KEY, JSON.stringify(uniqueArray((keys || []).filter(Boolean)))); }catch(e){}
+}
+function getFavoriteItems(){
+  return getFavoriteItemKeys().map(favoriteItemFromKey).filter(Boolean);
+}
+function isItemFavorite(itemOrKey){
+  const key = favoriteKeyFromValue(itemOrKey);
+  return !!key && getFavoriteItemKeys().includes(key);
+}
+function favoriteStarButton(item, extraClass=""){
+  const key = favoriteKeyForItem(item);
+  if(!key) return "";
+  const active = isItemFavorite(key);
+  return `<button class="item-favorite-btn ${esc(extraClass)} ${active?"active":""}" type="button" data-favorite-item="${esc(key)}" aria-label="${active?"즐겨찾기 해제":"즐겨찾기 추가"}" aria-pressed="${active?"true":"false"}"><span aria-hidden="true">${active?"★":"☆"}</span></button>`;
+}
+function syncItemFavoriteButton(button, itemOrKey){
+  if(!button) return;
+  const key = favoriteKeyFromValue(itemOrKey);
+  if(!key){ button.style.display="none"; return; }
+  const active = isItemFavorite(key);
+  button.style.display="grid";
+  button.dataset.favoriteItem = key;
+  button.classList.toggle("active", active);
+  button.setAttribute("aria-label", active ? "즐겨찾기 해제" : "즐겨찾기 추가");
+  button.setAttribute("aria-pressed", active ? "true" : "false");
+  button.innerHTML = `<span aria-hidden="true">${active?"★":"☆"}</span>`;
+}
+function bindItemFavoriteButtons(root=document){
+  if(!root || !root.querySelectorAll) return;
+  root.querySelectorAll("[data-favorite-item]").forEach(button=>{
+    if(button.dataset.favoriteBound === "1") return;
+    button.dataset.favoriteBound = "1";
+    button.addEventListener("click",event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      toggleItemFavorite(button.dataset.favoriteItem || "");
+    });
+  });
+}
+function refreshFavoriteButtonStates(){
+  document.querySelectorAll("[data-favorite-item]").forEach(button=>{
+    const key = button.dataset.favoriteItem || "";
+    const active = isItemFavorite(key);
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-label", active ? "즐겨찾기 해제" : "즐겨찾기 추가");
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+    const icon = button.querySelector("span");
+    if(icon) icon.textContent = active ? "★" : "☆";
+  });
+}
+function toggleItemFavorite(itemOrKey){
+  const key = favoriteKeyFromValue(itemOrKey);
+  if(!key) return;
+  const current = getFavoriteItemKeys();
+  const exists = current.includes(key);
+  const next = exists ? current.filter(row=>row!==key) : [key, ...current.filter(row=>row!==key)];
+  saveFavoriteItemKeys(next);
+  refreshFavoriteButtonStates();
+  renderFavoriteList();
+  if(els.homeSearchInput && els.homeSearchSuggestions?.classList.contains("show")) renderHomeSearchSuggestions(els.homeSearchInput.value);
+  if(els.itemFavoriteBtn && selectedItem) syncItemFavoriteButton(els.itemFavoriteBtn, selectedItem);
+}
+function toggleRecentList(){ recentExpanded = !recentExpanded; renderFavoriteList(); }
+function renderRecentList(){ renderFavoriteList(); }
+function renderFavoriteList(){
+  if(!els.homeRecentList) return;
+  const all = getFavoriteItems();
+  if(recentExpanded && all.length <= 3) recentExpanded = false;
+  const list = all.slice(0, recentExpanded ? all.length : 3);
+  els.homeRecentList.classList.toggle("expanded", recentExpanded);
+  if(els.homeRecentToggle){
+    els.homeRecentToggle.textContent = recentExpanded ? "접기" : `전체보기(${all.length}개) ›`;
+    els.homeRecentToggle.disabled = all.length <= 3;
+    els.homeRecentToggle.classList.toggle("disabled", all.length <= 3);
+  }
+  if(!all.length){
+    els.homeRecentList.innerHTML = `<div class="home-empty home-favorite-empty"><span class="home-empty-star" aria-hidden="true">☆</span><strong>즐겨찾기한 품목이 없습니다.</strong><small>아이템 목록이나 검색 결과의 별표를 눌러 추가해 주세요.</small></div>`;
+    return;
+  }
+  els.homeRecentList.innerHTML = list.map(item=>renderFavoriteItem(item)).join("");
+  els.homeRecentList.querySelectorAll("[data-favorite-open]").forEach(card=>{
+    const open = ()=>openFavoriteItem(card.dataset.favoriteOpen || "");
+    card.addEventListener("click",open);
+    card.addEventListener("keydown",event=>{
+      if(event.key === "Enter" || event.key === " "){ event.preventDefault(); open(); }
+    });
+  });
+  bindItemFavoriteButtons(els.homeRecentList);
+}
+function renderFavoriteItem(item){
+  const key = favoriteKeyForItem(item);
+  const thumbCandidates = getItemThumbnailCandidates(item);
+  const thumb = thumbCandidates.length ? thumbImageHTML(thumbCandidates[0], safe(item.modelName,"즐겨찾기 품목"), thumbCandidates[1]||"") : categoryIconImageHTML(categoryIconForItem(item), "thumb-icon-img");
+  return `<div class="home-recent-item home-favorite-item" role="button" tabindex="0" data-favorite-open="${esc(key)}">
+    <div class="home-recent-thumb">${thumb}</div>
+    <div class="home-recent-content"><div class="home-recent-title">${styledText(item.itemNo,"아이템번호 미등록",styleOf(item,"itemNo"))}</div><div class="home-recent-sub">${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}${item.productName?` · ${styledText(item.productName,"",styleOf(item,"productName"))}`:""}</div></div>
+    ${favoriteStarButton(item,"home-favorite-star-btn")}
+    <div class="home-recent-arrow">›</div>
+  </div>`;
+}
+function openFavoriteItem(key){
+  const item = favoriteItemFromKey(key);
+  if(!item) return;
+  resetItemCategoryFilter();
+  showPage("item");
+  if(els.itemInput) els.itemInput.value = item.itemNo || item.modelName || "";
+  quickListCurrentPage = 1;
+  searchItem(false);
 }
 function findItemForRecent(r){
   if(!r) return null;
@@ -1992,8 +2202,81 @@ function openRecentView(id){
   if(recent.type==="spec"){ showPage("specTable"); return;}
   if(recent.type==="process"){ openProcessHome(); return;}
 }
+function homeSuggestionScore(item, q){
+  const no = normalizeText(item?.itemNo || "");
+  const model = normalizeText(item?.modelName || "");
+  const product = normalizeText(item?.productName || "");
+  const keywords = normalizeText(item?.keywords || "");
+  if(no === q || model === q) return 0;
+  if(no.startsWith(q)) return 1;
+  if(model.startsWith(q)) return 2;
+  if(no.includes(q)) return 3;
+  if(model.includes(q)) return 4;
+  if(product.includes(q)) return 5;
+  if(keywords.includes(q)) return 6;
+  return 9;
+}
+function findHomeSearchSuggestions(query){
+  const q = normalizeText(query);
+  if(!q) return [];
+  return (DB.items || [])
+    .filter(item=>normalizeText([item.itemNo,item.modelName,item.productName,item.category,item.brand,item.keywords].join(" ")).includes(q))
+    .sort((a,b)=>homeSuggestionScore(a,q)-homeSuggestionScore(b,q) || String(a.itemNo||"").localeCompare(String(b.itemNo||"")))
+    .slice(0,6);
+}
+function renderHomeSearchSuggestions(query=""){
+  if(!els.homeSearchSuggestions || !els.homeSearchInput) return;
+  const q = String(query || "").trim();
+  if(!q || currentPage !== "home"){
+    hideHomeSearchSuggestions();
+    return;
+  }
+  const rows = findHomeSearchSuggestions(q);
+  if(!rows.length){
+    els.homeSearchSuggestions.innerHTML = `<div class="home-search-suggestion-empty">연관 품목이 없습니다.</div>`;
+    els.homeSearchSuggestions.classList.add("show");
+    els.homeSearchInput.setAttribute("aria-expanded","true");
+    return;
+  }
+  els.homeSearchSuggestions.innerHTML = rows.map(item=>{
+    const thumbs = getItemThumbnailCandidates(item);
+    const thumb = thumbs[0] || "";
+    return `<div class="home-search-suggestion" role="option" tabindex="0" data-item="${esc(item.itemNo || item.modelName || "")}">
+      <span class="home-search-suggestion-thumb">${thumb ? thumbImageHTML(thumb,safe(item.modelName,"제품 이미지"),thumbs[1]||"") : categoryIconImageHTML(categoryIconForItem(item),"home-search-suggestion-icon")}</span>
+      <span class="home-search-suggestion-copy"><strong>${styledText(item.modelName,"모델명 미등록",styleOf(item,"modelName"))}</strong><small><b>${styledText(item.itemNo,"아이템번호 미등록",styleOf(item,"itemNo"))}</b>${item.productName ? ` · ${styledText(item.productName,"",styleOf(item,"productName"))}` : ""}</small></span>
+      ${favoriteStarButton(item,"home-search-favorite-btn")}
+      <span class="home-search-suggestion-arrow">›</span>
+    </div>`;
+  }).join("");
+  els.homeSearchSuggestions.querySelectorAll(".home-search-suggestion").forEach(card=>{
+    const open=()=>openHomeSearchSuggestion(card.dataset.item || "");
+    card.addEventListener("click",open);
+    card.addEventListener("keydown",event=>{ if(event.key==="Enter" || event.key===" "){ event.preventDefault(); open(); } });
+  });
+  bindItemFavoriteButtons(els.homeSearchSuggestions);
+  els.homeSearchSuggestions.classList.add("show");
+  els.homeSearchInput.setAttribute("aria-expanded","true");
+}
+function hideHomeSearchSuggestions(){
+  if(els.homeSearchSuggestions){
+    els.homeSearchSuggestions.classList.remove("show");
+    els.homeSearchSuggestions.innerHTML = "";
+  }
+  if(els.homeSearchInput) els.homeSearchInput.setAttribute("aria-expanded","false");
+}
+function openHomeSearchSuggestion(value){
+  const q = String(value || "").trim();
+  if(!q) return;
+  hideHomeSearchSuggestions();
+  resetItemCategoryFilter();
+  showPage("item");
+  if(els.itemInput) els.itemInput.value = q;
+  quickListCurrentPage = 1;
+  searchItem(false);
+}
 function runHomeSearch(){
   const q=String(els.homeSearchInput?.value||"").trim();
+  hideHomeSearchSuggestions();
   resetItemCategoryFilter();
   showPage("item");
   if(els.itemInput) els.itemInput.value=q;
@@ -2089,6 +2372,7 @@ function categoryIconForItem(item){ return itemCategoryGroup(item); }
 
 function renderAll(){
   renderHomeDashboard();
+  if(els.homeSearchInput?.value) renderHomeSearchSuggestions(els.homeSearchInput.value);
   renderNotice();
   renderItemCategoryChips();
   renderQuickList(els.itemInput.value);
@@ -2253,7 +2537,7 @@ function renderQuickList(query=""){
     const thumb = thumbCandidates[0] || "";
     const tag = itemCategoryGroup(item);
     return `
-    <button class="quick-item oneui-item-card" type="button" data-item="${esc(item.itemNo)}">
+    <div class="quick-item oneui-item-card" role="button" tabindex="0" data-item="${esc(item.itemNo || item.modelName || "")}">
       <div class="quick-thumb">${thumb ? thumbImageHTML(thumb, safe(item.modelName,'제품 이미지'), thumbCandidates[1] || "") : `${categoryIconImageHTML(categoryIconForItem(item), "thumb-icon-img")}`}</div>
       <div class="quick-info">
         <div class="quick-no">${styledText(item.itemNo,"-",styleOf(item,"itemNo"))}</div>
@@ -2261,12 +2545,16 @@ function renderQuickList(query=""){
         <div class="quick-prod">${styledText(item.productName || item.category,"",styleOf(item,item.productName?"productName":"category"))}</div>
         <span class="quick-tag">${esc(tag)}</span>
       </div>
+      ${favoriteStarButton(item,"quick-favorite-btn")}
       <div class="quick-arrow">›</div>
-    </button>`;
+    </div>`;
   }).join("");
-  els.quickList.querySelectorAll(".quick-item").forEach(btn=>{
-    btn.addEventListener("click",()=>{ els.itemInput.value = btn.dataset.item; searchItem(); });
+  els.quickList.querySelectorAll(".quick-item").forEach(card=>{
+    const open=()=>{ els.itemInput.value = card.dataset.item; searchItem(); };
+    card.addEventListener("click",open);
+    card.addEventListener("keydown",event=>{ if(event.key==="Enter" || event.key===" "){ event.preventDefault(); open(); } });
   });
+  bindItemFavoriteButtons(els.quickList);
   renderItemPagination(totalPages);
 }
 
@@ -2371,6 +2659,8 @@ function renderProduct(item){
   els.modelName.innerHTML = styledText(item.modelName,"모델명 미등록", styleOf(item,"modelName"));
   els.productName.innerHTML = styledText(item.productName,"상품명 미등록", styleOf(item,"productName"));
   els.itemPill.innerHTML = styledText(item.itemNo,"-", styleOf(item,"itemNo"));
+  syncItemFavoriteButton(els.itemFavoriteBtn, item);
+  bindItemFavoriteButtons(els.productCard);
   els.photoLabel.innerHTML = styledText(item.category,"PRODUCT", styleOf(item,"category"));
   renderProductImages(item);
   prefetchFeatureImages(item);
@@ -2571,6 +2861,7 @@ function renderItemTextDetail(){
         <div class="item-detail-prod">${styledText(item.productName,"상품명 미등록",styleOf(item,"productName"))}</div>
         <span class="item-detail-cat">${styledText(item.category,"품목 미등록",styleOf(item,"category"))}</span>
       </div>
+      ${favoriteStarButton(item,"item-detail-favorite-btn")}
     </div>
     <div class="item-detail-tabs item-detail-tabs-two">
       ${ITEM_DETAIL_TABS.map(t=>`<button class="item-detail-tab ${t.key===active.key?"active":""}" type="button" data-key="${esc(t.key)}">${esc(t.label)}</button>`).join("")}
@@ -2578,6 +2869,7 @@ function renderItemTextDetail(){
     ${partTabs}
     ${renderStructuredSpecContent(item, selectedAirconSpecPart)}
   `;
+  bindItemFavoriteButtons(els.itemDetailContent);
   els.itemDetailContent.querySelectorAll(".item-detail-tab").forEach(btn=>{
     btn.addEventListener("click",()=>{
       const key = btn.dataset.key || "spec";
@@ -2600,42 +2892,8 @@ function renderItemTextDetail(){
 }
 
 function renderNotice(){
-  const notices = Array.isArray(DB.notices)
-    ? DB.notices.filter(n => safe(n.title,"") || safe(n.body,""))
-    : [];
-
-  // 공지사항은 메인 화면 카드로 노출하지 않고, 내용이 있을 때만 팝업으로 표시합니다.
-  if(!notices.length){
-    if(els.noticeModalList) els.noticeModalList.innerHTML = "";
-    noticePopupOpened = false;
-    closeNoticeModal();
-    return;
-  }
-
-  if(els.noticeModalList){
-    els.noticeModalSub.textContent = `${notices.length}건 표시 · 닫기 전까지 확인`;
-    els.noticeModalList.innerHTML = notices.map(n=>`
-      <div class="notice-modal-item">
-        <div class="notice-modal-item-title">${styledText(n.title,"공지사항",styleOf(n,"title"))}</div>
-        <div class="notice-modal-item-body">${styledText(n.body,"",styleOf(n,"body"))}</div>
-        ${n.date || n.type ? `<div class="notice-modal-meta">${styledText(n.type,"",styleOf(n,"type"))}${n.type&&n.date?" · ":""}${styledText(n.date,"",styleOf(n,"date"))}</div>` : ``}
-      </div>`).join("");
-    if(!noticePopupOpened) openNoticeModal();
-  }
-}
-
-function openNoticeModal(){
-  if(!els.noticeModal) return;
-  noticePopupOpened = true;
-  els.noticeModal.classList.add("show");
-  els.noticeModal.setAttribute("aria-hidden","false");
-  document.body.style.overflow = "hidden";
-}
-function closeNoticeModal(){
-  if(!els.noticeModal) return;
-  els.noticeModal.classList.remove("show");
-  els.noticeModal.setAttribute("aria-hidden","true");
-  if(!els.imageModal.classList.contains("show") && !els.specViewer.classList.contains("show")) document.body.style.overflow = "";
+  // 공지사항은 팝업을 사용하지 않고 전용 페이지 목록만 갱신합니다.
+  renderNoticePage();
 }
 
 function renderDetailBox(){
@@ -5224,7 +5482,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v111';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v114';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -5359,14 +5617,14 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v111';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v114';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
 
 
-<style id="v111-home-premium-style">
-/* v111 홈 UI: 프리미엄 네이비 헤더 + 2열 대형 메뉴 */
+<style id="v113-home-premium-style">
+/* v113 홈 UI: 프리미엄 네이비 헤더 + 2열 대형 메뉴 */
 body.view-home{background:linear-gradient(180deg,#eef6ff 0%,#f7faff 42%,#f4f8ff 100%)}
 body.view-home .app{max-width:760px;padding:0 14px 92px}
 body.view-home .hero{display:none!important}
@@ -5395,6 +5653,13 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 .home-premium-hero .home-search input{font-size:17px;font-weight:800;color:#0b1c3b}.home-premium-hero .home-search input::placeholder{color:#8fa0b7}
 .home-premium-hero .home-search button{display:grid;place-items:center;width:54px;height:54px;border-radius:19px;background:linear-gradient(180deg,#0c6df0,#0755c8);color:#fff;box-shadow:0 12px 25px rgba(0,90,220,.28)}
 .home-premium-hero .home-search button svg{width:27px;height:27px}
+.home-search-suggestions{position:absolute;left:0;right:0;top:calc(100% + 10px);z-index:30;display:none;max-height:390px;overflow:auto;border:1px solid #d9e6f5;border-radius:23px;background:rgba(255,255,255,.99);box-shadow:0 22px 50px rgba(5,32,78,.22);padding:8px;overscroll-behavior:contain}
+.home-search-suggestions.show{display:grid;gap:4px}
+.home-search-suggestion{width:100%!important;height:auto!important;display:grid!important;grid-template-columns:52px minmax(0,1fr) 16px!important;align-items:center;gap:11px;min-height:70px!important;padding:8px 10px!important;border:0!important;border-radius:16px!important;background:#fff!important;color:#07152d!important;text-align:left!important;box-shadow:none!important}
+.home-search-suggestion:hover,.home-search-suggestion:focus-visible{background:#f1f7ff!important;outline:none}
+.home-search-suggestion-thumb{width:52px;height:52px;border-radius:13px;background:#f4f8fd;display:grid;place-items:center;overflow:hidden}.home-search-suggestion-thumb img{width:100%;height:100%;object-fit:contain}.home-search-suggestion-icon{width:28px!important;height:28px!important}
+.home-search-suggestion-copy{display:block;min-width:0}.home-search-suggestion-copy strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#07152d;font-size:14px;font-weight:1000}.home-search-suggestion-copy small{display:block;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#667b98;font-size:11px;font-weight:800}.home-search-suggestion-copy small b{color:#0b63ce;font-weight:1000}.home-search-suggestion-arrow{color:#7890ad;font-size:24px;line-height:1}
+.home-search-suggestion-empty{padding:18px 14px;text-align:center;color:#74859d;font-size:12px;font-weight:900}
 .home-menu-block{padding:106px 0 18px}
 .home-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .home-quick{display:grid;grid-template-columns:68px minmax(0,1fr) 18px;align-items:center;gap:16px;min-height:128px;padding:20px 18px;border:1px solid #dde8f5;border-radius:25px;text-align:left;background:rgba(255,255,255,.98);box-shadow:0 16px 32px rgba(25,63,110,.07);color:#091a3a}
@@ -5415,12 +5680,69 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
  .home-premium-copy .home-title{font-size:31px}.home-premium-copy .home-sub{font-size:13px;margin-top:10px}.home-system-status{font-size:11px;margin-top:11px}
  .home-guidance-card{min-height:150px;border-radius:20px;padding:15px 66px 14px 14px}.home-guidance-title{font-size:14px;margin-top:9px}.home-guidance-body{font-size:10px;margin-top:6px;-webkit-line-clamp:2}.home-guidance-more{font-size:10px;margin-top:8px}.home-guidance-visual{width:62px;height:62px;right:5px;bottom:8px}.home-guidance-card .home-app-version{font-size:9px;right:9px;top:9px}.home-guidance-kicker{font-size:8px;padding:4px 7px}
  .home-premium-hero .home-search{transform:translateY(64px);min-height:66px;border-radius:23px;grid-template-columns:29px minmax(0,1fr) 48px;padding-left:16px}.home-premium-hero .home-search input{font-size:14px}.home-premium-hero .home-search button{width:48px;height:48px;border-radius:17px}
+ .home-search-suggestions{top:calc(100% + 8px);max-height:320px;border-radius:19px;padding:6px}.home-search-suggestion{grid-template-columns:44px minmax(0,1fr) 14px!important;min-height:62px!important;padding:7px 8px!important}.home-search-suggestion-thumb{width:44px;height:44px;border-radius:11px}.home-search-suggestion-copy strong{font-size:13px}.home-search-suggestion-copy small{font-size:10px;margin-top:4px}
  .home-menu-block{padding-top:90px}.home-quick{grid-template-columns:54px minmax(0,1fr) 14px;gap:11px;min-height:108px;padding:15px 12px;border-radius:21px}.home-quick-icon{width:54px;height:54px}.home-quick-icon svg{width:29px;height:29px}.home-quick-copy strong{font-size:16px}.home-quick-copy small{font-size:11px;margin-top:6px}.home-quick-arrow{font-size:23px}
  .home-recent-item{grid-template-columns:72px minmax(0,1fr) 14px!important;min-height:98px!important;padding:12px!important}.home-recent-thumb{width:72px!important;height:64px!important}.home-recent-title{font-size:15px!important}.home-recent-sub{font-size:11px!important}.home-recent-head .home-block-title{font-size:18px}.home-recent-toggle{font-size:11px}
 }
 @media(max-width:390px){
  .home-premium-head{grid-template-columns:minmax(0,1fr) 150px}.home-guidance-body{display:none}.home-guidance-card{min-height:130px;padding-right:58px}.home-guidance-title{font-size:13px}.home-premium-copy .home-title{font-size:28px}
  .home-quick-grid{gap:8px}.home-quick{grid-template-columns:46px minmax(0,1fr) 12px;gap:8px;min-height:96px;padding:13px 9px}.home-quick-icon{width:46px;height:46px}.home-quick-icon svg{width:25px;height:25px}.home-quick-copy strong{font-size:14px}.home-quick-copy small{font-size:10px}.home-quick-arrow{font-size:20px}
+}
+</style>
+
+
+<style id="v113-home-settings-notice-style">
+/* v113: 홈설정 연동 + 연관 검색 + 공지사항 전용 페이지 */
+.home-premium-hero{padding-bottom:18px!important}
+.home-premium-hero .home-search{transform:translateY(36px)!important;margin-top:12px!important}
+.home-menu-block{padding-top:54px!important}
+.notice-page-shell{margin-top:12px;border:1px solid #dbe7f5;border-radius:28px;background:#fff;padding:20px;box-shadow:0 18px 42px rgba(15,55,100,.08)}
+.notice-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid #e8eef6}
+.notice-page-title{font-size:22px;font-weight:1000;color:#07152d;letter-spacing:-.6px}
+.notice-page-sub{margin-top:6px;color:#6b7a90;font-size:13px;font-weight:850;line-height:1.5}
+.notice-page-count{flex:0 0 auto;border:1px solid #d8eaff;border-radius:999px;background:#eef6ff;color:#0b63ce;padding:8px 12px;font-size:12px;font-weight:1000}
+.notice-page-list{display:grid;gap:12px;padding-top:16px}
+.notice-page-item{border:1px solid #dfe8f4;border-radius:20px;background:linear-gradient(180deg,#fff,#fbfdff);padding:16px;box-shadow:0 9px 22px rgba(15,55,100,.045)}
+.notice-page-item-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.notice-page-item-title{font-size:16px;font-weight:1000;color:#07152d;line-height:1.4;word-break:keep-all}
+.notice-page-type{flex:0 0 auto;border-radius:999px;background:#eef6ff;color:#0b63ce;padding:6px 9px;font-size:10px;font-weight:1000}
+.notice-page-item-body{margin-top:10px;color:#334155;font-size:14px;font-weight:800;line-height:1.7;white-space:pre-line;word-break:keep-all}
+.notice-page-date{margin-top:12px;padding-top:10px;border-top:1px dashed #dfe8f4;color:#7b8da5;font-size:11px;font-weight:900}
+.notice-page-empty{border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;padding:30px 18px;text-align:center;color:#7b8da5;font-size:13px;font-weight:900}
+@media(max-width:620px){
+ .home-premium-hero{padding-bottom:14px!important}
+ .home-premium-hero .home-search{transform:translateY(29px)!important;margin-top:9px!important}
+ .home-menu-block{padding-top:43px!important}
+ .notice-page-shell{padding:15px;border-radius:23px}.notice-page-title{font-size:19px}.notice-page-item{padding:14px;border-radius:18px}
+}
+</style>
+
+<style id="v114-item-favorites-style">
+/* v114: 모든 품목 카드 즐겨찾기 + 홈 즐겨찾기 전용 영역 */
+.product-head-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.item-favorite-btn{display:grid;place-items:center;flex:0 0 auto;width:38px;height:38px;padding:0;border:1px solid #dce7f4;border-radius:14px;background:#f5f8fc;color:#8da0b8;font-size:24px;font-weight:1000;line-height:1;box-shadow:0 7px 18px rgba(15,55,100,.07);cursor:pointer;touch-action:manipulation;transition:transform .14s ease,background .14s ease,color .14s ease,border-color .14s ease}
+.item-favorite-btn:hover{background:#eef5ff;border-color:#bfd5f1}.item-favorite-btn:active{transform:scale(.92)}
+.item-favorite-btn.active{background:#fff8df;border-color:#f7d983;color:#f2a900;box-shadow:0 8px 20px rgba(242,169,0,.16)}
+.item-favorite-btn span{display:block;transform:translateY(-1px)}
+.quick-item.oneui-item-card{grid-template-columns:72px minmax(0,1fr) 38px 18px;cursor:pointer}
+.quick-item.oneui-item-card:focus-visible,.home-search-suggestion:focus-visible,.home-favorite-item:focus-visible{outline:3px solid rgba(29,117,255,.24);outline-offset:2px}
+.home-search-suggestion{grid-template-columns:52px minmax(0,1fr) 36px 16px!important;cursor:pointer}
+.home-search-suggestion .item-favorite-btn{width:34px;height:34px;border-radius:12px;font-size:21px;box-shadow:none}
+.item-detail-hero{position:relative;padding-right:58px}
+.item-detail-favorite-btn{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:15px}
+.home-favorite-head{align-items:center!important}.home-favorite-title-star{color:#f2a900;font-size:.92em;margin-right:2px}
+.home-recent-toggle.disabled{opacity:.48;cursor:default}
+.home-favorite-list .home-favorite-item{grid-template-columns:92px minmax(0,1fr) 38px 18px!important;cursor:pointer}
+.home-favorite-item .item-favorite-btn{width:36px;height:36px;border-radius:13px;font-size:22px;box-shadow:none}
+.home-favorite-empty{display:grid;justify-items:center;gap:7px;padding:29px 18px!important}.home-favorite-empty .home-empty-star{font-size:34px;color:#9db0c8}.home-favorite-empty strong{font-size:14px;color:#263b57}.home-favorite-empty small{font-size:11px;color:#7b8da5;font-weight:850;line-height:1.5}
+@media(max-width:620px){
+ .quick-item.oneui-item-card{grid-template-columns:66px minmax(0,1fr) 34px 14px;gap:9px}
+ .quick-item.oneui-item-card .item-favorite-btn{width:32px;height:32px;border-radius:11px;font-size:20px}
+ .home-search-suggestion{grid-template-columns:44px minmax(0,1fr) 32px 14px!important;gap:8px!important}
+ .home-search-suggestion .item-favorite-btn{width:30px;height:30px;border-radius:10px;font-size:19px}
+ .home-favorite-list .home-favorite-item{grid-template-columns:72px minmax(0,1fr) 34px 14px!important;gap:9px!important}
+ .home-favorite-item .item-favorite-btn{width:32px;height:32px;border-radius:11px;font-size:20px}
+ .item-detail-hero{padding-right:52px}.item-detail-favorite-btn{right:10px;top:10px;width:36px;height:36px;border-radius:13px;font-size:22px}
 }
 </style>
 
