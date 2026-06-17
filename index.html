@@ -760,7 +760,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v119</span>
+            <span id="homeAppVersion" class="home-app-version">v120</span>
           </button>
         </div>
         <div class="home-search">
@@ -1089,8 +1089,8 @@ body.view-nonhome .app{padding-top:0;}
 <div id="dbRefreshConfirmModal" class="db-refresh-confirm-modal" aria-hidden="true">
   <div class="db-refresh-confirm-panel" role="dialog" aria-modal="true" aria-labelledby="dbRefreshConfirmTitle" aria-describedby="dbRefreshConfirmMessage">
     <div class="db-refresh-confirm-icon" aria-hidden="true">↻</div>
-    <div id="dbRefreshConfirmTitle" class="db-refresh-confirm-title">DB를 새로 고침하시겠습니까?</div>
-    <div id="dbRefreshConfirmMessage" class="db-refresh-confirm-message">주 1회 정도 새로 고침 하시면 됩니다.<br>정말로 하시겠습니까?<br><strong>(예상 소요 시간 2분)</strong></div>
+    <div id="dbRefreshConfirmTitle" class="db-refresh-confirm-title">최신 DB를 동기화하시겠습니까?</div>
+    <div id="dbRefreshConfirmMessage" class="db-refresh-confirm-message">관리자가 마지막으로 배포한 최신 DB를 불러옵니다.<br>정말로 동기화하시겠습니까?<br><strong>(보통 수초 내 완료)</strong></div>
     <div class="db-refresh-confirm-actions">
       <button id="dbRefreshCancelBtn" class="db-refresh-confirm-btn cancel" type="button">취소</button>
       <button id="dbRefreshConfirmBtn" class="db-refresh-confirm-btn confirm" type="button">확인</button>
@@ -1100,8 +1100,8 @@ body.view-nonhome .app{padding-top:0;}
 <div id="dbRefreshModal" class="db-refresh-modal" aria-hidden="true">
   <div class="db-refresh-panel" role="dialog" aria-modal="true" aria-labelledby="dbRefreshTitle">
     <div class="db-refresh-spinner" aria-hidden="true"></div>
-    <div id="dbRefreshTitle" class="db-refresh-title">현재 새로 고침 중입니다.</div>
-    <div id="dbRefreshMessage" class="db-refresh-message">1~2분 정도 소요되니 잠시만 기다려주세요.</div>
+    <div id="dbRefreshTitle" class="db-refresh-title">최신 DB를 불러오는 중입니다.</div>
+    <div id="dbRefreshMessage" class="db-refresh-message">관리자가 배포한 최신 정보를 확인하고 있습니다.</div>
     <button id="dbRefreshStopBtn" class="db-refresh-stop-btn" type="button">새로고침 중지</button>
   </div>
 </div>
@@ -1151,7 +1151,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v119",
+  APP_VERSION: "v120",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1167,7 +1167,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v119"
+  SPEC_IMAGE_CACHE_BUST: "v120"
 };
 
 const DETAIL_TABS = [
@@ -1240,6 +1240,7 @@ let manualRefreshPromise = null;
 let manualRefreshController = null;
 let pendingManualRefreshAfterSuccess = null;
 let bootstrapReady = false;
+let lastPublishedDbErrorCode = "";
 let selectedNotice = null;
 let appHiddenAt = 0;
 let lastVersionCheckAt = 0;
@@ -1330,7 +1331,7 @@ function init(){
   appBackStack = [];
   clearOverlayUrl();
   showPage("home", false);
-  loadBootstrap(false, { silent: cachedLoaded }).finally(startUpdateSignalWatcher);
+  initializePublishedDb(cachedLoaded).finally(startUpdateSignalWatcher);
 }
 
 function bindEvents(){
@@ -1831,6 +1832,153 @@ function readBestLocalCache(){
   return best;
 }
 
+
+/**
+ * v120 시작 동기화
+ * - 저장 DB가 있으면 즉시 화면을 보여주고 서버 버전만 빠르게 확인합니다.
+ * - 최초 설치처럼 저장 DB가 없으면 관리자가 미리 생성한 publishedDb를 바로 내려받습니다.
+ * - 아직 publishedDb가 생성되지 않은 경우에만 기존 시트 직접 읽기 방식으로 한 번 fallback 합니다.
+ */
+async function initializePublishedDb(cachedLoaded){
+  if(!navigator.onLine){
+    if(!cachedLoaded) showStatus("인터넷 연결 후 앱을 다시 열어 최초 데이터를 받아 주세요.","err");
+    else els.syncText.textContent = "오프라인 · 저장 DB 사용 중";
+    return false;
+  }
+
+  if(!cachedLoaded) showStatus("최초 데이터를 불러오고 있습니다. 잠시만 기다려주세요.","warn");
+
+  let ok = false;
+  if(cachedLoaded){
+    ok = await syncPublishedDbIfNeeded({ silent:true, auto:true });
+  }else{
+    ok = await loadPublishedDb({ silent:false, initial:true });
+  }
+
+  if(!ok && !cachedLoaded){
+    // 관리자가 v120 배포 DB를 한 번도 만들지 않은 최초 전환 상황만 지원하는 안전장치입니다.
+    showStatus("최초 배포 DB가 아직 없어 구글시트에서 직접 데이터를 준비하고 있습니다. 관리자 DB 업데이트를 한 번 실행하면 다음 설치부터 빨라집니다.","warn");
+    ok = await loadBootstrap(false, { silent:false });
+  }
+
+  if(ok && !cachedLoaded){
+    showStatus("최신 DB가 저장되었습니다. 다음 실행부터 즉시 표시됩니다.","ok");
+    setTimeout(hideStatus,1800);
+  }
+  return ok;
+}
+
+async function syncPublishedDbIfNeeded(options={}){
+  const silent = options.silent === true;
+  const auto = options.auto === true;
+  const forceDownload = options.forceDownload === true;
+  const signal = options.signal || null;
+  try{
+    if(forceDownload) return await loadPublishedDb({ silent, auto, signal, manual:options.manual === true });
+    const meta = await apiGet({ action:"publishedVersion", _:Date.now() }, { signal });
+    if(signal?.aborted) throw createAbortError();
+    if(!meta || meta.ok === false || meta.available === false){
+      lastPublishedDbErrorCode = "PUBLISHED_DB_NOT_READY";
+      return false;
+    }
+    const remote = String(meta.updateVersion || "").trim();
+    const local = getRememberedDbUpdateVersion();
+    if(!DB.items.length || !local || (remote && remote !== local)){
+      return await loadPublishedDb({ silent, auto, signal, manual:options.manual === true });
+    }
+    lastPublishedDbErrorCode = "";
+    els.syncText.textContent = `최신 DB 사용 중 · ${safe(meta.updatedAt || DB.updatedAt, "업데이트 확인 완료")}`;
+    return true;
+  }catch(e){
+    if(signal?.aborted || e?.name === "AbortError") return false;
+    console.warn("published DB version check failed",e);
+    return false;
+  }
+}
+
+async function loadPublishedDb(options={}){
+  const signal = options.signal || null;
+  if(signal?.aborted) return false;
+  if(bootstrapLoading) return false;
+  bootstrapLoading = true;
+  const silent = options.silent === true;
+  const auto = options.auto === true;
+  const manual = options.manual === true;
+  const selectedItemNoBefore = selectedItem ? normalizeItemNo(selectedItem.itemNo) : "";
+  const previousDb = DB;
+  const previousVersion = safe(previousDb?.updateVersion || previousDb?.homeSettings?.updateVersion, "");
+  lastPublishedDbErrorCode = "";
+
+  try{
+    if(!silent){
+      showStatus(options.initial ? "최초 최신 DB를 내려받고 있습니다." : "관리자가 배포한 최신 DB를 불러오고 있습니다.","warn");
+    }else{
+      els.syncText.textContent = auto ? "최신 DB 버전 확인 · 자동 동기화 중" : "최신 DB 확인 중";
+    }
+
+    const data = await apiGet({ action:"publishedDb", _:Date.now() }, { signal });
+    if(signal?.aborted) throw createAbortError();
+    if(!data || data.ok === false){
+      lastPublishedDbErrorCode = String(data?.code || "PUBLISHED_DB_LOAD_FAILED");
+      throw new Error(data?.message || "published DB error");
+    }
+    if(!Array.isArray(data.items) || !data.items.length) throw new Error("items payload is empty");
+
+    const incomingDb = {
+      items: Array.isArray(data.items) ? data.items : [],
+      departments: Array.isArray(data.departments) ? data.departments : [],
+      mapData: data.mapData && typeof data.mapData === "object" ? data.mapData : {stores:[],logistics:[],coverage:[]},
+      processes: Array.isArray(data.processes) ? data.processes : [],
+      processRecommendations: Array.isArray(data.processRecommendations) ? data.processRecommendations : [],
+      specCompare: Array.isArray(data.specCompare) ? data.specCompare : [],
+      notices: Array.isArray(data.notices) ? data.notices : [],
+      homeSettings: data.homeSettings || {},
+      updateVersion: safe(data.updateVersion || data.homeSettings?.updateVersion, ""),
+      updatedAt: data.updatedAt || data.publishedAt || formatToday()
+    };
+
+    preserveStableSpecRows(incomingDb, previousDb, previousVersion);
+    restoreStableAirconSpecSnapshot(incomingDb);
+    DB = incomingDb;
+    saveStableAirconSpecSnapshot(DB);
+    bootstrapReady = true;
+    rebuildIndex();
+    if(selectedItemNoBefore) selectedItem = itemMap.get(normalize(selectedItemNoBefore)) || selectedItem;
+    saveDbCacheSafely(DB, Date.now());
+    rememberDbUpdateVersion(DB.updateVersion);
+    renderAll();
+    if(currentPage === "item" && selectedItem) renderProduct(selectedItem);
+    if(currentPage === "itemDetail" && selectedItem) renderItemTextDetail();
+    els.syncText.textContent = `최근 DB 배포: ${safe(DB.updatedAt, formatToday())}`;
+
+    if(auto){
+      showStatus("관리자가 배포한 최신 DB가 자동 반영되었습니다.","ok");
+      setTimeout(hideStatus,1600);
+    }else if(manual){
+      showStatus("최신 DB 동기화가 완료되었습니다.","ok");
+      setTimeout(hideStatus,1600);
+    }else if(!silent){
+      hideStatus();
+    }
+    lastPublishedDbErrorCode = "";
+    return true;
+  }catch(e){
+    if(signal?.aborted || e?.name === "AbortError") return false;
+    console.error(e);
+    if(lastPublishedDbErrorCode === "PUBLISHED_DB_NOT_READY"){
+      if(!silent) showStatus("관리자가 구글시트에서 ‘HUB 관리 → 직원 앱 DB 업데이트’를 먼저 한 번 실행해 주세요.","warn");
+    }else if(silent){
+      els.syncText.textContent = "저장 DB 사용 중 · 최신 DB 확인 대기";
+    }else{
+      showStatus("최신 배포 DB를 받지 못했습니다. 기존 저장 DB는 그대로 유지됩니다.","err");
+    }
+    return false;
+  }finally{
+    bootstrapLoading = false;
+    if(currentPage === "itemDetail" && selectedItem) renderItemTextDetail();
+  }
+}
+
 function delayMs(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
 function createAbortError(){
   try{ return new DOMException("요청이 중지되었습니다.","AbortError"); }
@@ -1875,7 +2023,7 @@ function requestManualDbRefresh(afterSuccess){
   if(manualRefreshPromise) return manualRefreshPromise;
   return openDbRefreshConfirmModal(afterSuccess);
 }
-function openDbRefreshModal(message="1~2분 정도 소요되니 잠시만 기다려주세요."){
+function openDbRefreshModal(message="관리자가 배포한 최신 정보를 확인하고 있습니다."){
   if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = message;
   if(els.dbRefreshStopBtn){
     els.dbRefreshStopBtn.disabled = false;
@@ -1919,36 +2067,32 @@ function runManualDbRefresh(afterSuccess){
   if(manualRefreshPromise) return manualRefreshPromise;
   manualRefreshController = typeof AbortController !== "undefined" ? new AbortController() : null;
   const signal = manualRefreshController?.signal || null;
-  openDbRefreshModal("1~2분 정도 소요되니 잠시만 기다려주세요.");
+  openDbRefreshModal("관리자가 배포한 최신 정보를 내려받고 있습니다. 잠시만 기다려주세요.");
   const shownAt = Date.now();
   manualRefreshPromise = (async()=>{
-    const idle = await waitForBootstrapIdle(150000, signal);
+    const idle = await waitForBootstrapIdle(60000, signal);
     if(signal?.aborted) return false;
     if(!idle){
-      if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "기존 DB 연결을 마무리하고 있습니다. 잠시만 더 기다려주세요.";
-      await waitForBootstrapIdle(60000, signal);
+      if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "현재 진행 중인 DB 확인을 마무리하고 있습니다.";
+      await waitForBootstrapIdle(30000, signal);
     }
     if(signal?.aborted) return false;
 
-    let ok = await loadBootstrap(true, { manual:true, signal });
+    const ok = await syncPublishedDbIfNeeded({ forceDownload:true, manual:true, signal });
     if(signal?.aborted) return false;
-    if(!ok && navigator.onLine){
-      if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "최신 DB 연결을 다시 확인하고 있습니다. 잠시만 기다려주세요.";
-      await delayMs(1200);
-      if(signal?.aborted) return false;
-      ok = await loadBootstrap(false, { manual:true, signal });
-    }
-    if(signal?.aborted) return false;
-
     const elapsed = Date.now()-shownAt;
-    if(elapsed < 1200) await delayMs(1200-elapsed);
+    if(elapsed < 700) await delayMs(700-elapsed);
     if(signal?.aborted) return false;
     if(ok){
       if(typeof afterSuccess === "function") afterSuccess();
       return true;
     }
-    if(els.dbRefreshMessage) els.dbRefreshMessage.textContent = "DB 연결이 지연되고 있습니다. 잠시 후 다시 눌러 주세요.";
-    await delayMs(2200);
+    if(els.dbRefreshMessage){
+      els.dbRefreshMessage.textContent = lastPublishedDbErrorCode === "PUBLISHED_DB_NOT_READY"
+        ? "관리자가 구글시트의 HUB 관리 메뉴에서 직원 앱 DB 업데이트를 먼저 실행해 주세요."
+        : "최신 DB 연결이 지연되고 있습니다. 기존 저장 DB를 계속 사용합니다.";
+    }
+    await delayMs(2400);
     return false;
   })().finally(()=>{
     closeDbRefreshModal();
@@ -2138,14 +2282,7 @@ async function checkUpdateSignal(forceCheck=false){
   const now = Date.now();
   if(!forceCheck && now - lastVersionCheckAt < Math.max(15000, Number(CONFIG.UPDATE_CHECK_MS || 60000) - 1000)) return;
   lastVersionCheckAt = now;
-  try{
-    const data = await apiGet({ action:"version", _:now });
-    if(!data || data.ok === false) return;
-    const remote = String(data.updateVersion || "").trim();
-    if(!remote) return;
-    const local = getRememberedDbUpdateVersion();
-    if(!local || remote !== local) await loadBootstrap(true, { silent:true, auto:true });
-  }catch(e){}
+  await syncPublishedDbIfNeeded({ silent:true, auto:true });
 }
 
 function viewTargetForItem(item){
@@ -2179,10 +2316,11 @@ async function apiGet(params, options={}){
   const url = `${CONFIG.APPS_SCRIPT_URL}?${qs}`;
   const isBootstrap = params && params.action === "bootstrap";
   const isForcedBootstrap = isBootstrap && String(params.refresh || "") === "1";
-  const timeoutMs = isForcedBootstrap ? 150000 : (isBootstrap ? 120000 : 60000);
+  const isPublishedDb = params && params.action === "publishedDb";
+  const timeoutMs = isForcedBootstrap ? 150000 : (isBootstrap ? 120000 : (isPublishedDb ? 90000 : 60000));
 
   // Apps Script 웹앱은 다른 도메인에서 fetch CORS가 불안정할 수 있어
-  // callback을 지원하는 JSONP를 먼저 사용합니다. 대용량 DB 새로고침은 최대 150초까지 기다립니다.
+  // callback을 지원하는 JSONP를 먼저 사용합니다. 최초 구형 fallback은 최대 150초, 미리 생성된 publishedDb 다운로드는 최대 90초까지 기다립니다.
   try{
     return await jsonp(url, timeoutMs, externalSignal);
   }catch(jsonpError){
@@ -6068,7 +6206,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v119';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v120';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -6203,7 +6341,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v119';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v120';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -6332,8 +6470,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 }
 </style>
 
-<style id="v119-favorites-refresh-style">
-/* v119: 스펙 비교 상단 반높이 즐겨찾기 카드 + 즐겨찾기 전용 페이지 + DB 새로고침 대기창 */
+<style id="v120-favorites-refresh-style">
+/* v120: 스펙 비교 상단 반높이 즐겨찾기 카드 + 즐겨찾기 전용 페이지 + DB 새로고침 대기창 */
 .home-favorite-shortcut-row{display:flex;justify-content:flex-end;margin:0 0 12px}
 .home-favorite-shortcut{width:calc((100% - 12px)/2);min-height:58px;border:1px solid #dbe7f5;border-radius:21px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:0 10px 25px rgba(15,55,100,.06);display:grid;grid-template-columns:42px minmax(0,1fr) 16px;align-items:center;gap:10px;padding:8px 13px;color:#07152d;text-align:left;cursor:pointer;touch-action:manipulation}
 .home-favorite-shortcut:active{transform:scale(.985)}
@@ -6365,8 +6503,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 </style>
 
 
-<style id="v119-content-favorites-notice-refresh-style">
-/* v119: 새로고침 중지 버튼 · 전체 화면 뒤로가기 경로 안정화 */
+<style id="v120-content-favorites-notice-refresh-style">
+/* v120: 새로고침 중지 버튼 · 전체 화면 뒤로가기 경로 안정화 */
 .favorite-page-list{display:grid;gap:16px;padding-top:16px}
 .favorite-group{display:grid;gap:9px}
 .favorite-group-head{display:flex;align-items:center;justify-content:space-between;padding:0 3px}
@@ -6416,8 +6554,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 </style>
 
 
-<style id="v119-navigation-history-style">
-/* v119: 홈/목록/상세/오버레이 전체 뒤로가기 이력 통합 */
+<style id="v120-navigation-history-style">
+/* v120: 홈/목록/상세/오버레이 전체 뒤로가기 이력 통합 */
 </style>
 </body>
 </html>
