@@ -776,7 +776,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v122</span>
+            <span id="homeAppVersion" class="home-app-version">v123</span>
           </button>
         </div>
         <div class="home-search">
@@ -995,7 +995,7 @@ body.view-nonhome .app{padding-top:0;}
             </label>
           </div>
           <label class="inquiry-field">
-            <span class="inquiry-field-label">주문번호(타 업무 문의인 경우 0으로 적어주세요) <strong>필수</strong></span>
+            <span class="inquiry-field-label">주문번호 <strong>필수</strong></span>
             <input id="inquiryOrderNo" type="text" inputmode="numeric" placeholder="비고 번호 또는 HDM 오더번호 입력" autocomplete="off" data-lpignore="true" data-1p-ignore="true" />
           </label>
           <label class="inquiry-field">
@@ -1208,7 +1208,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v122",
+  APP_VERSION: "v123",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1221,11 +1221,12 @@ const CONFIG = {
   CACHE_MAX_MS: 1000 * 60 * 60 * 12,
   SPEC_IMAGE_BASE_PATH: "./images/",
   PROCESS_IMAGE_BASE_PATH: "./images/process/",
+  PROCESS_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/process/",
   SPEC_IMAGE_RAW_BASE: "https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/",
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v122"
+  SPEC_IMAGE_CACHE_BUST: "v123"
 };
 
 const DETAIL_TABS = [
@@ -4360,31 +4361,88 @@ function resolveProcessImageUrl(value){
   if(!raw) return "";
   if(/^(https?:)?\/\//i.test(raw) || /^(data|blob):/i.test(raw)) return raw;
   let path = raw.replace(/\\/g,"/").replace(/^\.\//,"");
-  if(path.startsWith("/")) return path;
-  if(path.startsWith("images/")) path = "./" + path;
-  else if(!path.startsWith("../")) path = (CONFIG.PROCESS_IMAGE_BASE_PATH || "./images/process/") + path;
-  const parts = path.split("/").map((part,index)=>{
-    if(index === 0 && part === ".") return part;
-    if(part === ".." || !part) return part;
+  if(path.startsWith("/")) path = path.slice(1);
+  if(!path.startsWith("images/") && !path.startsWith("../")){
+    path = String(CONFIG.PROCESS_IMAGE_BASE_PATH || "./images/process/").replace(/^\.\//,"") + path;
+  }
+  const encodedPath = path.split("/").map(part=>{
+    if(!part || part === "." || part === "..") return part;
     try{return encodeURIComponent(decodeURIComponent(part));}catch(err){return encodeURIComponent(part);}
-  });
-  const url = parts.join("/");
-  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v122");
+  }).join("/");
+  let url = "";
+  try{ url = new URL(encodedPath, document.baseURI).href; }
+  catch(err){ url = encodedPath; }
+  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v123");
   return url + (url.includes("?") ? "&" : "?") + "v=" + bust;
+}
+
+function processImageFallbackUrl(url){
+  try{
+    const parsed = new URL(url, document.baseURI);
+    const marker = "/images/process/";
+    const idx = parsed.pathname.indexOf(marker);
+    if(idx < 0) return "";
+    const filePath = parsed.pathname.slice(idx + marker.length).split("/").map(part=>{
+      try{return encodeURIComponent(decodeURIComponent(part));}catch(err){return encodeURIComponent(part);}
+    }).join("/");
+    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v123");
+  }catch(err){ return ""; }
 }
 
 function processImagesHtml(value, altText="프로세스 이미지", className=""){
   const urls = processImageValues(value);
   if(!urls.length) return "";
   const one = urls.length === 1 ? " single" : "";
-  return `<div class="process-detail-images${one}${className ? ` ${className}` : ""}">${urls.map((url,index)=>`<div class="process-detail-image-frame"><img class="process-img" src="${esc(url)}" alt="${esc(altText)}${urls.length>1 ? ` ${index+1}` : ""}" loading="lazy" decoding="async"><span class="process-detail-image-hint">확대</span></div>`).join("")}</div>`;
+  return `<div class="process-detail-images${one}${className ? ` ${className}` : ""}">${urls.map((url,index)=>{const fallback=processImageFallbackUrl(url);return `<div class="process-detail-image-frame"><img class="process-img" src="${esc(url)}" data-fallback="${esc(fallback)}" alt="${esc(altText)}${urls.length>1 ? ` ${index+1}` : ""}" loading="lazy" decoding="async"><span class="process-detail-image-hint">확대</span></div>`;}).join("")}</div>`;
 }
 
 function bindProcessDetailImages(){
   if(!els.processDetailView) return;
-  els.processDetailView.querySelectorAll(".process-img").forEach(img=>{
-    img.addEventListener("error",()=>{ const frame=img.closest(".process-detail-image-frame"); if(frame) frame.remove(); },{once:true});
+  const images = Array.from(els.processDetailView.querySelectorAll(".process-img"));
+  images.forEach(img=>{
+    img.addEventListener("error",()=>{
+      const fallback = String(img.dataset.fallback || "").trim();
+      if(fallback && img.dataset.fallbackTried !== "1" && img.src !== fallback){
+        img.dataset.fallbackTried = "1";
+        img.src = fallback;
+        return;
+      }
+      const frame=img.closest(".process-detail-image-frame");
+      if(frame) frame.remove();
+    });
+    img.addEventListener("click",()=>{
+      const visible = Array.from(els.processDetailView.querySelectorAll(".process-img")).filter(node=>node.closest(".process-detail-image-frame"));
+      const urls = visible.map(node=>node.currentSrc || node.src).filter(Boolean);
+      const index = Math.max(0, visible.indexOf(img));
+      openImageModal(urls,index,img.alt || "프로세스 이미지 확대");
+    });
   });
+}
+
+function processRowHasImages(row){
+  if(!row || typeof row !== "object") return false;
+  if(processImageValues(row.heroImages || row.imageUrls || row.imageUrl).length) return true;
+  if(processImageValues(row.summaryImages).length || processImageValues(row.cautionImages).length) return true;
+  return (Array.isArray(row.steps) ? row.steps : []).some(step=>processImageValues(step && typeof step === "object" ? (step.images || step.imageUrls || step.imageUrl) : "").length);
+}
+
+const processImageLiveRefreshKeys = new Set();
+async function ensureProcessImagesForDetail(row){
+  if(!row || processRowHasImages(row) || !navigator.onLine) return;
+  const key = `${normalizeText(row.type)}|${normalizeText(row.title)}`;
+  if(!key || processImageLiveRefreshKeys.has(key)) return;
+  processImageLiveRefreshKeys.add(key);
+  try{
+    const data = await apiGet({action:"processes", _:Date.now()});
+    if(!data || data.ok === false || !Array.isArray(data.processes)) return;
+    const found = data.processes.find(item=>normalizeText(item.type)===normalizeText(row.type) && normalizeText(item.title)===normalizeText(row.title));
+    if(!found || !processRowHasImages(found)) return;
+    const idx = (DB.processes || []).findIndex(item=>normalizeText(item.type)===normalizeText(row.type) && normalizeText(item.title)===normalizeText(row.title));
+    if(idx >= 0) DB.processes[idx] = found;
+    processDetailRow = found;
+    saveDbCacheSafely(DB,Date.now());
+    renderProcessDetail(found);
+  }catch(err){ console.warn("process image live refresh failed",err); }
 }
 
 function openProcessDetail(row){
@@ -4405,7 +4463,14 @@ function openProcessDetail(row){
 function renderProcessDetail(row){
   if(!els.processDetailView || !row) return;
   const type = safe(row.type,"기타");
-  const steps = (Array.isArray(row.steps) ? row.steps : []).map((v,i)=>parseProcessStep(v,i+1)).filter(Boolean).slice(0,5);
+  const rawSteps = Array.isArray(row.steps) ? row.steps : [];
+  const steps = rawSteps.map((v,i)=>{
+    if(v && typeof v === "object" && !processImageValues(v.images || v.imageUrls || v.imageUrl).length){
+      const fallbackImages = row[`step${i+1}Images`] || (Array.isArray(row.stepImages) ? row.stepImages[i] : null) || row[`${i+1}번이미지`] || row[`${i+1}번 이미지`];
+      if(fallbackImages) v = {...v, images:fallbackImages};
+    }
+    return parseProcessStep(v,i+1);
+  }).filter(Boolean).slice(0,5);
   const summary = safe(row.summary || row.body, "내용 미등록");
   const caution = safe(row.caution, "");
   const chipSvg = processTypeIconSvg(type);
@@ -4426,6 +4491,7 @@ function renderProcessDetail(row){
   `;
   bindContentFavoriteButtons(els.processDetailView);
   bindProcessDetailImages();
+  setTimeout(()=>ensureProcessImagesForDetail(row),0);
 }
 
 function compressProcessRecommendationTerm(term){
@@ -6349,7 +6415,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v122';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v123';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -6484,7 +6550,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v122';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v123';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
