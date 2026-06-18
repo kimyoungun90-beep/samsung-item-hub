@@ -794,7 +794,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v126</span>
+            <span id="homeAppVersion" class="home-app-version">v127</span>
           </button>
         </div>
         <div class="home-search">
@@ -1262,7 +1262,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v126",
+  APP_VERSION: "v127",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1280,7 +1280,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v126"
+  SPEC_IMAGE_CACHE_BUST: "v127"
 };
 
 const DETAIL_TABS = [
@@ -1454,7 +1454,7 @@ function init(){
 }
 
 function bindEvents(){
-  // v126: 진열 점검 상수 초기화 전에 실행되던 바인딩을 현재 스크립트 완료 후로 지연합니다.
+  // v127: 진열 점검 상수 초기화 전에 실행되던 바인딩을 현재 스크립트 완료 후로 지연합니다.
   window.setTimeout(bindDisplayCheckEvents,0);
   document.querySelectorAll(".page-back-btn").forEach(btn=>btn.addEventListener("click",handleAppBack));
   if(els.globalBackTop) els.globalBackTop.addEventListener("click",handleAppBack);
@@ -1487,6 +1487,8 @@ function bindEvents(){
     });
   }
   if(els.homeBellBtn) els.homeBellBtn.addEventListener("click",openNoticePage);
+  const homeDisplayCheckShortcut = document.querySelector(".home-display-check-shortcut");
+  if(homeDisplayCheckShortcut) homeDisplayCheckShortcut.addEventListener("click",()=>showPage("displayCheck"));
   if(els.homeFavoriteShortcut) els.homeFavoriteShortcut.addEventListener("click",openFavoritesPage);
   if(els.homeRefreshBtn) els.homeRefreshBtn.addEventListener("click",()=>requestManualDbRefresh());
   if(els.noticePageRefreshBtn) els.noticePageRefreshBtn.addEventListener("click",()=>requestManualDbRefresh(()=>renderNoticePage()));
@@ -4436,7 +4438,7 @@ function resolveProcessImageUrl(value){
   let url = "";
   try{ url = new URL(encodedPath, document.baseURI).href; }
   catch(err){ url = encodedPath; }
-  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v126");
+  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v127");
   return url + (url.includes("?") ? "&" : "?") + "v=" + bust;
 }
 
@@ -4449,7 +4451,7 @@ function processImageFallbackUrl(url){
     const filePath = parsed.pathname.slice(idx + marker.length).split("/").map(part=>{
       try{return encodeURIComponent(decodeURIComponent(part));}catch(err){return encodeURIComponent(part);}
     }).join("/");
-    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v126");
+    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v127");
   }catch(err){ return ""; }
 }
 
@@ -6846,7 +6848,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v126';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v127';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -6981,7 +6983,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v126';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v127';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
