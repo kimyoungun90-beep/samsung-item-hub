@@ -748,6 +748,24 @@ body.view-nonhome .app{padding-top:0;}
 .inquiry-guide-modal{position:fixed;inset:0;z-index:22000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,16,38,.60);backdrop-filter:blur(8px)}.inquiry-guide-modal.show{display:flex}.inquiry-guide-panel{width:min(720px,calc(100vw - 28px));max-height:88vh;overflow:auto;border:1px solid rgba(255,255,255,.78);border-radius:26px;background:#fff;box-shadow:0 30px 80px rgba(4,16,38,.35)}.inquiry-guide-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px 14px;background:rgba(255,255,255,.97);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.inquiry-guide-title{font-size:19px;font-weight:1000;color:#07152d;letter-spacing:-.45px}.inquiry-guide-sub{margin-top:5px;color:#64748b;font-size:12px;font-weight:850;line-height:1.4}.inquiry-guide-close{width:42px;height:42px;border:0;border-radius:999px;background:#0b1b36;color:#fff;font-size:24px;font-weight:700;flex:0 0 auto}.inquiry-guide-body{padding:16px 18px 20px}.inquiry-guide-image-wrap{overflow:auto;border:1px solid #cbd5e1;border-radius:16px;background:#06111c;padding:8px}.inquiry-guide-image-wrap img{display:block;width:100%;min-width:620px;height:auto;border-radius:8px}.inquiry-guide-copy{margin-top:13px;border:1px solid #dbe7f5;border-radius:17px;background:#f8fbff;padding:13px 14px;color:#334155;font-size:13px;font-weight:900;line-height:1.65;word-break:keep-all}.inquiry-guide-copy p{margin:0}.inquiry-guide-copy p+p{margin-top:6px}.inquiry-guide-copy b{color:#0b63ce}.inquiry-guide-copy .inquiry-guide-small{color:#64748b;font-size:12px}.inquiry-guide-copy .inquiry-guide-alert{color:#b91c1c}.inquiry-guide-confirm{width:100%;min-height:50px;margin-top:14px;border:0;border-radius:17px;background:#0b63ce;color:#fff;font-size:14px;font-weight:1000;box-shadow:0 11px 24px rgba(11,99,206,.22)}.inquiry-guide-open{overflow:hidden!important}
 @media(max-width:640px){.inquiry-section-title{gap:8px}.inquiry-section-title h2{font-size:20px}.inquiry-section-title small{font-size:11px}.inquiry-card .form-row-2{grid-template-columns:1fr}.inquiry-field-label{font-size:11px}.inquiry-guide-modal{padding:10px}.inquiry-guide-panel{width:100%;border-radius:22px;max-height:91vh}.inquiry-guide-head{padding:14px}.inquiry-guide-title{font-size:18px}.inquiry-guide-body{padding:12px 13px 16px}.inquiry-guide-image-wrap img{min-width:560px}.inquiry-guide-copy{font-size:12px}.home-quick-copy strong{line-height:1.18}}
 </style>
+
+<style id="v124-display-check-style">
+.display-check-home-quick{border-color:#cfe0f5!important;background:linear-gradient(135deg,#f5f9ff,#fff)!important}
+.display-check-shell{margin-top:12px;border:1px solid #dbe6f2;border-radius:28px;background:#fff;padding:18px;box-shadow:0 18px 42px rgba(15,55,100,.07)}
+.display-check-hero{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:16px;align-items:center;border-radius:22px;background:linear-gradient(135deg,#071a37,#123c76);padding:20px;color:#fff}
+.display-check-kicker{font-size:10px;font-weight:1000;letter-spacing:1.4px;color:#85b8ff}.display-check-hero h2{margin:6px 0 0;font-size:22px;letter-spacing:-.6px}.display-check-hero p{margin:9px 0 0;color:#d8e7fb;font-size:12px;font-weight:800;line-height:1.65;word-break:keep-all}
+.display-check-progress-card{min-height:92px;border:1px solid rgba(255,255,255,.2);border-radius:20px;background:rgba(255,255,255,.10);display:grid;place-content:center;text-align:center}.display-check-progress-card strong{font-size:25px}.display-check-progress-card span{margin-top:4px;color:#c8dcf8;font-size:10px;font-weight:900}
+.display-check-controls{display:grid;grid-template-columns:1.15fr 1fr .8fr;gap:10px;margin-top:14px}.display-check-controls label{display:grid;gap:7px;color:#405570;font-size:11px;font-weight:1000}.display-check-controls label span{padding-left:4px}.display-check-controls b{color:#dc2626}.display-check-controls em{font-style:normal;color:#8493a8;font-size:9px}.display-check-controls select,.display-check-controls input{width:100%;height:46px;border:1px solid #d5e0ed;border-radius:15px;background:#f9fbfe;padding:0 13px;color:#12233c;font-size:13px;font-weight:900}
+.display-check-progress-track{height:9px;margin:15px 3px 0;border-radius:999px;background:#e8eef6;overflow:hidden}.display-check-progress-track span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#1472e6,#36a4ff);transition:width .25s ease}
+.display-check-status{margin-top:10px;border-radius:14px;background:#f4f8fc;padding:10px 12px;color:#60738d;font-size:11px;font-weight:900;line-height:1.5}.display-check-status.ok{background:#ecfdf3;color:#137044}.display-check-status.err{background:#fff1f2;color:#b42318}.display-check-status.loading{background:#eff6ff;color:#175db6}
+.display-check-list{display:grid;gap:11px;margin-top:13px}.display-check-empty{border:1px dashed #cbd8e7;border-radius:20px;padding:42px 16px;text-align:center;color:#788ba3;font-size:13px;font-weight:900}
+.display-check-card{border:1px solid #dce6f2;border-radius:22px;background:linear-gradient(180deg,#fff,#fbfdff);padding:12px;display:grid;grid-template-columns:118px minmax(0,1fr) 106px;gap:13px;align-items:center;box-shadow:0 9px 24px rgba(15,55,100,.045)}.display-check-card.done{border-color:#a9ddc4;background:linear-gradient(180deg,#fff,#f5fff9)}.display-check-card.uploading{border-color:#9cc8ff;background:#f6faff}
+.display-check-example{position:relative;width:118px;height:88px;border:1px solid #d8e3ef;border-radius:16px;background:#eef3f9;overflow:hidden;cursor:zoom-in}.display-check-example img{width:100%;height:100%;object-fit:cover;display:block}.display-check-example span{position:absolute;left:7px;top:7px;border-radius:999px;background:rgba(5,21,45,.78);color:#fff;padding:3px 7px;font-size:8px;font-weight:1000}
+.display-check-card-copy{min-width:0}.display-check-card-head{display:flex;align-items:center;gap:8px}.display-check-card-no{width:25px;height:25px;border-radius:9px;background:#eaf3ff;color:#0b63ce;display:grid;place-items:center;font-size:10px;font-weight:1000}.display-check-card-title{min-width:0;color:#07152d;font-size:15px;font-weight:1000;line-height:1.35}.display-check-card-guide{margin-top:7px;color:#667b94;font-size:11px;font-weight:850;line-height:1.55;word-break:keep-all}.display-check-card-state{margin-top:7px;color:#8191a6;font-size:10px;font-weight:1000}.display-check-card.done .display-check-card-state{color:#158052}.display-check-card.uploading .display-check-card-state{color:#1765c1}
+.display-check-card-action{display:grid;gap:7px}.display-check-capture-btn{min-height:44px;border:0;border-radius:15px;background:#0b63ce;color:#fff;font-size:12px;font-weight:1000;box-shadow:0 10px 22px rgba(11,99,206,.20)}.display-check-card.done .display-check-capture-btn{background:#0e7a4d}.display-check-capture-btn:disabled{opacity:.58;cursor:wait}.display-check-preview-btn{min-height:34px;border:1px solid #d8e3ef;border-radius:12px;background:#f6f9fc;color:#40546d;font-size:10px;font-weight:1000}.display-check-preview-btn[hidden]{display:none}
+@media(max-width:700px){.display-check-shell{padding:13px;border-radius:23px}.display-check-hero{grid-template-columns:minmax(0,1fr) 88px;padding:16px;border-radius:19px}.display-check-hero h2{font-size:19px}.display-check-hero p{font-size:10px}.display-check-progress-card{min-height:78px}.display-check-progress-card strong{font-size:20px}.display-check-controls{grid-template-columns:1fr 1fr}.display-check-controls label:first-child{grid-column:1/-1}.display-check-card{grid-template-columns:94px minmax(0,1fr) 88px;gap:9px;padding:9px;border-radius:19px}.display-check-example{width:94px;height:76px;border-radius:13px}.display-check-card-title{font-size:13px}.display-check-card-guide{font-size:9px;line-height:1.45}.display-check-capture-btn{min-height:42px;font-size:10px;padding:7px}.display-check-preview-btn{font-size:9px;padding:6px}.display-check-card-no{width:22px;height:22px}}
+@media(max-width:440px){.display-check-card{grid-template-columns:82px minmax(0,1fr) 76px}.display-check-example{width:82px;height:70px}.display-check-card-guide{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.display-check-capture-btn{font-size:9px}.display-check-controls{grid-template-columns:1fr}.display-check-controls label:first-child{grid-column:auto}}
+</style>
 </head>
 <body>
 <main class="app">
@@ -776,7 +794,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v123</span>
+            <span id="homeAppVersion" class="home-app-version">v124</span>
           </button>
         </div>
         <div class="home-search">
@@ -815,6 +833,10 @@ body.view-nonhome .app{padding-top:0;}
           <button class="home-quick" type="button" data-page="inquiry">
             <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h16v11H9l-5 3v-14Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8" cy="11" r="1" fill="currentColor"/><circle cx="12" cy="11" r="1" fill="currentColor"/><circle cx="16" cy="11" r="1" fill="currentColor"/></svg></span>
             <span class="home-quick-copy"><strong>배송 관리 요청/문의</strong><small>배송 일정 · 관리 요청</small></span><span class="home-quick-arrow">›</span>
+          </button>
+          <button class="home-quick display-check-home-quick" type="button" data-page="displayCheck">
+            <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5h3l1.4-2h7.2l1.4 2h3v11H4v-11Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span class="home-quick-copy"><strong>진열 연출 점검</strong><small>점포별 16개 항목 촬영</small></span><span class="home-quick-arrow">›</span>
           </button>
           <button class="home-quick" type="button" data-action="notice">
             <span class="home-quick-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M7 9a5 5 0 0 1 10 0c0 6 2.5 6 2.5 8H4.5C4.5 15 7 15 7 9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
@@ -874,6 +896,37 @@ body.view-nonhome .app{padding-top:0;}
       <span class="page-topbar-spacer" aria-hidden="true"></span>
     </div>
     <article id="noticeDetailContent" class="notice-detail-shell"></article>
+  </section>
+
+  <section id="pageDisplayCheck" class="page">
+    <div class="page-topbar">
+      <button class="page-icon-btn page-back-btn" type="button" aria-label="뒤로">‹</button>
+      <div class="page-topbar-title">진열 연출 점검</div>
+      <button id="displayCheckRefreshBtn" class="page-icon-btn" type="button" aria-label="촬영 현황 새로고침">↻</button>
+    </div>
+    <article class="display-check-shell">
+      <div class="display-check-hero">
+        <div>
+          <div class="display-check-kicker">DISPLAY CHECK</div>
+          <h2>점포별 진열 연출 사진 촬영</h2>
+          <p>점포를 선택한 뒤 예시 사진과 촬영 기준을 확인하고 항목별로 촬영해 주세요. 촬영 완료 사진은 진열연출앱으로 자동 전달됩니다.</p>
+        </div>
+        <div class="display-check-progress-card">
+          <strong id="displayCheckProgressText">0 / 16</strong>
+          <span>촬영 완료</span>
+        </div>
+      </div>
+      <div class="display-check-controls">
+        <label><span>점포 선택 <b>필수</b></span><select id="displayCheckStore"><option value="">점포를 선택하세요</option></select></label>
+        <label><span>촬영자 <em>선택 입력</em></span><input id="displayCheckUploader" type="text" maxlength="30" placeholder="예: 김영언"></label>
+        <label><span>촬영일</span><input id="displayCheckDate" type="date"></label>
+      </div>
+      <div class="display-check-progress-track"><span id="displayCheckProgressBar"></span></div>
+      <div id="displayCheckStatus" class="display-check-status">점포를 선택하면 촬영 항목이 표시됩니다.</div>
+      <div id="displayCheckList" class="display-check-list"></div>
+    </article>
+    <input id="displayCheckCamera" type="file" accept="image/*" capture="environment" hidden>
+    <iframe id="displayCheckUploadFrame" name="displayCheckUploadFrame" title="진열 사진 업로드" hidden></iframe>
   </section>
 
   <nav id="mainNav" class="nav home-mode">
@@ -1208,7 +1261,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v123",
+  APP_VERSION: "v124",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1226,7 +1279,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v123"
+  SPEC_IMAGE_CACHE_BUST: "v124"
 };
 
 const DETAIL_TABS = [
@@ -1284,7 +1337,7 @@ const SPEC_TERM_GUIDES = {
 };
 
 const FALLBACK_MAP_DATA = {"stores":[{"name":"양재점","address":"서울특별시 서초구 양재대로 159","tc":"남서울TC","x":44.0,"y":28.0,"phone":"1899-9900"},{"name":"양평점","address":"서울특별시 영등포구 선유로 156","tc":"서서울TC","x":38.0,"y":25.0,"phone":"1899-9900"},{"name":"상봉점","address":"서울특별시 중랑구 망우로 336","tc":"동서울TC","x":48.0,"y":24.0,"phone":"1899-9900"},{"name":"고척점","address":"서울특별시 구로구 경인로43길 49","tc":"인천TC","x":39.0,"y":27.0,"phone":"1899-9900"},{"name":"광명점","address":"경기도 광명시 일직로 40","tc":"인천TC","x":38.0,"y":30.0,"phone":"1899-9900"},{"name":"하남점","address":"경기도 하남시 미사강변한강로 209","tc":"동서울TC","x":50.0,"y":27.0,"phone":"1899-9900"},{"name":"의정부점","address":"경기도 의정부시 용민로 489","tc":"동서울TC","x":45.0,"y":18.0,"phone":"1899-9900"},{"name":"공세점","address":"경기도 용인시 기흥구 탑실로 38","tc":"평택TC","x":47.0,"y":38.0,"phone":"1899-9900"},{"name":"일산점","address":"경기도 고양시 일산동구 장백로 25","tc":"서서울TC","x":35.0,"y":21.0,"phone":"1899-9900"},{"name":"송도점","address":"인천광역시 연수구 컨벤시아대로 230","tc":"인천TC","x":31.0,"y":30.0,"phone":"1899-9900"},{"name":"청라점","address":"인천광역시 서구 첨단서로 188","tc":"인천TC","x":32.0,"y":25.0,"phone":"1899-9900"},{"name":"평택점","address":"경기도 평택시 경기대로 975","tc":"평택TC","x":46.0,"y":43.0,"phone":"1899-9900"},{"name":"천안점","address":"충청남도 천안시 서북구 3공단6로 77","tc":"아산TC","x":47.0,"y":48.0,"phone":"1899-9900"},{"name":"세종점","address":"세종특별자치시 종합운동장1로 14","tc":"세종TC","x":49.0,"y":50.0,"phone":"1899-9900"},{"name":"대전점","address":"대전광역시 중구 오류로 41","tc":"세종TC","x":50.0,"y":53.0,"phone":"1899-9900"},{"name":"대구점","address":"대구광역시 북구 검단로 97","tc":"대구TC","x":67.0,"y":64.0,"phone":"1899-9900"},{"name":"혁신점","address":"대구광역시 동구 첨단로 10","tc":"대구TC","x":70.0,"y":65.0,"phone":"1899-9900"},{"name":"울산점","address":"울산광역시 북구 진장유통로 78-12","tc":"울산TC","x":79.0,"y":74.0,"phone":"1899-9900"},{"name":"부산점","address":"부산광역시 수영구 구락로 137","tc":"양산TC","x":73.0,"y":83.0,"phone":"1899-9900"},{"name":"김해점","address":"경상남도 김해시 선천남로 16","tc":"양산TC","x":70.0,"y":80.0,"phone":"1899-9900"}],"logistics":[{"name":"서서울TC","address":"경기 고양시 일산서구 덕이로 256","phone":"1577-3913","x":34.0,"y":24.0,"kind":"TC"},{"name":"동서울TC","address":"경기도 남양주시 진접읍 양진로 980","phone":"1577-3914","x":49.0,"y":22.0,"kind":"TC"},{"name":"인천TC","address":"인천광역시 중구 항동7가 56","phone":"1577-3921","x":30.0,"y":28.0,"kind":"TC"},{"name":"평택TC","address":"경기 평택시 청북읍 어연리 687","phone":"1577-3922","x":46.0,"y":42.0,"kind":"TC"},{"name":"원주TC","address":"원주시 문막읍 원문로 2298-1","phone":"1577-3931","x":58.0,"y":37.0,"kind":"TC"},{"name":"강릉TC","address":"강원 강릉시 입암동 694-1","phone":"1577-3932","x":75.0,"y":34.0,"kind":"TC"},{"name":"남서울TC","address":"경기도 광주시 초월읍 무갑리 912-0","phone":"1899-9300","x":45.0,"y":29.0,"kind":"TC"},{"name":"대구TC","address":"대구 달서구 호산동 717번지","phone":"1577-3951","x":68.0,"y":64.0,"kind":"TC"},{"name":"양산TC","address":"경남 양산시 물금읍 증산리 936-4번지 한국복합물류단지 E동","phone":"1577-3961","x":72.0,"y":80.0,"kind":"TC"},{"name":"포항TC","address":"경북 포항시 기계면 새마을로 1296","phone":"1577-3953","x":80.0,"y":62.0,"kind":"TC"},{"name":"안동TC","address":"경북 안동시 풍산읍 유통단지길 32번지","phone":"1577-3954","x":70.0,"y":55.0,"kind":"TC"},{"name":"창원TC","address":"경남 함안군 칠원면 용산리 901-4번지","phone":"1577-3966","x":65.0,"y":79.0,"kind":"TC"},{"name":"울산TC","address":"울산광역시 울주군 삼남면 신안길 35-13","phone":"1577-3967","x":79.0,"y":74.0,"kind":"TC"},{"name":"사천TC","address":"사천시 축동면 탑리 910-3번지","phone":"1577-3960","x":58.0,"y":82.0,"kind":"TC"},{"name":"제주DC","address":"제주 제주시 화북일동 2140-1","phone":"1577-3971","x":42.0,"y":96.0,"kind":"TC"},{"name":"광주TC","address":"광주 북구 오룡동 1119번지 삼성제3공장","phone":"1577-3945","x":42.0,"y":77.0,"kind":"TC"},{"name":"세종TC","address":"세종시 부강면 연청로 745-46번지 중부복합물류터미널 B동","phone":"1577-3941","x":49.0,"y":51.0,"kind":"TC"},{"name":"아산TC","address":"충청남도 아산시 신창면 남성길 239","phone":"1577-3942","x":44.0,"y":47.0,"kind":"TC"},{"name":"익산TC","address":"전북 익산시 금마면 동고도리 1038-3","phone":"1577-3944","x":42.0,"y":65.0,"kind":"TC"},{"name":"순천TC","address":"전라남도 순천시 해룡면 여순로 1147","phone":"1577-3946","x":50.0,"y":82.0,"kind":"TC"},{"name":"목포TC","address":"전남 무안군 삼향읍 왕산리 175번지","phone":"1577-3947","x":34,"y":84,"kind":"TC"}],"coverage":[{"tc":"서서울TC","province":"서울","area":"강서구","note":""},{"tc":"서서울TC","province":"서울","area":"마포구","note":""},{"tc":"서서울TC","province":"서울","area":"용산구","note":""},{"tc":"서서울TC","province":"서울","area":"서대문구","note":""},{"tc":"서서울TC","province":"서울","area":"은평구","note":""},{"tc":"서서울TC","province":"서울","area":"종로구","note":""},{"tc":"서서울TC","province":"서울","area":"중구","note":""},{"tc":"서서울TC","province":"서울","area":"양천구","note":""},{"tc":"서서울TC","province":"서울","area":"영등포구","note":""},{"tc":"서서울TC","province":"서울","area":"동작구","note":""},{"tc":"서서울TC","province":"서울","area":"관악구","note":""},{"tc":"서서울TC","province":"경기","area":"고양시","note":""},{"tc":"서서울TC","province":"경기","area":"김포시","note":""},{"tc":"서서울TC","province":"경기","area":"파주시","note":""},{"tc":"서서울TC","province":"인천","area":"강화군","note":""},{"tc":"동서울TC","province":"서울","area":"강동구","note":""},{"tc":"동서울TC","province":"서울","area":"광진구","note":""},{"tc":"동서울TC","province":"서울","area":"노원구","note":""},{"tc":"동서울TC","province":"서울","area":"성동구","note":""},{"tc":"동서울TC","province":"서울","area":"중랑구","note":""},{"tc":"동서울TC","province":"서울","area":"동대문구","note":""},{"tc":"동서울TC","province":"서울","area":"강북구","note":""},{"tc":"동서울TC","province":"서울","area":"성북구","note":""},{"tc":"동서울TC","province":"서울","area":"도봉구","note":""},{"tc":"동서울TC","province":"경기","area":"하남시","note":""},{"tc":"동서울TC","province":"경기","area":"의정부시","note":""},{"tc":"동서울TC","province":"경기","area":"구리시","note":""},{"tc":"동서울TC","province":"경기","area":"남양주시","note":""},{"tc":"동서울TC","province":"경기","area":"동두천시","note":""},{"tc":"동서울TC","province":"경기","area":"포천시","note":""},{"tc":"동서울TC","province":"경기","area":"연천군","note":""},{"tc":"동서울TC","province":"경기","area":"양주시","note":""},{"tc":"동서울TC","province":"강원","area":"철원군","note":""},{"tc":"인천TC","province":"서울","area":"구로구","note":""},{"tc":"인천TC","province":"서울","area":"금천구","note":""},{"tc":"인천TC","province":"경기","area":"광명시","note":""},{"tc":"인천TC","province":"경기","area":"부천시","note":""},{"tc":"인천TC","province":"경기","area":"시흥시","note":""},{"tc":"인천TC","province":"경기","area":"안산시","note":""},{"tc":"인천TC","province":"인천","area":"중구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"동구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"미추홀구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"연수구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"남동구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"부평구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"계양구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"서구","note":"강화군 제외"},{"tc":"평택TC","province":"경기","area":"안양시","note":""},{"tc":"평택TC","province":"경기","area":"의왕시","note":""},{"tc":"평택TC","province":"경기","area":"군포시","note":""},{"tc":"평택TC","province":"경기","area":"과천시","note":""},{"tc":"평택TC","province":"경기","area":"오산시","note":""},{"tc":"평택TC","province":"경기","area":"화성시","note":""},{"tc":"평택TC","province":"경기","area":"수원시","note":""},{"tc":"평택TC","province":"경기","area":"용인시","note":""},{"tc":"평택TC","province":"경기","area":"평택시","note":""},{"tc":"평택TC","province":"경기","area":"안성시","note":""},{"tc":"원주TC","province":"강원","area":"원주시","note":""},{"tc":"원주TC","province":"강원","area":"영월군","note":""},{"tc":"원주TC","province":"강원","area":"인제군","note":""},{"tc":"원주TC","province":"강원","area":"횡성군","note":""},{"tc":"원주TC","province":"강원","area":"춘천시","note":""},{"tc":"원주TC","province":"강원","area":"화천군","note":""},{"tc":"원주TC","province":"강원","area":"양구군","note":""},{"tc":"원주TC","province":"강원","area":"홍천군","note":""},{"tc":"원주TC","province":"강원","area":"평창군","note":""},{"tc":"원주TC","province":"경기","area":"이천시","note":""},{"tc":"원주TC","province":"경기","area":"양평군","note":""},{"tc":"원주TC","province":"경기","area":"여주시","note":""},{"tc":"원주TC","province":"경기","area":"가평군","note":""},{"tc":"원주TC","province":"충북","area":"충주시","note":""},{"tc":"원주TC","province":"충북","area":"제천시","note":""},{"tc":"원주TC","province":"충북","area":"괴산군","note":""},{"tc":"원주TC","province":"충북","area":"단양군","note":""},{"tc":"원주TC","province":"충북","area":"음성군","note":""},{"tc":"강릉TC","province":"강원","area":"강릉시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"동해시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"삼척시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"속초시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"태백시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"고성군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"양양군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"정선군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"남서울TC","province":"서울","area":"송파구","note":""},{"tc":"남서울TC","province":"서울","area":"강남구","note":""},{"tc":"남서울TC","province":"서울","area":"서초구","note":""},{"tc":"남서울TC","province":"경기","area":"성남시","note":""},{"tc":"남서울TC","province":"경기","area":"광주시","note":""},{"tc":"대구TC","province":"대구","area":"대구광역시","note":""},{"tc":"대구TC","province":"경북","area":"경산시","note":""},{"tc":"대구TC","province":"경북","area":"김천시","note":""},{"tc":"대구TC","province":"경북","area":"구미시","note":""},{"tc":"대구TC","province":"경북","area":"칠곡군","note":""},{"tc":"대구TC","province":"경북","area":"고령군","note":""},{"tc":"대구TC","province":"경북","area":"성주군","note":""},{"tc":"대구TC","province":"경북","area":"청도군","note":""},{"tc":"대구TC","province":"경북","area":"군위군","note":""},{"tc":"대구TC","province":"경남","area":"거창군","note":""},{"tc":"양산TC","province":"부산","area":"부산광역시","note":""},{"tc":"양산TC","province":"경남","area":"양산시","note":""},{"tc":"양산TC","province":"경남","area":"김해시","note":""},{"tc":"양산TC","province":"경남","area":"밀양시","note":""},{"tc":"포항TC","province":"경북","area":"포항시","note":""},{"tc":"포항TC","province":"경북","area":"경주시","note":""},{"tc":"포항TC","province":"경북","area":"영덕군","note":""},{"tc":"포항TC","province":"경북","area":"울진군","note":""},{"tc":"포항TC","province":"경북","area":"영천시","note":""},{"tc":"포항TC","province":"경북","area":"울릉군","note":""},{"tc":"안동TC","province":"경북","area":"안동시","note":""},{"tc":"안동TC","province":"경북","area":"상주시","note":""},{"tc":"안동TC","province":"경북","area":"문경시","note":""},{"tc":"안동TC","province":"경북","area":"영주시","note":""},{"tc":"안동TC","province":"경북","area":"의성군","note":""},{"tc":"안동TC","province":"경북","area":"영양군","note":""},{"tc":"안동TC","province":"경북","area":"청송군","note":""},{"tc":"안동TC","province":"경북","area":"봉화군","note":""},{"tc":"안동TC","province":"경북","area":"예천군","note":""},{"tc":"창원TC","province":"경남","area":"창원시","note":""},{"tc":"창원TC","province":"경남","area":"의령군","note":""},{"tc":"창원TC","province":"경남","area":"함안군","note":""},{"tc":"창원TC","province":"경남","area":"합천군","note":""},{"tc":"창원TC","province":"경남","area":"창녕군","note":""},{"tc":"울산TC","province":"울산","area":"울산광역시","note":""},{"tc":"사천TC","province":"경남","area":"진주시","note":""},{"tc":"사천TC","province":"경남","area":"통영시","note":""},{"tc":"사천TC","province":"경남","area":"사천시","note":""},{"tc":"사천TC","province":"경남","area":"거제시","note":""},{"tc":"사천TC","province":"경남","area":"고성군","note":""},{"tc":"사천TC","province":"경남","area":"남해군","note":""},{"tc":"사천TC","province":"경남","area":"하동군","note":""},{"tc":"사천TC","province":"경남","area":"산청군","note":""},{"tc":"사천TC","province":"경남","area":"함양군","note":""},{"tc":"제주DC","province":"제주","area":"제주특별자치도","note":""},{"tc":"광주TC","province":"광주","area":"광주광역시","note":""},{"tc":"광주TC","province":"전남","area":"나주시","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"화순군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"담양군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"장성군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"곡성군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"영광군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"함평군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전북","area":"고창군","note":""},{"tc":"광주TC","province":"전북","area":"순창군","note":""},{"tc":"광주TC","province":"전북","area":"남원시","note":""},{"tc":"광주TC","province":"전북","area":"정읍시","note":""},{"tc":"세종TC","province":"대전","area":"대전광역시","note":""},{"tc":"세종TC","province":"세종","area":"세종특별자치시","note":""},{"tc":"세종TC","province":"충북","area":"청주시","note":""},{"tc":"세종TC","province":"충북","area":"보은군","note":""},{"tc":"세종TC","province":"충북","area":"영동군","note":""},{"tc":"세종TC","province":"충북","area":"옥천군","note":""},{"tc":"세종TC","province":"충북","area":"진천군","note":""},{"tc":"세종TC","province":"충북","area":"증평군","note":""},{"tc":"세종TC","province":"충남","area":"공주시","note":""},{"tc":"세종TC","province":"충남","area":"계룡시","note":""},{"tc":"세종TC","province":"충남","area":"금산군","note":""},{"tc":"세종TC","province":"충남","area":"청양군","note":""},{"tc":"세종TC","province":"전북","area":"무주군","note":""},{"tc":"아산TC","province":"충남","area":"아산시","note":""},{"tc":"아산TC","province":"충남","area":"천안시","note":""},{"tc":"아산TC","province":"충남","area":"서산시","note":""},{"tc":"아산TC","province":"충남","area":"보령시","note":""},{"tc":"아산TC","province":"충남","area":"당진군","note":""},{"tc":"아산TC","province":"충남","area":"예산군","note":""},{"tc":"아산TC","province":"충남","area":"태안군","note":""},{"tc":"아산TC","province":"충남","area":"홍성군","note":""},{"tc":"익산TC","province":"전북","area":"전주시","note":""},{"tc":"익산TC","province":"전북","area":"김제시","note":""},{"tc":"익산TC","province":"전북","area":"군산시","note":""},{"tc":"익산TC","province":"전북","area":"익산시","note":""},{"tc":"익산TC","province":"전북","area":"임실군","note":""},{"tc":"익산TC","province":"전북","area":"장수군","note":""},{"tc":"익산TC","province":"전북","area":"진안군","note":""},{"tc":"익산TC","province":"전북","area":"부안군","note":""},{"tc":"익산TC","province":"전북","area":"완주군","note":""},{"tc":"익산TC","province":"충남","area":"서천군","note":""},{"tc":"익산TC","province":"충남","area":"논산시","note":""},{"tc":"익산TC","province":"충남","area":"부여군","note":""},{"tc":"순천TC","province":"전남","area":"순천시","note":""},{"tc":"순천TC","province":"전남","area":"광양시","note":""},{"tc":"순천TC","province":"전남","area":"여수시","note":""},{"tc":"순천TC","province":"전남","area":"구례군","note":""},{"tc":"순천TC","province":"전남","area":"고흥군","note":""},{"tc":"순천TC","province":"전남","area":"보성군","note":""},{"tc":"목포TC","province":"전남","area":"목포시","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"무안군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"해남군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"진도군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"강진군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"영암군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"신안군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"장흥군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"완도군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"함평군","note":"함평읍·학교면·엄다면"}]};
-let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]}, processes:[], processRecommendations:[], specCompare:[], notices:[], homeSettings:{}, updatedAt:"" };
+let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]}, processes:[], processRecommendations:[], specCompare:[], notices:[], displayCheckItems:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const ITEM_FAVORITES_KEY = "costco_item_hub_item_favorites_v1";
 const CONTENT_FAVORITES_KEY = "costco_item_hub_content_favorites_v1";
@@ -1306,7 +1359,7 @@ let lastVersionCheckAt = 0;
 const recentViewLogTimes = new Map();
 let currentPage = "home";
 let appBackStack = [];
-const APP_ROUTE_PAGES = new Set(["home","favorites","notice","noticeDetail","item","itemDetail","specTable","inquiry","dept","process"]);
+const APP_ROUTE_PAGES = new Set(["home","favorites","notice","noticeDetail","item","itemDetail","specTable","inquiry","dept","process","displayCheck"]);
 let recentExpanded = false;
 let itemMap = new Map();
 let selectedItemCategoryFilter = "전체";
@@ -1348,6 +1401,11 @@ let processDetailRow = null;
 let processDetailReturn = { mode:"home", query:"", filter:"전체" };
 let processHistoryView = "home";
 let compareFilter = "전체";
+let displayCheckState = new Map();
+let displayCheckPendingItemCode = "";
+let displayCheckUploadBusy = false;
+const displayCheckUploadResolvers = new Map();
+let displayCheckStatusLoadedKey = "";
 let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
@@ -1357,7 +1415,7 @@ const $ = (id)=>document.getElementById(id);
 const els = {
   status:$("status"), syncText:$("syncText"), topRefreshBtn:$("topRefreshBtn"), floatRefreshBtn:$("floatRefreshBtn"), mainNav:$("mainNav"), globalBackTop:$("globalBackTop"), globalBackBottom:$("globalBackBottom"), globalRefreshTop:$("globalRefreshTop"), globalHomeBottom:$("globalHomeBottom"), itemPageRefreshBtn:$("itemPageRefreshBtn"),
   navItem:$("navItem"), navSpecTable:$("navSpecTable"), navInquiry:$("navInquiry"), navDept:$("navDept"), navProcess:$("navProcess"),
-  pageHome:$("pageHome"), pageFavorites:$("pageFavorites"), pageNotice:$("pageNotice"), pageNoticeDetail:$("pageNoticeDetail"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), noticeDetailContent:$("noticeDetailContent"), favoritePageList:$("favoritePageList"), favoritePageCount:$("favoritePageCount"), homeFavoriteShortcut:$("homeFavoriteShortcut"), homeFavoriteCount:$("homeFavoriteCount"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"), dbRefreshConfirmModal:$("dbRefreshConfirmModal"), dbRefreshConfirmBtn:$("dbRefreshConfirmBtn"), dbRefreshCancelBtn:$("dbRefreshCancelBtn"), dbRefreshModal:$("dbRefreshModal"), dbRefreshMessage:$("dbRefreshMessage"), dbRefreshStopBtn:$("dbRefreshStopBtn"),
+  pageHome:$("pageHome"), pageFavorites:$("pageFavorites"), pageNotice:$("pageNotice"), pageNoticeDetail:$("pageNoticeDetail"), pageItem:$("pageItem"), pageItemDetail:$("pageItemDetail"), pageSpecTable:$("pageSpecTable"), pageInquiry:$("pageInquiry"), pageDept:$("pageDept"), pageProcess:$("pageProcess"), pageDisplayCheck:$("pageDisplayCheck"), noticePageList:$("noticePageList"), noticePageCount:$("noticePageCount"), noticePageRefreshBtn:$("noticePageRefreshBtn"), noticeDetailContent:$("noticeDetailContent"), favoritePageList:$("favoritePageList"), favoritePageCount:$("favoritePageCount"), homeFavoriteShortcut:$("homeFavoriteShortcut"), homeFavoriteCount:$("homeFavoriteCount"), homeGreeting:$("homeGreeting"), homeSub:$("homeSub"), homeNoticeTitle:$("homeNoticeTitle"), homeNoticeBody:$("homeNoticeBody"), homeBellBtn:$("homeBellBtn"), homeBellDot:$("homeBellDot"), homeAppVersion:$("homeAppVersion"), homeSearchInput:$("homeSearchInput"), homeSearchBtn:$("homeSearchBtn"), homeSearchSuggestions:$("homeSearchSuggestions"), homeRecentList:$("homeRecentList"), homeRecentToggle:$("homeRecentToggle"), homeRefreshBtn:$("homeRefreshBtn"), dbRefreshConfirmModal:$("dbRefreshConfirmModal"), dbRefreshConfirmBtn:$("dbRefreshConfirmBtn"), dbRefreshCancelBtn:$("dbRefreshCancelBtn"), dbRefreshModal:$("dbRefreshModal"), dbRefreshMessage:$("dbRefreshMessage"), dbRefreshStopBtn:$("dbRefreshStopBtn"),
   itemInput:$("itemInput"), itemSearchBtn:$("itemSearchBtn"), itemCountPill:$("itemCountPill"), itemCategoryChips:$("itemCategoryChips"), itemFilterSummary:$("itemFilterSummary"), quickList:$("quickList"), itemPagination:$("itemPagination"),
   productCard:$("productCard"), productEmpty:$("productEmpty"), photoCarousel:$("photoCarousel"), photoPrev:$("photoPrev"), photoNext:$("photoNext"), photoDots:$("photoDots"), photoCount:$("photoCount"), photoEmpty:$("photoEmpty"), photoLabel:$("photoLabel"),
   modelName:$("modelName"), productName:$("productName"), metaList:$("metaList"), itemPill:$("itemPill"), itemFavoriteBtn:$("itemFavoriteBtn"), detailTabs:$("detailTabs"), detailBox:$("detailBox"), itemDetailContent:$("itemDetailContent"),
@@ -1365,6 +1423,7 @@ const els = {
   processSearch:$("processSearch"), processSearchBtn:$("processSearchBtn"), processSearchWrap:$("processSearchWrap"), processPageHeading:$("processPageHeading"), processSuggest:$("processSuggest"), processRecommendSection:$("processRecommendSection"), processRecommendChips:$("processRecommendChips"), processTypeSection:$("processTypeSection"), processTypeList:$("processTypeList"), processResultSection:$("processResultSection"), processResultTitle:$("processResultTitle"), processResultCount:$("processResultCount"), processTypeResetBtn:$("processTypeResetBtn"), processList:$("processList"), processCountPill:$("processCountPill"), processDetailSection:$("processDetailSection"), processDetailView:$("processDetailView"),
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
   inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryOrderNo:$("inquiryOrderNo"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"), inquiryGuideModal:$("inquiryGuideModal"), inquiryGuideClose:$("inquiryGuideClose"), inquiryGuideConfirm:$("inquiryGuideConfirm"),
+  displayCheckStore:$("displayCheckStore"), displayCheckUploader:$("displayCheckUploader"), displayCheckDate:$("displayCheckDate"), displayCheckList:$("displayCheckList"), displayCheckStatus:$("displayCheckStatus"), displayCheckProgressText:$("displayCheckProgressText"), displayCheckProgressBar:$("displayCheckProgressBar"), displayCheckCamera:$("displayCheckCamera"), displayCheckRefreshBtn:$("displayCheckRefreshBtn"), displayCheckUploadFrame:$("displayCheckUploadFrame"),
   imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption"),
   specViewer:$("specViewer"), specBackBtn:$("specBackBtn"), specViewerTitle:$("specViewerTitle"), specViewerCount:$("specViewerCount"), specCarousel:$("specCarousel"), specPrev:$("specPrev"), specNext:$("specNext"), specDots:$("specDots"), specHelpGuide:$("specHelpGuide"), specHelpBtn:$("specHelpBtn"), specHelpModal:$("specHelpModal"), specHelpClose:$("specHelpClose"), specHelpList:$("specHelpList"), specHelpTitle:$("specHelpTitle")
 };
@@ -1394,6 +1453,7 @@ function init(){
 }
 
 function bindEvents(){
+  bindDisplayCheckEvents();
   document.querySelectorAll(".page-back-btn").forEach(btn=>btn.addEventListener("click",handleAppBack));
   if(els.globalBackTop) els.globalBackTop.addEventListener("click",handleAppBack);
   if(els.globalBackBottom) els.globalBackBottom.addEventListener("click",handleAppBack);
@@ -1689,7 +1749,7 @@ function routeFallbackParent(page){
 }
 
 function showPage(page, push=true){
-  const map = { home:els.pageHome, favorites:els.pageFavorites, notice:els.pageNotice, noticeDetail:els.pageNoticeDetail, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess };
+  const map = { home:els.pageHome, favorites:els.pageFavorites, notice:els.pageNotice, noticeDetail:els.pageNoticeDetail, item:els.pageItem, itemDetail:els.pageItemDetail, specTable:els.pageSpecTable, inquiry:els.pageInquiry, dept:els.pageDept, process:els.pageProcess, displayCheck:els.pageDisplayCheck };
   const target = map[page] ? page : "home";
   if(push && currentPage && currentPage !== target){
     const nextTrail = appBackStack.slice();
@@ -1726,6 +1786,7 @@ function showPage(page, push=true){
   if(target==="favorites") renderFavoritePage();
   if(target==="notice") renderNoticePage();
   if(target==="noticeDetail") renderNoticeDetail();
+  if(target==="displayCheck") openDisplayCheckPage();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -3169,6 +3230,7 @@ function renderAll(){
   renderCompareChips();
   renderSpecCompare();
   renderProcessScreen(false);
+  if(currentPage === "displayCheck") renderDisplayCheckPage();
 }
 
 function searchItem(showError=true){
@@ -4372,7 +4434,7 @@ function resolveProcessImageUrl(value){
   let url = "";
   try{ url = new URL(encodedPath, document.baseURI).href; }
   catch(err){ url = encodedPath; }
-  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v123");
+  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v124");
   return url + (url.includes("?") ? "&" : "?") + "v=" + bust;
 }
 
@@ -4385,7 +4447,7 @@ function processImageFallbackUrl(url){
     const filePath = parsed.pathname.slice(idx + marker.length).split("/").map(part=>{
       try{return encodeURIComponent(decodeURIComponent(part));}catch(err){return encodeURIComponent(part);}
     }).join("/");
-    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v123");
+    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v124");
   }catch(err){ return ""; }
 }
 
@@ -5498,6 +5560,293 @@ function formatToday(){ const d=new Date(); return `${d.getFullYear()}.${String(
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
+
+
+// ============================================================================
+// v124 진열 연출 점검 촬영
+// ============================================================================
+const DISPLAY_CHECK_FALLBACK_ITEMS = [
+  {sort:1,code:"qled_tv",title:"QLED TV",pptCategory:"TV",guide:"QLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"qled_tv_example.svg"},
+  {sort:2,code:"oled_tv",title:"OLED TV",pptCategory:"TV",guide:"OLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"oled_tv_example.svg"},
+  {sort:3,code:"tv_fixture",title:"TV 2단 집기",pptCategory:"TV",guide:"TV 2단 집기 전체와 주변 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"tv_fixture_example.svg"},
+  {sort:4,code:"stand_aircon",title:"스탠드 에어컨",pptCategory:"AC",guide:"스탠드 에어컨 본체와 행사 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"stand_aircon_example.svg"},
+  {sort:5,code:"wall_aircon",title:"벽걸이 에어컨",pptCategory:"AC",guide:"벽걸이 에어컨과 실내기 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"wall_aircon_example.svg"},
+  {sort:6,code:"system_aircon",title:"시스템 에어컨",pptCategory:"AC",guide:"시스템 에어컨 진열물과 안내물이 함께 보이도록 촬영해 주세요.",exampleImage:"system_aircon_example.svg"},
+  {sort:7,code:"window_aircon",title:"창문형 에어컨",pptCategory:"AC",guide:"창문형 에어컨 본체와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"window_aircon_example.svg"},
+  {sort:8,code:"fridge_fixture_1",title:"냉장고 집기 1",pptCategory:"REF",guide:"냉장고 집기 전체와 제품 배열이 보이도록 촬영해 주세요.",exampleImage:"fridge_fixture_1_example.svg"},
+  {sort:9,code:"fridge_fixture_2",title:"냉장고 집기 2",pptCategory:"REF",guide:"추가 냉장고 집기와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"fridge_fixture_2_example.svg"},
+  {sort:10,code:"kimchi_fixture",title:"김치냉장고 집기",pptCategory:"REF",guide:"김치냉장고 진열 전체와 가격표를 촬영해 주세요.",exampleImage:"kimchi_fixture_example.svg"},
+  {sort:11,code:"clothing_care_fixture",title:"의류케어 집기",pptCategory:"REF",guide:"세탁기·건조기·의류케어 집기 전체가 보이도록 촬영해 주세요.",exampleImage:"clothing_care_fixture_example.svg"},
+  {sort:12,code:"monitor_fixture",title:"모니터/무빙스타일",pptCategory:"MON",guide:"모니터 또는 무빙스타일 진열과 가격표를 함께 촬영해 주세요.",exampleImage:"monitor_fixture_example.svg"},
+  {sort:13,code:"cooking_fixture",title:"조리기기 집기",pptCategory:"COOK",guide:"조리기기 제품과 행사 안내물이 보이도록 촬영해 주세요.",exampleImage:"cooking_fixture_example.svg"},
+  {sort:14,code:"cleaner_fixture",title:"청소기 진열",pptCategory:"ETC",guide:"청소기 제품과 액세서리 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"cleaner_fixture_example.svg"},
+  {sort:15,code:"av_fixture",title:"AV/사운드바 진열",pptCategory:"ETC",guide:"사운드바·AV 제품과 TV 연계 진열이 보이도록 촬영해 주세요.",exampleImage:"av_fixture_example.svg"},
+  {sort:16,code:"store_overview",title:"매장 전체 전경",pptCategory:"ETC",guide:"삼성전자 진열 구역 전체 동선과 노출 상태가 보이도록 촬영해 주세요.",exampleImage:"store_overview_example.svg"}
+];
+const DISPLAY_CHECK_STORES = ["양평점","대구점","대전점","양재점","상봉점","일산점","부산점","울산점","광명점","천안점","의정부점","공세점","송도점","세종점","혁신점","하남점","김해점","고척점","청라점","평택점"];
+
+function bindDisplayCheckEvents(){
+  if(els.displayCheckStore){
+    els.displayCheckStore.innerHTML = '<option value="">점포를 선택하세요</option>' + DISPLAY_CHECK_STORES.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
+    els.displayCheckStore.addEventListener("change",()=>{
+      displayCheckStatusLoadedKey = "";
+      displayCheckState = new Map();
+      renderDisplayCheckPage();
+      if(els.displayCheckStore.value) loadDisplayCheckStatus(true);
+    });
+  }
+  if(els.displayCheckDate){
+    els.displayCheckDate.value = getKoreaDateString();
+    els.displayCheckDate.addEventListener("change",()=>{
+      displayCheckStatusLoadedKey = "";
+      displayCheckState = new Map();
+      renderDisplayCheckPage();
+      if(els.displayCheckStore?.value) loadDisplayCheckStatus(true);
+    });
+  }
+  if(els.displayCheckUploader){
+    try{ els.displayCheckUploader.value = localStorage.getItem("costco_hub_display_check_uploader") || ""; }catch(e){}
+    els.displayCheckUploader.addEventListener("input",()=>{
+      try{ localStorage.setItem("costco_hub_display_check_uploader", els.displayCheckUploader.value.trim()); }catch(e){}
+    });
+  }
+  if(els.displayCheckRefreshBtn) els.displayCheckRefreshBtn.addEventListener("click",()=>loadDisplayCheckStatus(true));
+  if(els.displayCheckCamera) els.displayCheckCamera.addEventListener("change",handleDisplayCheckCameraFile);
+  if(els.displayCheckList){
+    els.displayCheckList.addEventListener("click",event=>{
+      const capture = event.target.closest("[data-display-capture]");
+      if(capture){ startDisplayCheckCapture(capture.dataset.displayCapture || ""); return; }
+      const preview = event.target.closest("[data-display-preview]");
+      if(preview){ openDisplayCheckPreview(preview.dataset.displayPreview || ""); return; }
+      const example = event.target.closest("[data-display-example]");
+      if(example){
+        const item = displayCheckItems().find(x=>x.code === example.dataset.displayExample);
+        const url = item ? displayCheckExampleUrl(item.exampleImage) : "";
+        if(url) openImageModal([url],0,`${item?.title || "촬영"} 예시`);
+      }
+    });
+  }
+  window.addEventListener("message",event=>{
+    const data = event.data || {};
+    if(data.source !== "COSTCO_HUB_DISPLAY_CHECK_UPLOAD" || !data.uploadToken) return;
+    const pending = displayCheckUploadResolvers.get(String(data.uploadToken));
+    if(!pending) return;
+    displayCheckUploadResolvers.delete(String(data.uploadToken));
+    clearTimeout(pending.timer);
+    if(data.ok) pending.resolve(data);
+    else pending.reject(new Error(data.message || "사진 등록에 실패했습니다."));
+  });
+}
+
+function getKoreaDateString(){
+  const now = new Date(Date.now() + 9*60*60*1000);
+  return now.toISOString().slice(0,10);
+}
+
+function displayCheckItems(){
+  const rows = Array.isArray(DB.displayCheckItems) && DB.displayCheckItems.length ? DB.displayCheckItems : DISPLAY_CHECK_FALLBACK_ITEMS;
+  return rows.map((row,index)=>({
+    sort:Number(row.sort)||index+1,
+    code:safe(row.code||row.itemCode,"").toLowerCase(),
+    title:safe(row.title||row.itemName,`항목 ${index+1}`),
+    pptCategory:safe(row.pptCategory,"ETC").toUpperCase(),
+    guide:safe(row.guide||row.description,"촬영 예시와 동일한 구도로 촬영해 주세요."),
+    exampleImage:safe(row.exampleImage,"")
+  })).filter(x=>x.code).sort((a,b)=>a.sort-b.sort);
+}
+
+function displayCheckExampleUrl(value){
+  const v = safe(value,"");
+  if(!v) return "";
+  if(/^https?:\/\//i.test(v) || /^data:/i.test(v)) return v;
+  return `./images/display-check/${v.replace(/^\.?\/?images\/display-check\//i,"")}`;
+}
+
+function openDisplayCheckPage(){
+  if(els.displayCheckDate && !els.displayCheckDate.value) els.displayCheckDate.value = getKoreaDateString();
+  renderDisplayCheckPage();
+  if(els.displayCheckStore?.value) loadDisplayCheckStatus(false);
+}
+
+function setDisplayCheckStatus(message,type=""){
+  if(!els.displayCheckStatus) return;
+  els.displayCheckStatus.textContent = message;
+  els.displayCheckStatus.className = "display-check-status" + (type ? " "+type : "");
+}
+
+function renderDisplayCheckPage(){
+  if(!els.displayCheckList) return;
+  const items = displayCheckItems();
+  const store = els.displayCheckStore?.value || "";
+  const completed = items.filter(item=>displayCheckState.get(item.code)?.done).length;
+  if(els.displayCheckProgressText) els.displayCheckProgressText.textContent = `${completed} / ${items.length}`;
+  if(els.displayCheckProgressBar) els.displayCheckProgressBar.style.width = `${items.length ? Math.round(completed/items.length*100) : 0}%`;
+  if(!store){
+    els.displayCheckList.innerHTML = '<div class="display-check-empty">점포를 먼저 선택해 주세요.<br>선택 후 촬영해야 할 항목이 순서대로 표시됩니다.</div>';
+    return;
+  }
+  els.displayCheckList.innerHTML = items.map(item=>{
+    const state = displayCheckState.get(item.code) || {};
+    const cls = state.uploading ? " uploading" : (state.done ? " done" : "");
+    const status = state.uploading ? "사진을 업로드하고 있습니다…" : (state.done ? `촬영 완료${state.uploadedAt ? " · "+esc(state.uploadedAt) : ""}` : "미촬영");
+    const buttonText = state.uploading ? "등록 중…" : (state.done ? "다시 촬영" : "촬영하기");
+    const exampleUrl = displayCheckExampleUrl(item.exampleImage);
+    return `<article class="display-check-card${cls}" data-display-code="${esc(item.code)}">
+      <div class="display-check-example" data-display-example="${esc(item.code)}">
+        ${exampleUrl ? `<img src="${esc(exampleUrl)}" alt="${esc(item.title)} 촬영 예시" onerror="this.style.display='none'">` : ""}
+        <span>촬영 예시</span>
+      </div>
+      <div class="display-check-card-copy">
+        <div class="display-check-card-head"><span class="display-check-card-no">${String(item.sort).padStart(2,"0")}</span><div class="display-check-card-title">${esc(item.title)}</div></div>
+        <div class="display-check-card-guide">${esc(item.guide)}</div>
+        <div class="display-check-card-state">${status}</div>
+      </div>
+      <div class="display-check-card-action">
+        <button class="display-check-capture-btn" type="button" data-display-capture="${esc(item.code)}" ${state.uploading?"disabled":""}>${buttonText}</button>
+        <button class="display-check-preview-btn" type="button" data-display-preview="${esc(item.code)}" ${state.previewUrl||state.imageUrl?"":"hidden"}>촬영 사진 보기</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+async function loadDisplayCheckStatus(force=false){
+  const store = els.displayCheckStore?.value || "";
+  const shotDate = els.displayCheckDate?.value || getKoreaDateString();
+  if(!store){ setDisplayCheckStatus("점포를 선택해 주세요.","err"); return; }
+  const key = `${store}|${shotDate}`;
+  if(!force && displayCheckStatusLoadedKey === key) return;
+  setDisplayCheckStatus("기존 촬영 현황을 확인하고 있습니다.","loading");
+  try{
+    const result = await apiGet({action:"displayCheckPhotos",store,shotDate,latestOnly:"1",includeData:"0",max:"40"});
+    if(!result?.ok) throw new Error(result?.message || "촬영 현황을 불러오지 못했습니다.");
+    displayCheckState = new Map();
+    (result.photos || []).forEach(row=>displayCheckState.set(row.itemCode,{
+      done:true,imageUrl:row.imageUrl||"",recordId:row.fileId||"",uploadedAt:row.uploadedAt||""
+    }));
+    displayCheckStatusLoadedKey = key;
+    renderDisplayCheckPage();
+    const total = displayCheckItems().length;
+    const done = Array.from(displayCheckState.values()).filter(x=>x.done).length;
+    setDisplayCheckStatus(`${store} ${shotDate} 촬영 현황: ${done}/${total}개 완료`, done===total?"ok":"");
+  }catch(err){
+    setDisplayCheckStatus(`촬영 현황 확인 실패: ${err.message || err}`,"err");
+  }
+}
+
+function startDisplayCheckCapture(code){
+  const store = els.displayCheckStore?.value || "";
+  if(!store){ setDisplayCheckStatus("점포를 먼저 선택해 주세요.","err"); els.displayCheckStore?.focus(); return; }
+  if(displayCheckUploadBusy){ setDisplayCheckStatus("현재 다른 사진을 등록 중입니다. 잠시만 기다려 주세요.","loading"); return; }
+  const item = displayCheckItems().find(x=>x.code===code);
+  if(!item) return;
+  displayCheckPendingItemCode = code;
+  els.displayCheckCamera.value = "";
+  els.displayCheckCamera.click();
+}
+
+async function handleDisplayCheckCameraFile(event){
+  const file = event.target.files && event.target.files[0];
+  const code = displayCheckPendingItemCode;
+  if(!file || !code) return;
+  const item = displayCheckItems().find(x=>x.code===code);
+  if(!item) return;
+  const store = els.displayCheckStore?.value || "";
+  const shotDate = els.displayCheckDate?.value || getKoreaDateString();
+  const uploader = els.displayCheckUploader?.value.trim() || "";
+  displayCheckUploadBusy = true;
+  const previous = displayCheckState.get(code) || {};
+  displayCheckState.set(code,{...previous,uploading:true});
+  renderDisplayCheckPage();
+  setDisplayCheckStatus(`${item.title} 사진을 압축하고 업로드하고 있습니다.`,"loading");
+  try{
+    const compressed = await compressDisplayCheckImage(file,1600,.80);
+    displayCheckState.set(code,{...previous,uploading:true,previewUrl:compressed.dataUrl});
+    renderDisplayCheckPage();
+    const result = await submitDisplayCheckUpload({
+      store,shotDate,uploader,
+      itemCode:item.code,itemName:item.title,pptCategory:item.pptCategory,
+      imageData:compressed.dataUrl
+    });
+    displayCheckState.set(code,{
+      done:true,uploading:false,previewUrl:compressed.dataUrl,imageUrl:result.imageUrl||"",
+      recordId:result.fileId||result.recordId||"",uploadedAt:"방금 등록"
+    });
+    displayCheckStatusLoadedKey = `${store}|${shotDate}`;
+    renderDisplayCheckPage();
+    setDisplayCheckStatus(`${item.title} 사진이 진열연출앱에 자동 등록되었습니다.`,"ok");
+  }catch(err){
+    displayCheckState.set(code,{...previous,uploading:false});
+    renderDisplayCheckPage();
+    setDisplayCheckStatus(`${item.title} 등록 실패: ${err.message || err}`,"err");
+  }finally{
+    displayCheckUploadBusy = false;
+    displayCheckPendingItemCode = "";
+    event.target.value = "";
+  }
+}
+
+function compressDisplayCheckImage(file,maxSide=1600,quality=.80){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onerror = ()=>reject(new Error("사진을 읽지 못했습니다."));
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onerror = ()=>reject(new Error("이 사진 형식은 처리할 수 없습니다. 카메라로 다시 촬영해 주세요."));
+      img.onload = ()=>{
+        const ratio = Math.min(1,maxSide/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height));
+        const width = Math.max(1,Math.round((img.naturalWidth||img.width)*ratio));
+        const height = Math.max(1,Math.round((img.naturalHeight||img.height)*ratio));
+        const canvas = document.createElement("canvas");
+        canvas.width=width;canvas.height=height;
+        const ctx=canvas.getContext("2d",{alpha:false});
+        ctx.fillStyle="#fff";ctx.fillRect(0,0,width,height);
+        ctx.drawImage(img,0,0,width,height);
+        const dataUrl=canvas.toDataURL("image/jpeg",quality);
+        resolve({dataUrl,width,height,byteSize:Math.round((dataUrl.split(",")[1]||"").length*3/4)});
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function submitDisplayCheckUpload(payload){
+  return new Promise((resolve,reject)=>{
+    const token = `dc_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const timer = setTimeout(()=>{
+      displayCheckUploadResolvers.delete(token);
+      reject(new Error("업로드 응답 시간이 초과되었습니다. 인터넷 연결을 확인해 주세요."));
+    },120000);
+    displayCheckUploadResolvers.set(token,{resolve,reject,timer});
+    const form=document.createElement("form");
+    form.method="POST";
+    form.action=CONFIG.APPS_SCRIPT_URL;
+    form.target="displayCheckUploadFrame";
+    form.style.display="none";
+    const values={action:"uploadDisplayCheckPhoto",uploadToken:token,...payload};
+    Object.entries(values).forEach(([name,value])=>{
+      const input=document.createElement(name==="imageData"?"textarea":"input");
+      if(input.tagName==="INPUT") input.type="hidden";
+      input.name=name;
+      input.value=String(value??"");
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    try{ form.submit(); }
+    catch(err){
+      clearTimeout(timer);displayCheckUploadResolvers.delete(token);form.remove();reject(err);return;
+    }
+    setTimeout(()=>form.remove(),1500);
+  });
+}
+
+function openDisplayCheckPreview(code){
+  const state=displayCheckState.get(code)||{};
+  const url=state.previewUrl||state.imageUrl||"";
+  const item=displayCheckItems().find(x=>x.code===code);
+  if(url) openImageModal([url],0,`${item?.title || "촬영"} 사진`);
+}
+
 </script>
 
 <script id="v103-map-final-script">
@@ -6415,7 +6764,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v123';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v124';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -6550,7 +6899,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v123';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v124';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
