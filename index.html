@@ -794,7 +794,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v127</span>
+            <span id="homeAppVersion" class="home-app-version">v128</span>
           </button>
         </div>
         <div class="home-search">
@@ -1262,7 +1262,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v127",
+  APP_VERSION: "v128",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1280,7 +1280,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v127"
+  SPEC_IMAGE_CACHE_BUST: "v128"
 };
 
 const DETAIL_TABS = [
@@ -1407,6 +1407,8 @@ let displayCheckPendingItemCode = "";
 let displayCheckCaptureSequence = 0;
 const displayCheckUploadResolvers = new Map();
 let displayCheckStatusLoadedKey = "";
+let displayCheckItemsLoading = null;
+let displayCheckItemsLoadedAt = 0;
 let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
@@ -4438,7 +4440,7 @@ function resolveProcessImageUrl(value){
   let url = "";
   try{ url = new URL(encodedPath, document.baseURI).href; }
   catch(err){ url = encodedPath; }
-  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v127");
+  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v128");
   return url + (url.includes("?") ? "&" : "?") + "v=" + bust;
 }
 
@@ -4451,7 +4453,7 @@ function processImageFallbackUrl(url){
     const filePath = parsed.pathname.slice(idx + marker.length).split("/").map(part=>{
       try{return encodeURIComponent(decodeURIComponent(part));}catch(err){return encodeURIComponent(part);}
     }).join("/");
-    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v127");
+    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v128");
   }catch(err){ return ""; }
 }
 
@@ -5570,22 +5572,22 @@ if("serviceWorker" in navigator){
 // v124 진열 연출 점검 촬영
 // ============================================================================
 const DISPLAY_CHECK_FALLBACK_ITEMS = [
-  {sort:1,code:"qled_tv",title:"QLED TV",pptCategory:"TV",guide:"QLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"A16.jpg"},
-  {sort:2,code:"oled_tv",title:"OLED TV",pptCategory:"TV",guide:"OLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"oled_tv_example.svg"},
-  {sort:3,code:"tv_fixture",title:"TV 2단 집기",pptCategory:"TV",guide:"TV 2단 집기 전체와 주변 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"tv_fixture_example.svg"},
-  {sort:4,code:"stand_aircon",title:"스탠드 에어컨",pptCategory:"AC",guide:"스탠드 에어컨 본체와 행사 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"stand_aircon_example.svg"},
-  {sort:5,code:"wall_aircon",title:"벽걸이 에어컨",pptCategory:"AC",guide:"벽걸이 에어컨과 실내기 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"wall_aircon_example.svg"},
-  {sort:6,code:"system_aircon",title:"시스템 에어컨",pptCategory:"AC",guide:"시스템 에어컨 진열물과 안내물이 함께 보이도록 촬영해 주세요.",exampleImage:"system_aircon_example.svg"},
-  {sort:7,code:"window_aircon",title:"창문형 에어컨",pptCategory:"AC",guide:"창문형 에어컨 본체와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"window_aircon_example.svg"},
-  {sort:8,code:"fridge_fixture_1",title:"냉장고 집기 1",pptCategory:"REF",guide:"냉장고 집기 전체와 제품 배열이 보이도록 촬영해 주세요.",exampleImage:"fridge_fixture_1_example.svg"},
-  {sort:9,code:"fridge_fixture_2",title:"냉장고 집기 2",pptCategory:"REF",guide:"추가 냉장고 집기와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"fridge_fixture_2_example.svg"},
-  {sort:10,code:"kimchi_fixture",title:"김치냉장고 집기",pptCategory:"REF",guide:"김치냉장고 진열 전체와 가격표를 촬영해 주세요.",exampleImage:"kimchi_fixture_example.svg"},
-  {sort:11,code:"clothing_care_fixture",title:"의류케어 집기",pptCategory:"REF",guide:"세탁기·건조기·의류케어 집기 전체가 보이도록 촬영해 주세요.",exampleImage:"clothing_care_fixture_example.svg"},
-  {sort:12,code:"monitor_fixture",title:"모니터/무빙스타일",pptCategory:"MON",guide:"모니터 또는 무빙스타일 진열과 가격표를 함께 촬영해 주세요.",exampleImage:"monitor_fixture_example.svg"},
-  {sort:13,code:"cooking_fixture",title:"조리기기 집기",pptCategory:"COOK",guide:"조리기기 제품과 행사 안내물이 보이도록 촬영해 주세요.",exampleImage:"cooking_fixture_example.svg"},
-  {sort:14,code:"cleaner_fixture",title:"청소기 진열",pptCategory:"ETC",guide:"청소기 제품과 액세서리 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"cleaner_fixture_example.svg"},
-  {sort:15,code:"av_fixture",title:"AV/사운드바 진열",pptCategory:"ETC",guide:"사운드바·AV 제품과 TV 연계 진열이 보이도록 촬영해 주세요.",exampleImage:"av_fixture_example.svg"},
-  {sort:16,code:"store_overview",title:"매장 전체 전경",pptCategory:"ETC",guide:"삼성전자 진열 구역 전체 동선과 노출 상태가 보이도록 촬영해 주세요.",exampleImage:"store_overview_example.svg"}
+  {sort:1,code:"qled_tv",title:"QLED TV",pptCategory:"TV",guide:"QLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"A01.jpg"},
+  {sort:2,code:"oled_tv",title:"OLED TV",pptCategory:"TV",guide:"OLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"A02.jpg"},
+  {sort:3,code:"tv_fixture",title:"TV 2단 집기",pptCategory:"TV",guide:"TV 2단 집기 전체와 주변 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A03.jpg"},
+  {sort:4,code:"stand_aircon",title:"스탠드 에어컨",pptCategory:"AC",guide:"스탠드 에어컨 본체와 행사 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A04.jpg"},
+  {sort:5,code:"wall_aircon",title:"벽걸이 에어컨",pptCategory:"AC",guide:"벽걸이 에어컨과 실내기 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A05.jpg"},
+  {sort:6,code:"system_aircon",title:"시스템 에어컨",pptCategory:"AC",guide:"시스템 에어컨 진열물과 안내물이 함께 보이도록 촬영해 주세요.",exampleImage:"A06.jpg"},
+  {sort:7,code:"window_aircon",title:"창문형 에어컨",pptCategory:"AC",guide:"창문형 에어컨 본체와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A07.jpg"},
+  {sort:8,code:"fridge_fixture_1",title:"냉장고 집기 1",pptCategory:"REF",guide:"냉장고 집기 전체와 제품 배열이 보이도록 촬영해 주세요.",exampleImage:"A08.jpg"},
+  {sort:9,code:"fridge_fixture_2",title:"냉장고 집기 2",pptCategory:"REF",guide:"추가 냉장고 집기와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A09.jpg"},
+  {sort:10,code:"kimchi_fixture",title:"김치냉장고 집기",pptCategory:"REF",guide:"김치냉장고 진열 전체와 가격표를 촬영해 주세요.",exampleImage:"A10.jpg"},
+  {sort:11,code:"clothing_care_fixture",title:"의류케어 집기",pptCategory:"REF",guide:"세탁기·건조기·의류케어 집기 전체가 보이도록 촬영해 주세요.",exampleImage:"A11.jpg"},
+  {sort:12,code:"monitor_fixture",title:"모니터/무빙스타일",pptCategory:"MON",guide:"모니터 또는 무빙스타일 진열과 가격표를 함께 촬영해 주세요.",exampleImage:"A12.jpg"},
+  {sort:13,code:"cooking_fixture",title:"조리기기 집기",pptCategory:"COOK",guide:"조리기기 제품과 행사 안내물이 보이도록 촬영해 주세요.",exampleImage:"A13.jpg"},
+  {sort:14,code:"cleaner_fixture",title:"청소기 진열",pptCategory:"ETC",guide:"청소기 제품과 액세서리 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A14.jpg"},
+  {sort:15,code:"av_fixture",title:"AV/사운드바 진열",pptCategory:"ETC",guide:"사운드바·AV 제품과 TV 연계 진열이 보이도록 촬영해 주세요.",exampleImage:"A15.jpg"},
+  {sort:16,code:"store_overview",title:"매장 전체 전경",pptCategory:"ETC",guide:"삼성전자 진열 구역 전체 동선과 노출 상태가 보이도록 촬영해 주세요.",exampleImage:"A16.jpg"}
 ];
 const DISPLAY_CHECK_STORES = ["양평점","대구점","대전점","양재점","상봉점","일산점","부산점","울산점","광명점","천안점","의정부점","공세점","송도점","세종점","혁신점","하남점","김해점","고척점","청라점","평택점"];
 
@@ -5688,14 +5690,21 @@ function bindDisplayCheckEvents(){
 
 function displayCheckItems(){
   const rows = Array.isArray(DB.displayCheckItems) && DB.displayCheckItems.length ? DB.displayCheckItems : DISPLAY_CHECK_FALLBACK_ITEMS;
-  return rows.map((row,index)=>({
-    sort:Number(row.sort)||index+1,
-    code:safe(row.code||row.itemCode,"").toLowerCase(),
-    title:safe(row.title||row.itemName,`항목 ${index+1}`),
-    pptCategory:safe(row.pptCategory,"ETC").toUpperCase(),
-    guide:safe(row.guide||row.description,"촬영 예시와 동일한 구도로 촬영해 주세요."),
-    exampleImage:safe(row.exampleImage,`A${String(index+1).padStart(2,"0")}.jpg`)
-  })).filter(x=>x.code).sort((a,b)=>a.sort-b.sort);
+  return rows.map((row,index)=>{
+    const sort = Number(row.sort) || index + 1;
+    const indexedImage = `A${String(sort).padStart(2,"0")}.jpg`;
+    const rawImage = safe(row.exampleImage,"");
+    // v128: 과거 기본 SVG 또는 비어 있는 값은 항목 순번별 A01~A16 JPG로 자동 보정합니다.
+    const exampleImage = (!rawImage || /_example\.svg(?:[?#].*)?$/i.test(rawImage)) ? indexedImage : rawImage;
+    return {
+      sort,
+      code:safe(row.code||row.itemCode,"").toLowerCase(),
+      title:safe(row.title||row.itemName,`항목 ${index+1}`),
+      pptCategory:safe(row.pptCategory,"ETC").toUpperCase(),
+      guide:safe(row.guide||row.description,"촬영 예시와 동일한 구도로 촬영해 주세요."),
+      exampleImage
+    };
+  }).filter(x=>x.code).sort((a,b)=>a.sort-b.sort);
 }
 
 function displayCheckExampleFile(value){
@@ -5709,8 +5718,8 @@ function displayCheckExampleCandidates(value){
   if(/^https?:\/\//i.test(v)) return [v];
   const file = displayCheckExampleFile(v);
   if(!file) return [];
-  const local = new URL(`./images/display-check/${file}`, document.baseURI).href + `?v=126`;
-  const raw = `https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/display-check/${encodeURIComponent(file).replace(/%2F/gi,"/")}?v=126`;
+  const local = new URL(`./images/display-check/${file}`, document.baseURI).href + `?v=128`;
+  const raw = `https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/display-check/${encodeURIComponent(file).replace(/%2F/gi,"/")}?v=128`;
   return [local,raw];
 }
 
@@ -5726,9 +5735,35 @@ function displayCheckExampleMarkup(item){
   return `<img src="${esc(first)}" data-fallback-src="${esc(fallback)}" alt="${esc(item.title)} 촬영 예시" onerror="if(this.dataset.fallbackSrc&&!this.dataset.fallbackTried){this.dataset.fallbackTried='1';this.src=this.dataset.fallbackSrc}else{this.style.display='none';this.parentElement.classList.add('image-missing')}">`;
 }
 
+async function ensureDisplayCheckItemsLoaded(force=false){
+  const now = Date.now();
+  if(displayCheckItemsLoading) return displayCheckItemsLoading;
+  if(!force && displayCheckItemsLoadedAt && now - displayCheckItemsLoadedAt < 5*60*1000) return DB.displayCheckItems;
+
+  displayCheckItemsLoading = (async()=>{
+    try{
+      const result = await apiGet({ action:"displayCheckItems", _:String(Date.now()) });
+      if(result && result.ok !== false && Array.isArray(result.items) && result.items.length){
+        DB.displayCheckItems = result.items;
+        displayCheckItemsLoadedAt = Date.now();
+        if(currentPage === "displayCheck") renderDisplayCheckPage();
+        return result.items;
+      }
+    }catch(e){
+      console.warn("진열 연출 항목 최신 정보 확인 실패:", e);
+    }finally{
+      displayCheckItemsLoading = null;
+    }
+    return DB.displayCheckItems;
+  })();
+  return displayCheckItemsLoading;
+}
+
 function openDisplayCheckPage(){
   populateDisplayCheckWeekOptions();
   renderDisplayCheckPage();
+  // v128: 저장 DB에 촬영 항목 설정이 없거나 오래되어도 시트의 최신 예시 이미지 파일명을 별도로 확인합니다.
+  ensureDisplayCheckItemsLoaded(false);
   if(els.displayCheckStore?.value) loadDisplayCheckStatus(false);
 }
 
@@ -6848,7 +6883,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v127';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v128';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -6983,7 +7018,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v127';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v128';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
