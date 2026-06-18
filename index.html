@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v129</span>
+            <span id="homeAppVersion" class="home-app-version">v130</span>
           </button>
         </div>
         <div class="home-search">
@@ -1265,7 +1265,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v129",
+  APP_VERSION: "v130",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1283,7 +1283,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v129"
+  SPEC_IMAGE_CACHE_BUST: "v130"
 };
 
 const DETAIL_TABS = [
@@ -5735,29 +5735,63 @@ function displayCheckLegacyExample(sort){
   return legacy[Number(sort)] || "";
 }
 
-function displayCheckItems(storeOverride){
-  const rows = Array.isArray(DB.displayCheckItems) && DB.displayCheckItems.length ? DB.displayCheckItems : DISPLAY_CHECK_FALLBACK_ITEMS;
-  const store = storeOverride !== undefined ? storeOverride : (els.displayCheckStore?.value || "");
+function displayCheckRowValue(row,keys,fallback=""){
+  if(Array.isArray(row)){
+    const indexMap={
+      sort:0, code:1, title:2, pptCategory:3, guide:4,
+      exampleImage:5, use:6, applicableStores:7
+    };
+    for(const key of keys){
+      const idx=indexMap[key];
+      if(idx===undefined) continue;
+      const value=row[idx];
+      if(value!==undefined && value!==null && String(value).trim()!=="") return value;
+    }
+    return fallback;
+  }
+  if(!row || typeof row!=="object") return fallback;
+  for(const key of keys){
+    if(row[key]!==undefined && row[key]!==null && String(row[key]).trim()!=="") return row[key];
+  }
+  return fallback;
+}
+
+function normalizeDisplayCheckRows(rows){
+  if(!Array.isArray(rows)) return [];
   return rows.map((row,index)=>{
-    const sort = Number(row.sort) || index + 1;
+    const sort = Number(displayCheckRowValue(row,["sort","순번","정렬","번호"],index+1)) || index + 1;
     const indexedImage = `A${String(sort).padStart(2,"0")}.jpg`;
-    const rawImage = safe(row.exampleImage,"");
-    // v129: 비어 있거나 과거 기본 SVG이면 항목 순번별 A01~A20 JPG를 우선 사용합니다.
+    const rawImage = safe(displayCheckRowValue(row,["exampleImage","예시이미지","예시 이미지","이미지"],""),"");
+    // v130: 시트 응답 형식이 객체·배열·한글 열 이름 중 어느 형태여도 안전하게 읽습니다.
     const exampleImage = (!rawImage || /_example\.svg(?:[?#].*)?$/i.test(rawImage)) ? indexedImage : rawImage;
     return {
       sort,
-      code:safe(row.code||row.itemCode,"").toLowerCase(),
-      title:safe(row.title||row.itemName,`항목 ${index+1}`),
-      pptCategory:safe(row.pptCategory,"ETC").toUpperCase(),
-      guide:safe(row.guide||row.description,"촬영 예시와 동일한 구도로 촬영해 주세요."),
+      code:safe(displayCheckRowValue(row,["code","itemCode","항목코드","코드"],""),"").toLowerCase(),
+      title:safe(displayCheckRowValue(row,["title","itemName","항목명","제목"],""),`항목 ${index+1}`),
+      pptCategory:safe(displayCheckRowValue(row,["pptCategory","PPT분류","분류","카테고리"],"ETC"),"ETC").toUpperCase(),
+      guide:safe(displayCheckRowValue(row,["guide","description","촬영기준","안내","설명"],""),"촬영 예시와 동일한 구도로 촬영해 주세요."),
       exampleImage,
-      applicableStores:safe(row.applicableStores||row.applyStores||row.stores,"전체"),
+      applicableStores:safe(displayCheckRowValue(row,["applicableStores","applyStores","stores","적용점포","대상점포","노출점포"],"전체"),"전체"),
       groupName:displayCheckGroupName(sort),
       legacyExampleImage:displayCheckLegacyExample(sort)
     };
-  }).filter(x=>x.code)
-    .filter(x=>displayCheckItemAppliesToStore(x,store))
+  }).filter(x=>x.code && x.title)
     .sort((a,b)=>a.sort-b.sort);
+}
+
+function displayCheckItems(storeOverride){
+  const store = storeOverride !== undefined ? storeOverride : (els.displayCheckStore?.value || "");
+  const remoteRows = Array.isArray(DB.displayCheckItems) ? DB.displayCheckItems : [];
+  let normalized = normalizeDisplayCheckRows(remoteRows);
+
+  // v130: 서버/시트가 빈 값이나 예상과 다른 형식을 반환해도 화면을 0/0으로 덮어쓰지 않습니다.
+  if(!normalized.length) normalized = normalizeDisplayCheckRows(DISPLAY_CHECK_FALLBACK_ITEMS);
+  let visible = normalized.filter(x=>displayCheckItemAppliesToStore(x,store));
+  if(!visible.length){
+    visible = normalizeDisplayCheckRows(DISPLAY_CHECK_FALLBACK_ITEMS)
+      .filter(x=>displayCheckItemAppliesToStore(x,store));
+  }
+  return visible;
 }
 
 function displayCheckExampleFile(value){
@@ -5774,8 +5808,8 @@ function displayCheckExampleCandidates(value,legacyValue=""){
     }
     const file = displayCheckExampleFile(v);
     if(!file) return;
-    const local = new URL(`./images/display-check/${file}`, document.baseURI).href + `?v=129`;
-    const raw = `https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/display-check/${encodeURIComponent(file).replace(/%2F/gi,"/")}?v=129`;
+    const local = new URL(`./images/display-check/${file}`, document.baseURI).href + `?v=130`;
+    const raw = `https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/display-check/${encodeURIComponent(file).replace(/%2F/gi,"/")}?v=130`;
     if(!out.includes(local)) out.push(local);
     if(!out.includes(raw)) out.push(raw);
   });
@@ -5813,10 +5847,14 @@ async function ensureDisplayCheckItemsLoaded(force=false){
     try{
       const result = await apiGet({ action:"displayCheckItems", _:String(Date.now()) });
       if(result && result.ok !== false && Array.isArray(result.items) && result.items.length){
-        DB.displayCheckItems = result.items;
-        displayCheckItemsLoadedAt = Date.now();
-        if(currentPage === "displayCheck") renderDisplayCheckPage();
-        return result.items;
+        const normalized = normalizeDisplayCheckRows(result.items);
+        if(normalized.length){
+          DB.displayCheckItems = result.items;
+          displayCheckItemsLoadedAt = Date.now();
+          if(currentPage === "displayCheck") renderDisplayCheckPage();
+          return result.items;
+        }
+        console.warn("진열 연출 항목 응답 형식이 올바르지 않아 기본 20개 항목을 유지합니다.", result.items);
       }
     }catch(e){
       console.warn("진열 연출 항목 최신 정보 확인 실패:", e);
@@ -7001,7 +7039,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v129';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v130';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7136,7 +7174,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v129';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v130';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
