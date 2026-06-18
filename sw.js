@@ -1,4 +1,4 @@
-const CACHE_NAME = 'costco-item-operation-hub-v124';
+const CACHE_NAME = 'costco-item-operation-hub-v125';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './tv_wall_install_fee.png', './images/inquiry_order_reference.png'];
 
 self.addEventListener('install', event => {
@@ -40,7 +40,7 @@ self.addEventListener('fetch', event => {
 
   if (url.origin !== self.location.origin) return;
 
-  // v124: 홈 화면 설치 앱도 재실행할 때 최신 index.html을 먼저 확인합니다.
+  // v125: 홈 화면 설치 앱도 재실행할 때 최신 index.html을 먼저 확인합니다.
   // 네트워크가 끊긴 경우에만 저장된 화면을 사용하므로 기기별 구버전 차이를 줄입니다.
   if (req.mode === 'navigate' || /\/index\.html$/.test(url.pathname)) {
     event.respondWith(
