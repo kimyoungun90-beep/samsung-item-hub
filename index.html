@@ -758,12 +758,14 @@ body.view-nonhome .app{padding-top:0;}
 .display-check-controls{display:grid;grid-template-columns:1.15fr 1fr .8fr;gap:10px;margin-top:14px}.display-check-controls label{display:grid;gap:7px;color:#405570;font-size:11px;font-weight:1000}.display-check-controls label span{padding-left:4px}.display-check-controls b{color:#dc2626}.display-check-controls em{font-style:normal;color:#8493a8;font-size:9px}.display-check-controls select,.display-check-controls input{width:100%;height:46px;border:1px solid #d5e0ed;border-radius:15px;background:#f9fbfe;padding:0 13px;color:#12233c;font-size:13px;font-weight:900}
 .display-check-progress-track{height:9px;margin:15px 3px 0;border-radius:999px;background:#e8eef6;overflow:hidden}.display-check-progress-track span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#1472e6,#36a4ff);transition:width .25s ease}
 .display-check-status{margin-top:10px;border-radius:14px;background:#f4f8fc;padding:10px 12px;color:#60738d;font-size:11px;font-weight:900;line-height:1.5}.display-check-status.ok{background:#ecfdf3;color:#137044}.display-check-status.err{background:#fff1f2;color:#b42318}.display-check-status.loading{background:#eff6ff;color:#175db6}
+.display-check-capture-note{display:flex;align-items:center;gap:9px;margin-top:12px;border:1px solid #fecaca;border-radius:14px;background:#fff7f7;padding:10px 13px;color:#7f1d1d}.display-check-capture-note strong{font-size:12px;font-weight:1000;color:#c02626}.display-check-capture-note span{font-size:10px;font-weight:850;color:#8f4b4b}
+.display-check-group-title{display:flex;align-items:center;gap:9px;margin:7px 2px -1px;color:#17365f;font-size:13px;font-weight:1000}.display-check-group-title::after{content:"";height:1px;flex:1;background:#dbe6f2}.display-check-group-count{border-radius:999px;background:#eaf3ff;color:#0b63ce;padding:3px 8px;font-size:9px;font-weight:1000}
 .display-check-list{display:grid;gap:11px;margin-top:13px}.display-check-empty{border:1px dashed #cbd8e7;border-radius:20px;padding:42px 16px;text-align:center;color:#788ba3;font-size:13px;font-weight:900}
 .display-check-card{border:1px solid #dce6f2;border-radius:22px;background:linear-gradient(180deg,#fff,#fbfdff);padding:12px;display:grid;grid-template-columns:118px minmax(0,1fr) 106px;gap:13px;align-items:center;box-shadow:0 9px 24px rgba(15,55,100,.045)}.display-check-card.done{border-color:#a9ddc4;background:linear-gradient(180deg,#fff,#f5fff9)}.display-check-card.uploading{border-color:#9cc8ff;background:#f6faff}.display-check-card.failed{border-color:#fecaca;background:#fff8f8}
 .display-check-example{position:relative;width:118px;height:88px;border:1px solid #d8e3ef;border-radius:16px;background:#eef3f9;overflow:hidden;cursor:zoom-in}.display-check-example img{width:100%;height:100%;object-fit:cover;display:block}.display-check-example span{position:absolute;left:7px;top:7px;border-radius:999px;background:rgba(5,21,45,.78);color:#fff;padding:3px 7px;font-size:8px;font-weight:1000}
 .display-check-card-copy{min-width:0}.display-check-card-head{display:flex;align-items:center;gap:8px}.display-check-card-no{width:25px;height:25px;border-radius:9px;background:#eaf3ff;color:#0b63ce;display:grid;place-items:center;font-size:10px;font-weight:1000}.display-check-card-title{min-width:0;color:#07152d;font-size:15px;font-weight:1000;line-height:1.35}.display-check-card-guide{margin-top:7px;color:#667b94;font-size:11px;font-weight:850;line-height:1.55;word-break:keep-all}.display-check-card-state{margin-top:7px;color:#8191a6;font-size:10px;font-weight:1000}.display-check-card.done .display-check-card-state{color:#158052}.display-check-card.uploading .display-check-card-state{color:#1765c1}.display-check-card.failed .display-check-card-state{color:#b42318}
 .display-check-card-action{display:grid;gap:7px}.display-check-capture-btn{min-height:44px;border:0;border-radius:15px;background:#0b63ce;color:#fff;font-size:12px;font-weight:1000;box-shadow:0 10px 22px rgba(11,99,206,.20)}.display-check-card.done .display-check-capture-btn{background:#0e7a4d}.display-check-capture-btn:disabled{opacity:.58;cursor:wait}.display-check-preview-btn{min-height:34px;border:1px solid #d8e3ef;border-radius:12px;background:#f6f9fc;color:#40546d;font-size:10px;font-weight:1000}.display-check-preview-btn[hidden]{display:none}
-@media(max-width:700px){.display-check-shell{padding:13px;border-radius:23px}.display-check-hero{grid-template-columns:minmax(0,1fr) 88px;padding:16px;border-radius:19px}.display-check-hero h2{font-size:19px}.display-check-hero p{font-size:10px}.display-check-progress-card{min-height:78px}.display-check-progress-card strong{font-size:20px}.display-check-controls{grid-template-columns:1fr 1fr}.display-check-controls label:first-child{grid-column:1/-1}.display-check-card{grid-template-columns:94px minmax(0,1fr) 88px;gap:9px;padding:9px;border-radius:19px}.display-check-example{width:94px;height:76px;border-radius:13px}.display-check-card-title{font-size:13px}.display-check-card-guide{font-size:9px;line-height:1.45}.display-check-capture-btn{min-height:42px;font-size:10px;padding:7px}.display-check-preview-btn{font-size:9px;padding:6px}.display-check-card-no{width:22px;height:22px}}
+@media(max-width:700px){.display-check-capture-note{align-items:flex-start;flex-direction:column;gap:2px}.display-check-shell{padding:13px;border-radius:23px}.display-check-hero{grid-template-columns:minmax(0,1fr) 88px;padding:16px;border-radius:19px}.display-check-hero h2{font-size:19px}.display-check-hero p{font-size:10px}.display-check-progress-card{min-height:78px}.display-check-progress-card strong{font-size:20px}.display-check-controls{grid-template-columns:1fr 1fr}.display-check-controls label:first-child{grid-column:1/-1}.display-check-card{grid-template-columns:94px minmax(0,1fr) 88px;gap:9px;padding:9px;border-radius:19px}.display-check-example{width:94px;height:76px;border-radius:13px}.display-check-card-title{font-size:13px}.display-check-card-guide{font-size:9px;line-height:1.45}.display-check-capture-btn{min-height:42px;font-size:10px;padding:7px}.display-check-preview-btn{font-size:9px;padding:6px}.display-check-card-no{width:22px;height:22px}}
 @media(max-width:440px){.display-check-card{grid-template-columns:82px minmax(0,1fr) 76px}.display-check-example{width:82px;height:70px}.display-check-card-guide{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.display-check-capture-btn{font-size:9px}.display-check-controls{grid-template-columns:1fr}.display-check-controls label:first-child{grid-column:auto}}
 </style>
 </head>
@@ -794,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v128</span>
+            <span id="homeAppVersion" class="home-app-version">v129</span>
           </button>
         </div>
         <div class="home-search">
@@ -809,7 +811,7 @@ body.view-nonhome .app{padding-top:0;}
         <div class="home-favorite-shortcut-row">
           <button class="home-favorite-shortcut home-display-check-shortcut" type="button" data-page="displayCheck" aria-label="진열 연출 점검 열기">
             <span class="home-favorite-shortcut-icon home-display-check-shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5h3l1.4-2h7.2l1.4 2h3v11H4v-11Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" stroke="currentColor" stroke-width="1.8"/></svg></span>
-            <span class="home-favorite-shortcut-copy"><strong>진열 연출 점검</strong><small>16개 항목 촬영</small></span>
+            <span class="home-favorite-shortcut-copy"><strong>진열 연출 점검</strong><small>20개 항목 촬영</small></span>
             <span class="home-favorite-shortcut-arrow" aria-hidden="true">›</span>
           </button>
           <button id="homeFavoriteShortcut" class="home-favorite-shortcut" type="button" aria-label="즐겨찾기 목록 열기">
@@ -913,7 +915,7 @@ body.view-nonhome .app{padding-top:0;}
           <p>점포를 선택한 뒤 예시 사진과 촬영 기준을 확인하고 항목별로 촬영해 주세요. 촬영 완료 사진은 진열연출앱으로 자동 전달됩니다.</p>
         </div>
         <div class="display-check-progress-card">
-          <strong id="displayCheckProgressText">0 / 16</strong>
+          <strong id="displayCheckProgressText">0 / 20</strong>
           <span>촬영 완료</span>
         </div>
       </div>
@@ -922,6 +924,7 @@ body.view-nonhome .app{padding-top:0;}
         <label><span>촬영자 <em>선택 입력</em></span><input id="displayCheckUploader" type="text" maxlength="30" placeholder="예: 김영언"></label>
         <label><span>촬영 주차</span><select id="displayCheckDate" aria-label="촬영 주차 선택"></select></label>
       </div>
+      <div class="display-check-capture-note"><strong>제품이 없을 경우 촬영 X</strong><span>해당 점포에 제품 또는 집기가 없으면 촬영하지 않아도 됩니다.</span></div>
       <div class="display-check-progress-track"><span id="displayCheckProgressBar"></span></div>
       <div id="displayCheckStatus" class="display-check-status">점포를 선택하면 촬영 항목이 표시됩니다.</div>
       <div id="displayCheckList" class="display-check-list"></div>
@@ -1262,7 +1265,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v128",
+  APP_VERSION: "v129",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1280,7 +1283,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v128"
+  SPEC_IMAGE_CACHE_BUST: "v129"
 };
 
 const DETAIL_TABS = [
@@ -4440,7 +4443,7 @@ function resolveProcessImageUrl(value){
   let url = "";
   try{ url = new URL(encodedPath, document.baseURI).href; }
   catch(err){ url = encodedPath; }
-  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v128");
+  const bust = encodeURIComponent((DB && DB.updateVersion) || CONFIG.APP_VERSION || "v129");
   return url + (url.includes("?") ? "&" : "?") + "v=" + bust;
 }
 
@@ -4453,7 +4456,7 @@ function processImageFallbackUrl(url){
     const filePath = parsed.pathname.slice(idx + marker.length).split("/").map(part=>{
       try{return encodeURIComponent(decodeURIComponent(part));}catch(err){return encodeURIComponent(part);}
     }).join("/");
-    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v128");
+    return String(CONFIG.PROCESS_IMAGE_RAW_BASE || "") + filePath + "?v=" + encodeURIComponent(CONFIG.APP_VERSION || "v129");
   }catch(err){ return ""; }
 }
 
@@ -5569,26 +5572,30 @@ if("serviceWorker" in navigator){
 
 
 // ============================================================================
-// v124 진열 연출 점검 촬영
+// v129 진열 연출 점검 촬영
 // ============================================================================
 const DISPLAY_CHECK_FALLBACK_ITEMS = [
-  {sort:1,code:"qled_tv",title:"QLED TV",pptCategory:"TV",guide:"QLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"A01.jpg"},
-  {sort:2,code:"oled_tv",title:"OLED TV",pptCategory:"TV",guide:"OLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"A02.jpg"},
-  {sort:3,code:"tv_fixture",title:"TV 2단 집기",pptCategory:"TV",guide:"TV 2단 집기 전체와 주변 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A03.jpg"},
-  {sort:4,code:"stand_aircon",title:"스탠드 에어컨",pptCategory:"AC",guide:"스탠드 에어컨 본체와 행사 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A04.jpg"},
-  {sort:5,code:"wall_aircon",title:"벽걸이 에어컨",pptCategory:"AC",guide:"벽걸이 에어컨과 실내기 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A05.jpg"},
-  {sort:6,code:"system_aircon",title:"시스템 에어컨",pptCategory:"AC",guide:"시스템 에어컨 진열물과 안내물이 함께 보이도록 촬영해 주세요.",exampleImage:"A06.jpg"},
-  {sort:7,code:"window_aircon",title:"창문형 에어컨",pptCategory:"AC",guide:"창문형 에어컨 본체와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A07.jpg"},
-  {sort:8,code:"fridge_fixture_1",title:"냉장고 집기 1",pptCategory:"REF",guide:"냉장고 집기 전체와 제품 배열이 보이도록 촬영해 주세요.",exampleImage:"A08.jpg"},
-  {sort:9,code:"fridge_fixture_2",title:"냉장고 집기 2",pptCategory:"REF",guide:"추가 냉장고 집기와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A09.jpg"},
-  {sort:10,code:"kimchi_fixture",title:"김치냉장고 집기",pptCategory:"REF",guide:"김치냉장고 진열 전체와 가격표를 촬영해 주세요.",exampleImage:"A10.jpg"},
-  {sort:11,code:"clothing_care_fixture",title:"의류케어 집기",pptCategory:"REF",guide:"세탁기·건조기·의류케어 집기 전체가 보이도록 촬영해 주세요.",exampleImage:"A11.jpg"},
-  {sort:12,code:"monitor_fixture",title:"모니터/무빙스타일",pptCategory:"MON",guide:"모니터 또는 무빙스타일 진열과 가격표를 함께 촬영해 주세요.",exampleImage:"A12.jpg"},
-  {sort:13,code:"cooking_fixture",title:"조리기기 집기",pptCategory:"COOK",guide:"조리기기 제품과 행사 안내물이 보이도록 촬영해 주세요.",exampleImage:"A13.jpg"},
-  {sort:14,code:"cleaner_fixture",title:"청소기 진열",pptCategory:"ETC",guide:"청소기 제품과 액세서리 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A14.jpg"},
-  {sort:15,code:"av_fixture",title:"AV/사운드바 진열",pptCategory:"ETC",guide:"사운드바·AV 제품과 TV 연계 진열이 보이도록 촬영해 주세요.",exampleImage:"A15.jpg"},
-  {sort:16,code:"store_overview",title:"매장 전체 전경",pptCategory:"ETC",guide:"삼성전자 진열 구역 전체 동선과 노출 상태가 보이도록 촬영해 주세요.",exampleImage:"A16.jpg"}
-];
+  {sort:1,code:"qled_tv",title:"QLED TV",pptCategory:"TV",guide:"QLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"A01.jpg",applicableStores:"전체"},
+  {sort:2,code:"oled_tv",title:"OLED TV",pptCategory:"TV",guide:"OLED TV 전체와 가격표가 함께 보이도록 정면에서 촬영해 주세요.",exampleImage:"A02.jpg",applicableStores:"전체"},
+  {sort:3,code:"tv_fixture",title:"TV 집기",pptCategory:"TV",guide:"TV 진열 집기 전체와 주변 노출 상태가 보이도록 촬영해 주세요.",exampleImage:"A03.jpg",applicableStores:"전체"},
+  {sort:4,code:"fridge_vignette",title:"냉장고 비네트 집기",pptCategory:"REF",guide:"냉장고 비네트 집기 전체와 제품·가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A04.jpg",applicableStores:"전체"},
+  {sort:5,code:"clothing_care_vignette",title:"의류케어 비네트 집기",pptCategory:"REF",guide:"세탁기·건조기·의류케어 비네트 집기 전체가 보이도록 촬영해 주세요.",exampleImage:"A05.jpg",applicableStores:"전체"},
+  {sort:6,code:"online_vignette_1",title:"온라인 비네트 1",pptCategory:"REF",guide:"온라인 비네트 전체 구성과 노출 상태가 보이도록 촬영해 주세요.",exampleImage:"A06.jpg",applicableStores:"대구점,혁신점,세종점,하남점"},
+  {sort:7,code:"online_vignette_2",title:"온라인 비네트 2",pptCategory:"REF",guide:"추가 온라인 비네트의 제품 배열과 안내물이 보이도록 촬영해 주세요.",exampleImage:"A07.jpg",applicableStores:"대구점,혁신점,세종점,하남점"},
+  {sort:8,code:"stand_aircon_1",title:"스탠드 에어컨 1",pptCategory:"AC",guide:"스탠드 에어컨 전체와 행사 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A08.jpg",applicableStores:"전체"},
+  {sort:9,code:"stand_aircon_2",title:"스탠드 에어컨 2",pptCategory:"AC",guide:"추가 스탠드 에어컨 진열과 주변 연출 상태가 보이도록 촬영해 주세요.",exampleImage:"A09.jpg",applicableStores:"전체"},
+  {sort:10,code:"wall_aircon",title:"벽걸이 에어컨",pptCategory:"AC",guide:"벽걸이 에어컨과 실내기 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A10.jpg",applicableStores:"전체"},
+  {sort:11,code:"window_aircon",title:"창문형 에어컨",pptCategory:"AC",guide:"창문형 에어컨 본체와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A11.jpg",applicableStores:"전체"},
+  {sort:12,code:"ceiling_aircon",title:"천장형 에어컨",pptCategory:"AC",guide:"천장형 에어컨 진열물과 안내물이 함께 보이도록 촬영해 주세요.",exampleImage:"A12.jpg",applicableStores:"전체"},
+  {sort:13,code:"moving_style_1",title:"무빙스타일 1",pptCategory:"MON",guide:"무빙스타일 제품 전체와 활용 연출이 보이도록 촬영해 주세요.",exampleImage:"A13.jpg",applicableStores:"전체"},
+  {sort:14,code:"moving_style_2",title:"무빙스타일 2",pptCategory:"MON",guide:"추가 무빙스타일 제품과 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A14.jpg",applicableStores:"전체"},
+  {sort:15,code:"monitor",title:"모니터",pptCategory:"MON",guide:"모니터 제품과 화면·가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A15.jpg",applicableStores:"전체"},
+  {sort:16,code:"microwave",title:"전자레인지",pptCategory:"COOK",guide:"전자레인지 제품과 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A16.jpg",applicableStores:"전체"},
+  {sort:17,code:"qooker",title:"큐커",pptCategory:"COOK",guide:"큐커 제품 전체와 행사 안내물이 함께 보이도록 촬영해 주세요.",exampleImage:"A17.jpg",applicableStores:"전체"},
+  {sort:18,code:"induction_2burner",title:"2구 인덕션",pptCategory:"COOK",guide:"2구 인덕션 제품과 진열·가격표가 보이도록 촬영해 주세요.",exampleImage:"A18.jpg",applicableStores:"전체"},
+  {sort:19,code:"dehumidifier",title:"제습기",pptCategory:"ETC",guide:"제습기 제품 전체와 가격표가 함께 보이도록 촬영해 주세요.",exampleImage:"A19.jpg",applicableStores:"전체"},
+  {sort:20,code:"vacuum_cleaner",title:"청소기",pptCategory:"ETC",guide:"청소기 제품과 액세서리 진열 상태가 보이도록 촬영해 주세요.",exampleImage:"A20.jpg",applicableStores:"전체"}
+]
 const DISPLAY_CHECK_STORES = ["양평점","대구점","대전점","양재점","상봉점","일산점","부산점","울산점","광명점","천안점","의정부점","공세점","송도점","세종점","혁신점","하남점","김해점","고척점","청라점","평택점"];
 
 function getKoreaDateString(){
@@ -5688,13 +5695,54 @@ function bindDisplayCheckEvents(){
   });
 }
 
-function displayCheckItems(){
+function normalizeDisplayCheckStoreName(value){
+  const raw = safe(value,"").replace(/^코스트코\s*/,"").replace(/\s+/g,"");
+  if(!raw) return "";
+  return raw.endsWith("점") ? raw : raw+"점";
+}
+
+function displayCheckItemAppliesToStore(item,store){
+  const selected = normalizeDisplayCheckStoreName(store);
+  if(!selected) return true;
+  const raw = safe(item.applicableStores,"");
+  if(!raw || /^(전체|ALL|\*)$/i.test(raw)) return true;
+  const stores = raw.split(/[,，;|\n]+/).map(normalizeDisplayCheckStoreName).filter(Boolean);
+  return stores.includes(selected);
+}
+
+function displayCheckGroupName(sort){
+  const n = Number(sort)||0;
+  if(n<=3) return "TV";
+  if(n<=5) return "비네트";
+  if(n<=7) return "온라인 비네트";
+  if(n<=12) return "에어컨";
+  if(n<=15) return "모니터";
+  if(n<=18) return "조리기기";
+  return "기타";
+}
+
+function displayCheckLegacyExample(sort){
+  const legacy = {
+    1:"qled_tv_example.svg",2:"oled_tv_example.svg",3:"tv_fixture_example.svg",
+    4:"fridge_fixture_1_example.svg",5:"clothing_care_fixture_example.svg",
+    6:"fridge_fixture_1_example.svg",7:"fridge_fixture_2_example.svg",
+    8:"stand_aircon_example.svg",9:"stand_aircon_example.svg",10:"wall_aircon_example.svg",
+    11:"window_aircon_example.svg",12:"system_aircon_example.svg",
+    13:"monitor_fixture_example.svg",14:"monitor_fixture_example.svg",15:"monitor_fixture_example.svg",
+    16:"cooking_fixture_example.svg",17:"cooking_fixture_example.svg",18:"cooking_fixture_example.svg",
+    19:"store_overview_example.svg",20:"cleaner_fixture_example.svg"
+  };
+  return legacy[Number(sort)] || "";
+}
+
+function displayCheckItems(storeOverride){
   const rows = Array.isArray(DB.displayCheckItems) && DB.displayCheckItems.length ? DB.displayCheckItems : DISPLAY_CHECK_FALLBACK_ITEMS;
+  const store = storeOverride !== undefined ? storeOverride : (els.displayCheckStore?.value || "");
   return rows.map((row,index)=>{
     const sort = Number(row.sort) || index + 1;
     const indexedImage = `A${String(sort).padStart(2,"0")}.jpg`;
     const rawImage = safe(row.exampleImage,"");
-    // v128: 과거 기본 SVG 또는 비어 있는 값은 항목 순번별 A01~A16 JPG로 자동 보정합니다.
+    // v129: 비어 있거나 과거 기본 SVG이면 항목 순번별 A01~A20 JPG를 우선 사용합니다.
     const exampleImage = (!rawImage || /_example\.svg(?:[?#].*)?$/i.test(rawImage)) ? indexedImage : rawImage;
     return {
       sort,
@@ -5702,37 +5750,58 @@ function displayCheckItems(){
       title:safe(row.title||row.itemName,`항목 ${index+1}`),
       pptCategory:safe(row.pptCategory,"ETC").toUpperCase(),
       guide:safe(row.guide||row.description,"촬영 예시와 동일한 구도로 촬영해 주세요."),
-      exampleImage
+      exampleImage,
+      applicableStores:safe(row.applicableStores||row.applyStores||row.stores,"전체"),
+      groupName:displayCheckGroupName(sort),
+      legacyExampleImage:displayCheckLegacyExample(sort)
     };
-  }).filter(x=>x.code).sort((a,b)=>a.sort-b.sort);
+  }).filter(x=>x.code)
+    .filter(x=>displayCheckItemAppliesToStore(x,store))
+    .sort((a,b)=>a.sort-b.sort);
 }
 
 function displayCheckExampleFile(value){
   return safe(value,"").replace(/^\.?\/?images\/display-check\//i,"");
 }
 
-function displayCheckExampleCandidates(value){
-  const v = safe(value,"");
-  if(!v) return [];
-  if(/^data:/i.test(v)) return [v];
-  if(/^https?:\/\//i.test(v)) return [v];
-  const file = displayCheckExampleFile(v);
-  if(!file) return [];
-  const local = new URL(`./images/display-check/${file}`, document.baseURI).href + `?v=128`;
-  const raw = `https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/display-check/${encodeURIComponent(file).replace(/%2F/gi,"/")}?v=128`;
-  return [local,raw];
+function displayCheckExampleCandidates(value,legacyValue=""){
+  const values = [safe(value,""),safe(legacyValue,"")].filter(Boolean);
+  const out = [];
+  values.forEach(v=>{
+    if(/^data:/i.test(v) || /^https?:\/\//i.test(v)){
+      if(!out.includes(v)) out.push(v);
+      return;
+    }
+    const file = displayCheckExampleFile(v);
+    if(!file) return;
+    const local = new URL(`./images/display-check/${file}`, document.baseURI).href + `?v=129`;
+    const raw = `https://raw.githubusercontent.com/kimyoungun90-beep/samsung-item-hub/main/images/display-check/${encodeURIComponent(file).replace(/%2F/gi,"/")}?v=129`;
+    if(!out.includes(local)) out.push(local);
+    if(!out.includes(raw)) out.push(raw);
+  });
+  return out;
 }
 
 function displayCheckExampleUrl(value){
   return displayCheckExampleCandidates(value)[0] || "";
 }
 
+function displayCheckTryNextExample(img){
+  let candidates=[];
+  try{ candidates=JSON.parse(decodeURIComponent(img.dataset.exampleCandidates||"%5B%5D")); }catch(e){}
+  const next=candidates.shift();
+  img.dataset.exampleCandidates=encodeURIComponent(JSON.stringify(candidates));
+  if(next){ img.src=next; return; }
+  img.style.display="none";
+  img.parentElement?.classList.add("image-missing");
+}
+
 function displayCheckExampleMarkup(item){
-  const candidates = displayCheckExampleCandidates(item.exampleImage);
+  const candidates = displayCheckExampleCandidates(item.exampleImage,item.legacyExampleImage);
   if(!candidates.length) return "";
-  const first = candidates[0];
-  const fallback = candidates[1] || "";
-  return `<img src="${esc(first)}" data-fallback-src="${esc(fallback)}" alt="${esc(item.title)} 촬영 예시" onerror="if(this.dataset.fallbackSrc&&!this.dataset.fallbackTried){this.dataset.fallbackTried='1';this.src=this.dataset.fallbackSrc}else{this.style.display='none';this.parentElement.classList.add('image-missing')}">`;
+  const first = candidates.shift();
+  const encoded = encodeURIComponent(JSON.stringify(candidates));
+  return `<img src="${esc(first)}" data-example-candidates="${esc(encoded)}" alt="${esc(item.title)} 촬영 예시" onerror="displayCheckTryNextExample(this)">`;
 }
 
 async function ensureDisplayCheckItemsLoaded(force=false){
@@ -5762,7 +5831,7 @@ async function ensureDisplayCheckItemsLoaded(force=false){
 function openDisplayCheckPage(){
   populateDisplayCheckWeekOptions();
   renderDisplayCheckPage();
-  // v128: 저장 DB에 촬영 항목 설정이 없거나 오래되어도 시트의 최신 예시 이미지 파일명을 별도로 확인합니다.
+  // v129: 저장 DB에 촬영 항목 설정이 없거나 오래되어도 시트의 최신 예시 이미지 파일명을 별도로 확인합니다.
   ensureDisplayCheckItemsLoaded(false);
   if(els.displayCheckStore?.value) loadDisplayCheckStatus(false);
 }
@@ -5775,8 +5844,8 @@ function setDisplayCheckStatus(message,type=""){
 
 function renderDisplayCheckPage(){
   if(!els.displayCheckList) return;
-  const items = displayCheckItems();
   const store = els.displayCheckStore?.value || "";
+  const items = displayCheckItems(store);
   const completed = items.filter(item=>displayCheckState.get(item.code)?.done).length;
   if(els.displayCheckProgressText) els.displayCheckProgressText.textContent = `${completed} / ${items.length}`;
   if(els.displayCheckProgressBar) els.displayCheckProgressBar.style.width = `${items.length ? Math.round(completed/items.length*100) : 0}%`;
@@ -5784,12 +5853,19 @@ function renderDisplayCheckPage(){
     els.displayCheckList.innerHTML = '<div class="display-check-empty">점포를 먼저 선택해 주세요.<br>선택 후 촬영해야 할 항목이 순서대로 표시됩니다.</div>';
     return;
   }
+  let lastGroup="";
   els.displayCheckList.innerHTML = items.map(item=>{
     const state = displayCheckState.get(item.code) || {};
-    const cls = state.uploading ? " uploading" : (state.done ? " done" : (state.failed ? " failed" : ""));
-    const status = state.uploading ? "촬영 완료 · 전송 중" : (state.done ? `전송 완료${state.uploadedAt ? " · "+esc(state.uploadedAt) : ""}` : (state.failed ? "전송 실패 · 다시 촬영해 주세요" : "미촬영"));
-    const buttonText = state.uploading ? "전송 중" : (state.done ? "다시 촬영" : "촬영하기");
-    return `<article class="display-check-card${cls}" data-display-code="${esc(item.code)}">
+    const cls = state.uploading || state.verifying ? " uploading" : (state.done ? " done" : (state.failed ? " failed" : ""));
+    const status = state.verifying ? "서버 저장 여부 확인 중" : (state.uploading ? "촬영 완료 · 전송 중" : (state.done ? `전송 완료${state.uploadedAt ? " · "+esc(state.uploadedAt) : ""}` : (state.failed ? "전송 실패 · 다시 촬영해 주세요" : "미촬영")));
+    const buttonText = state.uploading || state.verifying ? "확인 중" : (state.done ? "다시 촬영" : "촬영하기");
+    let groupHeader="";
+    if(item.groupName!==lastGroup){
+      lastGroup=item.groupName;
+      const count=items.filter(x=>x.groupName===item.groupName).length;
+      groupHeader=`<div class="display-check-group-title"><span>${esc(item.groupName)}</span><span class="display-check-group-count">${count}개</span></div>`;
+    }
+    return `${groupHeader}<article class="display-check-card${cls}" data-display-code="${esc(item.code)}">
       <div class="display-check-example" data-display-example="${esc(item.code)}">
         ${displayCheckExampleMarkup(item)}
         <span>촬영 예시</span>
@@ -5800,7 +5876,7 @@ function renderDisplayCheckPage(){
         <div class="display-check-card-state">${status}</div>
       </div>
       <div class="display-check-card-action">
-        <button class="display-check-capture-btn" type="button" data-display-capture="${esc(item.code)}" ${state.uploading?"disabled":""}>${buttonText}</button>
+        <button class="display-check-capture-btn" type="button" data-display-capture="${esc(item.code)}" ${state.uploading||state.verifying?"disabled":""}>${buttonText}</button>
         <button class="display-check-preview-btn" type="button" data-display-preview="${esc(item.code)}" ${state.previewUrl||state.imageUrl?"":"hidden"}>촬영 사진 보기</button>
       </div>
     </article>`;
@@ -5842,6 +5918,25 @@ function startDisplayCheckCapture(code){
   displayCheckPendingItemCode = code;
   els.displayCheckCamera.value = "";
   els.displayCheckCamera.click();
+}
+
+function displayCheckDelay(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
+
+async function verifyDisplayCheckUpload(store,shotDate,itemCode,uploadToken){
+  const waits=[0,2500,5000,8000];
+  for(const delay of waits){
+    if(delay) await displayCheckDelay(delay);
+    try{
+      const result=await apiGet({action:"displayCheckPhotos",store,shotDate,latestOnly:"1",includeData:"0",max:"80",_:String(Date.now())});
+      if(!result?.ok) continue;
+      const row=(result.photos||[]).find(photo=>{
+        if(uploadToken && photo.uploadToken===uploadToken) return true;
+        return !uploadToken && photo.itemCode===itemCode;
+      });
+      if(row) return row;
+    }catch(e){}
+  }
+  return null;
 }
 
 function handleDisplayCheckCameraFile(event){
@@ -5889,9 +5984,30 @@ function handleDisplayCheckCameraFile(event){
       renderDisplayCheckPage();
       setDisplayCheckStatus(`${item.title} 사진 전송이 완료되었습니다.`,"ok");
     }catch(err){
-      const latest = displayCheckState.get(code) || {};
+      let latest = displayCheckState.get(code) || {};
       if(latest.captureId !== captureId) return;
-      displayCheckState.set(code,{...latest,done:false,uploading:false,failed:true});
+      if(err && err.uploadToken){
+        displayCheckState.set(code,{...latest,done:true,uploading:false,verifying:true,failed:false});
+        renderDisplayCheckPage();
+        setDisplayCheckStatus(`${item.title} 사진이 서버에 저장됐는지 확인하고 있습니다.`,"loading");
+        const verified = await verifyDisplayCheckUpload(store,shotDate,item.code,err.uploadToken);
+        latest = displayCheckState.get(code) || {};
+        if(latest.captureId !== captureId) return;
+        if(verified){
+          displayCheckState.set(code,{
+            ...latest,done:true,uploading:false,verifying:false,failed:false,
+            imageUrl:verified.imageUrl||latest.imageUrl||"",
+            recordId:verified.fileId||latest.recordId||"",
+            uploadedAt:"서버 저장 확인"
+          });
+          displayCheckStatusLoadedKey = `${store}|${shotDate}`;
+          renderDisplayCheckPage();
+          setDisplayCheckStatus(`${item.title} 사진이 정상 저장된 것을 확인했습니다.`,"ok");
+          return;
+        }
+      }
+      latest = displayCheckState.get(code) || {};
+      displayCheckState.set(code,{...latest,done:false,uploading:false,verifying:false,failed:true});
       renderDisplayCheckPage();
       setDisplayCheckStatus(`${item.title} 전송 실패: ${err.message || err}`,"err");
     }
@@ -5934,7 +6050,9 @@ function submitDisplayCheckUpload(payload){
     const timer = setTimeout(()=>{
       displayCheckUploadResolvers.delete(token);
       try{ frame.remove(); }catch(e){}
-      reject(new Error("업로드 응답 시간이 초과되었습니다. 인터넷 연결을 확인해 주세요."));
+      const error = new Error("업로드 응답 시간이 지연되어 서버 저장 여부를 다시 확인합니다.");
+      error.uploadToken = token;
+      reject(error);
     },120000);
     displayCheckUploadResolvers.set(token,{resolve,reject,timer,frame});
     const form=document.createElement("form");
@@ -6883,7 +7001,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v128';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v129';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7018,7 +7136,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v128';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v129';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
