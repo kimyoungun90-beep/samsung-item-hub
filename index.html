@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v132</span>
+            <span id="homeAppVersion" class="home-app-version">v133</span>
           </button>
         </div>
         <div class="home-search">
@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v132",
+  APP_VERSION: "v133",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v132"
+  SPEC_IMAGE_CACHE_BUST: "v133"
 };
 
 const DETAIL_TABS = [
@@ -7139,7 +7139,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v132';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v133';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7274,7 +7274,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v132';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v133';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -7492,8 +7492,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 <style id="v120-navigation-history-style">
 /* v120: 홈/목록/상세/오버레이 전체 뒤로가기 이력 통합 */
 </style>
-<style id="v132-ai-assistant-style">
-/* v132: 홈 AI 업무 도우미 버튼과 별도 전체 화면 대화창 */
+<style id="v133-ai-assistant-style">
+/* v133: 홈 AI 업무 도우미 버튼과 별도 전체 화면 대화창 */
 .home-ai-shortcut{width:100%;min-height:72px;margin:0 0 12px;border:0;border-radius:22px;padding:12px 14px;display:grid;grid-template-columns:46px minmax(0,1fr) auto 16px;align-items:center;gap:11px;text-align:left;color:#fff;background:linear-gradient(135deg,#071a3b 0%,#0a4da8 58%,#1675e8 100%);box-shadow:0 16px 32px rgba(8,61,132,.22);position:relative;overflow:hidden}
 .home-ai-shortcut::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-55px;top:-72px;background:rgba(255,255,255,.12);pointer-events:none}
 .home-ai-shortcut:active{transform:scale(.985)}.home-ai-shortcut-icon{width:46px;height:46px;border-radius:16px;background:rgba(255,255,255,.16);display:grid;place-items:center;position:relative;z-index:1}.home-ai-shortcut-icon svg{width:27px;height:27px}.home-ai-shortcut-copy{min-width:0;display:grid;gap:4px;position:relative;z-index:1}.home-ai-shortcut-copy strong{font-size:15px;font-weight:1000;letter-spacing:-.25px}.home-ai-shortcut-copy small{font-size:10px;font-weight:850;color:rgba(255,255,255,.76);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.home-ai-shortcut-badge{position:relative;z-index:1;border:1px solid rgba(255,255,255,.32);border-radius:999px;background:rgba(255,255,255,.14);padding:5px 7px;font-size:8px;font-weight:1000;letter-spacing:.7px}.home-ai-shortcut-arrow{position:relative;z-index:1;font-size:23px;font-weight:900;color:rgba(255,255,255,.86)}
@@ -7508,7 +7508,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 @media(max-width:420px){.home-ai-shortcut{min-height:66px;border-radius:20px;grid-template-columns:42px minmax(0,1fr) auto 13px;padding:10px 11px;gap:8px}.home-ai-shortcut-icon{width:42px;height:42px;border-radius:14px}.home-ai-shortcut-copy strong{font-size:14px}.home-ai-shortcut-copy small{font-size:9px}.ai-assistant-head{min-height:68px;grid-template-columns:40px minmax(0,1fr) 40px;padding-left:10px;padding-right:10px}.ai-assistant-head-btn{width:38px;height:38px;border-radius:13px}.ai-assistant-head-line span{font-size:16px}.ai-assistant-messages{padding-left:12px;padding-right:12px}.ai-message-bubble{max-width:86%;font-size:12px}.ai-assistant-suggestions{padding-left:11px;padding-right:11px}.ai-assistant-composer{padding-left:10px;padding-right:10px}.ai-assistant-input-wrap{grid-template-columns:minmax(0,1fr) 38px 40px}.ai-assistant-mic,.ai-assistant-send{width:38px;height:38px}}
 </style>
 
-<script id="v132-ai-assistant-script">
+<script id="v133-ai-assistant-script">
 (() => {
   const overlay = document.getElementById("aiAssistantOverlay");
   const openButton = document.getElementById("homeAiAssistantShortcut");
@@ -7684,17 +7684,113 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     return blocks.join('<div style="height:10px"></div>');
   }
 
-  function submitQuestion(question){
+  async function requestHubAi(question){
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timer = controller ? window.setTimeout(()=>controller.abort(), 45000) : 0;
+    try{
+      return await apiGet({
+        action: "aiAsk",
+        question: String(question || ""),
+        t: String(Date.now())
+      }, controller ? { signal: controller.signal } : {});
+    }finally{
+      if(timer) window.clearTimeout(timer);
+    }
+  }
+
+  function findAiProcessIndex(title){
+    const target = aiNormalize(title);
+    return (Array.isArray(DB?.processes) ? DB.processes : [])
+      .findIndex(row=>aiNormalize(row?.title) === target);
+  }
+
+  function findAiItemIndex(product){
+    const itemNo = aiNormalize(product?.itemNo);
+    const modelName = aiNormalize(product?.modelName);
+    return (Array.isArray(DB?.items) ? DB.items : []).findIndex(row=>{
+      if(itemNo && aiNormalize(row?.itemNo) === itemNo) return true;
+      return !!(modelName && aiNormalize(row?.modelName) === modelName);
+    });
+  }
+
+  function buildHubAiAnswer(data){
+    if(!data || !data.ok) return "";
+
+    if(data.intent === "PROCESS" && data.process){
+      const process = data.process;
+      const index = findAiProcessIndex(process.title);
+      const steps = Array.isArray(process.steps) ? process.steps.filter(step=>step?.text) : [];
+      const summary = process.summary || "등록된 프로세스를 확인했습니다.";
+      const cautionHtml = process.caution
+        ? `<div class="ai-answer-note"><b>주의사항</b><p>${aiEscape(process.caution).replace(/\n/g,"<br>")}</p></div>`
+        : "";
+      const stepsHtml = steps.length
+        ? `<div class="ai-answer-note">${steps.map(step=>`<p><b>${aiEscape(step.no)}.</b> ${aiEscape(step.text).replace(/\n/g,"<br>")}</p>`).join("")}</div>`
+        : "";
+      const sourceButton = index >= 0
+        ? `<div class="ai-answer-section">${resultButton("process",index,process.title,`${process.type || "프로세스"} · 원문 전체 보기`)}</div>`
+        : "";
+      return `<strong>${aiEscape(process.title)}</strong><p>${aiEscape(summary).replace(/\n/g,"<br>")}</p>${cautionHtml}${stepsHtml}${sourceButton}<small>질문의 의미는 Gemini가 분석하고, 답변 내용은 HUB에 등록된 원문만 사용했습니다.</small>`;
+    }
+
+    if(data.intent === "PRODUCT"){
+      const products = Array.isArray(data.products) ? data.products : [];
+      if(!products.length) return `<strong>관련 제품을 찾지 못했습니다.</strong><p>모델명 또는 6자리 아이템번호를 함께 입력해 주세요.</p>`;
+      const cards = products.map(product=>{
+        const index = findAiItemIndex(product);
+        const title = [product.itemNo,product.modelName].filter(Boolean).join(" · ") || product.productName || "제품";
+        const sub = [product.category,product.productName].filter(Boolean).join(" · ");
+        return index >= 0
+          ? resultButton("item",index,title,sub)
+          : `<div class="ai-contact-line"><b>${aiEscape(title)}</b><span>${aiEscape(sub)}</span></div>`;
+      }).join("");
+      return `<strong>관련 제품 ${products.length}개를 찾았습니다.</strong><p>제품을 누르면 HUB 상세 화면으로 이동합니다.</p><div class="ai-answer-section">${cards}</div>`;
+    }
+
+    if(data.intent === "CONTACT"){
+      const contacts = Array.isArray(data.contacts) ? data.contacts : [];
+      const contactRows = contacts.map(row=>{
+        const label = [row.place,row.deptName || row.type].filter(Boolean).join(" · ") || "업무지원";
+        const tel = String(row.phone || "").replace(/[^0-9+]/g,"");
+        return `<div class="ai-contact-line"><b>${aiEscape(label)}</b><span>${row.phone ? `<a href="tel:${aiEscape(tel)}">${aiEscape(row.phone)}</a>` : "전화번호 미등록"}${row.scope ? ` · ${aiEscape(row.scope)}` : ""}</span></div>`;
+      }).join("");
+      return `<strong>관련 연락처를 확인했습니다.</strong><div class="ai-answer-section">${contactRows}${resultButton("dept",0,"업무지원 페이지 열기","점포·물류·서비스 연락처 전체 확인")}</div>`;
+    }
+
+    return "";
+  }
+
+  async function submitQuestion(question){
     const text = String(question || input.value || "").trim();
     if(!text) return;
     input.value = "";
     resizeInput();
     addMessage("user", `<p>${aiEscape(text)}</p>`);
     showTyping();
-    window.setTimeout(()=>{
+    if(sendButton) sendButton.disabled = true;
+
+    try{
+      const result = await requestHubAi(text);
       hideTyping();
-      addMessage("bot", buildAnswer(text));
-    }, 280);
+
+      if(result?.privacyBlocked){
+        addMessage("bot", `<strong>개인정보를 삭제해 주세요.</strong><p>${aiEscape(result.message || "전화번호·주소·주문번호를 제외하고 상황만 입력해 주세요.")}</p>`);
+        return;
+      }
+
+      const aiHtml = buildHubAiAnswer(result);
+      if(result?.ok && aiHtml){
+        addMessage("bot", aiHtml);
+      }else{
+        addMessage("bot", `${buildAnswer(text)}<small>Gemini 연결이 원활하지 않거나 등록 자료에서 확정하지 못해 HUB 기본 검색으로 안내했습니다.</small>`);
+      }
+    }catch(error){
+      hideTyping();
+      addMessage("bot", `${buildAnswer(text)}<small>AI 응답 시간이 초과되어 HUB 기본 검색으로 안내했습니다.</small>`);
+    }finally{
+      if(sendButton) sendButton.disabled = false;
+      input.focus();
+    }
   }
 
   function resizeInput(){
