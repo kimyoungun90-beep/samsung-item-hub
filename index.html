@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v135</span>
+            <span id="homeAppVersion" class="home-app-version">v136</span>
           </button>
         </div>
         <div class="home-search">
@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v135",
+  APP_VERSION: "v136",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v135"
+  SPEC_IMAGE_CACHE_BUST: "v136"
 };
 
 const DETAIL_TABS = [
@@ -4947,6 +4947,37 @@ async function firstExistingImageFast(urls, timeout=1100){
   return "";
 }
 
+function getFeatureImageNoFromUrl(url){
+  const clean = decodeURIComponent(String(url || "")).split(/[?#]/)[0];
+  const m = clean.match(/[_-](?:feature|func)[_-](\d+)\.(?:png|jpe?g|webp|gif)$/i);
+  return m ? Number(m[1]) : 0;
+}
+
+function mergeFeatureImageSources(localEntries, githubUrls, fallbackEntries){
+  const byNo = new Map();
+  const extras = [];
+
+  const add = (value, preferredNo=0)=>{
+    const url = typeof value === "string" ? value : safe(value?.url, "");
+    const no = Number(preferredNo || value?.no || getFeatureImageNoFromUrl(url));
+    if(!url) return;
+    if(no > 0){
+      if(!byNo.has(no)) byNo.set(no, url);
+    }else if(!extras.includes(url)){
+      extras.push(url);
+    }
+  };
+
+  (localEntries || []).forEach(v=>add(v, v?.no));
+  (githubUrls || []).forEach(v=>add(v));
+  (fallbackEntries || []).forEach(v=>add(v, v?.no));
+
+  return Array.from(byNo.entries())
+    .sort((a,b)=>a[0]-b[0])
+    .map(([,url])=>url)
+    .concat(extras);
+}
+
 async function resolveFeatureImageUrls(item){
   const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
   if(cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
@@ -4962,29 +4993,23 @@ async function resolveFeatureImageUrls(item){
   const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
   const exts = getSpecImageExtensions();
 
-  // 1순위: 가장 많이 쓰는 GitHub Pages images 폴더의 PNG 파일을 병렬로 먼저 확인합니다.
-  // 기존처럼 1장씩 순서대로 실패를 기다리면 기능 사진 버튼에서 지연이 크게 발생합니다.
-  const localPngChecks = Array.from({length:max}, (_,i)=>{
+  // v136: 같은 주소에서 정상 열리는 이미지가 네트워크 지연 때문에 누락되지 않도록
+  // 로컬 PNG 확인과 GitHub 실제 파일 목록 확인을 동시에 실행하고 번호별로 합칩니다.
+  const localPngPromise = Promise.all(Array.from({length:max}, (_,i)=>{
     const no = i + 1;
     const url = localSpecImageUrl(`${itemNo}_feature_${no}.png`);
-    return imageExistsWithTimeout(url, 900).then(ok=> ok ? { no, url } : null);
-  });
-  const localPng = (await Promise.all(localPngChecks)).filter(Boolean).sort((a,b)=>a.no-b.no).map(v=>v.url);
-  if(localPng.length){
-    if(cacheKey) featureImageUrlCache.set(cacheKey, localPng);
-    return localPng;
-  }
+    return imageExistsWithTimeout(url, 2600).then(ok=> ok ? { no, url } : null);
+  })).then(list=>list.filter(Boolean));
 
-  // 2순위: GitHub API 목록으로 실제 업로드된 feature/func 파일을 확인합니다.
-  const github = await fetchGithubFeatureImageUrls(item);
-  if(github.length){
-    if(cacheKey) featureImageUrlCache.set(cacheKey, github);
-    return github;
-  }
+  const githubPromise = fetchGithubFeatureImageUrls(item);
+  const [localEntries, githubUrls] = await Promise.all([localPngPromise, githubPromise]);
+  let urls = mergeFeatureImageSources(localEntries, githubUrls, []);
 
-  // 3순위: png 외 확장자와 func 파일명을 병렬 확인합니다.
-  const checks = Array.from({length:max}, (_,i)=>{
+  // GitHub API가 제한되거나 일부 파일만 확인된 경우, 빠진 번호만 로컬/Raw 주소에서 재확인합니다.
+  const foundNos = new Set(urls.map(getFeatureImageNoFromUrl).filter(Boolean));
+  const missingChecks = Array.from({length:max}, (_,i)=>{
     const no = i + 1;
+    if(foundNos.has(no)) return Promise.resolve(null);
     const group = [];
     exts.forEach(ext=>{
       group.push(localSpecImageUrl(`${itemNo}_feature_${no}.${ext}`));
@@ -4994,9 +5019,12 @@ async function resolveFeatureImageUrls(item){
       if(rawFeature) group.push(rawFeature);
       if(rawFunc) group.push(rawFunc);
     });
-    return firstExistingImageFast(uniqueArray(group), 1000).then(url=> url ? { no, url } : null);
+    return firstExistingImageFast(uniqueArray(group), 3200).then(url=> url ? { no, url } : null);
   });
-  const urls = (await Promise.all(checks)).filter(Boolean).sort((a,b)=>a.no-b.no).map(v=>v.url);
+
+  const fallbackEntries = (await Promise.all(missingChecks)).filter(Boolean);
+  urls = mergeFeatureImageSources(localEntries, githubUrls, fallbackEntries);
+
   if(cacheKey) featureImageUrlCache.set(cacheKey, urls);
   return urls;
 }
@@ -7139,7 +7167,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v135';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v136';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7274,7 +7302,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v135';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v136';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
