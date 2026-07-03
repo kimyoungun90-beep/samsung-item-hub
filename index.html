@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v136</span>
+            <span id="homeAppVersion" class="home-app-version">v138</span>
           </button>
         </div>
         <div class="home-search">
@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v136",
+  APP_VERSION: "v138",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v136"
+  SPEC_IMAGE_CACHE_BUST: "v138"
 };
 
 const DETAIL_TABS = [
@@ -4978,52 +4978,80 @@ function mergeFeatureImageSources(localEntries, githubUrls, fallbackEntries){
     .concat(extras);
 }
 
-async function resolveFeatureImageUrls(item){
-  const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
-  if(cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
-
-  const fromSheet = getFeatureImageUrlsFromSheet(item);
-  if(fromSheet.length){
-    if(cacheKey) featureImageUrlCache.set(cacheKey, fromSheet);
-    return fromSheet;
-  }
-
+function getReliableFeatureImageCandidateGroups(item){
   const itemNo = getSpecItemNo(item);
   if(!itemNo) return [];
   const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
   const exts = getSpecImageExtensions();
 
-  // v136: 같은 주소에서 정상 열리는 이미지가 네트워크 지연 때문에 누락되지 않도록
-  // 로컬 PNG 확인과 GitHub 실제 파일 목록 확인을 동시에 실행하고 번호별로 합칩니다.
-  const localPngPromise = Promise.all(Array.from({length:max}, (_,i)=>{
+  return Array.from({length:max}, (_,i)=>{
     const no = i + 1;
-    const url = localSpecImageUrl(`${itemNo}_feature_${no}.png`);
-    return imageExistsWithTimeout(url, 2600).then(ok=> ok ? { no, url } : null);
-  })).then(list=>list.filter(Boolean));
+    const sources = [];
 
-  const githubPromise = fetchGithubFeatureImageUrls(item);
-  const [localEntries, githubUrls] = await Promise.all([localPngPromise, githubPromise]);
-  let urls = mergeFeatureImageSources(localEntries, githubUrls, []);
-
-  // GitHub API가 제한되거나 일부 파일만 확인된 경우, 빠진 번호만 로컬/Raw 주소에서 재확인합니다.
-  const foundNos = new Set(urls.map(getFeatureImageNoFromUrl).filter(Boolean));
-  const missingChecks = Array.from({length:max}, (_,i)=>{
-    const no = i + 1;
-    if(foundNos.has(no)) return Promise.resolve(null);
-    const group = [];
+    // 운영 주소를 먼저 사용하고, 해당 파일이 없을 때 GitHub Raw 주소로 자동 재시도합니다.
+    // feature 이름을 우선하고 과거 호환용 func 이름도 함께 확인합니다.
     exts.forEach(ext=>{
-      group.push(localSpecImageUrl(`${itemNo}_feature_${no}.${ext}`));
-      group.push(localSpecImageUrl(`${itemNo}_func_${no}.${ext}`));
-      const rawFeature = rawSpecImageUrl(`${itemNo}_feature_${no}.${ext}`);
-      const rawFunc = rawSpecImageUrl(`${itemNo}_func_${no}.${ext}`);
-      if(rawFeature) group.push(rawFeature);
-      if(rawFunc) group.push(rawFunc);
+      const featureName = `${itemNo}_feature_${no}.${ext}`;
+      sources.push(localSpecImageUrl(featureName));
+      const rawFeature = rawSpecImageUrl(featureName);
+      if(rawFeature) sources.push(rawFeature);
     });
-    return firstExistingImageFast(uniqueArray(group), 3200).then(url=> url ? { no, url } : null);
-  });
+    exts.forEach(ext=>{
+      const funcName = `${itemNo}_func_${no}.${ext}`;
+      sources.push(localSpecImageUrl(funcName));
+      const rawFunc = rawSpecImageUrl(funcName);
+      if(rawFunc) sources.push(rawFunc);
+    });
 
-  const fallbackEntries = (await Promise.all(missingChecks)).filter(Boolean);
-  urls = mergeFeatureImageSources(localEntries, githubUrls, fallbackEntries);
+    return { no, sources: uniqueArray(sources) };
+  });
+}
+
+function loadFeatureImageWithoutShortTimeout(sources){
+  const queue = uniqueArray(sources || []);
+  return new Promise(resolve=>{
+    let index = 0;
+    const tryNext = ()=>{
+      if(index >= queue.length){
+        resolve("");
+        return;
+      }
+      const url = queue[index++];
+      const img = new Image();
+
+      // v138: 존재 확인용 2~3초 제한을 없앴습니다.
+      // 실제 이미지가 늦게 열리는 경우에도 onload까지 기다리고,
+      // 명확한 404/onerror일 때만 다음 후보 주소를 확인합니다.
+      img.onload = ()=>resolve(url);
+      img.onerror = ()=>tryNext();
+      img.decoding = "async";
+      img.src = url;
+    };
+    tryNext();
+  });
+}
+
+async function resolveFeatureImageUrls(item){
+  const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
+  if(cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
+
+  const fromSheet = getFeatureImageUrlsFromSheet(item);
+  const itemNo = getSpecItemNo(item);
+  if(!itemNo){
+    if(cacheKey) featureImageUrlCache.set(cacheKey, fromSheet);
+    return fromSheet;
+  }
+
+  // v138: 시트에 일부 URL만 등록되어 있어도 그것만으로 검색을 끝내지 않습니다.
+  // 시트 URL + 파일명 규칙 1~10번을 함께 확인해 번호별로 합칩니다.
+  // GitHub API 목록 및 짧은 시간 제한에는 의존하지 않습니다.
+  const groups = getReliableFeatureImageCandidateGroups(item);
+  const checkedEntries = (await Promise.all(groups.map(async group=>({
+    no: group.no,
+    url: await loadFeatureImageWithoutShortTimeout(group.sources)
+  })))).filter(entry=>entry.url);
+
+  const urls = mergeFeatureImageSources(fromSheet, [], checkedEntries);
 
   if(cacheKey) featureImageUrlCache.set(cacheKey, urls);
   return urls;
@@ -7167,7 +7195,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v136';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v138';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7302,7 +7330,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v136';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v138';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -7558,6 +7586,45 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     lastProcessTitles: []
   };
 
+  // v138: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
+  const AI_PROCESS_GUIDES = Object.freeze([
+    Object.freeze({type:"배송",title:"진열 제품(업체 배송 상품) 판매 후 배송 전 준비/주의 해야 하나요?",aliases:Object.freeze(["진열 제품 배송 준비", "업체 배송 상품 판매 후 준비", "진열 상품 팔고 배송 전 준비", "진열제품 포장 준비", "박스 요청"])}),
+    Object.freeze({type:"배송",title:"HDM에 \"배송 완료\"로 확인이 되는데 제품을 설치 받지 않고 취소를 원하는데 어떻게 하나요?",aliases:Object.freeze(["배송 완료인데 설치 안 받음", "배송완료 취소", "hdm 배송완료 취소", "설치 전 취소", "받지 않았는데 배송완료"])}),
+    Object.freeze({type:"VOC",title:"매장 제품 파손(불량)이 발생 했을 경우",aliases:Object.freeze(["매장 제품 파손", "진열 제품 자체 파손", "매장 상품 불량", "전시 제품 파손", "매장에서 제품 깨짐"])}),
+    Object.freeze({type:"배송",title:"배송 프로세스가 어떻게 되나요?",aliases:Object.freeze(["배송 절차", "배송 과정", "결제 후 배송 과정", "배송 프로세스", "배송 순서"])}),
+    Object.freeze({type:"배송",title:"지정 일자 배송 및 한참 뒤에 받기를 원하는 회원이 있는 경우 어떻게 되나요?",aliases:Object.freeze(["지정일 배송", "나중에 배송", "한참 뒤에 받기", "장기 지정 배송", "오래 뒤 배송"])}),
+    Object.freeze({type:"배송",title:"배송 연기는 언제까지 가능한가요?",aliases:Object.freeze(["배송 연기 기간", "배송 미루기", "배송일 연장", "배송 연기 언제까지", "배송延期"])}),
+    Object.freeze({type:"배송",title:"진열 제품은 어디까지 배송이 가능한가요?",aliases:Object.freeze(["진열 제품 배송 범위", "진열상품 타지역 배송", "진열 제품 어디까지 배송", "진열 제품 권역", "진열상품 배송 가능 지역"])}),
+    Object.freeze({type:"배송",title:"2개 이상 구매를 하셔서 동시에 받고 싶어 하시는데 어떻게 할까요?",aliases:Object.freeze(["두개 같이 배송", "2개 동시 배송", "여러 제품 한꺼번에 배송", "동시 배송", "제품 같이 받기"])}),
+    Object.freeze({type:"배송",title:"지정 시간을 요청하는 회원은 어떻게 응대 할까요?",aliases:Object.freeze(["배송 시간 지정", "오전 배송 요청", "오후 배송 요청", "첫배송 요청", "시간 지정 배송"])}),
+    Object.freeze({type:"배송",title:"진열제품은 일정을 어떻게 잡아야 할까요?",aliases:Object.freeze(["진열제품 일정", "진열 상품 배송일", "진열제품 배송 날짜", "진열제품 며칠 뒤", "진열제품 일정 잡기"])}),
+    Object.freeze({type:"배송",title:"섬 배송을 원하는 경우 배송이 가능한가요?",aliases:Object.freeze(["섬 배송", "울릉도 배송", "제주도 배송", "도서 지역 배송", "섬 지역 설치"])}),
+    Object.freeze({type:"서비스",title:"제품 수리, 교환, 환불 규정이 어떻게 될까요?",aliases:Object.freeze(["수리 교환 환불 규정", "제품 환불 기준", "교환 기준", "수리 규정", "제품 불량 환불"])}),
+    Object.freeze({type:"서비스",title:"서비스 연락처가 어떻게 되나요?",aliases:Object.freeze(["서비스센터 전화번호", "as 연락처", "삼성 서비스 연락처", "이전설치 전화번호", "서비스 전화"])}),
+    Object.freeze({type:"서비스",title:"서비스 무상 A/S 기준이 어떻게 되나요?",aliases:Object.freeze(["무상 as 기간", "무상수리 기준", "보증 기간", "패널 보증", "컴프레서 보증"])}),
+    Object.freeze({type:"설치",title:"기존에 드럼세탁기를 사용하고 계시는데 건조기가 직렬 설치가 되는지 궁금합니다.",aliases:Object.freeze(["건조기 직렬 설치", "세탁기 위 건조기", "드럼세탁기 건조기 올리기", "건조기 2단 설치", "세탁기 건조기 호환"])}),
+    Object.freeze({type:"설치",title:"건조기 설치 불가 장소는 어딘가요?",aliases:Object.freeze(["건조기 설치 안되는 곳", "건조기 설치 불가", "미용실 건조기 설치", "사업장 건조기 설치", "건조기 설치 장소"])}),
+    Object.freeze({type:"설치",title:"세탁기/건조기 설치 확보 공간이 궁금합니다.",aliases:Object.freeze(["세탁기 건조기 설치 공간", "원바디 설치 공간", "직렬 설치 공간", "세탁건조기 사이즈", "세탁기 깊이 공간"])}),
+    Object.freeze({type:"설치",title:"냉장고 설치 필요 공간이 어느 정도인지 궁금합니다.",aliases:Object.freeze(["냉장고 설치 공간", "냉장고 장 사이즈", "키친핏 설치 공간", "냉장고 문 열림 공간", "냉장고 여유 공간"])}),
+    Object.freeze({type:"설치",title:"설치 할 때 사다리차 비용이 궁금합니다.",aliases:Object.freeze(["사다리차 비용", "스카이차 비용", "사다리차 얼마", "고층 설치 비용", "사다리차 유료"])}),
+    Object.freeze({type:"설치",title:"기존 제품 회수나 이전 설치가 가능한가요?",aliases:Object.freeze(["기존 제품 회수", "폐가전 수거", "이전 설치", "쓰던 제품 수거", "제품 옮기기"])}),
+    Object.freeze({type:"VOC",title:"설치 도중 또는 설치 이후 회원 재산에 손해가 생겼을 경우 어떻게 해야 할까요? (바닥 기스, 수납장 파손, 벽지 손상 등)",aliases:Object.freeze(["설치 중 고객집 파손", "설치 도중 파손", "바닥 기스", "수납장 파손", "벽지 손상", "회원 재산 피해", "기사 설치 중 손해"])}),
+    Object.freeze({type:"VOC",title:"배송 지연으로 VOC 발생 했을 경우 어떻게 해야 할까요?",aliases:Object.freeze(["배송 지연 voc", "배송 늦음", "배송이 늦어요", "배송 늦어요", "배송 안옴", "배송 지연 민원", "배송 일정 지연"])}),
+    Object.freeze({type:"VOC",title:"제품 하자로 VOC 발생 했을 경우는 어떻게 해야 할까요?",aliases:Object.freeze(["제품 하자 voc", "설치 당일 불량", "제품 고장 민원", "배송 제품 하자", "제품 불량 voc"])}),
+    Object.freeze({type:"VOC",title:"에어컨 설치비 과다로 VOC 발생했는데 어떻게 해야 할까요?",aliases:Object.freeze(["에어컨 설치비 과다", "설치비 너무 많이", "에어컨 추가비용 민원", "설치비 바가지", "설치비 voc"])}),
+    Object.freeze({type:"VOC",title:"설치기사님 불만족으로 교체 요청하는 경우에는 어떻게 해야할까요?",aliases:Object.freeze(["설치기사 교체", "기사 불친절", "설치기사 불만", "다른 기사 요청", "기사 바꿔달라"])}),
+    Object.freeze({type:"VOC",title:"주소 오입력으로 배송이 당일 배송이 불가하게 됐는 경우 어떻게 해야 할까요? (당일 설치 요구 회원)",aliases:Object.freeze(["주소 오입력", "주소 잘못 입력", "당일 설치 주소 변경", "배송 주소 오류", "주소 틀림"])}),
+    Object.freeze({type:"VOC",title:"감성 불량으로 환불을 요구 하는 경우 어떻게 해야 할까요?",aliases:Object.freeze(["감성 불량 환불", "소음이 마음에 안듦", "색상 불만 환불", "단순 불만 환불", "기능 정상 환불"])}),
+    Object.freeze({type:"VOC",title:"제품 불량으로 초기 불량 판정서, 착하 판정서 등 회원이 확보하여 방문해서 환불을 요구하는데 어떻게 해야 할까요?",aliases:Object.freeze(["초기 불량 판정서", "착하 판정서", "불량 판정서 환불", "판정서 들고 환불", "서비스 판정서"])}),
+    Object.freeze({type:"설치",title:"회원이 무타공 설치를 원하시는데 어떻게 해야 할까요?",aliases:Object.freeze(["무타공 설치", "벽에 구멍 없이 설치", "무타공 tv", "타공 없는 벽걸이", "무타공 업체"])}),
+    Object.freeze({type:"기타",title:"삼성전자 제품 모델명은 어떻게 읽나요?",aliases:Object.freeze(["모델명 읽는 법", "모델명 어떻게 봐", "모델명 의미", "모델명 해석", "채번", "채번표", "에어컨 모델명 보는 법", "냉장고 모델명 보는 법"])}),
+    Object.freeze({type:"배송",title:"배송 지역 가능 여부를 알고 싶습니다.",aliases:Object.freeze(["배송 가능 지역", "우리 지역 배송", "배송 지역 확인", "전국 배송 가능", "설치 가능 지역"])}),
+    Object.freeze({type:"설치",title:"에어컨 멀티(2in1) 제품 구매 하시고 벽걸이(스탠드)는 설치를 나중에 하시려고 하는데 가능한가요?",aliases:Object.freeze(["2in1 한쪽만 설치", "멀티 에어컨 나중 설치", "벽걸이 나중에 설치", "스탠드만 먼저 설치", "에어컨 분리 설치"])}),
+    Object.freeze({type:"설치",title:"창문형 에어컨 설치 방법이 궁금합니다.",aliases:Object.freeze(["창문형 에어컨 설치", "윈도우핏 설치", "창문형 설치 방법", "창문형 자가 설치", "창문형 에어컨 창틀"])}),
+    Object.freeze({type:"설치",title:"냉장고 패널 변경이 되나요?",aliases:Object.freeze(["냉장고 패널 변경", "패널 교체 가능", "비스포크 패널 바꾸기", "냉장고 색상 변경", "냉장고 도어 패널"])}),
+    Object.freeze({type:"설치",title:"스탠드 단품 구매 후 벽걸이 실내기만 구매 해서 설치가 가능한가요?",aliases:Object.freeze(["스탠드 단품 후 벽걸이 구매", "벽걸이 실내기만 추가 구매", "에어컨 벽걸이만 나중 구매", "스탠드 사고 벽걸이 추가", "스탠드 샀는데 벽걸이만 나중에", "스탠드만 샀는데 벽걸이 추가", "벽걸이만 추가 구매", "실내기 추가 설치"])}),
+  ]);
+
   const aiEscape = value => typeof esc === "function" ? esc(String(value ?? "")) : String(value ?? "").replace(/[&<>\"']/g, ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;","'":"&#39;"}[ch]));
   const aiNormalize = value => String(value ?? "").normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim();
   const aiNow = () => new Intl.DateTimeFormat("ko-KR", {hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date());
@@ -7623,6 +7690,75 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     if(typingNode && typingNode.parentNode) typingNode.remove();
     typingNode = null;
   }
+
+
+  function aiCompactText(value){
+    return aiNormalize(value).replace(/[^0-9a-z가-힣]+/gi,"");
+  }
+
+  function aiGuideTokens(value){
+    const stop = new Set(["어떻게","하나요","되나요","할까요","궁금합니다","경우","회원","제품","상품","원하는","가능한가요","있나요","해주세요"]);
+    return aiNormalize(value)
+      .replace(/[^0-9a-z가-힣+./-]+/gi," ")
+      .split(/\s+/)
+      .map(word=>word.replace(/(으로|에서|에게|한테|부터|까지|이라면|이면|은|는|이|가|을|를|에|의|도|만)$/g,""))
+      .filter(word=>word.length >= 2 && !stop.has(word));
+  }
+
+  function isClearProductLookupQuestion(question){
+    const raw = String(question || "");
+    const normalized = aiNormalize(raw);
+    if(/(?:^|\D)\d{5,8}(?:\D|$)/.test(raw)) return true;
+    if(/\b(?=[A-Z0-9-]{5,}\b)(?=[A-Z0-9-]*[A-Z])(?=[A-Z0-9-]*\d)[A-Z0-9-]+\b/i.test(raw)) return true;
+    const findVerb = /(찾아|검색|조회|보여|추천|골라|목록|몇\s*개)/.test(normalized);
+    const productWord = /(tv|티비|냉장고|김치냉장고|에어컨|모니터|세탁기|건조기|청소기|전자레인지|큐커|인덕션|제습기|제품|상품)/i.test(normalized);
+    if(findVerb && productWord) return true;
+    return /(차이|비교|vs\.?|대비|뭐가\s*달|어떤\s*게\s*좋)/i.test(normalized) && /(아이템|모델|제품|상품)/.test(normalized);
+  }
+
+  function processGuideScore(question,guide){
+    const q = aiNormalize(question);
+    const compactQ = aiCompactText(question);
+    const qTokens = aiGuideTokens(question);
+    let best = 0;
+    [guide.title,...(guide.aliases || [])].forEach(text=>{
+      const normalized = aiNormalize(text);
+      const compact = aiCompactText(text);
+      let score = 0;
+      if(compactQ && compactQ === compact) score += 260;
+      else if(compactQ && compact.length >= 4 && compactQ.includes(compact)) score += 180;
+      else if(compactQ.length >= 4 && compact.includes(compactQ)) score += 145;
+      const tokens = aiGuideTokens(text);
+      qTokens.forEach(token=>{ if(normalized.includes(token)) score += token.length >= 4 ? 22 : 13; });
+      tokens.forEach(token=>{ if(q.includes(token)) score += token.length >= 4 ? 10 : 5; });
+      best = Math.max(best,score);
+    });
+    return best;
+  }
+
+  function findGuidedProcessMatches(question,limit=3){
+    const processes = Array.isArray(DB?.processes) ? DB.processes : [];
+    const byTitle = new Map(processes.map((row,index)=>[aiNormalize(row?.title),{row,index}]));
+    const byCompact = new Map(processes.map((row,index)=>[aiCompactText(row?.title),{row,index}]));
+    return AI_PROCESS_GUIDES.map(guide=>{
+      const entry = byTitle.get(aiNormalize(guide.title)) || byCompact.get(aiCompactText(guide.title));
+      return entry ? {...entry,guide,score:processGuideScore(question,guide)} : null;
+    }).filter(entry=>entry && entry.score>0).sort((a,b)=>b.score-a.score).slice(0,Math.max(1,limit));
+  }
+
+  function isDirectGuidedProcessMatch(matches){
+    if(!matches?.length) return false;
+    const first = Number(matches[0].score || 0);
+    const second = matches.length > 1 ? Number(matches[1].score || 0) : 0;
+    return first >= 110 || (first >= 82 && first-second >= 28);
+  }
+
+  function buildProcessSuggestionsAnswer(entries,noteText){
+    const list = (Array.isArray(entries) ? entries : []).filter(entry=>entry?.row).slice(0,3);
+    if(!list.length) return "";
+    return `<strong>질문과 비슷한 HUB 등록 질문 ${list.length}개를 찾았습니다.</strong><p>원하는 항목을 누르면 등록된 원문 답변을 확인할 수 있습니다.</p><div class="ai-answer-section">${list.map(({row,index})=>resultButton("process",index,row.title || "프로세스",[row.type,typeof processSnippet === "function" ? processSnippet(row) : row.summary].filter(Boolean).join(" · "))).join("")}</div>${noteText ? `<small>${aiEscape(noteText)}</small>` : ""}`;
+  }
+
 
   function questionTokens(query){
     const stop = new Set(["어떻게","알려줘","알려주세요","해줘","해주세요","해야","하나요","인가요","뭐야","무엇","어디로","관련","질문","문의해","있나요","가능한가요","좀","그냥"]);
@@ -7753,6 +7889,9 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 
   function findPriorityProcess(query, excludedTitles){
     const normalized = aiNormalize(query);
+    const guided = findGuidedProcessMatches(query,3).filter(entry=>!isExcludedProcessTitle(entry.row?.title,excludedTitles));
+    if(!isClearProductLookupQuestion(query) && isDirectGuidedProcessMatch(guided)) return guided[0];
+
     const processes = Array.isArray(DB?.processes) ? DB.processes : [];
     const candidates = processes.map((row,index)=>({row,index})).filter(entry=>!isExcludedProcessTitle(entry.row?.title,excludedTitles));
 
@@ -7789,7 +7928,9 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   }
 
   function fallbackProcessTitles(query){
-    return searchProcesses(query,questionTokens(query)).map(entry=>entry.row?.title).filter(Boolean);
+    const guided = findGuidedProcessMatches(query,3);
+    const source = guided.length ? guided : searchProcesses(query,questionTokens(query));
+    return source.map(entry=>entry.row?.title).filter(Boolean);
   }
 
   function isProductCompareQuestion(query){
@@ -7914,19 +8055,26 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
       if(compareHtml) return compareHtml;
     }
 
+    const clearProductLookup = isClearProductLookupQuestion(query);
+    const guided = findGuidedProcessMatches(query,3);
+    if(!clearProductLookup && guided.length){
+      if(isDirectGuidedProcessMatch(guided)){
+        return buildProcessRowAnswer(guided[0].row,guided[0].index,"HUB에 등록된 업무 질문과 직접 연결했습니다.");
+      }
+      return buildProcessSuggestionsAnswer(guided,"정확히 일치하지 않아 가까운 질문 3개를 안내했습니다.");
+    }
+
     const tokens = questionTokens(query);
-    const processIntent = /(voc|배송|설치|파손|반품|불량|주소|기사|서비스|물류|접수|교환|설치비|오배송|무타공|고객|회원|처리)/i.test(query);
     const contactIntent = /(연락처|전화|업무지원|물류|서비스센터|담당자)/i.test(query);
-    const itemIntent = /(모델|아이템|제품|tv|티비|냉장고|에어컨|모니터|세탁|건조|청소기|전자레인지|큐커|인덕션|제습기|\d{6}|[a-z]{2,}\d+)/i.test(query);
     const processes = searchProcesses(query,tokens);
-    const items = searchItems(query,tokens);
+    const items = clearProductLookup ? searchItems(query,tokens) : [];
     const contacts = contactIntent ? searchContacts(query,tokens) : [];
     const blocks = [];
 
-    if(processes.length && (processIntent || !itemIntent)){
-      blocks.push(`<strong>관련 업무 프로세스 ${processes.length}건을 찾았습니다.</strong><p>가장 가까운 항목을 눌러 원문 절차를 확인하세요.</p><div class="ai-answer-section">${processes.map(({row,index})=>resultButton("process",index,row.title || "프로세스",[row.type, typeof processSnippet === "function" ? processSnippet(row) : row.summary].filter(Boolean).join(" · "))).join("")}</div>`);
+    if(!clearProductLookup && processes.length){
+      blocks.push(buildProcessSuggestionsAnswer(processes,"질문과 비슷한 HUB 등록 질문을 안내했습니다."));
     }
-    if(items.length && (itemIntent || !processes.length)){
+    if(items.length){
       blocks.push(`<strong>관련 제품 ${items.length}개를 찾았습니다.</strong><p>아이템을 누르면 상세 스펙 화면으로 이동합니다.</p><div class="ai-answer-section">${items.map(({row,index})=>resultButton("item",index,[row.itemNo,row.modelName].filter(Boolean).join(" · ") || row.productName || "제품",[row.category,row.productName].filter(Boolean).join(" · "))).join("")}</div>`);
     }
     if(contacts.length){
@@ -7936,7 +8084,9 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     }
 
     if(!blocks.length){
-      return `<strong>HUB 자료에서 바로 일치하는 내용을 찾지 못했습니다.</strong><p>모델명, 6자리 아이템번호 또는 “설치 파손”, “주소 오입력”처럼 핵심 상황을 포함해 다시 질문해 주세요.</p><div class="ai-answer-note">등록 자료에 없는 내용은 추측해서 안내하지 않습니다.</div>`;
+      const similar = searchProcesses(query,tokens);
+      if(similar.length) return buildProcessSuggestionsAnswer(similar,"정확히 일치하지 않아 가까운 질문 3개를 안내했습니다.");
+      return `<strong>HUB 자료에서 바로 일치하는 내용을 찾지 못했습니다.</strong><p>모델명, 6자리 아이템번호 또는 처리 상황을 조금 더 구체적으로 입력해 주세요.</p><div class="ai-answer-note">원하는 답변이 검색되지 않은 경우 삼성 담당자에게 문의해 주세요.</div>`;
     }
     return blocks.join('<div style="height:10px"></div>');
   }
@@ -7988,6 +8138,18 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
         ? `<div class="ai-answer-section">${resultButton("process",index,process.title,`${process.type || "프로세스"} · 원문 전체 보기`)}</div>`
         : "";
       return `<strong>${aiEscape(process.title)}</strong><p>${aiEscape(summary).replace(/\n/g,"<br>")}</p>${cautionHtml}${stepsHtml}${sourceButton}<small>질문의 의미는 Gemini가 분석하고, 답변 내용은 HUB에 등록된 원문만 사용했습니다.</small>`;
+    }
+
+
+    if(data.intent === "PROCESS_SUGGESTIONS"){
+      const suggestions = Array.isArray(data.suggestions) ? data.suggestions : [];
+      const entries = suggestions.map(item=>{
+        const index = findAiProcessIndex(item?.title);
+        return index >= 0 ? {row:DB.processes[index],index} : null;
+      }).filter(Boolean).slice(0,3);
+      if(entries.length){
+        return buildProcessSuggestionsAnswer(entries,data.message || "질문과 가까운 HUB 등록 질문을 안내합니다.");
+      }
     }
 
     if(data.intent === "PRODUCT"){
