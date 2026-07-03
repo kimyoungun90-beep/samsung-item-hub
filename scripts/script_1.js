@@ -1,6 +1,6 @@
 
 const CONFIG = {
-  APP_VERSION: "v135",
+  APP_VERSION: "v138",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -18,7 +18,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v135"
+  SPEC_IMAGE_CACHE_BUST: "v138"
 };
 
 const DETAIL_TABS = [
@@ -3663,52 +3663,80 @@ function mergeFeatureImageSources(localEntries, githubUrls, fallbackEntries){
     .concat(extras);
 }
 
-async function resolveFeatureImageUrls(item){
-  const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
-  if(cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
-
-  const fromSheet = getFeatureImageUrlsFromSheet(item);
-  if(fromSheet.length){
-    if(cacheKey) featureImageUrlCache.set(cacheKey, fromSheet);
-    return fromSheet;
-  }
-
+function getReliableFeatureImageCandidateGroups(item){
   const itemNo = getSpecItemNo(item);
   if(!itemNo) return [];
   const max = Number(CONFIG.SPEC_IMAGE_MAX_COUNT || 10);
   const exts = getSpecImageExtensions();
 
-  // v136: 같은 주소에서 정상 열리는 이미지가 네트워크 지연 때문에 누락되지 않도록
-  // 로컬 PNG 확인과 GitHub 실제 파일 목록 확인을 동시에 실행하고 번호별로 합칩니다.
-  const localPngPromise = Promise.all(Array.from({length:max}, (_,i)=>{
+  return Array.from({length:max}, (_,i)=>{
     const no = i + 1;
-    const url = localSpecImageUrl(`${itemNo}_feature_${no}.png`);
-    return imageExistsWithTimeout(url, 2600).then(ok=> ok ? { no, url } : null);
-  })).then(list=>list.filter(Boolean));
+    const sources = [];
 
-  const githubPromise = fetchGithubFeatureImageUrls(item);
-  const [localEntries, githubUrls] = await Promise.all([localPngPromise, githubPromise]);
-  let urls = mergeFeatureImageSources(localEntries, githubUrls, []);
-
-  // GitHub API가 제한되거나 일부 파일만 확인된 경우, 빠진 번호만 로컬/Raw 주소에서 재확인합니다.
-  const foundNos = new Set(urls.map(getFeatureImageNoFromUrl).filter(Boolean));
-  const missingChecks = Array.from({length:max}, (_,i)=>{
-    const no = i + 1;
-    if(foundNos.has(no)) return Promise.resolve(null);
-    const group = [];
+    // 운영 주소를 먼저 사용하고, 해당 파일이 없을 때 GitHub Raw 주소로 자동 재시도합니다.
+    // feature 이름을 우선하고 과거 호환용 func 이름도 함께 확인합니다.
     exts.forEach(ext=>{
-      group.push(localSpecImageUrl(`${itemNo}_feature_${no}.${ext}`));
-      group.push(localSpecImageUrl(`${itemNo}_func_${no}.${ext}`));
-      const rawFeature = rawSpecImageUrl(`${itemNo}_feature_${no}.${ext}`);
-      const rawFunc = rawSpecImageUrl(`${itemNo}_func_${no}.${ext}`);
-      if(rawFeature) group.push(rawFeature);
-      if(rawFunc) group.push(rawFunc);
+      const featureName = `${itemNo}_feature_${no}.${ext}`;
+      sources.push(localSpecImageUrl(featureName));
+      const rawFeature = rawSpecImageUrl(featureName);
+      if(rawFeature) sources.push(rawFeature);
     });
-    return firstExistingImageFast(uniqueArray(group), 3200).then(url=> url ? { no, url } : null);
-  });
+    exts.forEach(ext=>{
+      const funcName = `${itemNo}_func_${no}.${ext}`;
+      sources.push(localSpecImageUrl(funcName));
+      const rawFunc = rawSpecImageUrl(funcName);
+      if(rawFunc) sources.push(rawFunc);
+    });
 
-  const fallbackEntries = (await Promise.all(missingChecks)).filter(Boolean);
-  urls = mergeFeatureImageSources(localEntries, githubUrls, fallbackEntries);
+    return { no, sources: uniqueArray(sources) };
+  });
+}
+
+function loadFeatureImageWithoutShortTimeout(sources){
+  const queue = uniqueArray(sources || []);
+  return new Promise(resolve=>{
+    let index = 0;
+    const tryNext = ()=>{
+      if(index >= queue.length){
+        resolve("");
+        return;
+      }
+      const url = queue[index++];
+      const img = new Image();
+
+      // v138: 존재 확인용 2~3초 제한을 없앴습니다.
+      // 실제 이미지가 늦게 열리는 경우에도 onload까지 기다리고,
+      // 명확한 404/onerror일 때만 다음 후보 주소를 확인합니다.
+      img.onload = ()=>resolve(url);
+      img.onerror = ()=>tryNext();
+      img.decoding = "async";
+      img.src = url;
+    };
+    tryNext();
+  });
+}
+
+async function resolveFeatureImageUrls(item){
+  const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
+  if(cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
+
+  const fromSheet = getFeatureImageUrlsFromSheet(item);
+  const itemNo = getSpecItemNo(item);
+  if(!itemNo){
+    if(cacheKey) featureImageUrlCache.set(cacheKey, fromSheet);
+    return fromSheet;
+  }
+
+  // v138: 시트에 일부 URL만 등록되어 있어도 그것만으로 검색을 끝내지 않습니다.
+  // 시트 URL + 파일명 규칙 1~10번을 함께 확인해 번호별로 합칩니다.
+  // GitHub API 목록 및 짧은 시간 제한에는 의존하지 않습니다.
+  const groups = getReliableFeatureImageCandidateGroups(item);
+  const checkedEntries = (await Promise.all(groups.map(async group=>({
+    no: group.no,
+    url: await loadFeatureImageWithoutShortTimeout(group.sources)
+  })))).filter(entry=>entry.url);
+
+  const urls = mergeFeatureImageSources(fromSheet, [], checkedEntries);
 
   if(cacheKey) featureImageUrlCache.set(cacheKey, urls);
   return urls;
