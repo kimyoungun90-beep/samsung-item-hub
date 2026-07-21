@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v138</span>
+            <span id="homeAppVersion" class="home-app-version">v139</span>
           </button>
         </div>
         <div class="home-search">
@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v138",
+  APP_VERSION: "v139",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v138"
+  SPEC_IMAGE_CACHE_BUST: "v139"
 };
 
 const DETAIL_TABS = [
@@ -5019,7 +5019,7 @@ function loadFeatureImageWithoutShortTimeout(sources){
       const url = queue[index++];
       const img = new Image();
 
-      // v138: 존재 확인용 2~3초 제한을 없앴습니다.
+      // v139: 존재 확인용 2~3초 제한을 없앴습니다.
       // 실제 이미지가 늦게 열리는 경우에도 onload까지 기다리고,
       // 명확한 404/onerror일 때만 다음 후보 주소를 확인합니다.
       img.onload = ()=>resolve(url);
@@ -5042,7 +5042,7 @@ async function resolveFeatureImageUrls(item){
     return fromSheet;
   }
 
-  // v138: 시트에 일부 URL만 등록되어 있어도 그것만으로 검색을 끝내지 않습니다.
+  // v139: 시트에 일부 URL만 등록되어 있어도 그것만으로 검색을 끝내지 않습니다.
   // 시트 URL + 파일명 규칙 1~10번을 함께 확인해 번호별로 합칩니다.
   // GitHub API 목록 및 짧은 시간 제한에는 의존하지 않습니다.
   const groups = getReliableFeatureImageCandidateGroups(item);
@@ -7195,7 +7195,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v138';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v139';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7330,7 +7330,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v138';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v139';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -7586,7 +7586,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     lastProcessTitles: []
   };
 
-  // v138: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
+  // v139: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
   const AI_PROCESS_GUIDES = Object.freeze([
     Object.freeze({type:"배송",title:"진열 제품(업체 배송 상품) 판매 후 배송 전 준비/주의 해야 하나요?",aliases:Object.freeze(["진열 제품 배송 준비", "업체 배송 상품 판매 후 준비", "진열 상품 팔고 배송 전 준비", "진열제품 포장 준비", "박스 요청"])}),
     Object.freeze({type:"배송",title:"HDM에 \"배송 완료\"로 확인이 되는데 제품을 설치 받지 않고 취소를 원하는데 어떻게 하나요?",aliases:Object.freeze(["배송 완료인데 설치 안 받음", "배송완료 취소", "hdm 배송완료 취소", "설치 전 취소", "받지 않았는데 배송완료"])}),
