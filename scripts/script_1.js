@@ -334,7 +334,7 @@ function bindEvents(){
   els.photoCarousel.addEventListener("click",(e)=>{
     const img = e.target.closest("img");
     if(img){
-      queueViewLog("대표이미지", viewTargetForItem(selectedItem), selectedItem?.itemNo || "");
+      // v142: 대표이미지는 조회 통계에서 제외하므로 로그를 저장하지 않습니다.
       openImageModal(currentImageUrls, Number(img.dataset.index||0), `${safe(selectedItem?.modelName,"제품 이미지")} · ${safe(selectedItem?.itemNo,"")}`);
     }
   });
@@ -3257,7 +3257,7 @@ function openProcessDetail(row){
   processDetailRow = row;
   processViewMode = "detail";
   pushProcessHistory("detail");
-  queueViewLog("프로세스", [safe(row.type,""), safe(row.title,"")].filter(Boolean).join(" · "), "");
+  queueViewLog("프로세스", [safe(row.type,"기타"), safe(row.title,"프로세스")].filter(Boolean).join(" · "), "");
   addRecentView({ type:"process", id:`process:${row.type || ''}:${row.title || row._dbIndex || ''}`, title:row.title || "프로세스", subtitle:row.type || "프로세스" });
   const typed = els.processSearch ? els.processSearch.value.trim() : "";
   const currentRows = matchProcesses(typed, typed ? "전체" : processFilter);
@@ -4060,7 +4060,7 @@ function closeSpecHelp(){
 
 async function openSpecCategoryViewer(cat){
   if(!cat) return;
-  queueViewLog("스펙 비교", safe(cat.label || cat.key,"스펙 비교"), "");
+  queueViewLog("스펙 비교", `${safe(cat.label || cat.key,"기타")} · 스펙 비교`, "");
   addRecentView({ type:"spec", id:`spec:${cat.key || cat.label}`, title:`${cat.label || cat.key} 스펙 비교`, subtitle:"스펙 비교" });
   currentSpecCategoryKey = cat.key || "";
   const hasSpecHelp = !!SPEC_TERM_GUIDES[currentSpecCategoryKey];
