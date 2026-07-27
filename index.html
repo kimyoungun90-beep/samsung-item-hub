@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -1316,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v140",
+  APP_VERSION: "v142",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1334,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v140"
+  SPEC_IMAGE_CACHE_BUST: "v142"
 };
 
 const DETAIL_TABS = [
@@ -1651,7 +1650,7 @@ function bindEvents(){
   els.photoCarousel.addEventListener("click",(e)=>{
     const img = e.target.closest("img");
     if(img){
-      queueViewLog("대표이미지", viewTargetForItem(selectedItem), selectedItem?.itemNo || "");
+      // v142: 대표이미지는 조회 통계에서 제외하므로 로그를 저장하지 않습니다.
       openImageModal(currentImageUrls, Number(img.dataset.index||0), `${safe(selectedItem?.modelName,"제품 이미지")} · ${safe(selectedItem?.itemNo,"")}`);
     }
   });
@@ -4624,7 +4623,7 @@ function openProcessDetail(row){
   processDetailRow = row;
   processViewMode = "detail";
   pushProcessHistory("detail");
-  queueViewLog("프로세스", [safe(row.type,""), safe(row.title,"")].filter(Boolean).join(" · "), "");
+  queueViewLog("프로세스", [safe(row.type,"기타"), safe(row.title,"프로세스")].filter(Boolean).join(" · "), "");
   addRecentView({ type:"process", id:`process:${row.type || ''}:${row.title || row._dbIndex || ''}`, title:row.title || "프로세스", subtitle:row.type || "프로세스" });
   const typed = els.processSearch ? els.processSearch.value.trim() : "";
   const currentRows = matchProcesses(typed, typed ? "전체" : processFilter);
@@ -5427,7 +5426,7 @@ function closeSpecHelp(){
 
 async function openSpecCategoryViewer(cat){
   if(!cat) return;
-  queueViewLog("스펙 비교", safe(cat.label || cat.key,"스펙 비교"), "");
+  queueViewLog("스펙 비교", `${safe(cat.label || cat.key,"기타")} · 스펙 비교`, "");
   addRecentView({ type:"spec", id:`spec:${cat.key || cat.label}`, title:`${cat.label || cat.key} 스펙 비교`, subtitle:"스펙 비교" });
   currentSpecCategoryKey = cat.key || "";
   const hasSpecHelp = !!SPEC_TERM_GUIDES[currentSpecCategoryKey];
