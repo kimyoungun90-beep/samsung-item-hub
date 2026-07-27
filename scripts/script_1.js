@@ -1,6 +1,5 @@
-
 const CONFIG = {
-  APP_VERSION: "v138",
+  APP_VERSION: "v143",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -18,7 +17,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v138"
+  SPEC_IMAGE_CACHE_BUST: "v143"
 };
 
 const DETAIL_TABS = [
@@ -108,6 +107,7 @@ let quickListCurrentPage = 1;
 const QUICK_LIST_PAGE_SIZE = 5;
 let itemDetailTab = "spec";
 let selectedAirconSpecPart = "스탠드";
+let selectedTvSpecPart = "TV";
 let selectedPhotoIndex = 0;
 let currentImageUrls = [];
 let modalImageUrls = [];
@@ -135,6 +135,7 @@ let processRecommendationLoadedAt = 0;
 let processRecommendationLoading = false;
 let processPendingOpenIndex = null;
 const processSearchLogTimes = new Map();
+const searchFailureLogTimes = new Map();
 let processViewMode = "home";
 let processDetailRow = null;
 let processDetailReturn = { mode:"home", query:"", filter:"전체" };
@@ -2002,6 +2003,7 @@ function searchItem(showError=true){
     const filterText = selectedItemCategoryFilter === "전체" ? "" : ` 선택한 품목(${selectedItemCategoryFilter}) 안에서`;
     els.productEmpty.textContent = `${raw}${filterText} 검색 결과가 없습니다. 품목 필터를 전체로 바꾸거나 아이템번호/모델명을 확인해 주세요.`;
     showStatus("검색 결과가 없습니다. 품목 필터 또는 검색어를 확인해 주세요.", "err");
+    queueSearchFailure(raw, "아이템 검색");
     return;
   }
   if(matches.length > 1){
@@ -2324,9 +2326,13 @@ function openItemDetailPage(item){
   const hydratedItem = restoreAirconSpecForItem(item);
   selectedItem = hydratedItem;
   itemDetailTab = "spec";
-  const isAircon = itemCategoryGroup(hydratedItem) === "에어컨";
+  const categoryGroup = itemCategoryGroup(hydratedItem);
+  const isAircon = categoryGroup === "에어컨";
+  const isTv = categoryGroup === "TV/모니터" || categoryGroup === "TV";
   const availableParts = isAircon ? getAvailableAirconSpecParts(hydratedItem) : [];
+  const availableTvParts = isTv ? getAvailableTvSpecParts(hydratedItem) : [];
   selectedAirconSpecPart = availableParts[0] || "스탠드";
+  selectedTvSpecPart = availableTvParts[0] || "TV";
 
   queueViewLog("스펙", viewTargetForItem(hydratedItem), hydratedItem.itemNo || "");
   renderItemTextDetail();
@@ -2384,27 +2390,60 @@ function ensureSelectedAirconSpecPart(item){
   return parts;
 }
 
-function renderStructuredSpecContent(item, airconPart=""){
+const TV_SPEC_PART_ORDER = ["TV","사운드바"];
+
+function normalizeTvSpecPart(value){
+  const text = safe(value, "").replace(/\s+/g, "").toLowerCase();
+  if(!text) return "TV";
+  if(text.includes("사운드") || text.includes("soundbar")) return "사운드바";
+  return "TV";
+}
+
+function getAvailableTvSpecParts(item){
+  const found = new Set();
+  const rows = Array.isArray(item?.specRows) ? item.specRows : [];
+  rows.forEach(row=>{
+    if(!safe(row?.question, "") && !safe(row?.answer, "")) return;
+    found.add(normalizeTvSpecPart(row?.productPart || row?.part));
+  });
+  if(found.size === 0 && safe(item?.spec, "")) found.add("TV");
+  return TV_SPEC_PART_ORDER.filter(part=>found.has(part));
+}
+
+function ensureSelectedTvSpecPart(item){
+  const parts = getAvailableTvSpecParts(item);
+  if(parts.length && !parts.includes(selectedTvSpecPart)) selectedTvSpecPart = parts[0];
+  return parts;
+}
+
+function renderStructuredSpecContent(item, selectedPart=""){
   let rows = Array.isArray(item?.specRows) ? item.specRows.filter(r=>safe(r.question,"") || safe(r.answer,"")) : [];
-  const isAircon = itemCategoryGroup(item) === "에어컨";
+  const categoryGroup = itemCategoryGroup(item);
+  const isAircon = categoryGroup === "에어컨";
+  const isTv = categoryGroup === "TV/모니터" || categoryGroup === "TV";
   if(isAircon){
     const availableParts = getAvailableAirconSpecParts(item);
-    const wanted = availableParts.includes(airconPart) ? airconPart : (availableParts[0] || "스탠드");
+    const wanted = availableParts.includes(selectedPart) ? selectedPart : (availableParts[0] || "스탠드");
     rows = rows.filter(r=>normalizeAirconSpecPart(r.productPart || r.part) === wanted);
-    airconPart = wanted;
+    selectedPart = wanted;
+  }else if(isTv){
+    const availableParts = getAvailableTvSpecParts(item);
+    const wanted = availableParts.includes(selectedPart) ? selectedPart : (availableParts[0] || "TV");
+    rows = rows.filter(r=>normalizeTvSpecPart(r.productPart || r.part) === wanted);
+    selectedPart = wanted;
   }
   if(!rows.length){
     const legacy = safe(item?.spec,"");
-    if(legacy && (!isAircon || (airconPart || "스탠드") === "스탠드")){
+    if(legacy && (!isAircon || (selectedPart || "스탠드") === "스탠드")){
       return `<div class="item-detail-content">
-        <div class="item-detail-content-title">${isAircon ? "스탠드 스펙" : "스펙"}</div>
+        <div class="item-detail-content-title">${isAircon ? "스탠드 스펙" : (isTv ? `${selectedPart || "TV"} 스펙` : "스펙")}</div>
         <div class="item-detail-content-body">${styledText(legacy,"",styleOf(item,"spec"))}</div>
       </div>`;
     }
-    const partText = isAircon && airconPart ? `${airconPart} 스펙이 등록되지 않았습니다.<br>` : "";
+    const partText = (isAircon || isTv) && selectedPart ? `${selectedPart} 스펙이 등록되지 않았습니다.<br>` : "";
     return `<div class="item-detail-content">
-      <div class="item-detail-content-title">${isAircon && airconPart ? `${airconPart} 스펙` : "스펙"}</div>
-      <div class="item-detail-content-body item-detail-empty">${partText}구글시트의 카테고리별 스펙 시트에 내용을 입력하세요.<br>에어컨은 A열 아이템번호, B열 제품구분, C열 구분번호, D열 질문, E열 답으로 입력합니다.</div>
+      <div class="item-detail-content-title">${(isAircon || isTv) && selectedPart ? `${selectedPart} 스펙` : "스펙"}</div>
+      <div class="item-detail-content-body item-detail-empty">${partText}구글시트의 카테고리별 스펙 시트에 내용을 입력하세요.<br>에어컨과 TV는 A열 아이템번호, B열 제품구분, C열 구분번호, D열 질문, E열 답으로 입력합니다.</div>
     </div>`;
   }
   const groups = new Map();
@@ -2437,11 +2476,17 @@ function renderItemTextDetail(){
   const thumbCandidates = getItemThumbnailCandidates(item);
   const thumb = thumbCandidates[0] || getItemThumbnailUrl(item) || "";
   const active = ITEM_DETAIL_TABS.find(t=>t.key===itemDetailTab) || ITEM_DETAIL_TABS[0];
-  const isAircon = itemCategoryGroup(item) === "에어컨";
+  const categoryGroup = itemCategoryGroup(item);
+  const isAircon = categoryGroup === "에어컨";
+  const isTv = categoryGroup === "TV/모니터" || categoryGroup === "TV";
   const availableAirconParts = isAircon ? ensureSelectedAirconSpecPart(item) : [];
-  const partTabs = isAircon && active.key === "spec" && availableAirconParts.length ? `
+  const availableTvParts = isTv ? ensureSelectedTvSpecPart(item) : [];
+  const partTabs = active.key === "spec" && isAircon && availableAirconParts.length ? `
     <div class="aircon-part-tabs" aria-label="에어컨 구성별 스펙">
       ${availableAirconParts.map(part=>`<button class="aircon-part-btn ${selectedAirconSpecPart===part?"active":""}" type="button" data-part="${part}">${part}</button>`).join("")}
+    </div>` : active.key === "spec" && isTv && availableTvParts.length ? `
+    <div class="aircon-part-tabs" aria-label="TV 구성별 스펙">
+      ${availableTvParts.map(part=>`<button class="tv-part-btn ${selectedTvSpecPart===part?"active":""}" type="button" data-part="${part}">${part}</button>`).join("")}
     </div>` : "";
   els.itemDetailContent.innerHTML = `
     <div class="item-detail-hero">
@@ -2458,7 +2503,7 @@ function renderItemTextDetail(){
       ${ITEM_DETAIL_TABS.map(t=>`<button class="item-detail-tab ${t.key===active.key?"active":""}" type="button" data-key="${esc(t.key)}">${esc(t.label)}</button>`).join("")}
     </div>
     ${partTabs}
-    ${renderStructuredSpecContent(item, selectedAirconSpecPart)}
+    ${renderStructuredSpecContent(item, isAircon ? selectedAirconSpecPart : (isTv ? selectedTvSpecPart : ""))}
   `;
   bindItemFavoriteButtons(els.itemDetailContent);
   els.itemDetailContent.querySelectorAll(".item-detail-tab").forEach(btn=>{
@@ -2477,6 +2522,13 @@ function renderItemTextDetail(){
     btn.addEventListener("click",()=>{
       selectedAirconSpecPart = btn.dataset.part || "스탠드";
       queueViewLog(`스펙-${selectedAirconSpecPart}`, viewTargetForItem(selectedItem), selectedItem?.itemNo || "");
+      renderItemTextDetail();
+    });
+  });
+  els.itemDetailContent.querySelectorAll(".tv-part-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      selectedTvSpecPart = btn.dataset.part || "TV";
+      queueViewLog(`스펙-${selectedTvSpecPart}`, viewTargetForItem(selectedItem), selectedItem?.itemNo || "");
       renderItemTextDetail();
     });
   });
@@ -3027,6 +3079,7 @@ function runProcessSearch(action="검색"){
   pushProcessHistory("results");
   const rows = renderProcessCurrentView(false);
   queueProcessSearchLog(term, rows.length, "", action);
+  if(!rows.length) queueSearchFailure(term, "프로세스 검색");
 }
 
 function renderProcessCurrentView(showSuggestions=false){
@@ -3311,6 +3364,22 @@ function compressProcessRecommendationTerm(term){
   return (picked.join(" ") || raw).slice(0,12);
 }
 
+
+
+function queueSearchFailure(query, searchType="통합검색"){
+  const cleanQuery = String(query || "").trim().replace(/\s+/g," ").slice(0,160);
+  const cleanType = String(searchType || "통합검색").trim().slice(0,40);
+  if(cleanQuery.length < 2) return;
+  const key = `${normalizeText(cleanType)}|${normalizeText(cleanQuery)}`;
+  const now = Date.now();
+  const prev = searchFailureLogTimes.get(key) || 0;
+  if(now - prev < 5000) return;
+  searchFailureLogTimes.set(key, now);
+  const qs = new URLSearchParams({ action:"logSearchFailure", query:cleanQuery, searchType:cleanType, _:String(now) }).toString();
+  const url = `${CONFIG.APPS_SCRIPT_URL}?${qs}`;
+  try{ fetch(url,{ method:"GET",mode:"no-cors",cache:"no-store",keepalive:true }).catch(()=>{}); }
+  catch(e){ try{ const img = new Image(); img.src = url; }catch(err){} }
+}
 
 function queueProcessSearchLog(term,resultCount=0,selectedProcess="",action="검색"){
   const cleanTerm = String(term || "").trim().replace(/\s+/g," ").slice(0,80);
@@ -3704,7 +3773,7 @@ function loadFeatureImageWithoutShortTimeout(sources){
       const url = queue[index++];
       const img = new Image();
 
-      // v138: 존재 확인용 2~3초 제한을 없앴습니다.
+      // v139: 존재 확인용 2~3초 제한을 없앴습니다.
       // 실제 이미지가 늦게 열리는 경우에도 onload까지 기다리고,
       // 명확한 404/onerror일 때만 다음 후보 주소를 확인합니다.
       img.onload = ()=>resolve(url);
@@ -3727,7 +3796,7 @@ async function resolveFeatureImageUrls(item){
     return fromSheet;
   }
 
-  // v138: 시트에 일부 URL만 등록되어 있어도 그것만으로 검색을 끝내지 않습니다.
+  // v139: 시트에 일부 URL만 등록되어 있어도 그것만으로 검색을 끝내지 않습니다.
   // 시트 URL + 파일명 규칙 1~10번을 함께 확인해 번호별로 합칩니다.
   // GitHub API 목록 및 짧은 시간 제한에는 의존하지 않습니다.
   const groups = getReliableFeatureImageCandidateGroups(item);
@@ -4962,4 +5031,3 @@ function openDisplayCheckPreview(code){
   const item=displayCheckItems().find(x=>x.code===code);
   if(url) openImageModal([url],0,`${item?.title || "촬영"} 사진`);
 }
-

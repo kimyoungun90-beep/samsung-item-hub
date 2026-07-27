@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v142",
+  APP_VERSION: "v143",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v142"
+  SPEC_IMAGE_CACHE_BUST: "v143"
 };
 
 const DETAIL_TABS = [
@@ -1451,6 +1451,7 @@ let processRecommendationLoadedAt = 0;
 let processRecommendationLoading = false;
 let processPendingOpenIndex = null;
 const processSearchLogTimes = new Map();
+const searchFailureLogTimes = new Map();
 let processViewMode = "home";
 let processDetailRow = null;
 let processDetailReturn = { mode:"home", query:"", filter:"전체" };
@@ -3318,6 +3319,7 @@ function searchItem(showError=true){
     const filterText = selectedItemCategoryFilter === "전체" ? "" : ` 선택한 품목(${selectedItemCategoryFilter}) 안에서`;
     els.productEmpty.textContent = `${raw}${filterText} 검색 결과가 없습니다. 품목 필터를 전체로 바꾸거나 아이템번호/모델명을 확인해 주세요.`;
     showStatus("검색 결과가 없습니다. 품목 필터 또는 검색어를 확인해 주세요.", "err");
+    queueSearchFailure(raw, "아이템 검색");
     return;
   }
   if(matches.length > 1){
@@ -4393,6 +4395,7 @@ function runProcessSearch(action="검색"){
   pushProcessHistory("results");
   const rows = renderProcessCurrentView(false);
   queueProcessSearchLog(term, rows.length, "", action);
+  if(!rows.length) queueSearchFailure(term, "프로세스 검색");
 }
 
 function renderProcessCurrentView(showSuggestions=false){
@@ -4677,6 +4680,22 @@ function compressProcessRecommendationTerm(term){
   return (picked.join(" ") || raw).slice(0,12);
 }
 
+
+
+function queueSearchFailure(query, searchType="통합검색"){
+  const cleanQuery = String(query || "").trim().replace(/\s+/g," ").slice(0,160);
+  const cleanType = String(searchType || "통합검색").trim().slice(0,40);
+  if(cleanQuery.length < 2) return;
+  const key = `${normalizeText(cleanType)}|${normalizeText(cleanQuery)}`;
+  const now = Date.now();
+  const prev = searchFailureLogTimes.get(key) || 0;
+  if(now - prev < 5000) return;
+  searchFailureLogTimes.set(key, now);
+  const qs = new URLSearchParams({ action:"logSearchFailure", query:cleanQuery, searchType:cleanType, _:String(now) }).toString();
+  const url = `${CONFIG.APPS_SCRIPT_URL}?${qs}`;
+  try{ fetch(url,{ method:"GET",mode:"no-cors",cache:"no-store",keepalive:true }).catch(()=>{}); }
+  catch(e){ try{ const img = new Image(); img.src = url; }catch(err){} }
+}
 
 function queueProcessSearchLog(term,resultCount=0,selectedProcess="",action="검색"){
   const cleanTerm = String(term || "").trim().replace(/\s+/g," ").slice(0,80);

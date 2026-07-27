@@ -1,4 +1,3 @@
-
 (() => {
   const previousV109RenderDepartments = renderDepartments;
   const cleanStore = value => String(value || '').replace(/^코스트코\s*/, '').split('(')[0].trim();
@@ -127,6 +126,6 @@
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v138';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v139';
   if(deptFilter === '물류') renderDepartments();
 })();

@@ -1,4 +1,3 @@
-
 (() => {
   const overlay = document.getElementById("aiAssistantOverlay");
   const openButton = document.getElementById("homeAiAssistantShortcut");
@@ -19,7 +18,7 @@
     lastProcessTitles: []
   };
 
-  // v138: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
+  // v139: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
   const AI_PROCESS_GUIDES = Object.freeze([
     Object.freeze({type:"배송",title:"진열 제품(업체 배송 상품) 판매 후 배송 전 준비/주의 해야 하나요?",aliases:Object.freeze(["진열 제품 배송 준비", "업체 배송 상품 판매 후 준비", "진열 상품 팔고 배송 전 준비", "진열제품 포장 준비", "박스 요청"])}),
     Object.freeze({type:"배송",title:"HDM에 \"배송 완료\"로 확인이 되는데 제품을 설치 받지 않고 취소를 원하는데 어떻게 하나요?",aliases:Object.freeze(["배송 완료인데 설치 안 받음", "배송완료 취소", "hdm 배송완료 취소", "설치 전 취소", "받지 않았는데 배송완료"])}),

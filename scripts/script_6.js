@@ -1,4 +1,3 @@
-
 (() => {
   const STORE_SUPPORT_PHONE = Object.freeze({
     '고척점':'02-331-5206','공세점':'02-331-5212','광명점':'02-331-5212','김해점':'02-331-5206',
@@ -122,7 +121,7 @@
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v138';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v139';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
