@@ -825,7 +825,7 @@ body.view-nonhome .app{padding-top:0;}
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 5.5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-5 3v-3H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
           </span>
           <span class="home-ai-shortcut-copy"><strong>AI 업무 도우미</strong><small>제품 · VOC · 배송 · 설치 질문</small></span>
-          <span class="home-ai-shortcut-badge">v1.0.1</span>
+          <span class="home-ai-shortcut-badge">v2.0.1</span>
           <span class="home-ai-shortcut-arrow" aria-hidden="true">›</span>
         </button>
         <div class="home-quick-grid">
@@ -1277,7 +1277,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">AI 업무 도우미</span><em>v1.0.1</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">AI 업무 도우미</span><em>v2.0.1</em></div>
         <small><i></i> HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v145",
+  APP_VERSION: "v144",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v145"
+  SPEC_IMAGE_CACHE_BUST: "v144"
 };
 
 const DETAIL_TABS = [
@@ -7702,7 +7702,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   const aiConversation = {
     lastQuestion: "",
     excludedProcessTitles: [],
-    lastProcessTitles: []
+    lastProcessTitles: [],
+    lastAnswerText: ""
   };
 
   // v139: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
@@ -7790,8 +7791,11 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   function addMessage(role, html){
     const row = document.createElement("div");
     row.className = `ai-message-row ${role}`;
-    row.innerHTML = `${role === "bot" ? '<div class="ai-message-avatar" aria-hidden="true">AI</div>' : ''}<div class="ai-message-bubble">${html}<div class="ai-message-time">${aiNow()}</div></div>`;
+    const canFeedback = role === "bot" && !!aiConversation.lastQuestion && !String(html).includes("개인정보를 삭제");
+    const feedback = canFeedback ? '<div class="ai-feedback-wrap"><span class="ai-feedback-label">원하는 답변이 아닌가요?</span><button class="ai-feedback-btn" type="button" data-ai-feedback="alternative">다른 답변 찾기</button></div>' : '';
+    row.innerHTML = `${role === "bot" ? '<div class="ai-message-avatar" aria-hidden="true">AI</div>' : ''}<div class="ai-message-bubble">${html}${feedback}<div class="ai-message-time">${aiNow()}</div></div>`;
     messages.appendChild(row);
+    if(role === "bot") aiConversation.lastAnswerText = row.querySelector(".ai-message-bubble")?.innerText?.replace(/원하는 답변이 아닌가요\?|다른 답변 찾기/g,"").trim().slice(0,5000) || "";
     aiScrollBottom();
     return row;
   }
@@ -7829,10 +7833,9 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     const normalized = aiNormalize(raw);
     if(/(?:^|\D)\d{5,8}(?:\D|$)/.test(raw)) return true;
     if(/\b(?=[A-Z0-9-]{5,}\b)(?=[A-Z0-9-]*[A-Z])(?=[A-Z0-9-]*\d)[A-Z0-9-]+\b/i.test(raw)) return true;
-    const findVerb = /(찾아|검색|조회|보여|추천|골라|목록|몇\s*개|뭐가\s*있|무엇이\s*있|어떤\s*(?:모델|제품)|모델이\s*뭐|제품이\s*뭐)/.test(normalized);
-    const productWord = /(tv|티비|텔레비전|냉장고|김치냉장고|에어컨|모니터|세탁기|건조기|청소기|전자레인지|큐커|인덕션|제습기|사운드바|제품|상품|모델)/i.test(normalized);
-    const sizeLookup = /\d{2,3}\s*(?:인치|형|\"|inch|cm|센티)/i.test(raw);
-    if((findVerb && productWord) || (sizeLookup && productWord)) return true;
+    const findVerb = /(찾아|검색|조회|보여|추천|골라|목록|몇\s*개)/.test(normalized);
+    const productWord = /(tv|티비|냉장고|김치냉장고|에어컨|모니터|세탁기|건조기|청소기|전자레인지|큐커|인덕션|제습기|제품|상품)/i.test(normalized);
+    if(findVerb && productWord) return true;
     return /(차이|비교|vs\.?|대비|뭐가\s*달|어떤\s*게\s*좋)/i.test(normalized) && /(아이템|모델|제품|상품)/.test(normalized);
   }
 
@@ -7908,9 +7911,15 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   }
 
   function rankProcesses(query, tokens){
+    const q = aiNormalize(query);
     return (Array.isArray(DB?.processes) ? DB.processes : []).map((row,index)=>{
-      const hay = [row.type,row.title,row.summary,row.body,row.fullText, ...(Array.isArray(row.steps)?row.steps.map(step=>typeof step === "object" ? step.text : step):[])].join(" ");
-      return {row,index,score:scoreText(hay,row.title,row.type,query,tokens)};
+      const keywordText = aiNormalize(row.keywords || "");
+      const hay = [row.type,row.title,row.keywords,row.summary,row.body,row.fullText, ...(Array.isArray(row.steps)?row.steps.map(step=>typeof step === "object" ? step.text : step):[])].join(" ");
+      let score = scoreText(hay,row.title,row.type,query,tokens);
+      if(q && keywordText.includes(q)) score += 120;
+      tokens.forEach(token=>{ if(keywordText.includes(token)) score += 32; });
+      if(q && aiNormalize(row.title).includes(q)) score += 80;
+      return {row,index,score};
     }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score || String(a.row.title||"").localeCompare(String(b.row.title||""),"ko"));
   }
 
@@ -7918,60 +7927,23 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     return rankProcesses(query,tokens).slice(0,3);
   }
 
-  function extractProductSize(query){
-    const raw = String(query || "").toLowerCase();
-    const inchMatch = raw.match(/(\d{2,3})\s*(?:인치|형|\"|inch)/i);
-    const cmMatch = raw.match(/(\d{2,3})\s*(?:cm|센티)/i);
-    const inchToCm = {"43":"108","50":"125","55":"138","65":"163","75":"189","77":"194","85":"214","98":"247"};
-    const cmToInch = Object.fromEntries(Object.entries(inchToCm).map(([inch,cm])=>[cm,inch]));
-    let inch = inchMatch ? String(Number(inchMatch[1])) : "";
-    let cm = cmMatch ? String(Number(cmMatch[1])) : "";
-    if(inch && !cm) cm = inchToCm[inch] || "";
-    if(cm && !inch) inch = cmToInch[cm] || "";
-    return {inch,cm};
-  }
-
-  function itemMatchesRequestedSize(row,size){
-    if(!size?.inch && !size?.cm) return true;
-    const text = aiNormalize([row.itemNo,row.modelName,row.productName,row.category,row.spec,row.feature,row.keywords,JSON.stringify(row.specRows || [])].join(" ")).replace(/\s+/g,"");
-    const aliases = [];
-    if(size.inch) aliases.push(`${size.inch}인치`,`${size.inch}형`,`${size.inch}\"`,`${size.inch}inch`);
-    if(size.cm) aliases.push(`${size.cm}cm`,`${size.cm}센티`,`(${size.cm})`);
-    return aliases.some(alias=>text.includes(aiNormalize(alias).replace(/\s+/g,"")));
-  }
-
   function searchItems(query, tokens){
     const digits = String(query||"").replace(/\D/g,"");
     const q = aiNormalize(query);
-    const requestedSize = extractProductSize(query);
-    const tvOnly = /(tv|티비|텔레비전)/i.test(String(query || ""));
-    const seen = new Set();
     return (Array.isArray(DB?.items) ? DB.items : []).map((row,index)=>{
       const itemNo = aiNormalize(row.itemNo);
       const model = aiNormalize(row.modelName);
       const title = [row.productName,row.modelName].filter(Boolean).join(" ");
-      const hay = [row.itemNo,row.modelName,row.productName,row.category,row.brand,row.spec,row.feature,row.keywords,JSON.stringify(row.specRows || [])].join(" ");
-      const normalizedHay = aiNormalize(hay);
+      const hay = [row.itemNo,row.modelName,row.productName,row.category,row.brand,row.keywords].join(" ");
       let score = scoreText(hay,title,row.category,query,tokens);
+      const keywordText = aiNormalize(row.keywords || "");
+      if(q && keywordText.includes(q)) score += 110;
+      tokens.forEach(token=>{ if(keywordText.includes(token)) score += 28; });
       if(digits && itemNo === digits) score += 120;
       if(q && model === q) score += 100;
       if(tokens.some(token=>model.startsWith(token))) score += 18;
-      if(tvOnly){
-        if(!/(?:^|\s)tv(?:\s|$)|티비|텔레비전/i.test(normalizedHay)) return {row,index,score:0};
-        score += 40;
-      }
-      if(requestedSize.inch || requestedSize.cm){
-        if(!itemMatchesRequestedSize(row,requestedSize)) return {row,index,score:0};
-        score += 120;
-      }
       return {row,index,score};
-    }).filter(item=>{
-      if(item.score<=0) return false;
-      const key=aiNormalize(item.row?.itemNo || item.row?.modelName);
-      if(!key || seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    }).sort((a,b)=>b.score-a.score || String(a.row?.itemNo||"").localeCompare(String(b.row?.itemNo||""),"ko")).slice(0,20);
+    }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score).slice(0,20);
   }
 
   function searchContacts(query, tokens){
@@ -8235,9 +8207,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
       blocks.push(buildProcessSuggestionsAnswer(processes,"질문과 비슷한 HUB 등록 질문을 안내했습니다."));
     }
     if(items.length){
-      const size = extractProductSize(query);
-      const label = size.inch ? `${size.inch}인치 ` : "";
-      blocks.push(`<strong>현재 HUB에 등록된 ${label}제품은 총 ${items.length}개입니다.</strong><p>원하는 제품을 누르면 상세 스펙을 확인할 수 있습니다.</p><div class="ai-answer-section">${items.map(({row,index})=>resultButton("item",index,[row.itemNo,row.modelName].filter(Boolean).join(" · ") || row.productName || "제품",[row.category,row.productName].filter(Boolean).join(" · "))).join("")}</div>`);
+      blocks.push(`<strong>관련 제품 ${items.length}개를 찾았습니다.</strong><p>아이템을 누르면 상세 스펙 화면으로 이동합니다.</p><div class="ai-answer-section">${items.map(({row,index})=>resultButton("item",index,[row.itemNo,row.modelName].filter(Boolean).join(" · ") || row.productName || "제품",[row.category,row.productName].filter(Boolean).join(" · "))).join("")}</div>`);
     }
     if(contacts.length){
       blocks.push(`<strong>관련 연락처를 확인했습니다.</strong><div class="ai-answer-section">${contacts.map(({row})=>`<div class="ai-contact-line"><b>${aiEscape([row.place,row.deptName || row.type].filter(Boolean).join(" · ") || "업무지원")}</b><span>${row.phone ? `<a href="tel:${aiEscape(String(row.phone).replace(/[^0-9+]/g,""))}">${aiEscape(row.phone)}</a>` : "전화번호 미등록"}${row.scope ? ` · ${aiEscape(row.scope)}` : ""}</span></div>`).join("")}${resultButton("dept",0,"업무지원 페이지 열기","점포·물류·서비스 연락처 전체 확인")}</div>`);
@@ -8329,11 +8299,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
           ? resultButton("item",index,title,sub)
           : `<div class="ai-contact-line"><b>${aiEscape(title)}</b><span>${aiEscape(sub)}</span></div>`;
       }).join("");
-      const totalCount = Number(data.totalCount || products.length);
-      const requestedSize = data.requestedSize || extractProductSize(question);
-      const label = requestedSize?.inch ? `${requestedSize.inch}인치 ` : "";
-      const more = totalCount > products.length ? `<small>전체 ${totalCount}개 중 ${products.length}개를 표시했습니다.</small>` : "";
-      return `<strong>현재 HUB에 등록된 ${label}제품은 총 ${totalCount}개입니다.</strong><p>원하는 제품을 누르면 상세 스펙을 확인할 수 있습니다.</p><div class="ai-answer-section">${cards}</div>${more}`;
+      return `<strong>관련 제품 ${products.length}개를 찾았습니다.</strong><p>제품을 누르면 HUB 상세 화면으로 이동합니다.</p><div class="ai-answer-section">${cards}</div>`;
     }
 
     if(data.intent === "CONTACT"){
@@ -8347,6 +8313,28 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     }
 
     return "";
+  }
+
+  async function logAlternativeFeedback(question, recommendation){
+    try{
+      await apiGet({
+        action:"logSearchFeedback",
+        question:String(question || ""),
+        recommendation:String(recommendation || "").slice(0,5000),
+        feedbackType:"다른 답변 찾기",
+        t:String(Date.now())
+      });
+    }catch(err){}
+  }
+
+  async function requestAlternativeFromButton(button){
+    const question = aiConversation.lastQuestion;
+    if(!question) return;
+    if(button){ button.disabled = true; button.textContent = "다른 답변을 찾는 중…"; }
+    const bubble = button?.closest(".ai-message-bubble");
+    const recommendation = bubble?.innerText?.replace(/원하는 답변이 아닌가요\?|다른 답변 찾기|다른 답변을 찾는 중…/g,"").trim() || aiConversation.lastAnswerText;
+    await logAlternativeFeedback(question,recommendation);
+    await submitQuestion("다른 답변 찾아줘");
   }
 
   async function submitQuestion(question){
@@ -8502,6 +8490,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     if(button) submitQuestion(button.dataset.aiQuestion || "");
   });
   messages.addEventListener("click", event=>{
+    const feedbackButton = event.target.closest("[data-ai-feedback]");
+    if(feedbackButton){ requestAlternativeFromButton(feedbackButton); return; }
     const button = event.target.closest("[data-ai-kind]");
     if(!button) return;
     const kind = button.dataset.aiKind;
