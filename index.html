@@ -8316,15 +8316,53 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   }
 
   async function logAlternativeFeedback(question, recommendation){
+    const q = String(question || "").trim();
+    if(!q) return false;
+
+    // 긴 추천 답변을 GET 쿼리로 보내면 URL 길이 제한 때문에 기록이 누락될 수 있습니다.
+    // 숨김 iframe + POST form으로 전송해 검색피드백DB에 안정적으로 저장합니다.
+    const iframeName = `hubFeedbackFrame_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const iframe = document.createElement("iframe");
+    iframe.name = iframeName;
+    iframe.style.display = "none";
+    iframe.setAttribute("aria-hidden", "true");
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = CONFIG.APPS_SCRIPT_URL;
+    form.target = iframeName;
+    form.style.display = "none";
+
+    const fields = {
+      action: "logSearchFeedback",
+      question: q.slice(0, 500),
+      recommendation: String(recommendation || "").slice(0, 5000),
+      feedbackType: "다른 답변 찾기",
+      t: String(Date.now())
+    };
+    Object.entries(fields).forEach(([name,value])=>{
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(iframe);
+    document.body.appendChild(form);
     try{
-      await apiGet({
-        action:"logSearchFeedback",
-        question:String(question || ""),
-        recommendation:String(recommendation || "").slice(0,5000),
-        feedbackType:"다른 답변 찾기",
-        t:String(Date.now())
-      });
-    }catch(err){}
+      form.submit();
+      await new Promise(resolve=>setTimeout(resolve, 900));
+      return true;
+    }catch(err){
+      console.warn("검색 피드백 저장 실패", err);
+      return false;
+    }finally{
+      setTimeout(()=>{
+        try{ form.remove(); }catch(e){}
+        try{ iframe.remove(); }catch(e){}
+      }, 4000);
+    }
   }
 
   async function requestAlternativeFromButton(button){
