@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v143",
+  APP_VERSION: "v144",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v143"
+  SPEC_IMAGE_CACHE_BUST: "v144"
 };
 
 const DETAIL_TABS = [
@@ -1391,7 +1391,7 @@ const SPEC_TERM_GUIDES = {
 };
 
 const FALLBACK_MAP_DATA = {"stores":[{"name":"양재점","address":"서울특별시 서초구 양재대로 159","tc":"남서울TC","x":44.0,"y":28.0,"phone":"1899-9900"},{"name":"양평점","address":"서울특별시 영등포구 선유로 156","tc":"서서울TC","x":38.0,"y":25.0,"phone":"1899-9900"},{"name":"상봉점","address":"서울특별시 중랑구 망우로 336","tc":"동서울TC","x":48.0,"y":24.0,"phone":"1899-9900"},{"name":"고척점","address":"서울특별시 구로구 경인로43길 49","tc":"인천TC","x":39.0,"y":27.0,"phone":"1899-9900"},{"name":"광명점","address":"경기도 광명시 일직로 40","tc":"인천TC","x":38.0,"y":30.0,"phone":"1899-9900"},{"name":"하남점","address":"경기도 하남시 미사강변한강로 209","tc":"동서울TC","x":50.0,"y":27.0,"phone":"1899-9900"},{"name":"의정부점","address":"경기도 의정부시 용민로 489","tc":"동서울TC","x":45.0,"y":18.0,"phone":"1899-9900"},{"name":"공세점","address":"경기도 용인시 기흥구 탑실로 38","tc":"평택TC","x":47.0,"y":38.0,"phone":"1899-9900"},{"name":"일산점","address":"경기도 고양시 일산동구 장백로 25","tc":"서서울TC","x":35.0,"y":21.0,"phone":"1899-9900"},{"name":"송도점","address":"인천광역시 연수구 컨벤시아대로 230","tc":"인천TC","x":31.0,"y":30.0,"phone":"1899-9900"},{"name":"청라점","address":"인천광역시 서구 첨단서로 188","tc":"인천TC","x":32.0,"y":25.0,"phone":"1899-9900"},{"name":"평택점","address":"경기도 평택시 경기대로 975","tc":"평택TC","x":46.0,"y":43.0,"phone":"1899-9900"},{"name":"천안점","address":"충청남도 천안시 서북구 3공단6로 77","tc":"아산TC","x":47.0,"y":48.0,"phone":"1899-9900"},{"name":"세종점","address":"세종특별자치시 종합운동장1로 14","tc":"세종TC","x":49.0,"y":50.0,"phone":"1899-9900"},{"name":"대전점","address":"대전광역시 중구 오류로 41","tc":"세종TC","x":50.0,"y":53.0,"phone":"1899-9900"},{"name":"대구점","address":"대구광역시 북구 검단로 97","tc":"대구TC","x":67.0,"y":64.0,"phone":"1899-9900"},{"name":"혁신점","address":"대구광역시 동구 첨단로 10","tc":"대구TC","x":70.0,"y":65.0,"phone":"1899-9900"},{"name":"울산점","address":"울산광역시 북구 진장유통로 78-12","tc":"울산TC","x":79.0,"y":74.0,"phone":"1899-9900"},{"name":"부산점","address":"부산광역시 수영구 구락로 137","tc":"양산TC","x":73.0,"y":83.0,"phone":"1899-9900"},{"name":"김해점","address":"경상남도 김해시 선천남로 16","tc":"양산TC","x":70.0,"y":80.0,"phone":"1899-9900"}],"logistics":[{"name":"서서울TC","address":"경기 고양시 일산서구 덕이로 256","phone":"1577-3913","x":34.0,"y":24.0,"kind":"TC"},{"name":"동서울TC","address":"경기도 남양주시 진접읍 양진로 980","phone":"1577-3914","x":49.0,"y":22.0,"kind":"TC"},{"name":"인천TC","address":"인천광역시 중구 항동7가 56","phone":"1577-3921","x":30.0,"y":28.0,"kind":"TC"},{"name":"평택TC","address":"경기 평택시 청북읍 어연리 687","phone":"1577-3922","x":46.0,"y":42.0,"kind":"TC"},{"name":"원주TC","address":"원주시 문막읍 원문로 2298-1","phone":"1577-3931","x":58.0,"y":37.0,"kind":"TC"},{"name":"강릉TC","address":"강원 강릉시 입암동 694-1","phone":"1577-3932","x":75.0,"y":34.0,"kind":"TC"},{"name":"남서울TC","address":"경기도 광주시 초월읍 무갑리 912-0","phone":"1899-9300","x":45.0,"y":29.0,"kind":"TC"},{"name":"대구TC","address":"대구 달서구 호산동 717번지","phone":"1577-3951","x":68.0,"y":64.0,"kind":"TC"},{"name":"양산TC","address":"경남 양산시 물금읍 증산리 936-4번지 한국복합물류단지 E동","phone":"1577-3961","x":72.0,"y":80.0,"kind":"TC"},{"name":"포항TC","address":"경북 포항시 기계면 새마을로 1296","phone":"1577-3953","x":80.0,"y":62.0,"kind":"TC"},{"name":"안동TC","address":"경북 안동시 풍산읍 유통단지길 32번지","phone":"1577-3954","x":70.0,"y":55.0,"kind":"TC"},{"name":"창원TC","address":"경남 함안군 칠원면 용산리 901-4번지","phone":"1577-3966","x":65.0,"y":79.0,"kind":"TC"},{"name":"울산TC","address":"울산광역시 울주군 삼남면 신안길 35-13","phone":"1577-3967","x":79.0,"y":74.0,"kind":"TC"},{"name":"사천TC","address":"사천시 축동면 탑리 910-3번지","phone":"1577-3960","x":58.0,"y":82.0,"kind":"TC"},{"name":"제주DC","address":"제주 제주시 화북일동 2140-1","phone":"1577-3971","x":42.0,"y":96.0,"kind":"TC"},{"name":"광주TC","address":"광주 북구 오룡동 1119번지 삼성제3공장","phone":"1577-3945","x":42.0,"y":77.0,"kind":"TC"},{"name":"세종TC","address":"세종시 부강면 연청로 745-46번지 중부복합물류터미널 B동","phone":"1577-3941","x":49.0,"y":51.0,"kind":"TC"},{"name":"아산TC","address":"충청남도 아산시 신창면 남성길 239","phone":"1577-3942","x":44.0,"y":47.0,"kind":"TC"},{"name":"익산TC","address":"전북 익산시 금마면 동고도리 1038-3","phone":"1577-3944","x":42.0,"y":65.0,"kind":"TC"},{"name":"순천TC","address":"전라남도 순천시 해룡면 여순로 1147","phone":"1577-3946","x":50.0,"y":82.0,"kind":"TC"},{"name":"목포TC","address":"전남 무안군 삼향읍 왕산리 175번지","phone":"1577-3947","x":34,"y":84,"kind":"TC"}],"coverage":[{"tc":"서서울TC","province":"서울","area":"강서구","note":""},{"tc":"서서울TC","province":"서울","area":"마포구","note":""},{"tc":"서서울TC","province":"서울","area":"용산구","note":""},{"tc":"서서울TC","province":"서울","area":"서대문구","note":""},{"tc":"서서울TC","province":"서울","area":"은평구","note":""},{"tc":"서서울TC","province":"서울","area":"종로구","note":""},{"tc":"서서울TC","province":"서울","area":"중구","note":""},{"tc":"서서울TC","province":"서울","area":"양천구","note":""},{"tc":"서서울TC","province":"서울","area":"영등포구","note":""},{"tc":"서서울TC","province":"서울","area":"동작구","note":""},{"tc":"서서울TC","province":"서울","area":"관악구","note":""},{"tc":"서서울TC","province":"경기","area":"고양시","note":""},{"tc":"서서울TC","province":"경기","area":"김포시","note":""},{"tc":"서서울TC","province":"경기","area":"파주시","note":""},{"tc":"서서울TC","province":"인천","area":"강화군","note":""},{"tc":"동서울TC","province":"서울","area":"강동구","note":""},{"tc":"동서울TC","province":"서울","area":"광진구","note":""},{"tc":"동서울TC","province":"서울","area":"노원구","note":""},{"tc":"동서울TC","province":"서울","area":"성동구","note":""},{"tc":"동서울TC","province":"서울","area":"중랑구","note":""},{"tc":"동서울TC","province":"서울","area":"동대문구","note":""},{"tc":"동서울TC","province":"서울","area":"강북구","note":""},{"tc":"동서울TC","province":"서울","area":"성북구","note":""},{"tc":"동서울TC","province":"서울","area":"도봉구","note":""},{"tc":"동서울TC","province":"경기","area":"하남시","note":""},{"tc":"동서울TC","province":"경기","area":"의정부시","note":""},{"tc":"동서울TC","province":"경기","area":"구리시","note":""},{"tc":"동서울TC","province":"경기","area":"남양주시","note":""},{"tc":"동서울TC","province":"경기","area":"동두천시","note":""},{"tc":"동서울TC","province":"경기","area":"포천시","note":""},{"tc":"동서울TC","province":"경기","area":"연천군","note":""},{"tc":"동서울TC","province":"경기","area":"양주시","note":""},{"tc":"동서울TC","province":"강원","area":"철원군","note":""},{"tc":"인천TC","province":"서울","area":"구로구","note":""},{"tc":"인천TC","province":"서울","area":"금천구","note":""},{"tc":"인천TC","province":"경기","area":"광명시","note":""},{"tc":"인천TC","province":"경기","area":"부천시","note":""},{"tc":"인천TC","province":"경기","area":"시흥시","note":""},{"tc":"인천TC","province":"경기","area":"안산시","note":""},{"tc":"인천TC","province":"인천","area":"중구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"동구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"미추홀구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"연수구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"남동구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"부평구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"계양구","note":"강화군 제외"},{"tc":"인천TC","province":"인천","area":"서구","note":"강화군 제외"},{"tc":"평택TC","province":"경기","area":"안양시","note":""},{"tc":"평택TC","province":"경기","area":"의왕시","note":""},{"tc":"평택TC","province":"경기","area":"군포시","note":""},{"tc":"평택TC","province":"경기","area":"과천시","note":""},{"tc":"평택TC","province":"경기","area":"오산시","note":""},{"tc":"평택TC","province":"경기","area":"화성시","note":""},{"tc":"평택TC","province":"경기","area":"수원시","note":""},{"tc":"평택TC","province":"경기","area":"용인시","note":""},{"tc":"평택TC","province":"경기","area":"평택시","note":""},{"tc":"평택TC","province":"경기","area":"안성시","note":""},{"tc":"원주TC","province":"강원","area":"원주시","note":""},{"tc":"원주TC","province":"강원","area":"영월군","note":""},{"tc":"원주TC","province":"강원","area":"인제군","note":""},{"tc":"원주TC","province":"강원","area":"횡성군","note":""},{"tc":"원주TC","province":"강원","area":"춘천시","note":""},{"tc":"원주TC","province":"강원","area":"화천군","note":""},{"tc":"원주TC","province":"강원","area":"양구군","note":""},{"tc":"원주TC","province":"강원","area":"홍천군","note":""},{"tc":"원주TC","province":"강원","area":"평창군","note":""},{"tc":"원주TC","province":"경기","area":"이천시","note":""},{"tc":"원주TC","province":"경기","area":"양평군","note":""},{"tc":"원주TC","province":"경기","area":"여주시","note":""},{"tc":"원주TC","province":"경기","area":"가평군","note":""},{"tc":"원주TC","province":"충북","area":"충주시","note":""},{"tc":"원주TC","province":"충북","area":"제천시","note":""},{"tc":"원주TC","province":"충북","area":"괴산군","note":""},{"tc":"원주TC","province":"충북","area":"단양군","note":""},{"tc":"원주TC","province":"충북","area":"음성군","note":""},{"tc":"강릉TC","province":"강원","area":"강릉시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"동해시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"삼척시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"속초시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"태백시","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"고성군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"양양군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"강릉TC","province":"강원","area":"정선군","note":"광원리·장촌리·명개리·자운리·대관령면·진부면·속사리·이목정리·노동리 포함"},{"tc":"남서울TC","province":"서울","area":"송파구","note":""},{"tc":"남서울TC","province":"서울","area":"강남구","note":""},{"tc":"남서울TC","province":"서울","area":"서초구","note":""},{"tc":"남서울TC","province":"경기","area":"성남시","note":""},{"tc":"남서울TC","province":"경기","area":"광주시","note":""},{"tc":"대구TC","province":"대구","area":"대구광역시","note":""},{"tc":"대구TC","province":"경북","area":"경산시","note":""},{"tc":"대구TC","province":"경북","area":"김천시","note":""},{"tc":"대구TC","province":"경북","area":"구미시","note":""},{"tc":"대구TC","province":"경북","area":"칠곡군","note":""},{"tc":"대구TC","province":"경북","area":"고령군","note":""},{"tc":"대구TC","province":"경북","area":"성주군","note":""},{"tc":"대구TC","province":"경북","area":"청도군","note":""},{"tc":"대구TC","province":"경북","area":"군위군","note":""},{"tc":"대구TC","province":"경남","area":"거창군","note":""},{"tc":"양산TC","province":"부산","area":"부산광역시","note":""},{"tc":"양산TC","province":"경남","area":"양산시","note":""},{"tc":"양산TC","province":"경남","area":"김해시","note":""},{"tc":"양산TC","province":"경남","area":"밀양시","note":""},{"tc":"포항TC","province":"경북","area":"포항시","note":""},{"tc":"포항TC","province":"경북","area":"경주시","note":""},{"tc":"포항TC","province":"경북","area":"영덕군","note":""},{"tc":"포항TC","province":"경북","area":"울진군","note":""},{"tc":"포항TC","province":"경북","area":"영천시","note":""},{"tc":"포항TC","province":"경북","area":"울릉군","note":""},{"tc":"안동TC","province":"경북","area":"안동시","note":""},{"tc":"안동TC","province":"경북","area":"상주시","note":""},{"tc":"안동TC","province":"경북","area":"문경시","note":""},{"tc":"안동TC","province":"경북","area":"영주시","note":""},{"tc":"안동TC","province":"경북","area":"의성군","note":""},{"tc":"안동TC","province":"경북","area":"영양군","note":""},{"tc":"안동TC","province":"경북","area":"청송군","note":""},{"tc":"안동TC","province":"경북","area":"봉화군","note":""},{"tc":"안동TC","province":"경북","area":"예천군","note":""},{"tc":"창원TC","province":"경남","area":"창원시","note":""},{"tc":"창원TC","province":"경남","area":"의령군","note":""},{"tc":"창원TC","province":"경남","area":"함안군","note":""},{"tc":"창원TC","province":"경남","area":"합천군","note":""},{"tc":"창원TC","province":"경남","area":"창녕군","note":""},{"tc":"울산TC","province":"울산","area":"울산광역시","note":""},{"tc":"사천TC","province":"경남","area":"진주시","note":""},{"tc":"사천TC","province":"경남","area":"통영시","note":""},{"tc":"사천TC","province":"경남","area":"사천시","note":""},{"tc":"사천TC","province":"경남","area":"거제시","note":""},{"tc":"사천TC","province":"경남","area":"고성군","note":""},{"tc":"사천TC","province":"경남","area":"남해군","note":""},{"tc":"사천TC","province":"경남","area":"하동군","note":""},{"tc":"사천TC","province":"경남","area":"산청군","note":""},{"tc":"사천TC","province":"경남","area":"함양군","note":""},{"tc":"제주DC","province":"제주","area":"제주특별자치도","note":""},{"tc":"광주TC","province":"광주","area":"광주광역시","note":""},{"tc":"광주TC","province":"전남","area":"나주시","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"화순군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"담양군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"장성군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"곡성군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"영광군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전남","area":"함평군","note":"학교면·함평읍·엄다면 제외"},{"tc":"광주TC","province":"전북","area":"고창군","note":""},{"tc":"광주TC","province":"전북","area":"순창군","note":""},{"tc":"광주TC","province":"전북","area":"남원시","note":""},{"tc":"광주TC","province":"전북","area":"정읍시","note":""},{"tc":"세종TC","province":"대전","area":"대전광역시","note":""},{"tc":"세종TC","province":"세종","area":"세종특별자치시","note":""},{"tc":"세종TC","province":"충북","area":"청주시","note":""},{"tc":"세종TC","province":"충북","area":"보은군","note":""},{"tc":"세종TC","province":"충북","area":"영동군","note":""},{"tc":"세종TC","province":"충북","area":"옥천군","note":""},{"tc":"세종TC","province":"충북","area":"진천군","note":""},{"tc":"세종TC","province":"충북","area":"증평군","note":""},{"tc":"세종TC","province":"충남","area":"공주시","note":""},{"tc":"세종TC","province":"충남","area":"계룡시","note":""},{"tc":"세종TC","province":"충남","area":"금산군","note":""},{"tc":"세종TC","province":"충남","area":"청양군","note":""},{"tc":"세종TC","province":"전북","area":"무주군","note":""},{"tc":"아산TC","province":"충남","area":"아산시","note":""},{"tc":"아산TC","province":"충남","area":"천안시","note":""},{"tc":"아산TC","province":"충남","area":"서산시","note":""},{"tc":"아산TC","province":"충남","area":"보령시","note":""},{"tc":"아산TC","province":"충남","area":"당진군","note":""},{"tc":"아산TC","province":"충남","area":"예산군","note":""},{"tc":"아산TC","province":"충남","area":"태안군","note":""},{"tc":"아산TC","province":"충남","area":"홍성군","note":""},{"tc":"익산TC","province":"전북","area":"전주시","note":""},{"tc":"익산TC","province":"전북","area":"김제시","note":""},{"tc":"익산TC","province":"전북","area":"군산시","note":""},{"tc":"익산TC","province":"전북","area":"익산시","note":""},{"tc":"익산TC","province":"전북","area":"임실군","note":""},{"tc":"익산TC","province":"전북","area":"장수군","note":""},{"tc":"익산TC","province":"전북","area":"진안군","note":""},{"tc":"익산TC","province":"전북","area":"부안군","note":""},{"tc":"익산TC","province":"전북","area":"완주군","note":""},{"tc":"익산TC","province":"충남","area":"서천군","note":""},{"tc":"익산TC","province":"충남","area":"논산시","note":""},{"tc":"익산TC","province":"충남","area":"부여군","note":""},{"tc":"순천TC","province":"전남","area":"순천시","note":""},{"tc":"순천TC","province":"전남","area":"광양시","note":""},{"tc":"순천TC","province":"전남","area":"여수시","note":""},{"tc":"순천TC","province":"전남","area":"구례군","note":""},{"tc":"순천TC","province":"전남","area":"고흥군","note":""},{"tc":"순천TC","province":"전남","area":"보성군","note":""},{"tc":"목포TC","province":"전남","area":"목포시","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"무안군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"해남군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"진도군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"강진군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"영암군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"신안군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"장흥군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"완도군","note":"함평읍·학교면·엄다면"},{"tc":"목포TC","province":"전남","area":"함평군","note":"함평읍·학교면·엄다면"}]};
-let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]}, processes:[], processRecommendations:[], specCompare:[], notices:[], displayCheckItems:[], homeSettings:{}, updatedAt:"" };
+let DB = { items:[], departments:[], mapData:{stores:[],logistics:[],coverage:[]}, processes:[], processRecommendations:[], searchLearning:[], specCompare:[], notices:[], displayCheckItems:[], homeSettings:{}, updatedAt:"" };
 const HOME_RECENT_KEY = "costco_item_hub_recent_v76";
 const ITEM_FAVORITES_KEY = "costco_item_hub_item_favorites_v1";
 const CONTENT_FAVORITES_KEY = "costco_item_hub_content_favorites_v1";
@@ -3294,6 +3294,47 @@ function renderAll(){
   if(currentPage === "displayCheck") renderDisplayCheckPage();
 }
 
+
+function normalizeLearningQuery(value){
+  return normalizeText(String(value || "")).replace(/[^0-9a-z가-힣]/g,"");
+}
+
+function findLearningMatch(query, type){
+  const q = normalizeLearningQuery(query);
+  if(!q || !Array.isArray(DB.searchLearning)) return null;
+  const wantedType = String(type || "").trim();
+  const exact = DB.searchLearning.find(row => String(row?.type || "").trim() === wantedType && normalizeLearningQuery(row?.expression) === q);
+  if(exact) return exact;
+  if(q.length < 4) return null;
+  return DB.searchLearning.find(row => {
+    if(String(row?.type || "").trim() !== wantedType) return false;
+    const expr = normalizeLearningQuery(row?.expression);
+    return expr.length >= 4 && (q.includes(expr) || expr.includes(q));
+  }) || null;
+}
+
+function findItemFromLearning(query){
+  const learned = findLearningMatch(query,"아이템");
+  if(!learned) return null;
+  const key = normalizeLearningQuery(learned.targetKey || learned.targetName);
+  const name = normalizeLearningQuery(learned.targetName);
+  return (DB.items || []).find(item => {
+    const values = [item.itemNo,item.modelName,item.productName].map(normalizeLearningQuery);
+    return (key && values.includes(key)) || (name && values.includes(name));
+  }) || null;
+}
+
+function findProcessesFromLearning(query){
+  const learned = findLearningMatch(query,"프로세스");
+  if(!learned) return [];
+  const key = normalizeLearningQuery(learned.targetKey || learned.targetName);
+  const name = normalizeLearningQuery(learned.targetName);
+  return (DB.processes || []).map((row,index)=>({ ...row, _dbIndex:index })).filter(row => {
+    const values = [row.title,row.type].map(normalizeLearningQuery);
+    return (key && values.includes(key)) || (name && values.includes(name));
+  });
+}
+
 function searchItem(showError=true){
   const raw = els.itemInput.value.trim();
   const qText = normalizeText(raw);
@@ -3348,6 +3389,9 @@ function findItemsByQuery(query){
   const digits = normalizeItemNo(raw);
   const numericOnly = /^\d+$/.test(raw.replace(/\s+/g,""));
   if(!qText) return [];
+
+  const learnedItem = findItemFromLearning(raw);
+  if(learnedItem) return [learnedItem];
 
   const baseRows = filterItemsByCategory(DB.items);
 
@@ -4296,6 +4340,11 @@ function processTypeDescription(type){
 
 function matchProcesses(query, typeFilter="전체"){
   const q = normalizeText(query);
+  const learnedRows = query ? findProcessesFromLearning(query) : [];
+  if(learnedRows.length){
+    if(typeFilter && typeFilter !== "전체") return learnedRows.filter(row=>safe(row.type,"기타")===typeFilter);
+    return learnedRows;
+  }
   let rows = (DB.processes || []).map((row,index)=>({ ...row, _dbIndex:index }));
   if(typeFilter && typeFilter !== "전체") rows = rows.filter(row=>safe(row.type,"기타") === typeFilter);
   if(!q) return rows.sort((a,b)=>processLocaleCompare(a.title,b.title));
