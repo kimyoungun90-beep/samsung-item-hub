@@ -121,7 +121,7 @@
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v139';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.0.1';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
