@@ -15,7 +15,8 @@
   const aiConversation = {
     lastQuestion: "",
     excludedProcessTitles: [],
-    lastProcessTitles: []
+    lastProcessTitles: [],
+    lastAnswerText: ""
   };
 
   // v139: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
@@ -103,8 +104,29 @@
   function addMessage(role, html){
     const row = document.createElement("div");
     row.className = `ai-message-row ${role}`;
-    row.innerHTML = `${role === "bot" ? '<div class="ai-message-avatar" aria-hidden="true">AI</div>' : ''}<div class="ai-message-bubble">${html}<div class="ai-message-time">${aiNow()}</div></div>`;
+    const processTitles = uniqueProcessTitles(aiConversation.lastProcessTitles);
+    const canFeedback = role === "bot"
+      && !!aiConversation.lastQuestion
+      && processTitles.length > 0
+      && !String(html).includes("개인정보를 삭제");
+    const feedback = canFeedback
+      ? '<div class="ai-feedback-wrap"><span class="ai-feedback-label">원하는 답변이 아닌가요?</span><button class="ai-feedback-btn" type="button" data-ai-feedback="alternative">다른 답변 찾기</button></div>'
+      : '';
+    row.innerHTML = `${role === "bot" ? '<div class="ai-message-avatar" aria-hidden="true">AI</div>' : ''}<div class="ai-message-bubble">${html}${feedback}<div class="ai-message-time">${aiNow()}</div></div>`;
     messages.appendChild(row);
+    if(role === "bot"){
+      const answerText = row.querySelector(".ai-message-bubble")?.innerText
+        ?.replace(/원하는 답변이 아닌가요\?|다른 답변 찾기/g,"")
+        .trim()
+        .slice(0,5000) || "";
+      aiConversation.lastAnswerText = answerText;
+      row._aiFeedbackContext = {
+        question: String(aiConversation.lastQuestion || ""),
+        recommendation: answerText,
+        processTitles: processTitles,
+        excludedProcessTitles: uniqueProcessTitles(aiConversation.excludedProcessTitles)
+      };
+    }
     aiScrollBottom();
     return row;
   }
@@ -220,9 +242,15 @@
   }
 
   function rankProcesses(query, tokens){
+    const q = aiNormalize(query);
     return (Array.isArray(DB?.processes) ? DB.processes : []).map((row,index)=>{
-      const hay = [row.type,row.title,row.summary,row.body,row.fullText, ...(Array.isArray(row.steps)?row.steps.map(step=>typeof step === "object" ? step.text : step):[])].join(" ");
-      return {row,index,score:scoreText(hay,row.title,row.type,query,tokens)};
+      const keywordText = aiNormalize(row.keywords || "");
+      const hay = [row.type,row.title,row.keywords,row.summary,row.body,row.fullText, ...(Array.isArray(row.steps)?row.steps.map(step=>typeof step === "object" ? step.text : step):[])].join(" ");
+      let score = scoreText(hay,row.title,row.type,query,tokens);
+      if(q && keywordText.includes(q)) score += 120;
+      tokens.forEach(token=>{ if(keywordText.includes(token)) score += 32; });
+      if(q && aiNormalize(row.title).includes(q)) score += 80;
+      return {row,index,score};
     }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score || String(a.row.title||"").localeCompare(String(b.row.title||""),"ko"));
   }
 
@@ -239,11 +267,14 @@
       const title = [row.productName,row.modelName].filter(Boolean).join(" ");
       const hay = [row.itemNo,row.modelName,row.productName,row.category,row.brand,row.keywords].join(" ");
       let score = scoreText(hay,title,row.category,query,tokens);
+      const keywordText = aiNormalize(row.keywords || "");
+      if(q && keywordText.includes(q)) score += 110;
+      tokens.forEach(token=>{ if(keywordText.includes(token)) score += 28; });
       if(digits && itemNo === digits) score += 120;
       if(q && model === q) score += 100;
       if(tokens.some(token=>model.startsWith(token))) score += 18;
       return {row,index,score};
-    }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score).slice(0,3);
+    }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score).slice(0,20);
   }
 
   function searchContacts(query, tokens){
@@ -523,13 +554,15 @@
     return blocks.join('<div style="height:10px"></div>');
   }
 
-  async function requestHubAi(question){
+  async function requestHubAi(question, options={}){
     const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
     const timer = controller ? window.setTimeout(()=>controller.abort(), 45000) : 0;
+    const excludedProcessTitles = uniqueProcessTitles(options.excludedProcessTitles || []);
     try{
       return await apiGet({
         action: "aiAsk",
         question: String(question || ""),
+        excludeProcessTitles: excludedProcessTitles.length ? JSON.stringify(excludedProcessTitles) : "",
         t: String(Date.now())
       }, controller ? { signal: controller.signal } : {});
     }finally{
@@ -615,6 +648,135 @@
     return "";
   }
 
+  function createFeedbackId(){
+    try{
+      if(globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID().replace(/-/g,"");
+    }catch(err){}
+    return `fb_${Date.now()}_${Math.random().toString(36).slice(2,12)}`;
+  }
+
+  function postSearchFeedbackForm(params, timeoutMs=8000){
+    return new Promise((resolve,reject)=>{
+      const feedbackId = String(params.feedbackId || "");
+      const frameName = `hubSearchFeedback_${feedbackId}`;
+      const frame = document.createElement("iframe");
+      const form = document.createElement("form");
+      let settled = false;
+
+      frame.name = frameName;
+      frame.hidden = true;
+      form.method = "POST";
+      form.action = CONFIG.APPS_SCRIPT_URL;
+      form.target = frameName;
+      form.hidden = true;
+
+      Object.entries(params).forEach(([name,value])=>{
+        const inputNode = document.createElement("input");
+        inputNode.type = "hidden";
+        inputNode.name = name;
+        inputNode.value = String(value ?? "");
+        form.appendChild(inputNode);
+      });
+
+      const cleanup = ()=>{
+        window.removeEventListener("message",onMessage);
+        frame.remove();
+        form.remove();
+      };
+      const finish = (error,data)=>{
+        if(settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        cleanup();
+        if(error) reject(error);
+        else resolve(data);
+      };
+      const onMessage = event=>{
+        if(event.source !== frame.contentWindow) return;
+        const data = event?.data;
+        if(data?.source !== "COSTCO_HUB_SEARCH_FEEDBACK") return;
+        if(String(data.feedbackId || "") !== feedbackId) return;
+        if(data.ok) finish(null,data);
+        else finish(new Error(data.message || "검색 피드백 저장 실패"));
+      };
+      const timer = window.setTimeout(
+        ()=>finish(new Error("검색 피드백 저장 확인 시간 초과")),
+        Math.max(3000,Number(timeoutMs) || 8000)
+      );
+
+      window.addEventListener("message",onMessage);
+      document.body.append(frame,form);
+      try{ form.submit(); }catch(err){ finish(err); }
+    });
+  }
+
+  async function logAlternativeFeedback(question, recommendation){
+    const q = String(question || "").trim();
+    if(!q) return false;
+
+    const feedbackId = createFeedbackId();
+    const params = {
+      action: "logSearchFeedback",
+      question: q.slice(0, 500),
+      recommendation: String(recommendation || "").slice(0, 5000),
+      feedbackType: "다른 답변 찾기",
+      feedbackId: feedbackId,
+      t: String(Date.now())
+    };
+
+    try{
+      const result = await postSearchFeedbackForm(params);
+      if(result?.ok) return true;
+    }catch(err){
+      console.warn("검색 피드백 POST 확인 실패",err);
+    }
+
+    // iframe 응답이 차단된 환경에서는 POST 후 동일 ID의 JSONP 확인 요청을 보냅니다.
+    try{
+      await fetch(CONFIG.APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        keepalive: true,
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: new URLSearchParams(params).toString()
+      });
+    }catch(err){
+      console.warn("검색 피드백 POST 재시도 실패",err);
+    }
+
+    try{
+      const result = await apiGet({
+        ...params,
+        recommendation:String(recommendation || "").slice(0,500)
+      });
+      return !!result?.ok;
+    }catch(err){
+      console.warn("검색 피드백 최종 확인 실패",err);
+      return false;
+    }
+  }
+
+  async function requestAlternativeFromButton(button){
+    const answerRow = button?.closest(".ai-message-row");
+    const context = answerRow?._aiFeedbackContext || {};
+    const question = String(context.question || aiConversation.lastQuestion || "").trim();
+    if(!question) return;
+
+    aiConversation.lastQuestion = question;
+    aiConversation.lastProcessTitles = uniqueProcessTitles(context.processTitles || aiConversation.lastProcessTitles);
+    aiConversation.excludedProcessTitles = uniqueProcessTitles(
+      context.excludedProcessTitles || aiConversation.excludedProcessTitles
+    );
+
+    if(button){
+      button.disabled = true;
+      button.textContent = "다른 답변을 찾는 중…";
+    }
+    const recommendation = String(context.recommendation || aiConversation.lastAnswerText || "").trim();
+    logAlternativeFeedback(question,recommendation).catch(()=>{});
+    await submitQuestion("다른 답변 찾아줘");
+  }
+
   async function submitQuestion(question){
     const text = String(question || input.value || "").trim();
     if(!text) return;
@@ -645,21 +807,28 @@
           return;
         }
 
-        const retryQuestion = [
-          baseQuestion,
-          "이전에 제시한 아래 프로세스는 사용자가 원하는 답변이 아닙니다.",
-          excluded.map(title=>`- ${title}`).join("\n"),
-          "위 제목은 제외하고 HUB 목록에서 다른 프로세스 하나를 선택하세요."
-        ].join("\n");
-
         let retryResult = null;
-        try{ retryResult = await requestHubAi(retryQuestion); }catch(err){}
-        const retryTitle = retryResult?.process?.title || "";
+        try{
+          retryResult = await requestHubAi(baseQuestion,{excludedProcessTitles:excluded});
+        }catch(err){}
+        const retryTitle = retryResult?.process?.title
+          || retryResult?.suggestions?.find(item=>!isExcludedProcessTitle(item?.title,excluded))?.title
+          || "";
         if(retryResult?.ok && retryResult.intent === "PROCESS" && retryTitle && !isExcludedProcessTitle(retryTitle,excluded)){
           hideTyping();
           rememberProcessContext(baseQuestion,[retryTitle],false);
           addMessage("bot", buildHubAiAnswer(retryResult,baseQuestion));
           return;
+        }
+        if(retryResult?.ok && retryTitle && !isExcludedProcessTitle(retryTitle,excluded)){
+          const retryIndex = findAiProcessIndex(retryTitle);
+          const retryRow = retryIndex >= 0 ? DB.processes[retryIndex] : null;
+          if(retryRow){
+            hideTyping();
+            rememberProcessContext(baseQuestion,[retryTitle],false);
+            addMessage("bot", buildProcessRowAnswer(retryRow,retryIndex,"이전에 제시한 답변을 제외하고 다음으로 관련 높은 HUB 프로세스를 안내했습니다."));
+            return;
+          }
         }
 
         const nextEntry = findNextProcess(baseQuestion,excluded);
@@ -706,6 +875,8 @@
       if(result?.ok && aiHtml){
         if(result.intent === "PROCESS" && result.process?.title){
           rememberProcessContext(text,[result.process.title],true);
+        }else if(result.intent === "PROCESS_SUGGESTIONS"){
+          rememberProcessContext(text,(result.suggestions || []).map(item=>item?.title),true);
         }
         addMessage("bot", aiHtml);
       }else{
@@ -757,7 +928,7 @@
 
   openButton.addEventListener("click", openAiAssistant);
   closeButton?.addEventListener("click", closeAiAssistant);
-  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; resizeInput(); input.focus(); });
+  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; aiConversation.lastAnswerText=""; resizeInput(); input.focus(); });
   sendButton?.addEventListener("click", ()=>submitQuestion());
   input.addEventListener("input", resizeInput);
   input.addEventListener("keydown", event=>{
@@ -768,6 +939,8 @@
     if(button) submitQuestion(button.dataset.aiQuestion || "");
   });
   messages.addEventListener("click", event=>{
+    const feedbackButton = event.target.closest("[data-ai-feedback]");
+    if(feedbackButton){ requestAlternativeFromButton(feedbackButton); return; }
     const button = event.target.closest("[data-ai-kind]");
     if(!button) return;
     const kind = button.dataset.aiKind;

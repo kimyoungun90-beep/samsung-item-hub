@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.0.1</span>
+            <span id="homeAppVersion" class="home-app-version">v2.0.3 Stable</span>
           </button>
         </div>
         <div class="home-search">
@@ -825,7 +825,7 @@ body.view-nonhome .app{padding-top:0;}
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 5.5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-5 3v-3H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
           </span>
           <span class="home-ai-shortcut-copy"><strong>AI 업무 도우미</strong><small>제품 · VOC · 배송 · 설치 질문</small></span>
-          <span class="home-ai-shortcut-badge">v2.0.1</span>
+          <span class="home-ai-shortcut-badge">v2.0.3</span>
           <span class="home-ai-shortcut-arrow" aria-hidden="true">›</span>
         </button>
         <div class="home-quick-grid">
@@ -1277,7 +1277,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">AI 업무 도우미</span><em>v2.0.1</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">AI 업무 도우미</span><em>v2.0.3</em></div>
         <small><i></i> HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.0.1",
+  APP_VERSION: "v2.0.3 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.0.1"
+  SPEC_IMAGE_CACHE_BUST: "v2.0.3"
 };
 
 const DETAIL_TABS = [
@@ -7314,7 +7314,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.0.1';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.0.3 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7449,7 +7449,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.0.1';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.0.3 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -7676,7 +7676,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 .ai-assistant-head{min-height:74px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:10px;color:#fff;background:linear-gradient(135deg,#061a3d,#0a4da8 68%,#126de0);box-shadow:0 8px 24px rgba(5,35,83,.20);z-index:2}.ai-assistant-head-btn{width:42px;height:42px;border:1px solid rgba(255,255,255,.16);border-radius:15px;background:rgba(255,255,255,.10);color:#fff;font-size:29px;font-weight:850;display:grid;place-items:center}.ai-assistant-head-btn.reset{font-size:21px}.ai-assistant-head-copy{min-width:0}.ai-assistant-head-line{display:flex;align-items:center;gap:7px}.ai-assistant-head-line span{font-size:18px;font-weight:1000;letter-spacing:-.4px}.ai-assistant-head-line em{font-style:normal;border:1px solid rgba(255,255,255,.32);border-radius:999px;padding:3px 6px;font-size:7px;font-weight:1000;letter-spacing:.7px}.ai-assistant-head-copy small{margin-top:5px;display:flex;align-items:center;gap:5px;color:rgba(255,255,255,.74);font-size:10px;font-weight:850}.ai-assistant-head-copy small i{width:7px;height:7px;border-radius:50%;background:#45e08d;box-shadow:0 0 0 3px rgba(69,224,141,.15)}
 .ai-assistant-messages{min-height:0;overflow-y:auto;padding:20px max(16px,calc((100% - 700px)/2)) 26px;overscroll-behavior:contain;scroll-behavior:smooth}.ai-message-row{display:flex;align-items:flex-end;gap:8px;margin-bottom:16px}.ai-message-row.user{justify-content:flex-end}.ai-message-avatar{flex:0 0 auto;width:32px;height:32px;border-radius:12px;background:#0b63ce;color:#fff;display:grid;place-items:center;font-size:10px;font-weight:1000;box-shadow:0 6px 16px rgba(11,99,206,.20)}.ai-message-bubble{max-width:min(82%,580px);border:1px solid #dce7f4;border-radius:6px 20px 20px 20px;background:#fff;padding:13px 14px;color:#1b2c43;font-size:13px;font-weight:800;line-height:1.65;box-shadow:0 8px 22px rgba(15,55,100,.07);word-break:keep-all}.ai-message-row.user .ai-message-bubble{border:0;border-radius:20px 6px 20px 20px;background:#0b63ce;color:#fff;box-shadow:0 8px 22px rgba(11,99,206,.18)}.ai-message-bubble strong{display:block;color:#07152d;font-size:14px;font-weight:1000;margin-bottom:4px}.ai-message-row.user .ai-message-bubble strong{color:#fff}.ai-message-bubble p{margin:0}.ai-message-bubble small{display:block;margin-top:7px;color:#7a8ca5;font-size:10px;font-weight:850;line-height:1.5}.ai-message-row.user .ai-message-bubble small{color:rgba(255,255,255,.72)}.ai-message-time{margin-top:5px;font-size:8px;color:#9aabc0;font-weight:800;text-align:right}.ai-message-row.user .ai-message-time{color:rgba(255,255,255,.65)}
 .ai-typing{display:flex;gap:4px;align-items:center;min-height:18px}.ai-typing i{width:6px;height:6px;border-radius:50%;background:#8ea2bb;animation:aiTyping 1.1s infinite ease-in-out}.ai-typing i:nth-child(2){animation-delay:.15s}.ai-typing i:nth-child(3){animation-delay:.3s}@keyframes aiTyping{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-4px);opacity:1}}
-.ai-answer-section{display:grid;gap:8px;margin-top:9px}.ai-result-card{width:100%;border:1px solid #dce8f6;border-radius:15px;background:#f8fbff;padding:10px 11px;display:grid;grid-template-columns:minmax(0,1fr) 18px;gap:8px;text-align:left;color:#142842}.ai-result-card:active{transform:scale(.985)}.ai-result-copy{min-width:0;display:grid;gap:3px}.ai-result-copy b{font-size:12px;font-weight:1000;line-height:1.35}.ai-result-copy span{font-size:9px;font-weight:850;color:#71839a;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ai-result-card>span{align-self:center;color:#0b63ce;font-size:20px;font-weight:1000}.ai-answer-note{border-radius:13px;background:#fff7dc;color:#7a5700;padding:9px 10px;font-size:10px;font-weight:900;line-height:1.5}.ai-contact-line{border:1px solid #dce8f6;border-radius:14px;background:#f8fbff;padding:9px 10px}.ai-contact-line b{display:block;font-size:11px;color:#10243e}.ai-contact-line span{display:block;margin-top:3px;font-size:10px;color:#61748e}.ai-contact-line a{color:#0b63ce;text-decoration:none;font-weight:1000}
+.ai-answer-section{display:grid;gap:8px;margin-top:9px}.ai-result-card{width:100%;border:1px solid #dce8f6;border-radius:15px;background:#f8fbff;padding:10px 11px;display:grid;grid-template-columns:minmax(0,1fr) 18px;gap:8px;text-align:left;color:#142842}.ai-result-card:active{transform:scale(.985)}.ai-result-copy{min-width:0;display:grid;gap:3px}.ai-result-copy b{font-size:12px;font-weight:1000;line-height:1.35}.ai-result-copy span{font-size:9px;font-weight:850;color:#71839a;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ai-result-card>span{align-self:center;color:#0b63ce;font-size:20px;font-weight:1000}.ai-answer-note{border-radius:13px;background:#fff7dc;color:#7a5700;padding:9px 10px;font-size:10px;font-weight:900;line-height:1.5}.ai-feedback-wrap{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:11px;padding-top:10px;border-top:1px solid #e3ebf5}.ai-feedback-label{color:#7b8da5;font-size:9px;font-weight:900}.ai-feedback-btn{flex:0 0 auto;border:1px solid #bcd4f0;border-radius:999px;background:#eef6ff;color:#0b5fbf;padding:7px 10px;font:inherit;font-size:9px;font-weight:1000;line-height:1}.ai-feedback-btn:active{transform:scale(.97)}.ai-feedback-btn:disabled{border-color:#d6e0ec;background:#f2f5f8;color:#8b9aab;cursor:wait}.ai-contact-line{border:1px solid #dce8f6;border-radius:14px;background:#f8fbff;padding:9px 10px}.ai-contact-line b{display:block;font-size:11px;color:#10243e}.ai-contact-line span{display:block;margin-top:3px;font-size:10px;color:#61748e}.ai-contact-line a{color:#0b63ce;text-decoration:none;font-weight:1000}
 .ai-compare-summary{margin-top:8px;border-radius:13px;background:#eaf4ff;color:#184d87;padding:9px 10px;font-size:10px;font-weight:900;line-height:1.55}.ai-compare-scroll{margin-top:9px;max-width:100%;overflow-x:auto;border:1px solid #d9e6f4;border-radius:14px;background:#fff;scrollbar-width:thin}.ai-compare-table{width:100%;min-width:540px;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:10px;line-height:1.45}.ai-compare-table th,.ai-compare-table td{padding:9px 8px;border-right:1px solid #e1eaf4;border-bottom:1px solid #e1eaf4;vertical-align:top;word-break:break-word}.ai-compare-table th{background:#edf5ff;color:#0b4f9c;font-weight:1000;text-align:left}.ai-compare-table th:first-child,.ai-compare-table td:first-child{position:sticky;left:0;z-index:1;width:92px;min-width:92px;background:#f7faff;color:#314b68;font-weight:1000}.ai-compare-table thead th:first-child{z-index:2;background:#e8f2ff}.ai-compare-table th:last-child,.ai-compare-table td:last-child{border-right:0}.ai-compare-table tr:last-child td{border-bottom:0}.ai-compare-table .ai-compare-product{display:block;color:#0b63ce;font-size:11px;font-weight:1000}.ai-compare-table .ai-compare-model{display:block;margin-top:2px;color:#637891;font-size:8px;font-weight:850}.ai-compare-more{margin-top:7px;color:#74879e;font-size:9px;font-weight:850;line-height:1.5}
 .ai-assistant-suggestions{display:flex;gap:7px;overflow-x:auto;padding:9px max(14px,calc((100% - 700px)/2)) 8px;background:linear-gradient(180deg,rgba(243,247,252,0),#f3f7fc 35%);scrollbar-width:none}.ai-assistant-suggestions::-webkit-scrollbar{display:none}.ai-assistant-suggestions button{flex:0 0 auto;border:1px solid #cfdeef;border-radius:999px;background:#fff;color:#31506f;padding:8px 11px;font-size:10px;font-weight:950;white-space:nowrap;box-shadow:0 5px 14px rgba(15,55,100,.05)}
 .ai-assistant-composer{padding:8px max(14px,calc((100% - 700px)/2)) calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #dfe8f3}.ai-assistant-input-wrap{display:grid;grid-template-columns:minmax(0,1fr) 40px 42px;align-items:end;gap:6px;border:1px solid #d6e2f0;border-radius:21px;background:#f8fbff;padding:6px 6px 6px 13px;box-shadow:inset 0 1px 0 #fff}.ai-assistant-input-wrap textarea{width:100%;max-height:112px;min-height:38px;resize:none;border:0;outline:0;background:transparent;padding:9px 0 7px;color:#10243d;font-family:inherit;font-size:13px;font-weight:800;line-height:1.45}.ai-assistant-input-wrap textarea::placeholder{color:#9aaabd}.ai-assistant-mic,.ai-assistant-send{width:40px;height:40px;border:0;border-radius:14px;display:grid;place-items:center}.ai-assistant-mic{background:#eaf2fb;color:#496785}.ai-assistant-mic.listening{background:#ffe8e8;color:#d62f2f;animation:aiMicPulse 1s infinite}.ai-assistant-send{background:#0b63ce;color:#fff;box-shadow:0 7px 16px rgba(11,99,206,.22)}.ai-assistant-mic svg,.ai-assistant-send svg{width:21px;height:21px}@keyframes aiMicPulse{50%{box-shadow:0 0 0 7px rgba(214,47,47,.10)}}.ai-assistant-footnote{text-align:center;margin-top:6px;color:#93a3b7;font-size:8px;font-weight:850}.ai-assistant-empty{padding:10px 0;color:#7588a0;font-size:11px;font-weight:850}
@@ -7791,11 +7791,29 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   function addMessage(role, html){
     const row = document.createElement("div");
     row.className = `ai-message-row ${role}`;
-    const canFeedback = role === "bot" && !!aiConversation.lastQuestion && !String(html).includes("개인정보를 삭제");
-    const feedback = canFeedback ? '<div class="ai-feedback-wrap"><span class="ai-feedback-label">원하는 답변이 아닌가요?</span><button class="ai-feedback-btn" type="button" data-ai-feedback="alternative">다른 답변 찾기</button></div>' : '';
+    const processTitles = uniqueProcessTitles(aiConversation.lastProcessTitles);
+    const canFeedback = role === "bot"
+      && !!aiConversation.lastQuestion
+      && processTitles.length > 0
+      && !String(html).includes("개인정보를 삭제");
+    const feedback = canFeedback
+      ? '<div class="ai-feedback-wrap"><span class="ai-feedback-label">원하는 답변이 아닌가요?</span><button class="ai-feedback-btn" type="button" data-ai-feedback="alternative">다른 답변 찾기</button></div>'
+      : '';
     row.innerHTML = `${role === "bot" ? '<div class="ai-message-avatar" aria-hidden="true">AI</div>' : ''}<div class="ai-message-bubble">${html}${feedback}<div class="ai-message-time">${aiNow()}</div></div>`;
     messages.appendChild(row);
-    if(role === "bot") aiConversation.lastAnswerText = row.querySelector(".ai-message-bubble")?.innerText?.replace(/원하는 답변이 아닌가요\?|다른 답변 찾기/g,"").trim().slice(0,5000) || "";
+    if(role === "bot"){
+      const answerText = row.querySelector(".ai-message-bubble")?.innerText
+        ?.replace(/원하는 답변이 아닌가요\?|다른 답변 찾기/g,"")
+        .trim()
+        .slice(0,5000) || "";
+      aiConversation.lastAnswerText = answerText;
+      row._aiFeedbackContext = {
+        question: String(aiConversation.lastQuestion || ""),
+        recommendation: answerText,
+        processTitles: processTitles,
+        excludedProcessTitles: uniqueProcessTitles(aiConversation.excludedProcessTitles)
+      };
+    }
     aiScrollBottom();
     return row;
   }
@@ -8223,13 +8241,15 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     return blocks.join('<div style="height:10px"></div>');
   }
 
-  async function requestHubAi(question){
+  async function requestHubAi(question, options={}){
     const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
     const timer = controller ? window.setTimeout(()=>controller.abort(), 45000) : 0;
+    const excludedProcessTitles = uniqueProcessTitles(options.excludedProcessTitles || []);
     try{
       return await apiGet({
         action: "aiAsk",
         question: String(question || ""),
+        excludeProcessTitles: excludedProcessTitles.length ? JSON.stringify(excludedProcessTitles) : "",
         t: String(Date.now())
       }, controller ? { signal: controller.signal } : {});
     }finally{
@@ -8315,63 +8335,132 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     return "";
   }
 
+  function createFeedbackId(){
+    try{
+      if(globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID().replace(/-/g,"");
+    }catch(err){}
+    return `fb_${Date.now()}_${Math.random().toString(36).slice(2,12)}`;
+  }
+
+  function postSearchFeedbackForm(params, timeoutMs=8000){
+    return new Promise((resolve,reject)=>{
+      const feedbackId = String(params.feedbackId || "");
+      const frameName = `hubSearchFeedback_${feedbackId}`;
+      const frame = document.createElement("iframe");
+      const form = document.createElement("form");
+      let settled = false;
+
+      frame.name = frameName;
+      frame.hidden = true;
+      form.method = "POST";
+      form.action = CONFIG.APPS_SCRIPT_URL;
+      form.target = frameName;
+      form.hidden = true;
+
+      Object.entries(params).forEach(([name,value])=>{
+        const inputNode = document.createElement("input");
+        inputNode.type = "hidden";
+        inputNode.name = name;
+        inputNode.value = String(value ?? "");
+        form.appendChild(inputNode);
+      });
+
+      const cleanup = ()=>{
+        window.removeEventListener("message",onMessage);
+        frame.remove();
+        form.remove();
+      };
+      const finish = (error,data)=>{
+        if(settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        cleanup();
+        if(error) reject(error);
+        else resolve(data);
+      };
+      const onMessage = event=>{
+        if(event.source !== frame.contentWindow) return;
+        const data = event?.data;
+        if(data?.source !== "COSTCO_HUB_SEARCH_FEEDBACK") return;
+        if(String(data.feedbackId || "") !== feedbackId) return;
+        if(data.ok) finish(null,data);
+        else finish(new Error(data.message || "검색 피드백 저장 실패"));
+      };
+      const timer = window.setTimeout(
+        ()=>finish(new Error("검색 피드백 저장 확인 시간 초과")),
+        Math.max(3000,Number(timeoutMs) || 8000)
+      );
+
+      window.addEventListener("message",onMessage);
+      document.body.append(frame,form);
+      try{ form.submit(); }catch(err){ finish(err); }
+    });
+  }
+
   async function logAlternativeFeedback(question, recommendation){
     const q = String(question || "").trim();
     if(!q) return false;
 
-    // 긴 추천 답변을 GET 쿼리로 보내면 URL 길이 제한 때문에 기록이 누락될 수 있습니다.
-    // 숨김 iframe + POST form으로 전송해 검색피드백DB에 안정적으로 저장합니다.
-    const iframeName = `hubFeedbackFrame_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const iframe = document.createElement("iframe");
-    iframe.name = iframeName;
-    iframe.style.display = "none";
-    iframe.setAttribute("aria-hidden", "true");
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = CONFIG.APPS_SCRIPT_URL;
-    form.target = iframeName;
-    form.style.display = "none";
-
-    const fields = {
+    const feedbackId = createFeedbackId();
+    const params = {
       action: "logSearchFeedback",
       question: q.slice(0, 500),
       recommendation: String(recommendation || "").slice(0, 5000),
       feedbackType: "다른 답변 찾기",
+      feedbackId: feedbackId,
       t: String(Date.now())
     };
-    Object.entries(fields).forEach(([name,value])=>{
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = value;
-      form.appendChild(input);
-    });
 
-    document.body.appendChild(iframe);
-    document.body.appendChild(form);
     try{
-      form.submit();
-      await new Promise(resolve=>setTimeout(resolve, 900));
-      return true;
+      const result = await postSearchFeedbackForm(params);
+      if(result?.ok) return true;
     }catch(err){
-      console.warn("검색 피드백 저장 실패", err);
+      console.warn("검색 피드백 POST 확인 실패",err);
+    }
+
+    // iframe 응답이 차단된 환경에서는 POST 후 동일 ID의 JSONP 확인 요청을 보냅니다.
+    try{
+      await fetch(CONFIG.APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        keepalive: true,
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: new URLSearchParams(params).toString()
+      });
+    }catch(err){
+      console.warn("검색 피드백 POST 재시도 실패",err);
+    }
+
+    try{
+      const result = await apiGet({
+        ...params,
+        recommendation:String(recommendation || "").slice(0,500)
+      });
+      return !!result?.ok;
+    }catch(err){
+      console.warn("검색 피드백 최종 확인 실패",err);
       return false;
-    }finally{
-      setTimeout(()=>{
-        try{ form.remove(); }catch(e){}
-        try{ iframe.remove(); }catch(e){}
-      }, 4000);
     }
   }
 
   async function requestAlternativeFromButton(button){
-    const question = aiConversation.lastQuestion;
+    const answerRow = button?.closest(".ai-message-row");
+    const context = answerRow?._aiFeedbackContext || {};
+    const question = String(context.question || aiConversation.lastQuestion || "").trim();
     if(!question) return;
-    if(button){ button.disabled = true; button.textContent = "다른 답변을 찾는 중…"; }
-    const bubble = button?.closest(".ai-message-bubble");
-    const recommendation = bubble?.innerText?.replace(/원하는 답변이 아닌가요\?|다른 답변 찾기|다른 답변을 찾는 중…/g,"").trim() || aiConversation.lastAnswerText;
-    await logAlternativeFeedback(question,recommendation);
+
+    aiConversation.lastQuestion = question;
+    aiConversation.lastProcessTitles = uniqueProcessTitles(context.processTitles || aiConversation.lastProcessTitles);
+    aiConversation.excludedProcessTitles = uniqueProcessTitles(
+      context.excludedProcessTitles || aiConversation.excludedProcessTitles
+    );
+
+    if(button){
+      button.disabled = true;
+      button.textContent = "다른 답변을 찾는 중…";
+    }
+    const recommendation = String(context.recommendation || aiConversation.lastAnswerText || "").trim();
+    logAlternativeFeedback(question,recommendation).catch(()=>{});
     await submitQuestion("다른 답변 찾아줘");
   }
 
@@ -8405,21 +8494,28 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
           return;
         }
 
-        const retryQuestion = [
-          baseQuestion,
-          "이전에 제시한 아래 프로세스는 사용자가 원하는 답변이 아닙니다.",
-          excluded.map(title=>`- ${title}`).join("\n"),
-          "위 제목은 제외하고 HUB 목록에서 다른 프로세스 하나를 선택하세요."
-        ].join("\n");
-
         let retryResult = null;
-        try{ retryResult = await requestHubAi(retryQuestion); }catch(err){}
-        const retryTitle = retryResult?.process?.title || "";
+        try{
+          retryResult = await requestHubAi(baseQuestion,{excludedProcessTitles:excluded});
+        }catch(err){}
+        const retryTitle = retryResult?.process?.title
+          || retryResult?.suggestions?.find(item=>!isExcludedProcessTitle(item?.title,excluded))?.title
+          || "";
         if(retryResult?.ok && retryResult.intent === "PROCESS" && retryTitle && !isExcludedProcessTitle(retryTitle,excluded)){
           hideTyping();
           rememberProcessContext(baseQuestion,[retryTitle],false);
           addMessage("bot", buildHubAiAnswer(retryResult,baseQuestion));
           return;
+        }
+        if(retryResult?.ok && retryTitle && !isExcludedProcessTitle(retryTitle,excluded)){
+          const retryIndex = findAiProcessIndex(retryTitle);
+          const retryRow = retryIndex >= 0 ? DB.processes[retryIndex] : null;
+          if(retryRow){
+            hideTyping();
+            rememberProcessContext(baseQuestion,[retryTitle],false);
+            addMessage("bot", buildProcessRowAnswer(retryRow,retryIndex,"이전에 제시한 답변을 제외하고 다음으로 관련 높은 HUB 프로세스를 안내했습니다."));
+            return;
+          }
         }
 
         const nextEntry = findNextProcess(baseQuestion,excluded);
@@ -8466,6 +8562,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
       if(result?.ok && aiHtml){
         if(result.intent === "PROCESS" && result.process?.title){
           rememberProcessContext(text,[result.process.title],true);
+        }else if(result.intent === "PROCESS_SUGGESTIONS"){
+          rememberProcessContext(text,(result.suggestions || []).map(item=>item?.title),true);
         }
         addMessage("bot", aiHtml);
       }else{
@@ -8517,7 +8615,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 
   openButton.addEventListener("click", openAiAssistant);
   closeButton?.addEventListener("click", closeAiAssistant);
-  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; resizeInput(); input.focus(); });
+  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; aiConversation.lastAnswerText=""; resizeInput(); input.focus(); });
   sendButton?.addEventListener("click", ()=>submitQuestion());
   input.addEventListener("input", resizeInput);
   input.addEventListener("keydown", event=>{
