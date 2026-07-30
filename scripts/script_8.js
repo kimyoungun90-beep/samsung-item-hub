@@ -65,7 +65,7 @@
   const aiScrollBottom = () => requestAnimationFrame(()=>{ messages.scrollTop = messages.scrollHeight; });
 
   function aiInitialMarkup(){
-    return `<div class="ai-message-row bot"><div class="ai-message-avatar" aria-hidden="true">AI</div><div class="ai-message-bubble"><strong>무엇을 도와드릴까요?</strong><p>제품 모델, 아이템번호, VOC, 배송·설치 처리 절차를 평소 말투로 질문해 주세요.</p><small>현재는 HUB에 등록된 자료를 찾아 안내합니다.</small></div></div>`;
+    return `<div class="ai-message-row bot"><div class="ai-message-avatar" aria-hidden="true">AI</div><div class="ai-message-bubble"><strong>무엇을 도와드릴까요?</strong><p>제품 모델, 아이템번호, VOC, 배송·설치 처리 절차를 평소 말투로 질문해 주세요.</p><small>코스트코 HUB에 등록된 자료만 찾아 안내합니다.</small></div></div>`;
   }
 
   function openAiAssistant(){
