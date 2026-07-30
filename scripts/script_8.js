@@ -16,7 +16,8 @@
     lastQuestion: "",
     excludedProcessTitles: [],
     lastProcessTitles: [],
-    lastAnswerText: ""
+    lastAnswerText: "",
+    answerSequence: 0
   };
 
   // v139: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
@@ -105,26 +106,36 @@
     const row = document.createElement("div");
     row.className = `ai-message-row ${role}`;
     const processTitles = uniqueProcessTitles(aiConversation.lastProcessTitles);
+    const answerNo = role === "bot" && processTitles.length > 0
+      ? ++aiConversation.answerSequence
+      : 0;
     const canFeedback = role === "bot"
       && !!aiConversation.lastQuestion
       && processTitles.length > 0
       && !String(html).includes("개인정보를 삭제");
+    const historyLabel = answerNo
+      ? `<div class="ai-answer-history-label"><span>답변 ${answerNo}</span><small>${answerNo === 1 ? "첫 번째 안내" : "이전 답변을 제외한 추가 안내"}</small></div>`
+      : "";
     const feedback = canFeedback
       ? '<div class="ai-feedback-wrap"><span class="ai-feedback-label">원하는 답변이 아닌가요?</span><button class="ai-feedback-btn" type="button" data-ai-feedback="alternative">다른 답변 찾기</button></div>'
       : '';
-    row.innerHTML = `${role === "bot" ? '<div class="ai-message-avatar" aria-hidden="true">AI</div>' : ''}<div class="ai-message-bubble">${html}${feedback}<div class="ai-message-time">${aiNow()}</div></div>`;
+    row.innerHTML = `${role === "bot" ? '<div class="ai-message-avatar" aria-hidden="true">AI</div>' : ''}<div class="ai-message-bubble">${historyLabel}${html}${feedback}<div class="ai-message-time">${aiNow()}</div></div>`;
+    if(answerNo){
+      row.classList.add("ai-answer-history-entry");
+      row.dataset.aiAnswerNo = String(answerNo);
+    }
     messages.appendChild(row);
     if(role === "bot"){
-      const answerText = row.querySelector(".ai-message-bubble")?.innerText
-        ?.replace(/원하는 답변이 아닌가요\?|다른 답변 찾기/g,"")
-        .trim()
-        .slice(0,5000) || "";
+      const answerCopy = row.querySelector(".ai-message-bubble")?.cloneNode(true);
+      answerCopy?.querySelectorAll(".ai-answer-history-label,.ai-feedback-wrap,.ai-message-time").forEach(node=>node.remove());
+      const answerText = String(answerCopy?.innerText || "").trim().slice(0,5000);
       aiConversation.lastAnswerText = answerText;
       row._aiFeedbackContext = {
         question: String(aiConversation.lastQuestion || ""),
         recommendation: answerText,
         processTitles: processTitles,
-        excludedProcessTitles: uniqueProcessTitles(aiConversation.excludedProcessTitles)
+        excludedProcessTitles: uniqueProcessTitles(aiConversation.excludedProcessTitles),
+        answerNo: answerNo
       };
     }
     aiScrollBottom();
@@ -767,22 +778,31 @@
     aiConversation.excludedProcessTitles = uniqueProcessTitles(
       context.excludedProcessTitles || aiConversation.excludedProcessTitles
     );
+    aiConversation.answerSequence = Math.max(
+      Number(aiConversation.answerSequence || 0),
+      Number(context.answerNo || 0)
+    );
 
     if(button){
       button.disabled = true;
       button.textContent = "다른 답변을 찾는 중…";
     }
+    answerRow?.classList.add("ai-answer-kept");
     const recommendation = String(context.recommendation || aiConversation.lastAnswerText || "").trim();
     logAlternativeFeedback(question,recommendation).catch(()=>{});
-    await submitQuestion("다른 답변 찾아줘");
+    try{
+      await submitQuestion("다른 답변 찾아줘",{fromFeedbackButton:true});
+    }finally{
+      if(button) button.textContent = "이 답변 제외됨";
+    }
   }
 
-  async function submitQuestion(question){
+  async function submitQuestion(question, options={}){
     const text = String(question || input.value || "").trim();
     if(!text) return;
     input.value = "";
     resizeInput();
-    addMessage("user", `<p>${aiEscape(text)}</p>`);
+    if(!options.fromFeedbackButton) addMessage("user", `<p>${aiEscape(text)}</p>`);
     showTyping();
     if(sendButton) sendButton.disabled = true;
 
@@ -837,6 +857,7 @@
           rememberProcessContext(baseQuestion,[nextEntry.row?.title],false);
           addMessage("bot", buildProcessRowAnswer(nextEntry.row,nextEntry.index,"이전에 제시한 답변을 제외하고 다음 후보를 안내했습니다."));
         }else{
+          rememberProcessContext(baseQuestion,[],false);
           addMessage("bot", `<strong>다른 관련 프로세스를 더 찾지 못했습니다.</strong><p>상황을 조금 더 구체적으로 적어 주세요.</p><small>원하는 답변이 검색되지 않은 경우 삼성 담당자에게 문의해 주세요.</small>`);
         }
         return;
@@ -845,6 +866,7 @@
       aiConversation.lastQuestion = text;
       aiConversation.excludedProcessTitles = [];
       aiConversation.lastProcessTitles = [];
+      aiConversation.answerSequence = 0;
 
       if(isProductCompareQuestion(text)){
         const localCompare = buildProductComparisonAnswer(findComparisonItems(text));
@@ -928,7 +950,7 @@
 
   openButton.addEventListener("click", openAiAssistant);
   closeButton?.addEventListener("click", closeAiAssistant);
-  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; aiConversation.lastAnswerText=""; resizeInput(); input.focus(); });
+  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; aiConversation.lastAnswerText=""; aiConversation.answerSequence=0; resizeInput(); input.focus(); });
   sendButton?.addEventListener("click", ()=>submitQuestion());
   input.addEventListener("input", resizeInput);
   input.addEventListener("keydown", event=>{
