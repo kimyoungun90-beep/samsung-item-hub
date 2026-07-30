@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.0.6 Stable</span>
+            <span id="homeAppVersion" class="home-app-version">v2.0.8 Stable</span>
           </button>
         </div>
         <div class="home-search">
@@ -829,11 +829,11 @@ body.view-nonhome .app{padding-top:0;}
             <span class="home-ai-shortcut-badge">COSTCO</span>
             <span class="home-ai-shortcut-arrow" aria-hidden="true">›</span>
           </button>
-          <a id="homeSamsungChatbotShortcut" class="home-ai-shortcut home-ai-shortcut-samsung" href="https://www.samsung.com/sec/chatbot/" target="_blank" rel="noopener noreferrer" aria-label="삼성 공식 챗봇 새 창으로 열기">
+          <a id="homeSamsungChatbotShortcut" class="home-ai-shortcut home-ai-shortcut-samsung" href="https://www.samsungsvc.co.kr/chat?channel_id=PCB" target="_blank" rel="noopener noreferrer external" aria-label="삼성전자서비스 공식 AI CS Bot 새 창으로 열기">
             <span class="home-ai-shortcut-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 5.5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-5 3v-3H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m12 8 .65 1.7L14.5 10.5l-1.85.8L12 13l-.65-1.7-1.85-.8 1.85-.8L12 8Z" fill="currentColor"/></svg>
             </span>
-            <span class="home-ai-shortcut-copy"><strong>삼성 공식 챗봇</strong><small>삼성 제품 · 서비스 · 구매 상담</small></span>
+            <span class="home-ai-shortcut-copy"><strong>삼성 공식 AI CS Bot</strong><small>삼성 제품 · 사양 · 고장 증상 상담</small></span>
             <span class="home-ai-shortcut-badge">OFFICIAL</span>
             <span class="home-ai-shortcut-arrow" aria-hidden="true">↗</span>
           </a>
@@ -1287,7 +1287,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="코스트코 전용 AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.0.6</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.0.8</em></div>
         <small><i></i> 코스트코 HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1325,7 +1325,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.0.6 Stable",
+  APP_VERSION: "v2.0.8 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1343,7 +1343,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.0.6"
+  SPEC_IMAGE_CACHE_BUST: "v2.0.8"
 };
 
 const DETAIL_TABS = [
@@ -7324,7 +7324,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.0.6 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.0.8 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7459,7 +7459,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.0.6 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.0.8 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
