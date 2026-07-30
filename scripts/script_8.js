@@ -724,45 +724,20 @@
   async function logAlternativeFeedback(question, recommendation){
     const q = String(question || "").trim();
     if(!q) return false;
-
-    const feedbackId = createFeedbackId();
-    const params = {
-      action: "logSearchFeedback",
-      question: q.slice(0, 500),
-      recommendation: String(recommendation || "").slice(0, 5000),
-      feedbackType: "다른 답변 찾기",
-      feedbackId: feedbackId,
-      t: String(Date.now())
-    };
-
     try{
-      const result = await postSearchFeedbackForm(params);
-      if(result?.ok) return true;
-    }catch(err){
-      console.warn("검색 피드백 POST 확인 실패",err);
-    }
-
-    // iframe 응답이 차단된 환경에서는 POST 후 동일 ID의 JSONP 확인 요청을 보냅니다.
-    try{
-      await fetch(CONFIG.APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        keepalive: true,
-        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-        body: new URLSearchParams(params).toString()
-      });
-    }catch(err){
-      console.warn("검색 피드백 POST 재시도 실패",err);
-    }
-
-    try{
+      if(typeof queueSearchFailure === "function"){
+        queueSearchFailure(q,"AI 다른 답변 찾기");
+        return true;
+      }
       const result = await apiGet({
-        ...params,
-        recommendation:String(recommendation || "").slice(0,500)
+        action:"logSearchFailure",
+        query:q.slice(0,160),
+        searchType:"AI 다른 답변 찾기",
+        _:String(Date.now())
       });
       return !!result?.ok;
     }catch(err){
-      console.warn("검색 피드백 최종 확인 실패",err);
+      console.warn("AI 다른 답변 검색실패 기록 저장 실패",err);
       return false;
     }
   }
@@ -904,7 +879,12 @@
       }else{
         const shownTitles = fallbackProcessTitles(text);
         if(shownTitles.length) rememberProcessContext(text,shownTitles,true);
-        addMessage("bot", `${buildAnswer(text)}<small>원하는 답변이 검색되지 않은 경우 삼성 담당자에게 문의해 주세요.</small>`);
+        else rememberProcessContext(text,[],true);
+        const fallbackHtml = buildAnswer(text);
+        if(!shownTitles.length && fallbackHtml.includes("바로 일치하는 내용을 찾지 못했습니다") && typeof queueSearchFailure === "function"){
+          queueSearchFailure(text,"AI 업무 도우미");
+        }
+        addMessage("bot", `${fallbackHtml}<small>원하는 답변이 검색되지 않은 경우 삼성 담당자에게 문의해 주세요.</small>`);
       }
     }catch(error){
       hideTyping();

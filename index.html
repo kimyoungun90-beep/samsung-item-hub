@@ -796,7 +796,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.0.4 Stable</span>
+            <span id="homeAppVersion" class="home-app-version">v2.0.5 Stable</span>
           </button>
         </div>
         <div class="home-search">
@@ -825,7 +825,7 @@ body.view-nonhome .app{padding-top:0;}
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 5.5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-5 3v-3H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
           </span>
           <span class="home-ai-shortcut-copy"><strong>AI 업무 도우미</strong><small>제품 · VOC · 배송 · 설치 질문</small></span>
-          <span class="home-ai-shortcut-badge">v2.0.4</span>
+          <span class="home-ai-shortcut-badge">v2.0.5</span>
           <span class="home-ai-shortcut-arrow" aria-hidden="true">›</span>
         </button>
         <div class="home-quick-grid">
@@ -1277,7 +1277,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">AI 업무 도우미</span><em>v2.0.4</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">AI 업무 도우미</span><em>v2.0.5</em></div>
         <small><i></i> HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1315,7 +1315,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.0.4 Stable",
+  APP_VERSION: "v2.0.5 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1333,7 +1333,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.0.4"
+  SPEC_IMAGE_CACHE_BUST: "v2.0.5"
 };
 
 const DETAIL_TABS = [
@@ -7314,7 +7314,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.0.4 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.0.5 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -7449,7 +7449,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.0.4 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.0.5 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -8411,45 +8411,20 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   async function logAlternativeFeedback(question, recommendation){
     const q = String(question || "").trim();
     if(!q) return false;
-
-    const feedbackId = createFeedbackId();
-    const params = {
-      action: "logSearchFeedback",
-      question: q.slice(0, 500),
-      recommendation: String(recommendation || "").slice(0, 5000),
-      feedbackType: "다른 답변 찾기",
-      feedbackId: feedbackId,
-      t: String(Date.now())
-    };
-
     try{
-      const result = await postSearchFeedbackForm(params);
-      if(result?.ok) return true;
-    }catch(err){
-      console.warn("검색 피드백 POST 확인 실패",err);
-    }
-
-    // iframe 응답이 차단된 환경에서는 POST 후 동일 ID의 JSONP 확인 요청을 보냅니다.
-    try{
-      await fetch(CONFIG.APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        keepalive: true,
-        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-        body: new URLSearchParams(params).toString()
-      });
-    }catch(err){
-      console.warn("검색 피드백 POST 재시도 실패",err);
-    }
-
-    try{
+      if(typeof queueSearchFailure === "function"){
+        queueSearchFailure(q,"AI 다른 답변 찾기");
+        return true;
+      }
       const result = await apiGet({
-        ...params,
-        recommendation:String(recommendation || "").slice(0,500)
+        action:"logSearchFailure",
+        query:q.slice(0,160),
+        searchType:"AI 다른 답변 찾기",
+        _:String(Date.now())
       });
       return !!result?.ok;
     }catch(err){
-      console.warn("검색 피드백 최종 확인 실패",err);
+      console.warn("AI 다른 답변 검색실패 기록 저장 실패",err);
       return false;
     }
   }
@@ -8591,7 +8566,12 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
       }else{
         const shownTitles = fallbackProcessTitles(text);
         if(shownTitles.length) rememberProcessContext(text,shownTitles,true);
-        addMessage("bot", `${buildAnswer(text)}<small>원하는 답변이 검색되지 않은 경우 삼성 담당자에게 문의해 주세요.</small>`);
+        else rememberProcessContext(text,[],true);
+        const fallbackHtml = buildAnswer(text);
+        if(!shownTitles.length && fallbackHtml.includes("바로 일치하는 내용을 찾지 못했습니다") && typeof queueSearchFailure === "function"){
+          queueSearchFailure(text,"AI 업무 도우미");
+        }
+        addMessage("bot", `${fallbackHtml}<small>원하는 답변이 검색되지 않은 경우 삼성 담당자에게 문의해 주세요.</small>`);
       }
     }catch(error){
       hideTyping();
