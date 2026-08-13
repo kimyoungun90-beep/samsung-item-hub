@@ -1,5 +1,5 @@
 const CONFIG = {
-  APP_VERSION: "v2.1.4 Stable",
+  APP_VERSION: "v2.1.6 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -17,7 +17,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.4"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.6"
 };
 
 const DETAIL_TABS = [
@@ -157,7 +157,7 @@ let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
-const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v211";
+const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v216";
 const PRODUCT_COMPARE_RECENT_KEY = "costco_hub_product_compare_recent_v214";
 let productComparisonData = { costco:[], external:[], categories:["TV"], updatedAt:"" };
 let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"", showAllRecent:false };
@@ -4276,20 +4276,27 @@ function isNegativeSpecValue(v){
 }
 
 function productCompareRowKey(row){
-  return [row?.source || "", row?.category || "", row?.modelName || "", row?.itemNo || "", row?.row || ""].join("||");
+  return [row?.source || "", row?.category || "", row?.modelName || "", (row?.itemNos || []).join(",") || row?.itemNo || "", row?.row || ""].join("||");
 }
 
 function normalizeProductComparisonData(data){
-  const cleanRows = (rows, source)=>(Array.isArray(rows) ? rows : []).map((row,index)=>({
-    source:source,
-    category:safe(row?.category,""),
-    modelName:safe(row?.modelName,""),
-    itemNo:safe(row?.itemNo,""),
-    features:row?.features && typeof row.features === "object" ? row.features : {},
-    featureGroups:row?.featureGroups && typeof row.featureGroups === "object" ? row.featureGroups : {},
-    featureOrder:Array.isArray(row?.featureOrder) ? row.featureOrder.map(v=>safe(v,"")).filter(Boolean) : [],
-    row:Number(row?.row || index + 2)
-  })).filter(row=>row.category && row.modelName && (source !== "costco" || row.itemNo));
+  const listValues = value=>uniqueArray((Array.isArray(value) ? value : String(value || "").split(/[\r\n,|;\s]+/)).map(v=>safe(v,"")).filter(Boolean));
+  const cleanRows = (rows, source)=>(Array.isArray(rows) ? rows : []).map((row,index)=>{
+    const itemNos = listValues(row?.itemNos || row?.itemNo).filter(value=>/^\d{6}$/.test(value));
+    const modelName = safe(row?.modelName,"");
+    return {
+      source:source,
+      category:safe(row?.category,""),
+      modelName:modelName,
+      itemNo:itemNos[0] || safe(row?.itemNo,""),
+      itemNos:itemNos,
+      searchText:safe(row?.searchText,"") || [modelName].concat(itemNos).join(" "),
+      features:row?.features && typeof row.features === "object" ? row.features : {},
+      featureGroups:row?.featureGroups && typeof row.featureGroups === "object" ? row.featureGroups : {},
+      featureOrder:Array.isArray(row?.featureOrder) ? row.featureOrder.map(v=>safe(v,"")).filter(Boolean) : [],
+      row:Number(row?.row || index + 2)
+    };
+  }).filter(row=>row.category && row.modelName && (source !== "costco" || row.itemNos.length || row.itemNo));
   const costco = cleanRows(data?.costco,"costco");
   const external = cleanRows(data?.external,"external");
   const categories = uniqueArray((Array.isArray(data?.categories) ? data.categories : []).concat(costco.map(r=>r.category),external.map(r=>r.category)).filter(Boolean));
@@ -4389,7 +4396,7 @@ function productCompareModelOptions(rows, selectedKey, placeholder){
   const sorted = rows.slice().sort((a,b)=>String(a.modelName||"").localeCompare(String(b.modelName||""),"ko",{numeric:true,sensitivity:"base"}));
   return `<option value="">${esc(placeholder)}</option>` + sorted.map(row=>{
     const key = productCompareRowKey(row);
-    const item = row.itemNo ? ` · ${row.itemNo}` : "";
+    const item = row.itemNos?.length ? ` · ${row.itemNos[0]}${row.itemNos.length>1?` 외 ${row.itemNos.length-1}개`:''}` : (row.itemNo ? ` · ${row.itemNo}` : "");
     return `<option value="${esc(key)}" ${key===selectedKey?'selected':''}>${esc(row.modelName + item)}</option>`;
   }).join("");
 }
@@ -4413,7 +4420,7 @@ function productCompareResultHtml(rows, mode){
   if(!sections.length){
     return `<section class="pc-result"><div class="pc-empty">선택한 모델의 스펙 값이 아직 없습니다.<br/>시트의 D열 <b>스펙구분</b>, E열 <b>스펙항목</b>, F열 <b>스펙값</b>을 입력해 주세요.</div></section>`;
   }
-  const head = rows.map(row=>`<th><span class="pc-model-head">${esc(row.modelName)}</span><span class="pc-model-meta">${row.source==='costco'?'코스트코':'타 경로'}${row.itemNo?` · ${esc(row.itemNo)}`:''}</span></th>`).join("");
+  const head = rows.map(row=>`<th><span class="pc-model-head">${esc(row.modelName)}</span><span class="pc-model-meta">${row.source==='costco'?'코스트코':'타 경로'}${row.itemNos?.length?` · 아이템 ${esc(row.itemNos.join(', '))}`:(row.itemNo?` · ${esc(row.itemNo)}`:'')}</span></th>`).join("");
   const body = sections.map(section=>{
     const fields = section.fields.map(field=>{
       const values = rows.map(row=>safe(row.features?.[field],""));
@@ -4430,7 +4437,7 @@ function productCompareCatalogRows(){
   const query = normalizeText(productComparisonState.query);
   return productCompareRows("costco").filter(row=>{
     if(!query) return true;
-    return normalizeText(`${row.modelName} ${row.itemNo} ${Object.values(row.features||{}).join(' ')}`).includes(query);
+    return normalizeText(`${row.searchText || ''} ${row.modelName} ${(row.itemNos||[]).join(' ')} ${row.itemNo} ${Object.values(row.features||{}).join(' ')}`).includes(query);
   });
 }
 
@@ -4450,7 +4457,8 @@ function renderProductCompareCatalogList(){
       const selected = productComparisonState.selected.includes(key);
       const firstSpec = (row.featureOrder || []).find(field=>safe(row.features?.[field],"")) || Object.keys(row.features || {})[0] || "";
       const specSummary = firstSpec ? `${firstSpec} ${safe(row.features?.[firstSpec],"")}` : "스펙 입력 대기";
-      return `<button class="pc-product ${selected?'selected':''}" type="button" data-pc-product="${esc(key)}" aria-pressed="${selected?'true':'false'}"><span class="pc-check">✓</span><span class="pc-product-copy"><span class="pc-product-model">${esc(row.modelName)}</span><span class="pc-product-sub">아이템 ${esc(row.itemNo)} · ${esc(specSummary)}</span></span><span class="pc-product-arrow">›</span></button>`;
+      const itemSummary = row.itemNos?.length ? `${row.itemNos[0]}${row.itemNos.length>1?` 외 ${row.itemNos.length-1}개`:''}` : row.itemNo;
+      return `<button class="pc-product ${selected?'selected':''}" type="button" data-pc-product="${esc(key)}" aria-pressed="${selected?'true':'false'}"><span class="pc-check">✓</span><span class="pc-product-copy"><span class="pc-product-model">${esc(row.modelName)}</span><span class="pc-product-sub">아이템 ${esc(itemSummary)} · ${esc(specSummary)}</span></span><span class="pc-product-arrow">›</span></button>`;
     }).join("") + (rows.length>30 ? `<div class="pc-sheet-guide">검색 결과가 많아 처음 30개만 표시했습니다. 위 검색창에 모델명 또는 아이템번호를 입력해 주세요.</div>` : "");
   }
   list.querySelectorAll("[data-pc-product]").forEach(button=>button.addEventListener("click",()=>{
@@ -4531,7 +4539,7 @@ function openProductComparisonSearch(query){
   const text = String(query || "").trim();
   if(!text){ if(typeof showStatus === "function") showStatus("아이템번호 또는 모델명을 입력해 주세요.","warn"); return; }
   const normalized = normalizeText(text);
-  const row = productComparisonData.costco.find(item=>normalizeText(`${item.modelName} ${item.itemNo}`).includes(normalized));
+  const row = productComparisonData.costco.find(item=>normalizeText(`${item.searchText || ''} ${item.modelName} ${(item.itemNos||[]).join(' ')} ${item.itemNo}`).includes(normalized));
   if(!row){ if(typeof showStatus === "function") showStatus("코스트코 제품 DB에서 일치하는 모델을 찾지 못했습니다.","warn"); return; }
   openCostcoProductComparison(row.category,text);
 }
@@ -4556,7 +4564,7 @@ function renderProductCompareHub(loadFailed=false){
   hydrateProductComparisonCache();
   const root = els.specCategoryGrid;
   if(!root) return;
-  const categories = uniqueArray(["TV","냉장고","세탁기/건조기","에어컨","김치냉장고"].concat(productComparisonData.categories || []).filter(Boolean));
+  const categories = uniqueArray(["TV","냉장고","세탁기/건조기","김치냉장고","에어컨"].concat(productComparisonData.categories || []).filter(Boolean));
   if(!categories.includes(productComparisonState.category)) productComparisonState.category = categories[0] || "TV";
   const costcoRows = productCompareRows("costco");
   const externalRows = productCompareRows("external");

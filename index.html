@@ -747,7 +747,7 @@ body.view-nonhome .app{padding-top:0;}
 .inquiry-section-title{align-items:flex-start}.inquiry-section-title h2{letter-spacing:-.65px}.inquiry-section-title small{max-width:720px;line-height:1.65;word-break:keep-all}.inquiry-section-title small b{color:#b45309;font-weight:1000}.inquiry-guide-box{font-size:13px;line-height:1.75;background:linear-gradient(180deg,#f8fbff,#fff);border-color:#cfe0f4}.inquiry-guide-box b{display:inline-block;margin-top:3px;color:#b45309}.inquiry-form{gap:12px}.inquiry-field{display:grid;gap:7px;min-width:0}.inquiry-field-label{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 5px;color:#334155;font-size:12px;font-weight:1000;line-height:1.3}.inquiry-field-label em{font-style:normal;color:#7c8da5;font-size:10px;font-weight:900;white-space:nowrap}.inquiry-field-label strong{color:#dc2626;font-size:10px;font-weight:1000}.inquiry-select-field select{cursor:pointer}.inquiry-submit-note{border:1px solid #d9e6f4;border-radius:16px;background:#f8fbff;padding:12px 13px;color:#526780;font-size:12px;font-weight:900;line-height:1.6;word-break:keep-all}.inquiry-card .submit-btn{background:linear-gradient(135deg,#0b6be8,#0758c7);box-shadow:0 12px 28px rgba(11,99,206,.23)}
 .inquiry-guide-modal{position:fixed;inset:0;z-index:22000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,16,38,.60);backdrop-filter:blur(8px)}.inquiry-guide-modal.show{display:flex}.inquiry-guide-panel{width:min(720px,calc(100vw - 28px));max-height:88vh;overflow:auto;border:1px solid rgba(255,255,255,.78);border-radius:26px;background:#fff;box-shadow:0 30px 80px rgba(4,16,38,.35)}.inquiry-guide-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px 14px;background:rgba(255,255,255,.97);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.inquiry-guide-title{font-size:19px;font-weight:1000;color:#07152d;letter-spacing:-.45px}.inquiry-guide-sub{margin-top:5px;color:#64748b;font-size:12px;font-weight:850;line-height:1.4}.inquiry-guide-close{width:42px;height:42px;border:0;border-radius:999px;background:#0b1b36;color:#fff;font-size:24px;font-weight:700;flex:0 0 auto}.inquiry-guide-body{padding:16px 18px 20px}.inquiry-guide-image-wrap{overflow:auto;border:1px solid #cbd5e1;border-radius:16px;background:#06111c;padding:8px}.inquiry-guide-image-wrap img{display:block;width:100%;min-width:620px;height:auto;border-radius:8px}.inquiry-guide-copy{margin-top:13px;border:1px solid #dbe7f5;border-radius:17px;background:#f8fbff;padding:13px 14px;color:#334155;font-size:13px;font-weight:900;line-height:1.65;word-break:keep-all}.inquiry-guide-copy p{margin:0}.inquiry-guide-copy p+p{margin-top:6px}.inquiry-guide-copy b{color:#0b63ce}.inquiry-guide-copy .inquiry-guide-small{color:#64748b;font-size:12px}.inquiry-guide-copy .inquiry-guide-alert{color:#b91c1c}.inquiry-guide-confirm{width:100%;min-height:50px;margin-top:14px;border:0;border-radius:17px;background:#0b63ce;color:#fff;font-size:14px;font-weight:1000;box-shadow:0 11px 24px rgba(11,99,206,.22)}.inquiry-guide-open{overflow:hidden!important}
 @media(max-width:640px){.inquiry-section-title{gap:8px}.inquiry-section-title h2{font-size:20px}.inquiry-section-title small{font-size:11px}.inquiry-card .form-row-2{grid-template-columns:1fr}.inquiry-field-label{font-size:11px}.inquiry-guide-modal{padding:10px}.inquiry-guide-panel{width:100%;border-radius:22px;max-height:91vh}.inquiry-guide-head{padding:14px}.inquiry-guide-title{font-size:18px}.inquiry-guide-body{padding:12px 13px 16px}.inquiry-guide-image-wrap img{min-width:560px}.inquiry-guide-copy{font-size:12px}.home-quick-copy strong{line-height:1.18}}
-/* v2.1.4 dashboard + visual-matched product comparison */
+/* v2.1.6 dashboard + multiple item numbers per model */
 .inquiry-app-shell{overflow:hidden;border:1px solid #dce6f3;border-radius:28px;background:#f7f9fc;box-shadow:0 20px 55px rgba(15,45,85,.10)}
 .inquiry-page-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #dce6f3;background:#fff}.inquiry-page-head-copy{min-width:0}.inquiry-page-head h2{margin:0;color:#07152d;font-size:24px;font-weight:1000;letter-spacing:-.8px}.inquiry-page-head p{margin:6px 0 0;color:#64748b;font-size:12px;font-weight:850;line-height:1.55}.inquiry-refresh-btn{display:flex;align-items:center;gap:7px;min-height:42px;padding:0 14px;border:1px solid #cfe0f5;border-radius:14px;background:#f5f9ff;color:#0b63ce;font-size:12px;font-weight:1000}.inquiry-refresh-btn svg{width:17px;height:17px}
 .inquiry-panel{padding:20px 22px 22px}.inquiry-hidden{display:none!important}.inquiry-block-title{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:12px}.inquiry-block-title h3{margin:0;color:#0b1830;font-size:18px;font-weight:1000;letter-spacing:-.45px}.inquiry-block-title small{color:#7b8ba2;font-size:11px;font-weight:850}.inquiry-all-btn{border:0;background:transparent;color:#536884;font-size:11px;font-weight:1000}
@@ -860,7 +860,8 @@ body.view-nonhome .app{padding-top:0;}
   .pc-category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
   .pc-category-card{min-height:144px;padding:14px 8px;border:1px solid #cedced;border-radius:17px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;box-shadow:none}
   .pc-category-card:active{transform:scale(.985);border-color:#4f92e9;background:#f8fbff}
-  .pc-category-card.wide{grid-column:1/-1;min-height:98px;display:grid;grid-template-columns:90px minmax(0,1fr);justify-content:center;padding:10px 58px;text-align:left}
+  .pc-category-card.wide{grid-column:1/-1;min-height:98px;display:grid;grid-template-columns:90px auto;justify-content:center;padding:10px 58px;text-align:center}
+  .pc-category-card.wide .pc-category-copy{text-align:center}
   .pc-category-icon{display:grid;place-items:center;width:72px;height:68px;border:0;border-radius:0;background:transparent;box-shadow:none;color:#071846}
   .pc-category-icon svg{width:68px;height:68px;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
   .pc-category-copy{display:block}.pc-category-copy strong{display:block;color:#07152d;font-size:17px;font-weight:1000;line-height:1.3;letter-spacing:-.55px;white-space:normal}.pc-category-copy small{display:block;margin-top:7px;color:#0755c7;font-size:12px;font-weight:950}.pc-category-copy small b{margin-left:5px;font-size:20px;vertical-align:-2px}
@@ -904,7 +905,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.1.4 Stable</span>
+            <span id="homeAppVersion" class="home-app-version">v2.1.6 Stable</span>
           </button>
         </div>
         <div class="home-search">
@@ -1434,7 +1435,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="코스트코 전용 AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.4</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.6</em></div>
         <small><i></i> 코스트코 HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1472,7 +1473,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.1.4 Stable",
+  APP_VERSION: "v2.1.6 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1490,7 +1491,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.4"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.6"
 };
 
 const DETAIL_TABS = [
@@ -1630,7 +1631,7 @@ let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
-const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v211";
+const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v216";
 const PRODUCT_COMPARE_RECENT_KEY = "costco_hub_product_compare_recent_v214";
 let productComparisonData = { costco:[], external:[], categories:["TV"], updatedAt:"" };
 let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"", showAllRecent:false };
@@ -5798,20 +5799,27 @@ function isNegativeSpecValue(v){
 }
 
 function productCompareRowKey(row){
-  return [row?.source || "", row?.category || "", row?.modelName || "", row?.itemNo || "", row?.row || ""].join("||");
+  return [row?.source || "", row?.category || "", row?.modelName || "", (row?.itemNos || []).join(",") || row?.itemNo || "", row?.row || ""].join("||");
 }
 
 function normalizeProductComparisonData(data){
-  const cleanRows = (rows, source)=>(Array.isArray(rows) ? rows : []).map((row,index)=>({
-    source:source,
-    category:safe(row?.category,""),
-    modelName:safe(row?.modelName,""),
-    itemNo:safe(row?.itemNo,""),
-    features:row?.features && typeof row.features === "object" ? row.features : {},
-    featureGroups:row?.featureGroups && typeof row.featureGroups === "object" ? row.featureGroups : {},
-    featureOrder:Array.isArray(row?.featureOrder) ? row.featureOrder.map(v=>safe(v,"")).filter(Boolean) : [],
-    row:Number(row?.row || index + 2)
-  })).filter(row=>row.category && row.modelName && (source !== "costco" || row.itemNo));
+  const listValues = value=>uniqueArray((Array.isArray(value) ? value : String(value || "").split(/[\r\n,|;\s]+/)).map(v=>safe(v,"")).filter(Boolean));
+  const cleanRows = (rows, source)=>(Array.isArray(rows) ? rows : []).map((row,index)=>{
+    const itemNos = listValues(row?.itemNos || row?.itemNo).filter(value=>/^\d{6}$/.test(value));
+    const modelName = safe(row?.modelName,"");
+    return {
+      source:source,
+      category:safe(row?.category,""),
+      modelName:modelName,
+      itemNo:itemNos[0] || safe(row?.itemNo,""),
+      itemNos:itemNos,
+      searchText:safe(row?.searchText,"") || [modelName].concat(itemNos).join(" "),
+      features:row?.features && typeof row.features === "object" ? row.features : {},
+      featureGroups:row?.featureGroups && typeof row.featureGroups === "object" ? row.featureGroups : {},
+      featureOrder:Array.isArray(row?.featureOrder) ? row.featureOrder.map(v=>safe(v,"")).filter(Boolean) : [],
+      row:Number(row?.row || index + 2)
+    };
+  }).filter(row=>row.category && row.modelName && (source !== "costco" || row.itemNos.length || row.itemNo));
   const costco = cleanRows(data?.costco,"costco");
   const external = cleanRows(data?.external,"external");
   const categories = uniqueArray((Array.isArray(data?.categories) ? data.categories : []).concat(costco.map(r=>r.category),external.map(r=>r.category)).filter(Boolean));
@@ -5911,7 +5919,7 @@ function productCompareModelOptions(rows, selectedKey, placeholder){
   const sorted = rows.slice().sort((a,b)=>String(a.modelName||"").localeCompare(String(b.modelName||""),"ko",{numeric:true,sensitivity:"base"}));
   return `<option value="">${esc(placeholder)}</option>` + sorted.map(row=>{
     const key = productCompareRowKey(row);
-    const item = row.itemNo ? ` · ${row.itemNo}` : "";
+    const item = row.itemNos?.length ? ` · ${row.itemNos[0]}${row.itemNos.length>1?` 외 ${row.itemNos.length-1}개`:''}` : (row.itemNo ? ` · ${row.itemNo}` : "");
     return `<option value="${esc(key)}" ${key===selectedKey?'selected':''}>${esc(row.modelName + item)}</option>`;
   }).join("");
 }
@@ -5935,7 +5943,7 @@ function productCompareResultHtml(rows, mode){
   if(!sections.length){
     return `<section class="pc-result"><div class="pc-empty">선택한 모델의 스펙 값이 아직 없습니다.<br/>시트의 D열 <b>스펙구분</b>, E열 <b>스펙항목</b>, F열 <b>스펙값</b>을 입력해 주세요.</div></section>`;
   }
-  const head = rows.map(row=>`<th><span class="pc-model-head">${esc(row.modelName)}</span><span class="pc-model-meta">${row.source==='costco'?'코스트코':'타 경로'}${row.itemNo?` · ${esc(row.itemNo)}`:''}</span></th>`).join("");
+  const head = rows.map(row=>`<th><span class="pc-model-head">${esc(row.modelName)}</span><span class="pc-model-meta">${row.source==='costco'?'코스트코':'타 경로'}${row.itemNos?.length?` · 아이템 ${esc(row.itemNos.join(', '))}`:(row.itemNo?` · ${esc(row.itemNo)}`:'')}</span></th>`).join("");
   const body = sections.map(section=>{
     const fields = section.fields.map(field=>{
       const values = rows.map(row=>safe(row.features?.[field],""));
@@ -5952,7 +5960,7 @@ function productCompareCatalogRows(){
   const query = normalizeText(productComparisonState.query);
   return productCompareRows("costco").filter(row=>{
     if(!query) return true;
-    return normalizeText(`${row.modelName} ${row.itemNo} ${Object.values(row.features||{}).join(' ')}`).includes(query);
+    return normalizeText(`${row.searchText || ''} ${row.modelName} ${(row.itemNos||[]).join(' ')} ${row.itemNo} ${Object.values(row.features||{}).join(' ')}`).includes(query);
   });
 }
 
@@ -5972,7 +5980,8 @@ function renderProductCompareCatalogList(){
       const selected = productComparisonState.selected.includes(key);
       const firstSpec = (row.featureOrder || []).find(field=>safe(row.features?.[field],"")) || Object.keys(row.features || {})[0] || "";
       const specSummary = firstSpec ? `${firstSpec} ${safe(row.features?.[firstSpec],"")}` : "스펙 입력 대기";
-      return `<button class="pc-product ${selected?'selected':''}" type="button" data-pc-product="${esc(key)}" aria-pressed="${selected?'true':'false'}"><span class="pc-check">✓</span><span class="pc-product-copy"><span class="pc-product-model">${esc(row.modelName)}</span><span class="pc-product-sub">아이템 ${esc(row.itemNo)} · ${esc(specSummary)}</span></span><span class="pc-product-arrow">›</span></button>`;
+      const itemSummary = row.itemNos?.length ? `${row.itemNos[0]}${row.itemNos.length>1?` 외 ${row.itemNos.length-1}개`:''}` : row.itemNo;
+      return `<button class="pc-product ${selected?'selected':''}" type="button" data-pc-product="${esc(key)}" aria-pressed="${selected?'true':'false'}"><span class="pc-check">✓</span><span class="pc-product-copy"><span class="pc-product-model">${esc(row.modelName)}</span><span class="pc-product-sub">아이템 ${esc(itemSummary)} · ${esc(specSummary)}</span></span><span class="pc-product-arrow">›</span></button>`;
     }).join("") + (rows.length>30 ? `<div class="pc-sheet-guide">검색 결과가 많아 처음 30개만 표시했습니다. 위 검색창에 모델명 또는 아이템번호를 입력해 주세요.</div>` : "");
   }
   list.querySelectorAll("[data-pc-product]").forEach(button=>button.addEventListener("click",()=>{
@@ -6053,7 +6062,7 @@ function openProductComparisonSearch(query){
   const text = String(query || "").trim();
   if(!text){ if(typeof showStatus === "function") showStatus("아이템번호 또는 모델명을 입력해 주세요.","warn"); return; }
   const normalized = normalizeText(text);
-  const row = productComparisonData.costco.find(item=>normalizeText(`${item.modelName} ${item.itemNo}`).includes(normalized));
+  const row = productComparisonData.costco.find(item=>normalizeText(`${item.searchText || ''} ${item.modelName} ${(item.itemNos||[]).join(' ')} ${item.itemNo}`).includes(normalized));
   if(!row){ if(typeof showStatus === "function") showStatus("코스트코 제품 DB에서 일치하는 모델을 찾지 못했습니다.","warn"); return; }
   openCostcoProductComparison(row.category,text);
 }
@@ -6078,7 +6087,7 @@ function renderProductCompareHub(loadFailed=false){
   hydrateProductComparisonCache();
   const root = els.specCategoryGrid;
   if(!root) return;
-  const categories = uniqueArray(["TV","냉장고","세탁기/건조기","에어컨","김치냉장고"].concat(productComparisonData.categories || []).filter(Boolean));
+  const categories = uniqueArray(["TV","냉장고","세탁기/건조기","김치냉장고","에어컨"].concat(productComparisonData.categories || []).filter(Boolean));
   if(!categories.includes(productComparisonState.category)) productComparisonState.category = categories[0] || "TV";
   const costcoRows = productCompareRows("costco");
   const externalRows = productCompareRows("external");
@@ -8004,7 +8013,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.4 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.6 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8139,7 +8148,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.4 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.6 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
