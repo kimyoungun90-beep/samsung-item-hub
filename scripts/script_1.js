@@ -1,5 +1,5 @@
 const CONFIG = {
-  APP_VERSION: "v2.1.3 Stable",
+  APP_VERSION: "v2.1.4 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -17,7 +17,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.3"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.4"
 };
 
 const DETAIL_TABS = [
@@ -158,8 +158,9 @@ let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
 const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v211";
+const PRODUCT_COMPARE_RECENT_KEY = "costco_hub_product_compare_recent_v214";
 let productComparisonData = { costco:[], external:[], categories:["TV"], updatedAt:"" };
-let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"" };
+let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"", showAllRecent:false };
 let productComparisonLoading = null;
 let productComparisonLoadedAt = 0;
 let productComparisonCacheHydrated = false;
@@ -4346,9 +4347,9 @@ function pushProductComparisonSubview(mode){
   }catch(err){}
 }
 
-function openCostcoProductComparison(category){
+function openCostcoProductComparison(category, query=""){
   productComparisonState.category = category || productComparisonState.category || "TV";
-  productComparisonState.query = "";
+  productComparisonState.query = String(query || "");
   productComparisonState.selected = [];
   setProductComparisonMode("costco");
   pushProductComparisonSubview("costco");
@@ -4490,20 +4491,72 @@ function productCompareCategoryDescription(category){
   return "코스트코 판매 모델의 주요 기능 비교";
 }
 
+function productCompareCategoryIcon(category){
+  const value = normalizeText(category);
+  if(value.includes("냉장") && value.includes("김치")) return `<svg viewBox="0 0 72 72" fill="none"><rect x="20" y="8" width="32" height="56" rx="4"/><path d="M20 36h32M43 21v8M43 45v8"/></svg>`;
+  if(value.includes("냉장")) return `<svg viewBox="0 0 72 72" fill="none"><rect x="18" y="7" width="36" height="58" rx="4"/><path d="M18 34h36M39 17v9M39 43v11"/></svg>`;
+  if(value.includes("세탁") || value.includes("건조")) return `<svg viewBox="0 0 72 72" fill="none"><rect x="16" y="8" width="40" height="56" rx="5"/><circle cx="36" cy="40" r="15"/><circle cx="36" cy="40" r="11"/><path d="M22 17h2M29 17h2M44 17h6"/></svg>`;
+  if(value.includes("에어컨") || value.includes("A/C")) return `<svg viewBox="0 0 72 72" fill="none"><rect x="10" y="17" width="52" height="24" rx="5"/><path d="M18 33h36M22 37h28M25 49c3 3 3 7 0 10M36 49c3 3 3 7 0 10M47 49c3 3 3 7 0 10"/></svg>`;
+  if(value === "TV") return `<svg viewBox="0 0 72 72" fill="none"><rect x="9" y="10" width="54" height="38" rx="4"/><path d="M36 48v9M25 60h22"/></svg>`;
+  return `<svg viewBox="0 0 72 72" fill="none"><rect x="18" y="8" width="36" height="56" rx="6"/><circle cx="36" cy="38" r="13"/></svg>`;
+}
+
+function getProductComparisonRecents(){
+  try{
+    const rows = JSON.parse(localStorage.getItem(PRODUCT_COMPARE_RECENT_KEY) || "[]");
+    return Array.isArray(rows) ? rows.slice(0,20) : [];
+  }catch(error){ return []; }
+}
+
+function recordProductComparisonRecents(rows){
+  const current = getProductComparisonRecents();
+  (rows || []).filter(row=>row && row.source === "costco").forEach(row=>{
+    const key = productCompareRowKey(row);
+    const recent = {key,category:row.category,modelName:row.modelName,itemNo:row.itemNo,viewedAt:new Date().toISOString()};
+    const duplicateIndex = current.findIndex(item=>item.key === key);
+    if(duplicateIndex >= 0) current.splice(duplicateIndex,1);
+    current.unshift(recent);
+  });
+  try{ localStorage.setItem(PRODUCT_COMPARE_RECENT_KEY,JSON.stringify(current.slice(0,20))); }catch(error){}
+}
+
+function productCompareRecentTime(value){
+  const date = new Date(value || "");
+  if(Number.isNaN(date.getTime())) return "최근 확인";
+  const pad = number=>String(number).padStart(2,"0");
+  return `확인일 ${date.getFullYear()}.${pad(date.getMonth()+1)}.${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function openProductComparisonSearch(query){
+  const text = String(query || "").trim();
+  if(!text){ if(typeof showStatus === "function") showStatus("아이템번호 또는 모델명을 입력해 주세요.","warn"); return; }
+  const normalized = normalizeText(text);
+  const row = productComparisonData.costco.find(item=>normalizeText(`${item.modelName} ${item.itemNo}`).includes(normalized));
+  if(!row){ if(typeof showStatus === "function") showStatus("코스트코 제품 DB에서 일치하는 모델을 찾지 못했습니다.","warn"); return; }
+  openCostcoProductComparison(row.category,text);
+}
+
 function productCompareIndexHtml(categories){
-  const cards = categories.map(category=>{
-    const count = productComparisonData.costco.filter(row=>safe(row.category,"") === category).length;
-    return `<button class="pc-category-card" type="button" data-pc-open-costco="${esc(category)}"><span class="pc-category-icon">${esc(productCompareCategoryCode(category))}</span><span class="pc-category-copy"><strong>${esc(category)} 스펙 비교</strong><small>${esc(productCompareCategoryDescription(category))}</small></span><span class="pc-category-meta"><b>${count}</b><small>모델</small></span><span class="pc-category-arrow">›</span></button>`;
+  const cards = categories.map((category,index)=>{
+    const wide = categories.length % 2 === 1 && index === categories.length-1;
+    return `<button class="pc-category-card ${wide?'wide':''}" type="button" data-pc-open-costco="${esc(category)}"><span class="pc-category-icon">${productCompareCategoryIcon(category)}</span><span class="pc-category-copy"><strong>${esc(String(category).replace("/"," · "))}</strong><small>스펙 보기 <b>›</b></small></span></button>`;
   }).join("");
-  return `<section class="pc-index-panel"><div class="pc-index-heading"><div><span>PRODUCT CATEGORY</span><h3>코스트코 제품 비교</h3><p>비교할 품목을 선택하면 등록된 코스트코 판매 모델을 확인할 수 있습니다.</p></div><span class="pc-index-total">${productComparisonData.costco.length}<small>전체 모델</small></span></div><div class="pc-category-list">${cards || `<div class="pc-empty">코코제품 시트에 등록된 품목이 없습니다.</div>`}</div></section>
-    <section class="pc-cross-launch"><div class="pc-cross-launch-top"><span class="pc-cross-symbol">↔</span><span class="pc-cross-label">CROSS CHANNEL COMPARE</span></div><h3>타 경로 제품과 비교</h3><p>코스트코 판매 모델과 다른 판매 경로의 모델을 한 화면에서 직접 비교합니다.</p><div class="pc-cross-flow"><span>코스트코 DB</span><b>VS</b><span>타 경로 DB</span></div><button id="pcOpenCross" class="pc-cross-start" type="button"><span>타 경로 스펙 비교 시작하기</span><b>›</b></button></section>`;
+  const recents = getProductComparisonRecents();
+  const visibleRecents = recents.slice(0,productComparisonState.showAllRecent ? 10 : 2);
+  const recentRows = visibleRecents.length ? visibleRecents.map(item=>`<button class="pc-recent-row" type="button" data-pc-recent="${esc(item.key)}"><span class="pc-recent-badge">${esc(productCompareCategoryCode(item.category))}</span><span class="pc-recent-copy"><strong>${esc(item.modelName)}${item.itemNo?` <em>(${esc(item.itemNo)})</em>`:''}</strong><small>${esc(productCompareRecentTime(item.viewedAt))}</small></span><span class="pc-recent-arrow">›</span></button>`).join("") : `<div class="pc-recent-empty">아직 확인한 스펙이 없습니다.</div>`;
+  return `<section class="pc-design-head"><button id="pcIndexBack" class="pc-design-back" type="button" aria-label="이전 화면">‹</button><div><h2>스펙 비교</h2><p>제품군별 핵심 스펙을 빠르게 확인해 보세요.</p></div><span class="pc-design-type">이미지형</span></section>
+    <section class="pc-index-search"><input id="pcIndexSearch" type="search" placeholder="아이템번호 또는 모델명 검색" autocomplete="off"/><button id="pcIndexSearchBtn" type="button" aria-label="스펙 검색"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button></section>
+    <section class="pc-products"><h3>제품군 선택</h3><div class="pc-category-list">${cards}</div></section>
+    <section class="pc-recent"><div class="pc-recent-head"><h3>최근 확인한 스펙</h3>${recents.length>2?`<button id="pcRecentAll" type="button">${productComparisonState.showAllRecent?'접기':'전체 보기'} ›</button>`:''}</div><div class="pc-recent-list">${recentRows}</div></section>
+    <a class="pc-service-card" href="https://www.samsungsvc.co.kr/chat?channel_id=PCB" target="_blank" rel="noopener noreferrer external"><div class="pc-service-kicker"><strong>코스트코 판매 제품 외 문의</strong><span>삼성 공식</span></div><div class="pc-service-main"><span class="pc-service-bot"><svg viewBox="0 0 72 72" fill="none"><path d="M14 40V29a22 22 0 0 1 44 0v11"/><rect x="9" y="34" width="11" height="20" rx="5"/><rect x="52" y="34" width="11" height="20" rx="5"/><path d="M57 53c-2 7-7 9-15 9"/><rect x="25" y="25" width="25" height="22" rx="11"/><circle cx="32" cy="36" r="2" fill="currentColor"/><circle cx="38" cy="36" r="2" fill="currentColor"/><circle cx="44" cy="36" r="2" fill="currentColor"/></svg></span><span><strong>삼성 A/S Bot</strong><small>제품 사용 · 고장 · 서비스 문의</small></span></div><span class="pc-service-connect">삼성 A/S Bot 연결 <b>↗</b></span></a>
+    <button id="pcOpenCross" class="pc-index-start" type="button"><span class="pc-start-icon">▥</span><strong>스펙 비교 시작하기</strong></button>`;
 }
 
 function renderProductCompareHub(loadFailed=false){
   hydrateProductComparisonCache();
   const root = els.specCategoryGrid;
   if(!root) return;
-  const categories = uniqueArray(["TV"].concat(productComparisonData.categories || []).filter(Boolean));
+  const categories = uniqueArray(["TV","냉장고","세탁기/건조기","에어컨","김치냉장고"].concat(productComparisonData.categories || []).filter(Boolean));
   if(!categories.includes(productComparisonState.category)) productComparisonState.category = categories[0] || "TV";
   const costcoRows = productCompareRows("costco");
   const externalRows = productCompareRows("external");
@@ -4523,10 +4576,8 @@ function renderProductCompareHub(loadFailed=false){
       </section>` : productCompareIndexHtml(categories);
   root.className = "pc-shell";
   root.innerHTML = `
-    <section class="pc-hero"><div class="pc-hero-top"><div><div class="pc-eyebrow">PRODUCT INTELLIGENCE</div><h2>스펙 비교</h2></div><span class="pc-db-state"><i></i>DB 연결</span></div><p>코스트코 판매 제품과 타 경로 제품의 핵심 사양을 정확하게 비교하세요.</p><div class="pc-hero-meta"><span>코스트코 ${productComparisonData.costco.length}개</span><span>타 경로 ${productComparisonData.external.length}개</span><span>${esc(productComparisonData.updatedAt || (productComparisonLoading?'불러오는 중':'DB 대기'))}</span><button id="pcReloadComparison" type="button">↻ 최신 DB</button></div></section>
     ${viewHtml}
     ${resultHtml}
-    <a class="pc-service" href="https://www.samsungsvc.co.kr/chat?channel_id=PCB" target="_blank" rel="noopener noreferrer external" aria-label="삼성 공식 A/S Bot 새 창으로 열기"><span class="pc-service-icon">A/S</span><span><em>삼성 공식 서비스</em><strong>코스트코 판매 제품 외 문의</strong><small>사용법·고장·서비스 문의는 삼성 A/S Bot에서 확인하세요.</small></span><span class="pc-service-go">상담하기 ›</span></a>
     ${loadFailed?`<div class="pc-empty">최신 비교 DB 연결이 지연되고 있습니다. 잠시 후 다시 열거나 앱 새로고침을 눌러 주세요.</div>`:""}`;
 
   root.querySelectorAll("[data-pc-category]").forEach(button=>button.addEventListener("click",()=>{
@@ -4539,8 +4590,17 @@ function renderProductCompareHub(loadFailed=false){
   }));
   document.getElementById("pcReloadComparison")?.addEventListener("click",()=>ensureProductComparisonDataLoaded(true));
   root.querySelectorAll("[data-pc-open-costco]").forEach(button=>button.addEventListener("click",()=>openCostcoProductComparison(button.dataset.pcOpenCostco || "TV")));
+  root.querySelectorAll("[data-pc-recent]").forEach(button=>button.addEventListener("click",()=>{
+    const recent = getProductComparisonRecents().find(item=>item.key === button.dataset.pcRecent);
+    if(recent) openCostcoProductComparison(recent.category,recent.modelName);
+  }));
   root.querySelectorAll("[data-pc-back-index]").forEach(button=>button.addEventListener("click",closeProductComparisonSubview));
   document.getElementById("pcOpenCross")?.addEventListener("click",openCrossProductComparison);
+  document.getElementById("pcIndexBack")?.addEventListener("click",handleAppBack);
+  const indexSearch = document.getElementById("pcIndexSearch");
+  document.getElementById("pcIndexSearchBtn")?.addEventListener("click",()=>openProductComparisonSearch(indexSearch?.value));
+  indexSearch?.addEventListener("keydown",event=>{ if(event.key === "Enter"){ event.preventDefault(); openProductComparisonSearch(indexSearch.value); } });
+  document.getElementById("pcRecentAll")?.addEventListener("click",()=>{ productComparisonState.showAllRecent=!productComparisonState.showAllRecent; renderProductCompareHub(); });
   if(crossMode){
     const costcoSelect = document.getElementById("pcCrossCostco");
     const externalSelect = document.getElementById("pcCrossExternal");
@@ -4551,6 +4611,7 @@ function renderProductCompareHub(loadFailed=false){
     runButton?.addEventListener("click",()=>{
       const rows=[findProductCompareRow(productComparisonState.crossCostco),findProductCompareRow(productComparisonState.crossExternal)].filter(Boolean);
       if(rows.length<2) return;
+      recordProductComparisonRecents(rows);
       productComparisonState.resultRows=rows; productComparisonState.resultMode="cross"; renderProductCompareHub();
       setTimeout(()=>document.getElementById("productCompareResult")?.scrollIntoView?.({behavior:"smooth",block:"start"}),30);
     });
@@ -4560,6 +4621,7 @@ function renderProductCompareHub(loadFailed=false){
     document.getElementById("pcCompareSelected")?.addEventListener("click",()=>{
       const rows=productComparisonState.selected.map(findProductCompareRow).filter(Boolean);
       if(rows.length<2) return;
+      recordProductComparisonRecents(rows);
       productComparisonState.resultRows=rows; productComparisonState.resultMode="costco"; renderProductCompareHub();
       setTimeout(()=>document.getElementById("productCompareResult")?.scrollIntoView?.({behavior:"smooth",block:"start"}),30);
     });
