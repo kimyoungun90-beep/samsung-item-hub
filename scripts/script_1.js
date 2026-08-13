@@ -1,5 +1,5 @@
 const CONFIG = {
-  APP_VERSION: "v2.0.8 Stable",
+  APP_VERSION: "v2.0.9 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -17,7 +17,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.0.8"
+  SPEC_IMAGE_CACHE_BUST: "v2.0.9"
 };
 
 const DETAIL_TABS = [
@@ -141,6 +141,11 @@ let processDetailRow = null;
 let processDetailReturn = { mode:"home", query:"", filter:"전체" };
 let processHistoryView = "home";
 let compareFilter = "전체";
+let inquiryRows = [];
+let inquiryFilter = "전체";
+let inquiryListExpanded = false;
+let inquiryLoading = false;
+let inquiryRuntimeKey = "";
 let displayCheckState = new Map();
 let displayCheckPendingItemCode = "";
 let displayCheckCaptureSequence = 0;
@@ -164,7 +169,7 @@ const els = {
   deptSearch:$("deptSearch"), deptChips:$("deptChips"), deptList:$("deptList"), deptCountPill:$("deptCountPill"), storeSelect:$("storeSelect"), logisticsSelect:$("logisticsSelect"), deptFilterPanel:$("deptFilterPanel"), deptFilterIcon:$("deptFilterIcon"), deptFilterTitle:$("deptFilterTitle"), deptFilterDesc:$("deptFilterDesc"), deptRegionSearch:$("deptRegionSearch"), deptResultsTitle:$("deptResultsTitle"), deptMapPanel:$("deptMapPanel"), mapSelectionBar:$("mapSelectionBar"), mapStoreSelectWrap:$("mapStoreSelectWrap"), mapTcSelectWrap:$("mapTcSelectWrap"), mapStoreSelect:$("mapStoreSelect"), mapTcSelect:$("mapTcSelect"), mapMetroToggle:$("mapMetroToggle"), mapBackBtn:$("mapBackBtn"), mapResetBtn:$("mapResetBtn"), mapZoomIn:$("mapZoomIn"), mapZoomOut:$("mapZoomOut"), koreaMap:$("koreaMap"), metroMap:$("metroMap"), mapDetailLayout:$("mapDetailLayout"), mapInfo:$("mapInfo"), mapCoverageList:$("mapCoverageList"),
   processSearch:$("processSearch"), processSearchBtn:$("processSearchBtn"), processSearchWrap:$("processSearchWrap"), processPageHeading:$("processPageHeading"), processSuggest:$("processSuggest"), processRecommendSection:$("processRecommendSection"), processRecommendChips:$("processRecommendChips"), processTypeSection:$("processTypeSection"), processTypeList:$("processTypeList"), processResultSection:$("processResultSection"), processResultTitle:$("processResultTitle"), processResultCount:$("processResultCount"), processTypeResetBtn:$("processTypeResetBtn"), processList:$("processList"), processCountPill:$("processCountPill"), processDetailSection:$("processDetailSection"), processDetailView:$("processDetailView"),
   specCategoryGrid:$("specCategoryGrid"), compareChips:$("compareChips"), compareTableWrap:$("compareTableWrap"), compareCountPill:$("compareCountPill"),
-  inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryOrderNo:$("inquiryOrderNo"), inquiryBody:$("inquiryBody"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"), inquiryGuideModal:$("inquiryGuideModal"), inquiryGuideClose:$("inquiryGuideClose"), inquiryGuideConfirm:$("inquiryGuideConfirm"),
+  inquiryDashboardPanel:$("inquiryDashboardPanel"), inquiryFormPanel:$("inquiryFormPanel"), inquiryDetailPanel:$("inquiryDetailPanel"), inquiryRefreshBtn:$("inquiryRefreshBtn"), inquirySummaryGrid:$("inquirySummaryGrid"), inquiryCountTotal:$("inquiryCountTotal"), inquiryCountReceived:$("inquiryCountReceived"), inquiryCountProcessing:$("inquiryCountProcessing"), inquiryCountCompleted:$("inquiryCountCompleted"), inquiryCountCancelled:$("inquiryCountCancelled"), inquiryUpdatedAt:$("inquiryUpdatedAt"), inquiryRecentList:$("inquiryRecentList"), inquiryListTitle:$("inquiryListTitle"), inquiryShowAllBtn:$("inquiryShowAllBtn"), inquiryNewRequestBtn:$("inquiryNewRequestBtn"), inquiryFormBack:$("inquiryFormBack"), inquiryDetailBack:$("inquiryDetailBack"), inquiryDetailContent:$("inquiryDetailContent"), inquiryTypeChoices:$("inquiryTypeChoices"), inquiryType:$("inquiryType"), inquiryStore:$("inquiryStore"), inquiryName:$("inquiryName"), inquiryPhone:$("inquiryPhone"), inquiryOrderNo:$("inquiryOrderNo"), inquiryRequestDate:$("inquiryRequestDate"), inquiryBody:$("inquiryBody"), inquiryBodyCount:$("inquiryBodyCount"), inquiryOrderGuideBtn:$("inquiryOrderGuideBtn"), inquirySubmitBtn:$("inquirySubmitBtn"), inquiryResult:$("inquiryResult"), inquiryGuideModal:$("inquiryGuideModal"), inquiryGuideClose:$("inquiryGuideClose"), inquiryGuideConfirm:$("inquiryGuideConfirm"),
   displayCheckStore:$("displayCheckStore"), displayCheckUploader:$("displayCheckUploader"), displayCheckYear:$("displayCheckYear"), displayCheckDate:$("displayCheckDate"), displayCheckList:$("displayCheckList"), displayCheckStatus:$("displayCheckStatus"), displayCheckProgressText:$("displayCheckProgressText"), displayCheckProgressBar:$("displayCheckProgressBar"), displayCheckCamera:$("displayCheckCamera"), displayCheckRefreshBtn:$("displayCheckRefreshBtn"), displayCheckUploadFrame:$("displayCheckUploadFrame"),
   imageModal:$("imageModal"), imageModalImg:$("imageModalImg"), imageModalClose:$("imageModalClose"), imageModalPrev:$("imageModalPrev"), imageModalNext:$("imageModalNext"), imageModalCaption:$("imageModalCaption"),
   specViewer:$("specViewer"), specBackBtn:$("specBackBtn"), specViewerTitle:$("specViewerTitle"), specViewerCount:$("specViewerCount"), specCarousel:$("specCarousel"), specPrev:$("specPrev"), specNext:$("specNext"), specDots:$("specDots"), specHelpGuide:$("specHelpGuide"), specHelpBtn:$("specHelpBtn"), specHelpModal:$("specHelpModal"), specHelpClose:$("specHelpClose"), specHelpList:$("specHelpList"), specHelpTitle:$("specHelpTitle")
@@ -315,7 +320,18 @@ function bindEvents(){
     if(!e.target.closest(".process-search-wrap")) hideProcessSuggestions();
     if(!e.target.closest(".home-search")) hideHomeSearchSuggestions();
   });
-  els.inquirySubmitBtn.addEventListener("click",submitInquiry);
+  if(els.inquirySubmitBtn) els.inquirySubmitBtn.addEventListener("click",submitInquiry);
+  document.querySelectorAll("[data-inquiry-start]").forEach(btn=>btn.addEventListener("click",()=>openInquiryForm(btn.dataset.inquiryStart)));
+  if(els.inquiryNewRequestBtn) els.inquiryNewRequestBtn.addEventListener("click",()=>openInquiryForm("동시 배송 요청"));
+  if(els.inquiryFormBack) els.inquiryFormBack.addEventListener("click",showInquiryDashboard);
+  if(els.inquiryDetailBack) els.inquiryDetailBack.addEventListener("click",showInquiryDashboard);
+  if(els.inquiryRefreshBtn) els.inquiryRefreshBtn.addEventListener("click",()=>loadInquiryDashboard(true));
+  if(els.inquiryShowAllBtn) els.inquiryShowAllBtn.addEventListener("click",()=>{ inquiryFilter="전체"; inquiryListExpanded=!inquiryListExpanded; renderInquiryDashboard(); });
+  if(els.inquirySummaryGrid) els.inquirySummaryGrid.addEventListener("click",event=>{ const btn=event.target.closest("[data-status]"); if(!btn)return; inquiryFilter=btn.dataset.status||"전체"; inquiryListExpanded=true; renderInquiryDashboard(); });
+  if(els.inquiryTypeChoices) els.inquiryTypeChoices.addEventListener("click",event=>{ const btn=event.target.closest("[data-inquiry-type]"); if(btn) selectInquiryType(btn.dataset.inquiryType); });
+  if(els.inquiryRecentList) els.inquiryRecentList.addEventListener("click",event=>{ const btn=event.target.closest("[data-inquiry-request]"); if(btn) openInquiryDetail(btn.dataset.inquiryRequest); });
+  if(els.inquiryOrderGuideBtn) els.inquiryOrderGuideBtn.addEventListener("click",openInquiryGuide);
+  if(els.inquiryBody) els.inquiryBody.addEventListener("input",updateInquiryBodyCount);
   if(els.inquiryGuideClose) els.inquiryGuideClose.addEventListener("click",closeInquiryGuide);
   if(els.inquiryGuideConfirm) els.inquiryGuideConfirm.addEventListener("click",closeInquiryGuide);
   if(els.inquiryGuideModal) els.inquiryGuideModal.addEventListener("click",(e)=>{ if(e.target === els.inquiryGuideModal) closeInquiryGuide(); });
@@ -519,7 +535,8 @@ function showPage(page, push=true){
   if(target==="specTable"){ els.navSpecTable.classList.add("active"); prefetchSpecCategoryFirstImages(); }
   if(target==="inquiry"){
     els.navInquiry.classList.add("active");
-    window.setTimeout(openInquiryGuide, 90);
+    showInquiryDashboard();
+    loadInquiryDashboard();
   }
   if(target==="dept"){ els.navDept.classList.add("active"); renderDeptFilterPanel(); }
   if(target==="process"){
@@ -537,6 +554,7 @@ function showPage(page, push=true){
 
 function handleAppBack(){
   if(els.inquiryGuideModal && els.inquiryGuideModal.classList.contains("show")){ closeInquiryGuide(); return; }
+  if(currentPage === "inquiry" && (els.inquiryFormPanel && !els.inquiryFormPanel.classList.contains("inquiry-hidden") || els.inquiryDetailPanel && !els.inquiryDetailPanel.classList.contains("inquiry-hidden"))){ showInquiryDashboard(); return; }
   if(els.imageModal && els.imageModal.classList.contains("show")){ closeImageModal(); return; }
   if(els.specViewer && els.specViewer.classList.contains("show")){ closeSpecViewer(); return; }
 
@@ -4253,45 +4271,158 @@ function closeInquiryGuide(){
   document.body.classList.remove("inquiry-guide-open");
 }
 
-async function submitInquiry(){
-  const type = safe(els.inquiryType.value, "기타");
-  const store = els.inquiryStore.value.trim();
-  const name = els.inquiryName.value.trim();
-  const phone = els.inquiryPhone.value.trim();
-  const orderNo = els.inquiryOrderNo.value.trim();
-  const body = els.inquiryBody.value.trim();
-  if(!orderNo){
-    showInquiryResult("주문번호를 입력해 주세요. 비고 번호가 없으면 HDM 오더번호를 입력해 주세요.", "err");
-    els.inquiryOrderNo.focus();
-    return;
-  }
-  if(!body){
-    showInquiryResult("배송 관리 요청사항을 입력해 주세요.", "err");
-    els.inquiryBody.focus();
-    return;
-  }
-  els.inquirySubmitBtn.disabled = true;
-  showInquiryResult("배송 관리 요청을 등록하는 중입니다.", "warn");
+function inquiryTodayValue(){
+  const now = new Date();
+  return new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
+
+function getInquiryRequesterKey(){
+  if(inquiryRuntimeKey) return inquiryRuntimeKey;
   try{
-    const res = await apiGet({ action:"submitInquiry", type, store, name, phone, orderNo, body, page: location.href, _: Date.now() });
-    if(!res || res.ok === false) throw new Error(res?.message || "등록 실패");
-    els.inquiryStore.value = "";
-    els.inquiryName.value = "";
-    els.inquiryPhone.value = "";
-    els.inquiryOrderNo.value = "";
-    els.inquiryBody.value = "";
-    showInquiryResult("배송 관리 요청이 등록되었습니다. 해당 내용은 관리자만 확인 가능합니다.", "ok");
+    inquiryRuntimeKey = localStorage.getItem("costco_hub_inquiry_requester_v1") || "";
+    if(!inquiryRuntimeKey){
+      const random = globalThis.crypto?.randomUUID ? crypto.randomUUID() : `${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;
+      inquiryRuntimeKey = `iq_${random.replace(/[^A-Za-z0-9_-]/g,"")}`;
+      localStorage.setItem("costco_hub_inquiry_requester_v1",inquiryRuntimeKey);
+    }
+  }catch(err){
+    inquiryRuntimeKey = `iq_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  }
+  return inquiryRuntimeKey;
+}
+
+function showInquiryDashboard(){
+  els.inquiryDashboardPanel?.classList.remove("inquiry-hidden");
+  els.inquiryFormPanel?.classList.add("inquiry-hidden");
+  els.inquiryDetailPanel?.classList.add("inquiry-hidden");
+  renderInquiryDashboard();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function openInquiryForm(type="동시 배송 요청"){
+  selectInquiryType(type);
+  els.inquiryDashboardPanel?.classList.add("inquiry-hidden");
+  els.inquiryDetailPanel?.classList.add("inquiry-hidden");
+  els.inquiryFormPanel?.classList.remove("inquiry-hidden");
+  if(els.inquiryRequestDate){ els.inquiryRequestDate.min=inquiryTodayValue(); if(!els.inquiryRequestDate.value) els.inquiryRequestDate.value=inquiryTodayValue(); }
+  try{ if(els.inquiryStore&&!els.inquiryStore.value) els.inquiryStore.value=localStorage.getItem("costco_hub_inquiry_store_v1")||""; }catch(err){}
+  if(els.inquiryResult){ els.inquiryResult.textContent=""; els.inquiryResult.className="status inquiry-form-result"; }
+  updateInquiryBodyCount();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function selectInquiryType(type){
+  const selected = safe(type,"동시 배송 요청");
+  if(els.inquiryType) els.inquiryType.value=selected;
+  document.querySelectorAll("[data-inquiry-type]").forEach(btn=>btn.classList.toggle("selected",btn.dataset.inquiryType===selected));
+}
+
+function updateInquiryBodyCount(){
+  if(els.inquiryBodyCount) els.inquiryBodyCount.textContent=`${(els.inquiryBody?.value||"").length}/300`;
+}
+
+async function loadInquiryDashboard(force=false){
+  if(inquiryLoading) return;
+  inquiryLoading=true;
+  if(els.inquiryRefreshBtn) els.inquiryRefreshBtn.disabled=true;
+  if(els.inquiryUpdatedAt) els.inquiryUpdatedAt.textContent="현황 조회 중…";
+  try{
+    const res=await apiGet({action:"getInquiryStatus",requesterKey:getInquiryRequesterKey(),_:Date.now()});
+    if(!res||res.ok===false) throw new Error(res?.message||"조회 실패");
+    inquiryRows=Array.isArray(res.inquiries)?res.inquiries:[];
+    if(force) inquiryListExpanded=false;
+    if(els.inquiryUpdatedAt) els.inquiryUpdatedAt.textContent=`${safe(res.updatedAt,"방금")} 기준`;
+    renderInquiryDashboard();
   }catch(err){
     console.error(err);
-    showInquiryResult("배송 관리 요청 등록에 실패했습니다. Apps Script 배포/권한을 확인해 주세요.", "err");
+    if(els.inquiryUpdatedAt) els.inquiryUpdatedAt.textContent="현황 조회 실패";
+    if(els.inquiryRecentList){ els.inquiryRecentList.className="inquiry-empty"; els.inquiryRecentList.innerHTML="요청 현황을 불러오지 못했습니다.<br/>새 Code.gs 배포 상태와 네트워크를 확인해 주세요."; }
   }finally{
-    els.inquirySubmitBtn.disabled = false;
+    inquiryLoading=false;
+    if(els.inquiryRefreshBtn) els.inquiryRefreshBtn.disabled=false;
+  }
+}
+
+function renderInquiryDashboard(){
+  if(!els.inquiryRecentList) return;
+  const count=status=>status==="전체"?inquiryRows.length:inquiryRows.filter(row=>safe(row.status,"접수")===status).length;
+  if(els.inquiryCountTotal) els.inquiryCountTotal.textContent=count("전체");
+  if(els.inquiryCountReceived) els.inquiryCountReceived.textContent=count("접수");
+  if(els.inquiryCountProcessing) els.inquiryCountProcessing.textContent=count("처리중");
+  if(els.inquiryCountCompleted) els.inquiryCountCompleted.textContent=count("완료");
+  if(els.inquiryCountCancelled) els.inquiryCountCancelled.textContent=count("취소");
+  els.inquirySummaryGrid?.querySelectorAll("[data-status]").forEach(btn=>btn.classList.toggle("active",btn.dataset.status===inquiryFilter));
+  const filtered=inquiryFilter==="전체"?inquiryRows:inquiryRows.filter(row=>safe(row.status,"접수")===inquiryFilter);
+  const visible=inquiryListExpanded?filtered:filtered.slice(0,5);
+  if(els.inquiryListTitle) els.inquiryListTitle.textContent=inquiryFilter==="전체"?"최근 요청 내역":`${inquiryFilter} 요청 내역`;
+  if(els.inquiryShowAllBtn) els.inquiryShowAllBtn.textContent=inquiryFilter!=="전체"?"전체로 보기 ›":inquiryListExpanded?"최근 5건 보기 ›":"전체보기 ›";
+  if(!visible.length){
+    els.inquiryRecentList.className="inquiry-empty";
+    els.inquiryRecentList.innerHTML=inquiryRows.length?`${esc(inquiryFilter)} 상태의 요청이 없습니다.`:"이 기기에서 접수한 요청이 없습니다.<br/>새 요청을 등록하면 처리 현황이 여기에 표시됩니다.";
+    return;
+  }
+  els.inquiryRecentList.className="inquiry-list";
+  els.inquiryRecentList.innerHTML=visible.map(row=>{
+    const status=safe(row.status,"접수");
+    const badgeClass=status==="처리중"?"processing":status==="완료"?"completed":status==="취소"?"cancelled":"";
+    return `<button class="inquiry-list-row" type="button" data-inquiry-request="${esc(row.requestNo)}"><span class="inquiry-list-icon">${inquiryTypeIcon(row.type)}</span><span class="inquiry-list-main"><span class="inquiry-list-top"><strong>${esc(safe(row.requestNo,"접수 요청"))}</strong></span><b>${esc(safe(row.type,"배송 관리 요청"))}</b><small>${esc(safe(row.registeredAt,""))} · ${esc(safe(row.requestDate,"일자 미입력"))} · ${esc(safe(row.store,"점포 미입력"))}</small></span><span class="inquiry-status-badge ${badgeClass}">${esc(status)}</span><span class="inquiry-list-arrow">›</span></button>`;
+  }).join("");
+}
+
+function inquiryTypeIcon(type){
+  if(String(type||"").includes("지정")) return `<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M4 9h16" stroke="currentColor" stroke-width="2"/></svg>`;
+  if(String(type||"").includes("빠른")) return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="m14 2-9 12h6l-1 8 9-13h-6l1-7Z"/></svg>`;
+  return `<svg viewBox="0 0 24 24" fill="none"><path d="M3 7 11 3l6 3-8 4-6-3Zm0 0v9l6 3v-9M14 13h7v5h-7z" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="20" r="1.5" fill="currentColor"/><circle cx="20" cy="20" r="1.5" fill="currentColor"/></svg>`;
+}
+
+function openInquiryDetail(requestNo){
+  const row=inquiryRows.find(item=>String(item.requestNo||"")===String(requestNo||""));
+  if(!row||!els.inquiryDetailContent) return;
+  const status=safe(row.status,"접수");
+  const badgeClass=status==="처리중"?"processing":status==="완료"?"completed":status==="취소"?"cancelled":"";
+  els.inquiryDetailContent.innerHTML=`<div class="inquiry-detail-head"><div><h3>${esc(safe(row.requestNo,"요청 상세"))}</h3><p>${esc(safe(row.registeredAt,""))} 접수</p></div><span class="inquiry-status-badge ${badgeClass}">${esc(status)}</span></div><div class="inquiry-detail-grid"><div class="inquiry-detail-item"><span>요청 유형</span><strong>${esc(safe(row.type,"-"))}</strong></div><div class="inquiry-detail-item"><span>요청 일자</span><strong>${esc(safe(row.requestDate,"-"))}</strong></div><div class="inquiry-detail-item"><span>신청 점포</span><strong>${esc(safe(row.store,"-"))}</strong></div><div class="inquiry-detail-item"><span>주문/오더 번호</span><strong>${esc(safe(row.orderNo,"-"))}</strong></div><div class="inquiry-detail-item full"><span>요청 내용</span><strong>${esc(safe(row.body,"-"))}</strong></div></div><div class="inquiry-detail-memo"><b>관리자 처리 메모</b><br/>${esc(safe(row.managerMemo,"아직 등록된 관리자 메모가 없습니다."))}</div>`;
+  els.inquiryDashboardPanel?.classList.add("inquiry-hidden");
+  els.inquiryFormPanel?.classList.add("inquiry-hidden");
+  els.inquiryDetailPanel?.classList.remove("inquiry-hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function submitInquiry(){
+  const type=safe(els.inquiryType?.value,"동시 배송 요청");
+  const store=(els.inquiryStore?.value||"").trim();
+  const name=(els.inquiryName?.value||"").trim();
+  const phone=(els.inquiryPhone?.value||"").trim();
+  const orderNo=(els.inquiryOrderNo?.value||"").trim();
+  const requestDate=(els.inquiryRequestDate?.value||"").trim();
+  const body=(els.inquiryBody?.value||"").trim();
+  const checks=[[store,els.inquiryStore,"신청 점포를 선택해 주세요."],[name,els.inquiryName,"담당자명을 입력해 주세요."],[orderNo,els.inquiryOrderNo,"주문번호 또는 HDM 오더번호를 입력해 주세요."],[requestDate,els.inquiryRequestDate,"요청 일자를 선택해 주세요."],[body,els.inquiryBody,"배송 관리 요청 내용을 입력해 주세요."]];
+  for(const [value,field,message] of checks){ if(!value){ showInquiryResult(message,"err"); field?.focus(); return; } }
+  els.inquirySubmitBtn.disabled=true;
+  showInquiryResult("배송 관리 요청을 접수하는 중입니다.","warn");
+  try{
+    const res=await apiGet({action:"submitInquiry",type,store,name,phone,orderNo,requestDate,body,requesterKey:getInquiryRequesterKey(),page:location.href.split("#")[0],_:Date.now()});
+    if(!res||res.ok===false) throw new Error(res?.message||"등록 실패");
+    try{ localStorage.setItem("costco_hub_inquiry_store_v1",store); }catch(err){}
+    els.inquiryOrderNo.value="";
+    els.inquiryBody.value="";
+    updateInquiryBodyCount();
+    inquiryFilter="전체";
+    inquiryListExpanded=false;
+    showInquiryDashboard();
+    if(els.inquiryUpdatedAt) els.inquiryUpdatedAt.textContent=`${safe(res.requestNo,"요청")} 접수 완료`;
+    await loadInquiryDashboard(true);
+  }catch(err){
+    console.error(err);
+    showInquiryResult(`배송 관리 요청 등록에 실패했습니다. ${safe(err?.message,"")}`,"err");
+  }finally{
+    els.inquirySubmitBtn.disabled=false;
   }
 }
 
 function showInquiryResult(msg,type="warn"){
-  els.inquiryResult.textContent = msg;
-  els.inquiryResult.className = `status show ${type}`;
+  if(!els.inquiryResult) return;
+  els.inquiryResult.textContent=msg;
+  els.inquiryResult.className=`status inquiry-form-result show ${type}`;
 }
 
 function oneStepSwipe(target, isActive, onLeft, onRight){
