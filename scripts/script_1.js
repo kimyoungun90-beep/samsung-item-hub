@@ -1,5 +1,5 @@
 const CONFIG = {
-  APP_VERSION: "v2.1.6 Stable",
+  APP_VERSION: "v2.1.7 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -17,7 +17,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.6"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.7"
 };
 
 const DETAIL_TABS = [
@@ -157,7 +157,7 @@ let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
-const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v216";
+const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v217";
 const PRODUCT_COMPARE_RECENT_KEY = "costco_hub_product_compare_recent_v214";
 let productComparisonData = { costco:[], external:[], categories:["TV"], updatedAt:"" };
 let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"", showAllRecent:false };
@@ -4420,7 +4420,12 @@ function productCompareResultHtml(rows, mode){
   if(!sections.length){
     return `<section class="pc-result"><div class="pc-empty">선택한 모델의 스펙 값이 아직 없습니다.<br/>시트의 D열 <b>스펙구분</b>, E열 <b>스펙항목</b>, F열 <b>스펙값</b>을 입력해 주세요.</div></section>`;
   }
-  const head = rows.map(row=>`<th><span class="pc-model-head">${esc(row.modelName)}</span><span class="pc-model-meta">${row.source==='costco'?'코스트코':'타 경로'}${row.itemNos?.length?` · 아이템 ${esc(row.itemNos.join(', '))}`:(row.itemNo?` · ${esc(row.itemNo)}`:'')}</span></th>`).join("");
+  const head = rows.map(row=>{
+    const itemText = row.itemNos?.length
+      ? ` · 아이템 ${row.itemNos[0]}${row.itemNos.length>1?` 외 ${row.itemNos.length-1}개`:''}`
+      : (row.itemNo ? ` · ${row.itemNo}` : '');
+    return `<th><span class="pc-model-head">${esc(row.modelName)}</span><span class="pc-model-meta">${row.source==='costco'?'코스트코':'타 경로'}${esc(itemText)}</span></th>`;
+  }).join("");
   const body = sections.map(section=>{
     const fields = section.fields.map(field=>{
       const values = rows.map(row=>safe(row.features?.[field],""));
@@ -4430,7 +4435,9 @@ function productCompareResultHtml(rows, mode){
     }).join("");
     return `<tr class="pc-section-row"><td colspan="${rows.length+1}">${esc(section.title)}</td></tr>${fields}`;
   }).join("");
-  return `<section id="productCompareResult" class="pc-result"><div class="pc-result-head"><h3>${mode==='cross'?'코스트코 ↔ 타 경로 비교':'코스트코 제품 비교 결과'}</h3><span>다른 항목은 노란색 표시</span></div><div class="pc-compare-scroll"><table class="pc-table"><thead><tr><th>비교 항목</th>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`;
+  const tableClass = rows.length === 2 ? 'pc-table pc-table-two' : 'pc-table pc-table-three';
+  const columnGroup = `<colgroup><col class="pc-label-col">${rows.map(()=>'<col class="pc-product-col">').join('')}</colgroup>`;
+  return `<section id="productCompareResult" class="pc-result"><div class="pc-result-head"><h3>${mode==='cross'?'코스트코 ↔ 타 경로 비교':'코스트코 제품 비교 결과'}</h3><span>다른 항목은 노란색 표시</span></div><div class="pc-compare-scroll"><table class="${tableClass}">${columnGroup}<thead><tr><th>비교 항목</th>${head}</tr></thead><tbody>${body}</tbody></table></div></section>`;
 }
 
 function productCompareCatalogRows(){

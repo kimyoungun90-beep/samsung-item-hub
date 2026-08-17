@@ -126,6 +126,6 @@
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.6 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.7 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
