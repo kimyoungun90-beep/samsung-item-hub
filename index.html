@@ -747,7 +747,7 @@ body.view-nonhome .app{padding-top:0;}
 .inquiry-section-title{align-items:flex-start}.inquiry-section-title h2{letter-spacing:-.65px}.inquiry-section-title small{max-width:720px;line-height:1.65;word-break:keep-all}.inquiry-section-title small b{color:#b45309;font-weight:1000}.inquiry-guide-box{font-size:13px;line-height:1.75;background:linear-gradient(180deg,#f8fbff,#fff);border-color:#cfe0f4}.inquiry-guide-box b{display:inline-block;margin-top:3px;color:#b45309}.inquiry-form{gap:12px}.inquiry-field{display:grid;gap:7px;min-width:0}.inquiry-field-label{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 5px;color:#334155;font-size:12px;font-weight:1000;line-height:1.3}.inquiry-field-label em{font-style:normal;color:#7c8da5;font-size:10px;font-weight:900;white-space:nowrap}.inquiry-field-label strong{color:#dc2626;font-size:10px;font-weight:1000}.inquiry-select-field select{cursor:pointer}.inquiry-submit-note{border:1px solid #d9e6f4;border-radius:16px;background:#f8fbff;padding:12px 13px;color:#526780;font-size:12px;font-weight:900;line-height:1.6;word-break:keep-all}.inquiry-card .submit-btn{background:linear-gradient(135deg,#0b6be8,#0758c7);box-shadow:0 12px 28px rgba(11,99,206,.23)}
 .inquiry-guide-modal{position:fixed;inset:0;z-index:22000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,16,38,.60);backdrop-filter:blur(8px)}.inquiry-guide-modal.show{display:flex}.inquiry-guide-panel{width:min(720px,calc(100vw - 28px));max-height:88vh;overflow:auto;border:1px solid rgba(255,255,255,.78);border-radius:26px;background:#fff;box-shadow:0 30px 80px rgba(4,16,38,.35)}.inquiry-guide-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px 14px;background:rgba(255,255,255,.97);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(10px)}.inquiry-guide-title{font-size:19px;font-weight:1000;color:#07152d;letter-spacing:-.45px}.inquiry-guide-sub{margin-top:5px;color:#64748b;font-size:12px;font-weight:850;line-height:1.4}.inquiry-guide-close{width:42px;height:42px;border:0;border-radius:999px;background:#0b1b36;color:#fff;font-size:24px;font-weight:700;flex:0 0 auto}.inquiry-guide-body{padding:16px 18px 20px}.inquiry-guide-image-wrap{overflow:auto;border:1px solid #cbd5e1;border-radius:16px;background:#06111c;padding:8px}.inquiry-guide-image-wrap img{display:block;width:100%;min-width:620px;height:auto;border-radius:8px}.inquiry-guide-copy{margin-top:13px;border:1px solid #dbe7f5;border-radius:17px;background:#f8fbff;padding:13px 14px;color:#334155;font-size:13px;font-weight:900;line-height:1.65;word-break:keep-all}.inquiry-guide-copy p{margin:0}.inquiry-guide-copy p+p{margin-top:6px}.inquiry-guide-copy b{color:#0b63ce}.inquiry-guide-copy .inquiry-guide-small{color:#64748b;font-size:12px}.inquiry-guide-copy .inquiry-guide-alert{color:#b91c1c}.inquiry-guide-confirm{width:100%;min-height:50px;margin-top:14px;border:0;border-radius:17px;background:#0b63ce;color:#fff;font-size:14px;font-weight:1000;box-shadow:0 11px 24px rgba(11,99,206,.22)}.inquiry-guide-open{overflow:hidden!important}
 @media(max-width:640px){.inquiry-section-title{gap:8px}.inquiry-section-title h2{font-size:20px}.inquiry-section-title small{font-size:11px}.inquiry-card .form-row-2{grid-template-columns:1fr}.inquiry-field-label{font-size:11px}.inquiry-guide-modal{padding:10px}.inquiry-guide-panel{width:100%;border-radius:22px;max-height:91vh}.inquiry-guide-head{padding:14px}.inquiry-guide-title{font-size:18px}.inquiry-guide-body{padding:12px 13px 16px}.inquiry-guide-image-wrap img{min-width:560px}.inquiry-guide-copy{font-size:12px}.home-quick-copy strong{line-height:1.18}}
-/* v2.1.7 dashboard + mobile comparison table */
+/* v2.1.9 dashboard + unified item/AI search */
 .inquiry-app-shell{overflow:hidden;border:1px solid #dce6f3;border-radius:28px;background:#f7f9fc;box-shadow:0 20px 55px rgba(15,45,85,.10)}
 .inquiry-page-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #dce6f3;background:#fff}.inquiry-page-head-copy{min-width:0}.inquiry-page-head h2{margin:0;color:#07152d;font-size:24px;font-weight:1000;letter-spacing:-.8px}.inquiry-page-head p{margin:6px 0 0;color:#64748b;font-size:12px;font-weight:850;line-height:1.55}.inquiry-refresh-btn{display:flex;align-items:center;gap:7px;min-height:42px;padding:0 14px;border:1px solid #cfe0f5;border-radius:14px;background:#f5f9ff;color:#0b63ce;font-size:12px;font-weight:1000}.inquiry-refresh-btn svg{width:17px;height:17px}
 .inquiry-panel{padding:20px 22px 22px}.inquiry-hidden{display:none!important}.inquiry-block-title{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:12px}.inquiry-block-title h3{margin:0;color:#0b1830;font-size:18px;font-weight:1000;letter-spacing:-.45px}.inquiry-block-title small{color:#7b8ba2;font-size:11px;font-weight:850}.inquiry-all-btn{border:0;background:transparent;color:#536884;font-size:11px;font-weight:1000}
@@ -905,12 +905,12 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.1.7 Stable</span>
+            <span id="homeAppVersion" class="home-app-version">v2.1.9 Stable</span>
           </button>
         </div>
         <div class="home-search">
           <span class="home-search-leading" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-          <input id="homeSearchInput" type="search" placeholder="아이템 번호 또는 모델명을 입력하세요." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" aria-autocomplete="list" aria-controls="homeSearchSuggestions" aria-expanded="false" />
+          <input id="homeSearchInput" type="search" placeholder="아이템번호·모델명 또는 업무 질문을 입력하세요." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" aria-autocomplete="list" aria-controls="homeSearchSuggestions" aria-expanded="false" />
           <button id="homeSearchBtn" type="button" aria-label="검색"><svg viewBox="0 0 24 24" fill="none"><path d="M7 5H5v4M17 5h2v4M7 19H5v-4M17 19h2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
           <div id="homeSearchSuggestions" class="home-search-suggestions" role="listbox" aria-label="연관 아이템 검색 결과"></div>
         </div>
@@ -1435,7 +1435,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="코스트코 전용 AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.7</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.9</em></div>
         <small><i></i> 코스트코 HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1473,7 +1473,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.1.7 Stable",
+  APP_VERSION: "v2.1.9 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1491,7 +1491,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.7"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.9"
 };
 
 const DETAIL_TABS = [
@@ -1631,7 +1631,7 @@ let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
-const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v217";
+const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v219";
 const PRODUCT_COMPARE_RECENT_KEY = "costco_hub_product_compare_recent_v214";
 let productComparisonData = { costco:[], external:[], categories:["TV"], updatedAt:"" };
 let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"", showAllRecent:false };
@@ -1705,9 +1705,7 @@ function bindEvents(){
     els.homeSearchInput.addEventListener("keydown",e=>{
       if(e.key === "Enter"){
         e.preventDefault();
-        const first = els.homeSearchSuggestions?.querySelector(".home-search-suggestion");
-        if(first) openHomeSearchSuggestion(first.dataset.item || "");
-        else runHomeSearch();
+        runHomeSearch();
       }else if(e.key === "Escape"){
         hideHomeSearchSuggestions();
       }
@@ -3332,7 +3330,7 @@ function renderHomeSearchSuggestions(query=""){
   }
   const rows = findHomeSearchSuggestions(q);
   if(!rows.length){
-    els.homeSearchSuggestions.innerHTML = `<div class="home-search-suggestion-empty">연관 품목이 없습니다.</div>`;
+    els.homeSearchSuggestions.innerHTML = `<div class="home-search-suggestion-empty">등록 제품이 없으면 AI 업무 도우미로 검색됩니다.</div>`;
     els.homeSearchSuggestions.classList.add("show");
     els.homeSearchInput.setAttribute("aria-expanded","true");
     return;
@@ -3373,9 +3371,34 @@ function openHomeSearchSuggestion(value){
   quickListCurrentPage = 1;
   searchItem(false);
 }
+function normalizeHomeLookupKey(value){
+  return String(value ?? "").normalize("NFKC").toUpperCase().replace(/[^0-9A-Z가-힣]/g,"");
+}
+function isRegisteredHomeItemQuery(query){
+  const key = normalizeHomeLookupKey(query);
+  if(!key || !Array.isArray(DB.items) || !DB.items.length) return false;
+  const numberOnly = /^\d+$/.test(key);
+  return DB.items.some(item=>{
+    const itemNos = String(item?.itemNo || "")
+      .split(/[\s,|;/]+/)
+      .map(normalizeItemNo)
+      .filter(Boolean);
+    if(itemNos.includes(key)) return true;
+    if(numberOnly) return false;
+    const modelKey = normalizeHomeLookupKey(item?.modelName || "");
+    if(!modelKey) return false;
+    return modelKey === key || (key.length >= 4 && modelKey.includes(key));
+  });
+}
 function runHomeSearch(){
   const q=String(els.homeSearchInput?.value||"").trim();
   hideHomeSearchSuggestions();
+  const dbReady = Array.isArray(DB.items) && DB.items.length > 0;
+  if(q && dbReady && !isRegisteredHomeItemQuery(q) && typeof window.openHubAiAssistantWithQuery === "function"){
+    if(els.homeSearchInput) els.homeSearchInput.value = "";
+    window.openHubAiAssistantWithQuery(q);
+    return;
+  }
   resetItemCategoryFilter();
   showPage("item");
   if(els.itemInput) els.itemInput.value=q;
@@ -8020,7 +8043,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.7 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.9 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8155,7 +8178,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.7 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.9 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -9122,6 +9145,31 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     });
   }
 
+  async function logAiSearchQuery(question){
+    const q = String(question || "").trim();
+    if(!q) return false;
+    const feedbackId = createFeedbackId();
+    const params = {
+      action:"logSearchFeedback",
+      question:q.slice(0,500),
+      recommendation:"",
+      feedbackType:"AI 검색",
+      feedbackId:feedbackId
+    };
+    try{
+      const result = await postSearchFeedbackForm(params,8000);
+      return !!result?.ok;
+    }catch(error){
+      try{
+        const result = await apiGet({ ...params, _:String(Date.now()) });
+        return !!result?.ok;
+      }catch(fallbackError){
+        console.warn("AI 검색기록 저장 실패",fallbackError);
+        return false;
+      }
+    }
+  }
+
   async function logAlternativeFeedback(question, recommendation){
     const q = String(question || "").trim();
     if(!q) return false;
@@ -9183,6 +9231,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     if(sendButton) sendButton.disabled = true;
 
     const alternativeRequest = isAlternativeAnswerRequest(text);
+    if(!alternativeRequest) logAiSearchQuery(text).catch(()=>{});
 
     try{
       if(alternativeRequest){
@@ -9328,6 +9377,15 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     };
     try{ recognition.start(); }catch(err){}
   }
+
+  window.openHubAiAssistantWithQuery = function(question){
+    const text = String(question || "").trim();
+    if(!text) return false;
+    openAiAssistant();
+    addMessage("bot", `<strong>AI 업무 도우미로 연결했습니다.</strong><p>등록된 아이템번호 또는 모델명과 일치하지 않아 업무 자료에서 검색합니다.</p>`);
+    window.setTimeout(()=>submitQuestion(text,{fromHomeSearch:true}),80);
+    return true;
+  };
 
   openButton.addEventListener("click", openAiAssistant);
   closeButton?.addEventListener("click", closeAiAssistant);

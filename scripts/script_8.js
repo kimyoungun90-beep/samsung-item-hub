@@ -721,6 +721,31 @@
     });
   }
 
+  async function logAiSearchQuery(question){
+    const q = String(question || "").trim();
+    if(!q) return false;
+    const feedbackId = createFeedbackId();
+    const params = {
+      action:"logSearchFeedback",
+      question:q.slice(0,500),
+      recommendation:"",
+      feedbackType:"AI 검색",
+      feedbackId:feedbackId
+    };
+    try{
+      const result = await postSearchFeedbackForm(params,8000);
+      return !!result?.ok;
+    }catch(error){
+      try{
+        const result = await apiGet({ ...params, _:String(Date.now()) });
+        return !!result?.ok;
+      }catch(fallbackError){
+        console.warn("AI 검색기록 저장 실패",fallbackError);
+        return false;
+      }
+    }
+  }
+
   async function logAlternativeFeedback(question, recommendation){
     const q = String(question || "").trim();
     if(!q) return false;
@@ -782,6 +807,7 @@
     if(sendButton) sendButton.disabled = true;
 
     const alternativeRequest = isAlternativeAnswerRequest(text);
+    if(!alternativeRequest) logAiSearchQuery(text).catch(()=>{});
 
     try{
       if(alternativeRequest){
@@ -927,6 +953,15 @@
     };
     try{ recognition.start(); }catch(err){}
   }
+
+  window.openHubAiAssistantWithQuery = function(question){
+    const text = String(question || "").trim();
+    if(!text) return false;
+    openAiAssistant();
+    addMessage("bot", `<strong>AI 업무 도우미로 연결했습니다.</strong><p>등록된 아이템번호 또는 모델명과 일치하지 않아 업무 자료에서 검색합니다.</p>`);
+    window.setTimeout(()=>submitQuestion(text,{fromHomeSearch:true}),80);
+    return true;
+  };
 
   openButton.addEventListener("click", openAiAssistant);
   closeButton?.addEventListener("click", closeAiAssistant);

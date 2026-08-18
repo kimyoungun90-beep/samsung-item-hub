@@ -1,5 +1,5 @@
 const CONFIG = {
-  APP_VERSION: "v2.1.7 Stable",
+  APP_VERSION: "v2.1.9 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -17,7 +17,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.7"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.9"
 };
 
 const DETAIL_TABS = [
@@ -157,7 +157,7 @@ let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
-const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v217";
+const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v219";
 const PRODUCT_COMPARE_RECENT_KEY = "costco_hub_product_compare_recent_v214";
 let productComparisonData = { costco:[], external:[], categories:["TV"], updatedAt:"" };
 let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"", showAllRecent:false };
@@ -231,9 +231,7 @@ function bindEvents(){
     els.homeSearchInput.addEventListener("keydown",e=>{
       if(e.key === "Enter"){
         e.preventDefault();
-        const first = els.homeSearchSuggestions?.querySelector(".home-search-suggestion");
-        if(first) openHomeSearchSuggestion(first.dataset.item || "");
-        else runHomeSearch();
+        runHomeSearch();
       }else if(e.key === "Escape"){
         hideHomeSearchSuggestions();
       }
@@ -1858,7 +1856,7 @@ function renderHomeSearchSuggestions(query=""){
   }
   const rows = findHomeSearchSuggestions(q);
   if(!rows.length){
-    els.homeSearchSuggestions.innerHTML = `<div class="home-search-suggestion-empty">연관 품목이 없습니다.</div>`;
+    els.homeSearchSuggestions.innerHTML = `<div class="home-search-suggestion-empty">등록 제품이 없으면 AI 업무 도우미로 검색됩니다.</div>`;
     els.homeSearchSuggestions.classList.add("show");
     els.homeSearchInput.setAttribute("aria-expanded","true");
     return;
@@ -1899,9 +1897,34 @@ function openHomeSearchSuggestion(value){
   quickListCurrentPage = 1;
   searchItem(false);
 }
+function normalizeHomeLookupKey(value){
+  return String(value ?? "").normalize("NFKC").toUpperCase().replace(/[^0-9A-Z가-힣]/g,"");
+}
+function isRegisteredHomeItemQuery(query){
+  const key = normalizeHomeLookupKey(query);
+  if(!key || !Array.isArray(DB.items) || !DB.items.length) return false;
+  const numberOnly = /^\d+$/.test(key);
+  return DB.items.some(item=>{
+    const itemNos = String(item?.itemNo || "")
+      .split(/[\s,|;/]+/)
+      .map(normalizeItemNo)
+      .filter(Boolean);
+    if(itemNos.includes(key)) return true;
+    if(numberOnly) return false;
+    const modelKey = normalizeHomeLookupKey(item?.modelName || "");
+    if(!modelKey) return false;
+    return modelKey === key || (key.length >= 4 && modelKey.includes(key));
+  });
+}
 function runHomeSearch(){
   const q=String(els.homeSearchInput?.value||"").trim();
   hideHomeSearchSuggestions();
+  const dbReady = Array.isArray(DB.items) && DB.items.length > 0;
+  if(q && dbReady && !isRegisteredHomeItemQuery(q) && typeof window.openHubAiAssistantWithQuery === "function"){
+    if(els.homeSearchInput) els.homeSearchInput.value = "";
+    window.openHubAiAssistantWithQuery(q);
+    return;
+  }
   resetItemCategoryFilter();
   showPage("item");
   if(els.itemInput) els.itemInput.value=q;
