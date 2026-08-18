@@ -1,5 +1,5 @@
 const CONFIG = {
-  APP_VERSION: "v2.1.10 Stable",
+  APP_VERSION: "v2.1.11 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -17,7 +17,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.10"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.11"
 };
 
 const DETAIL_TABS = [
@@ -158,7 +158,7 @@ let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
 let specPrefetchStarted = false;
-const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v2110";
+const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_v2111";
 const PRODUCT_COMPARE_RECENT_KEY = "costco_hub_product_compare_recent_v214";
 let productComparisonData = { costco:[], external:[], categories:["TV"], updatedAt:"" };
 let productComparisonState = { category:"TV", query:"", selected:[], mode:"index", crossCostco:"", crossExternal:"", resultRows:[], resultMode:"", showAllRecent:false };
@@ -4320,6 +4320,7 @@ function normalizeProductComparisonData(data){
       searchText:safe(row?.searchText,"") || [modelName].concat(itemNos).join(" "),
       features:row?.features && typeof row.features === "object" ? row.features : {},
       featureGroups:row?.featureGroups && typeof row.featureGroups === "object" ? row.featureGroups : {},
+      featureLabels:row?.featureLabels && typeof row.featureLabels === "object" ? row.featureLabels : {},
       featureOrder:Array.isArray(row?.featureOrder) ? row.featureOrder.map(v=>safe(v,"")).filter(Boolean) : [],
       row:Number(row?.row || index + 2)
     };
@@ -4432,18 +4433,27 @@ function productCompareResultHtml(rows, mode){
   if(!Array.isArray(rows) || rows.length < 2) return "";
   const groups = [];
   const fieldsByGroup = {};
-  const assignedGroup = {};
   rows.forEach(row=>{
     const orderedFields = uniqueArray((row.featureOrder || []).concat(Object.keys(row.features || {})));
     orderedFields.forEach(field=>{
       if(!field || !rows.some(item=>safe(item.features?.[field],"") !== "")) return;
-      const group = assignedGroup[field] || safe(row.featureGroups?.[field],"") || "상세 스펙";
-      assignedGroup[field] = group;
+      const group = safe(row.featureGroups?.[field],"") || "상세 스펙";
       if(!fieldsByGroup[group]){ fieldsByGroup[group]=[]; groups.push(group); }
       if(!fieldsByGroup[group].includes(field)) fieldsByGroup[group].push(field);
     });
   });
-  const sections = groups.map(title=>({title,fields:fieldsByGroup[title]})).filter(section=>section.fields.length);
+  const sectionRank = title=>{
+    const compact = String(title || "").trim().replace(/\s+/g,"");
+    const numbered = compact.match(/^(\d+)(?:[-._)]|$)/);
+    if(numbered) return Number(numbered[1]);
+    if(compact.includes("스탠드")) return 1;
+    if(compact.includes("벽걸이")) return 2;
+    if(compact.includes("실외기")) return 3;
+    return 999;
+  };
+  const sections = groups.map((title,index)=>({title,fields:fieldsByGroup[title],index}))
+    .filter(section=>section.fields.length)
+    .sort((a,b)=>sectionRank(a.title)-sectionRank(b.title) || a.index-b.index);
   if(!sections.length){
     return `<section class="pc-result"><div class="pc-empty">선택한 모델의 스펙 값이 아직 없습니다.<br/>시트의 D열 <b>스펙구분</b>, E열 <b>스펙항목</b>, F열 <b>스펙값</b>을 입력해 주세요.</div></section>`;
   }
@@ -4456,9 +4466,10 @@ function productCompareResultHtml(rows, mode){
   const body = sections.map(section=>{
     const fields = section.fields.map(field=>{
       const values = rows.map(row=>safe(row.features?.[field],""));
+      const label = rows.map(row=>safe(row.featureLabels?.[field],"")).find(Boolean) || String(field).split("\u241F").pop() || field;
       const normalizedValues = uniqueArray(values.map(v=>normalizeText(v || "미입력")));
       const different = normalizedValues.length > 1;
-      return `<tr class="${different?'pc-different':''}"><td>${esc(field)}</td>${values.map(value=>`<td>${esc(value || '미입력')}</td>`).join("")}</tr>`;
+      return `<tr class="${different?'pc-different':''}"><td>${esc(label)}</td>${values.map(value=>`<td>${esc(value || '미입력')}</td>`).join("")}</tr>`;
     }).join("");
     return `<tr class="pc-section-row"><td colspan="${rows.length+1}">${esc(section.title)}</td></tr>${fields}`;
   }).join("");
@@ -4490,7 +4501,8 @@ function renderProductCompareCatalogList(){
       const key = productCompareRowKey(row);
       const selected = productComparisonState.selected.includes(key);
       const firstSpec = (row.featureOrder || []).find(field=>safe(row.features?.[field],"")) || Object.keys(row.features || {})[0] || "";
-      const specSummary = firstSpec ? `${firstSpec} ${safe(row.features?.[firstSpec],"")}` : "스펙 입력 대기";
+      const firstSpecLabel = safe(row.featureLabels?.[firstSpec],"") || String(firstSpec).split("\u241F").pop() || firstSpec;
+      const specSummary = firstSpec ? `${firstSpecLabel} ${safe(row.features?.[firstSpec],"")}` : "스펙 입력 대기";
       const itemSummary = row.itemNos?.length ? `${row.itemNos[0]}${row.itemNos.length>1?` 외 ${row.itemNos.length-1}개`:''}` : row.itemNo;
       return `<button class="pc-product ${selected?'selected':''}" type="button" data-pc-product="${esc(key)}" aria-pressed="${selected?'true':'false'}"><span class="pc-check">✓</span><span class="pc-product-copy"><span class="pc-product-model">${esc(row.modelName)}</span><span class="pc-product-sub">아이템 ${esc(itemSummary)} · ${esc(specSummary)}</span></span><span class="pc-product-arrow">›</span></button>`;
     }).join("") + (rows.length>30 ? `<div class="pc-sheet-guide">검색 결과가 많아 처음 30개만 표시했습니다. 위 검색창에 모델명 또는 아이템번호를 입력해 주세요.</div>` : "");
