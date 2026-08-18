@@ -300,6 +300,52 @@
     return `<button class="ai-result-card" type="button" data-ai-kind="${kind}" data-ai-index="${index}"><span class="ai-result-copy"><b>${aiEscape(title)}</b><span>${aiEscape(sub)}</span></span><span>›</span></button>`;
   }
 
+  function normalizeLearningLookup(value){
+    return aiNormalize(value).replace(/[^0-9a-z가-힣]/g,"");
+  }
+
+  function findPriorityLearning(query){
+    const q = normalizeLearningLookup(query);
+    const rows = Array.isArray(DB?.searchLearning) ? DB.searchLearning : [];
+    if(!q || !rows.length) return null;
+    const exact = rows.find(row=>normalizeLearningLookup(row?.expression) === q);
+    if(exact) return exact;
+    if(q.length < 4) return null;
+    return rows.find(row=>{
+      const expression = normalizeLearningLookup(row?.expression);
+      return expression.length >= 4 && (q.includes(expression) || expression.includes(q));
+    }) || null;
+  }
+
+  function buildPriorityLearningAnswer(query){
+    const learned = findPriorityLearning(query);
+    if(!learned) return "";
+    const type = String(learned.type || "").trim();
+
+    if(type === "아이템" && typeof findItemFromLearning === "function"){
+      const item = findItemFromLearning(query);
+      const index = item ? findAiItemIndex(item) : -1;
+      if(item && index >= 0){
+        const title = [item.itemNo,item.modelName].filter(Boolean).join(" · ") || item.productName || "제품";
+        const sub = [item.category,item.productName].filter(Boolean).join(" · ");
+        return `<strong>검색실패 수정 내용을 우선 반영했습니다.</strong><p>관리자가 연결한 제품입니다.</p><div class="ai-answer-section">${resultButton("item",index,title,sub)}</div>`;
+      }
+    }
+
+    if(type === "프로세스" && typeof findProcessesFromLearning === "function"){
+      const rows = findProcessesFromLearning(query);
+      if(rows.length){
+        const row = rows[0];
+        const index = Number.isInteger(row._dbIndex) ? row._dbIndex : findAiProcessIndex(row.title);
+        return buildProcessRowAnswer(row,index,"검색실패에서 수정한 연결 답변을 가장 먼저 적용했습니다.");
+      }
+    }
+
+    const directAnswer = String(learned.targetName || learned.targetKey || "").trim();
+    if(!directAnswer) return "";
+    return `<strong>검색실패 수정 내용을 우선 반영했습니다.</strong><div class="ai-answer-section"><div class="ai-answer-note">${aiEscape(directAnswer).replace(/\n/g,"<br>")}</div></div><small>검색학습DB에 등록된 관리자 답변입니다.</small>`;
+  }
+
   function isAlternativeAnswerRequest(value){
     const text = aiNormalize(value).replace(/[.!?~]+/g," ").replace(/\s+/g," ").trim();
     return /(?:이|그|저)?\s*(?:대답|답변|내용|거|것)?\s*(?:이|가)?\s*(?:아니야|아닙니다|아닌데|틀렸어|틀려|안 맞아|맞지 않아)|(?:그거|그것|이거|이것)\s*말고|다른\s*(?:답|답변|거|것|내용)|다시\s*(?:찾아|검색)/.test(text);
@@ -868,6 +914,13 @@
       aiConversation.excludedProcessTitles = [];
       aiConversation.lastProcessTitles = [];
       aiConversation.answerSequence = 0;
+
+      const learnedAnswer = buildPriorityLearningAnswer(text);
+      if(learnedAnswer){
+        hideTyping();
+        addMessage("bot", learnedAnswer);
+        return;
+      }
 
       if(isProductCompareQuestion(text)){
         const localCompare = buildProductComparisonAnswer(findComparisonItems(text));
