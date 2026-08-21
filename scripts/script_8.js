@@ -17,7 +17,8 @@
     excludedProcessTitles: [],
     lastProcessTitles: [],
     lastAnswerText: "",
-    answerSequence: 0
+    answerSequence: 0,
+    pendingSearchLogQuestion: ""
   };
 
   // v139: 제품 찾기보다 아래 35개 등록 업무 질문을 우선합니다.
@@ -111,8 +112,9 @@
       : 0;
     const canFeedback = role === "bot"
       && !!aiConversation.lastQuestion
-      && processTitles.length > 0
-      && !String(html).includes("개인정보를 삭제");
+      && !String(html).includes("개인정보를 삭제")
+      && !String(html).includes("어떤 질문의 다른 답변을 찾을지 확인이 필요합니다")
+      && !String(html).includes("다른 관련 프로세스를 더 찾지 못했습니다");
     const historyLabel = answerNo
       ? `<div class="ai-answer-history-label"><span>답변 ${answerNo}</span><small>${answerNo === 1 ? "첫 번째 안내" : "이전 답변을 제외한 추가 안내"}</small></div>`
       : "";
@@ -137,6 +139,11 @@
         excludedProcessTitles: uniqueProcessTitles(aiConversation.excludedProcessTitles),
         answerNo: answerNo
       };
+      const pendingLogQuestion = String(aiConversation.pendingSearchLogQuestion || "").trim();
+      if(pendingLogQuestion && answerText){
+        aiConversation.pendingSearchLogQuestion = "";
+        logAiSearchResult(pendingLogQuestion,answerText).catch(()=>{});
+      }
     }
     aiScrollBottom();
     return row;
@@ -317,10 +324,18 @@
     }) || null;
   }
 
+  function buildQuestionEcho(query){
+    const text = String(query || "").replace(/\s+/g," ").trim();
+    if(!text) return "";
+    const shortText = text.length > 60 ? text.slice(0,60) + "…" : text;
+    return `<strong>“${aiEscape(shortText)}”에 대해 안내드릴게요.</strong>`;
+  }
+
   function buildPriorityLearningAnswer(query){
     const learned = findPriorityLearning(query);
     if(!learned) return "";
     const type = String(learned.type || "").trim();
+    const questionEcho = buildQuestionEcho(query);
 
     if(type === "아이템" && typeof findItemFromLearning === "function"){
       const item = findItemFromLearning(query);
@@ -328,7 +343,7 @@
       if(item && index >= 0){
         const title = [item.itemNo,item.modelName].filter(Boolean).join(" · ") || item.productName || "제품";
         const sub = [item.category,item.productName].filter(Boolean).join(" · ");
-        return `<strong>검색실패 수정 내용을 우선 반영했습니다.</strong><p>관리자가 연결한 제품입니다.</p><div class="ai-answer-section">${resultButton("item",index,title,sub)}</div>`;
+        return `${questionEcho}<p>관련 제품을 찾았습니다.</p><div class="ai-answer-section">${resultButton("item",index,title,sub)}</div>`;
       }
     }
 
@@ -337,13 +352,13 @@
       if(rows.length){
         const row = rows[0];
         const index = Number.isInteger(row._dbIndex) ? row._dbIndex : findAiProcessIndex(row.title);
-        return buildProcessRowAnswer(row,index,"검색실패에서 수정한 연결 답변을 가장 먼저 적용했습니다.");
+        return `${questionEcho}<div style="height:8px"></div>${buildProcessRowAnswer(row,index,"")}`;
       }
     }
 
     const directAnswer = String(learned.targetName || learned.targetKey || "").trim();
     if(!directAnswer) return "";
-    return `<strong>검색실패 수정 내용을 우선 반영했습니다.</strong><div class="ai-answer-section"><div class="ai-answer-note">${aiEscape(directAnswer).replace(/\n/g,"<br>")}</div></div><small>검색학습DB에 등록된 관리자 답변입니다.</small>`;
+    return `${questionEcho}<div class="ai-answer-section"><div class="ai-answer-note">${aiEscape(directAnswer).replace(/\n/g,"<br>")}</div></div>`;
   }
 
   function isAlternativeAnswerRequest(value){
@@ -767,14 +782,15 @@
     });
   }
 
-  async function logAiSearchQuery(question){
+  async function logAiSearchResult(question, recommendation){
     const q = String(question || "").trim();
-    if(!q) return false;
+    const a = String(recommendation || "").trim();
+    if(!q || !a) return false;
     const feedbackId = createFeedbackId();
     const params = {
       action:"logSearchFeedback",
       question:q.slice(0,500),
-      recommendation:"",
+      recommendation:a.slice(0,5000),
       feedbackType:"AI 검색",
       feedbackId:feedbackId
     };
@@ -786,7 +802,7 @@
         const result = await apiGet({ ...params, _:String(Date.now()) });
         return !!result?.ok;
       }catch(fallbackError){
-        console.warn("AI 검색기록 저장 실패",fallbackError);
+        console.warn("AI 검색 질문/답변 저장 실패",fallbackError);
         return false;
       }
     }
@@ -853,7 +869,6 @@
     if(sendButton) sendButton.disabled = true;
 
     const alternativeRequest = isAlternativeAnswerRequest(text);
-    if(!alternativeRequest) logAiSearchQuery(text).catch(()=>{});
 
     try{
       if(alternativeRequest){
@@ -863,6 +878,7 @@
           addMessage("bot", `<strong>어떤 질문의 다른 답변을 찾을지 확인이 필요합니다.</strong><p>처음 상황을 한 번만 다시 적어 주세요.</p>`);
           return;
         }
+        aiConversation.pendingSearchLogQuestion = baseQuestion;
 
         excludeLastProcessAnswers();
         const excluded = [...aiConversation.excludedProcessTitles];
@@ -914,6 +930,7 @@
       aiConversation.excludedProcessTitles = [];
       aiConversation.lastProcessTitles = [];
       aiConversation.answerSequence = 0;
+      aiConversation.pendingSearchLogQuestion = text;
 
       const learnedAnswer = buildPriorityLearningAnswer(text);
       if(learnedAnswer){
@@ -1018,7 +1035,7 @@
 
   openButton.addEventListener("click", openAiAssistant);
   closeButton?.addEventListener("click", closeAiAssistant);
-  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; aiConversation.lastAnswerText=""; aiConversation.answerSequence=0; resizeInput(); input.focus(); });
+  resetButton?.addEventListener("click", ()=>{ messages.innerHTML = aiInitialMarkup(); input.value=""; aiConversation.lastQuestion=""; aiConversation.excludedProcessTitles=[]; aiConversation.lastProcessTitles=[]; aiConversation.lastAnswerText=""; aiConversation.answerSequence=0; aiConversation.pendingSearchLogQuestion=""; resizeInput(); input.focus(); });
   sendButton?.addEventListener("click", ()=>submitQuestion());
   input.addEventListener("input", resizeInput);
   input.addEventListener("keydown", event=>{
