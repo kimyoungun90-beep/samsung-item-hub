@@ -905,7 +905,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.1.17 Stable</span>
+            <span id="homeAppVersion" class="home-app-version">v2.1.18 Stable</span>
           </button>
         </div>
         <div class="home-search">
@@ -1463,7 +1463,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="코스트코 전용 AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.17</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.18</em></div>
         <small><i></i> 코스트코 HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1501,7 +1501,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.1.17 Stable",
+  APP_VERSION: "v2.1.18 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1519,7 +1519,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.17"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.18"
 };
 
 const DETAIL_TABS = [
@@ -1815,7 +1815,14 @@ function bindEvents(){
   if(els.deptMapPanel) els.deptMapPanel.addEventListener("click",e=>{const btn=e.target.closest("[data-map-mode]");if(!btn)return;const next=btn.dataset.mapMode||"all";mapMode=next;if(next==="all"){mapSelectedStore="";mapSelectedTc="";mapMetroOpen=false;mapZoom=1;}else if(next==="store"){mapSelectedStore="";mapSelectedTc="";mapMetroOpen=false;}else if(next==="coverage"){mapSelectedStore="";mapSelectedTc="";mapMetroOpen=false;}renderMapPanel();});
   els.processSearch.addEventListener("input",debounce(()=>{
     processFilter = "전체";
-    if(els.processSearch.value.trim() && processViewMode === "home") pushProcessHistory("results");
+    const hasQuery = Boolean(els.processSearch.value.trim());
+    if(hasQuery && processViewMode === "home") pushProcessHistory("results");
+    // v2.1.18: 검색어를 모두 지우면 전체 리스트가 아니라 프로세스 기본 화면으로 복귀
+    if(!hasQuery){
+      processViewMode = "home";
+      processHistoryView = "home";
+      processDetailRow = null;
+    }
     renderProcessCurrentView(true);
   },90));
   els.processSearch.addEventListener("focus",()=>renderProcessSuggestions());
@@ -8116,7 +8123,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.17 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.18 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8251,7 +8258,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.17 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.18 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -9572,8 +9579,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 </script>
 
 
-<style id="v217-process-upgrade-style">
-/* v2.1.17 프로세스 프리미엄 화면 + 점포별 연락처 */
+<style id="v218-process-upgrade-style">
+/* v2.1.18 프로세스 프리미엄 화면 + 점포별 연락처 */
 #pageProcess .process-shell{gap:16px}
 #pageProcess #processPageHeading small{color:#64748b;font-weight:800}
 #pageProcess .process-search-box{border:1px solid #cfdbea;border-radius:20px;min-height:58px;box-shadow:0 10px 28px rgba(15,45,90,.06)}
@@ -9587,13 +9594,13 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 .process-situation-icon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#eaf3ff,#f7faff);color:#155ec7;font-size:20px;font-weight:1000}.process-situation-card.manager .process-situation-icon{background:linear-gradient(145deg,#0d2f67,#165fc7);color:#fff}
 .process-situation-copy{display:grid;min-width:0;gap:3px}.process-situation-copy b{font-size:15px;font-weight:1000;color:#0a1b35}.process-situation-copy em{font-style:normal;font-size:10px;font-weight:1000;color:#1d62c7}.process-situation-copy small{font-size:11px;font-weight:800;color:#5f6f84;line-height:1.45;word-break:keep-all}.process-situation-chevron{font-size:25px;color:#8697ac;font-weight:500}
 .process-contact-section{padding-bottom:15px}.process-contact-count{flex:0 0 auto;border-radius:999px;background:#eef5ff!important;color:#1764d1!important;padding:6px 9px;font-size:10px!important;font-weight:1000!important}.process-store-select-wrap{display:grid;gap:6px}.process-store-select-wrap label{font-size:10px;font-weight:1000;color:#64748b;margin-left:3px}.process-store-select-wrap select{width:100%;min-height:52px;border:1px solid #cedbea;border-radius:17px;background:#fff;color:#0f172a;padding:0 14px;font-size:14px;font-weight:950;outline:none}.process-store-select-wrap select:focus{border-color:#1f67d2;box-shadow:0 0 0 3px rgba(31,103,210,.08)}
-.process-contact-result{margin-top:11px}.process-contact-empty{border:1px dashed #cfdae7;border-radius:18px;background:#f8fbff;padding:18px 12px;text-align:center;color:#7b8ba0;font-size:12px;font-weight:850;line-height:1.5}.process-contact-store{display:flex;align-items:center;gap:7px;margin:2px 1px 10px;font-size:15px;font-weight:1000;color:#0b1d38}.process-contact-store:before{content:'●';font-size:9px;color:#1d67d1}.process-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.process-contact-card{display:grid;gap:5px;border:1px solid #dce6f2;border-radius:18px;background:#fff;padding:12px;min-width:0;box-shadow:0 7px 18px rgba(15,45,90,.04)}.process-contact-card.active{border-color:#1f67d2;background:#f7fbff;box-shadow:0 0 0 3px rgba(31,103,210,.07)}.process-contact-card .label{font-size:11px;font-weight:1000;color:#53657a}.process-contact-card .sub{font-size:9px;font-weight:900;color:#8796aa;line-height:1.35}.process-contact-card .name{font-size:11px;font-weight:950;color:#0f172a}.process-contact-card .phone{font-size:15px;font-weight:1000;color:#155fc7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.process-contact-card .phone.missing{color:#9aa8b8;font-size:12px}.process-contact-card a{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border-radius:11px;background:#0f5fc9;color:#fff;font-size:11px;font-weight:1000;text-decoration:none;margin-top:2px}.process-contact-note{margin-top:9px;border-radius:13px;background:#f6f8fb;padding:9px 11px;color:#65758a;font-size:10px;font-weight:800;line-height:1.45}
+.process-contact-result{margin-top:11px}.process-contact-empty{border:1px dashed #cfdae7;border-radius:18px;background:#f8fbff;padding:18px 12px;text-align:center;color:#7b8ba0;font-size:12px;font-weight:850;line-height:1.5}.process-contact-store{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:2px 1px 10px;font-size:15px;font-weight:1000;color:#0b1d38}.process-contact-store:before{content:'●';font-size:9px;color:#1d67d1}.process-contact-guide{flex:1 1 230px;font-size:9px;font-weight:800;color:#77879a;line-height:1.4;letter-spacing:-.15px}.process-contact-card .logistics-name{display:inline-flex;align-items:center;width:max-content;max-width:100%;padding:3px 7px;border-radius:999px;background:#edf5ff;color:#155fc7;font-size:10px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.process-contact-card .logistics-name.missing{background:#f5f7fa;color:#98a4b2}.process-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.process-contact-card{display:grid;gap:5px;border:1px solid #dce6f2;border-radius:18px;background:#fff;padding:12px;min-width:0;box-shadow:0 7px 18px rgba(15,45,90,.04)}.process-contact-card.active{border-color:#1f67d2;background:#f7fbff;box-shadow:0 0 0 3px rgba(31,103,210,.07)}.process-contact-card .label{font-size:11px;font-weight:1000;color:#53657a}.process-contact-card .sub{font-size:9px;font-weight:900;color:#8796aa;line-height:1.35}.process-contact-card .name{font-size:11px;font-weight:950;color:#0f172a}.process-contact-card .phone{font-size:15px;font-weight:1000;color:#155fc7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.process-contact-card .phone.missing{color:#9aa8b8;font-size:12px}.process-contact-card a{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border-radius:11px;background:#0f5fc9;color:#fff;font-size:11px;font-weight:1000;text-decoration:none;margin-top:2px}.process-contact-note{margin-top:9px;border-radius:13px;background:#f6f8fb;padding:9px 11px;color:#65758a;font-size:10px;font-weight:800;line-height:1.45}
 #processTypeSection{margin-top:0}.process-type-list{border-radius:22px!important;box-shadow:0 10px 26px rgba(15,45,90,.04)}
 @media(max-width:430px){.process-situation-section,.process-contact-section{padding:14px;border-radius:22px}.process-situation-grid{gap:8px}.process-situation-card{grid-template-columns:40px minmax(0,1fr) 12px;gap:8px;min-height:112px;padding:11px;border-radius:18px}.process-situation-icon{width:40px;height:40px;border-radius:14px}.process-situation-copy b{font-size:14px}.process-situation-copy small{font-size:10px}.process-contact-grid{gap:8px}.process-contact-card{padding:11px}.process-contact-card .phone{font-size:13px}#pageProcess .process-search-box:after{font-size:9px}}
 </style>
-<script id="v217-process-upgrade-script">
+<script id="v218-process-upgrade-script">
 (() => {
-  const V217_STORES=['고척점','공세점','광명점','김해점','대구점','대전점','부산점','상봉점','세종점','송도점','양재점','양평점','울산점','의정부점','일산점','천안점','청라점','평택점','하남점','혁신점'];
+  const V218_STORES=['고척점','공세점','광명점','김해점','대구점','대전점','부산점','상봉점','세종점','송도점','양재점','양평점','울산점','의정부점','일산점','천안점','청라점','평택점','하남점','혁신점'];
   const SERVICE_DEFAULT='1588-3366';
   let processSelectedContactKind='';
 
@@ -9664,11 +9671,12 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
     const store=select.value;if(!store){result.innerHTML='<div class="process-contact-empty">점포를 선택하면 해당 점포의 연락처가 표시됩니다.</div>';return;}
     const row=selectedContact()||{store,servicePhone:SERVICE_DEFAULT};
     const kinds=['support','logistics','service','manager'];
-    result.innerHTML=`<div class="process-contact-store">${esc(store)}</div><div class="process-contact-grid">${kinds.map(kind=>{const meta=contactMeta(kind),phone=contactPhone(row,kind),name=contactName(row,kind),active=processSelectedContactKind===kind?' active':'';return `<div class="process-contact-card${active}" data-contact-card="${kind}"><span class="label">${esc(meta[0])}</span><span class="sub">${esc(meta[1])}</span>${kind==='manager'&&row.managerName?`<span class="name">${esc(row.managerName)}</span>`:''}<span class="phone${phone?'':' missing'}">${esc(phone||'연락처 미등록')}</span>${phone?`<a href="tel:${phoneHref(phone)}">전화 연결</a>`:''}</div>`;}).join('')}</div>${row.note?`<div class="process-contact-note">${esc(row.note)}</div>`:''}`;
+    const guide='업체 배송으로 타 지역 배송인 경우 홈페이지 → 업무지원에서 물류 연락처 확인 바랍니다.';
+    result.innerHTML=`<div class="process-contact-store"><span>${esc(store)}</span><span class="process-contact-guide">${esc(guide)}</span></div><div class="process-contact-grid">${kinds.map(kind=>{const meta=contactMeta(kind),phone=contactPhone(row,kind),name=contactName(row,kind),active=processSelectedContactKind===kind?' active':'';const logisticsName=kind==='logistics'?(row.logisticsName||''):'';return `<div class="process-contact-card${active}" data-contact-card="${kind}"><span class="label">${esc(meta[0])}</span><span class="sub">${esc(meta[1])}</span>${kind==='logistics'?`<span class="logistics-name${logisticsName?'':' missing'}">${esc(logisticsName||'물류명 미등록')}</span>`:''}${kind==='manager'&&row.managerName?`<span class="name">${esc(row.managerName)}</span>`:''}<span class="phone${phone?'':' missing'}">${esc(phone||'연락처 미등록')}</span>${phone?`<a href="tel:${phoneHref(phone)}">전화 연결</a>`:''}</div>`;}).join('')}</div>${row.note?`<div class="process-contact-note">${esc(row.note)}</div>`:''}`;
   }
   function renderProcessContactStoreOptions(){
     const select=document.getElementById('processStoreSelect');if(!select)return;const before=select.value;
-    const rows=contactRows();const stores=(rows.length?rows.map(r=>cleanStore(r.store)):V217_STORES).filter(Boolean);const unique=[...new Set(stores)].sort((a,b)=>a.localeCompare(b,'ko'));
+    const rows=contactRows();const stores=(rows.length?rows.map(r=>cleanStore(r.store)):V218_STORES).filter(Boolean);const unique=[...new Set(stores)].sort((a,b)=>a.localeCompare(b,'ko'));
     select.innerHTML='<option value="">점포를 선택하세요</option>'+unique.map(store=>`<option value="${esc(store)}">${esc(store)}</option>`).join('');if(before&&unique.includes(before))select.value=before;
     const count=document.querySelector('.process-contact-count');if(count)count.textContent=`${unique.length}개 점포`;
   }
