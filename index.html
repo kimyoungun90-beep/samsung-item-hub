@@ -905,7 +905,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.1.18 Stable</span>
+            <span id="homeAppVersion" class="home-app-version">v2.1.19 Stable</span>
           </button>
         </div>
         <div class="home-search">
@@ -1317,17 +1317,21 @@ body.view-nonhome .app{padding-top:0;}
         <section id="processSituationSection" class="process-situation-section">
           <div class="process-v117-head"><div><strong>상황별 문의 안내</strong><span>현재 상황에 맞는 문의 창구를 확인하세요.</span></div></div>
           <div class="process-situation-grid">
-            <button class="process-situation-card" type="button" data-contact-kind="support">
-              <span class="process-situation-icon">⌕</span><span class="process-situation-copy"><b>업무지원실</b><em>배송 전 업무</em><small>배송 확인, 주소 변경, 주문 확인, 재고 확인 등</small></span><span class="process-situation-chevron">›</span>
+            <button class="process-situation-card support" type="button" data-contact-kind="support">
+              <span class="process-situation-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M9 7.5h4.1l2 5.1-2.6 2.2a18.3 18.3 0 0 0 4.7 4.7l2.2-2.6 5.1 2V23c0 1.1-.9 2-2 2C13.1 25 7 18.9 7 11.5c0-1.1.9-2 2-2Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M20.5 6.5h4a2 2 0 0 1 2 2v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="m22.5 11.5 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+              <span class="process-situation-copy"><b>업무지원실</b><em>배송 전 업무</em><small>배송 확인 · 주소 변경<br>주문 확인 · 재고 확인</small></span><span class="process-situation-chevron">›</span>
             </button>
-            <button class="process-situation-card" type="button" data-contact-kind="logistics">
-              <span class="process-situation-icon">▣</span><span class="process-situation-copy"><b>물류</b><em>배송 당일 및 작일 업무</em><small>설치 시간, 설치 기사 확인, 설치 당일 이슈 등</small></span><span class="process-situation-chevron">›</span>
+            <button class="process-situation-card logistics" type="button" data-contact-kind="logistics">
+              <span class="process-situation-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4.5 9h15v12h-15V9Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M19.5 13h4.2l3.8 4v4h-8V13Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="10" cy="23.5" r="2.5" stroke="currentColor" stroke-width="2.2"/><circle cx="24" cy="23.5" r="2.5" stroke="currentColor" stroke-width="2.2"/><path d="M12.5 23.5h9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+              <span class="process-situation-copy"><b>물류</b><em>배송 당일·작일 업무</em><small>설치 시간 · 기사 확인<br>설치 당일 이슈</small></span><span class="process-situation-chevron">›</span>
             </button>
-            <button class="process-situation-card" type="button" data-contact-kind="service">
-              <span class="process-situation-icon">◇</span><span class="process-situation-copy"><b>서비스</b><em>배송 후 업무</em><small>제품 불량, 회원 불편 사항, 이전 설치 등</small></span><span class="process-situation-chevron">›</span>
+            <button class="process-situation-card service" type="button" data-contact-kind="service">
+              <span class="process-situation-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="10" r="4" stroke="currentColor" stroke-width="2.2"/><path d="M9 25c.8-5 3.2-7.5 7-7.5s6.2 2.5 7 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M7 12.5V16a3 3 0 0 0 3 3h1v-7H9.5A2.5 2.5 0 0 0 7 14.5ZM25 12.5V16a3 3 0 0 1-3 3h-1v-7h1.5a2.5 2.5 0 0 1 2.5 2.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M22 19v2.5c0 1.4-1.1 2.5-2.5 2.5H18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+              <span class="process-situation-copy"><b>서비스</b><em>배송 후 업무</em><small>제품 불량 · 회원 불편<br>이전 설치</small></span><span class="process-situation-chevron">›</span>
             </button>
             <button class="process-situation-card manager" type="button" data-contact-kind="manager">
-              <span class="process-situation-icon">!</span><span class="process-situation-copy"><b>담당자</b><em>통합 업무</em><small>배송 지연, VOC, 긴급건 등</small></span><span class="process-situation-chevron">›</span>
+              <span class="process-situation-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="10.5" r="4.2" stroke="currentColor" stroke-width="2.2"/><path d="M8.5 25c.8-5 3.4-7.5 7.5-7.5s6.7 2.5 7.5 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M25.5 7.5v6M25.5 17h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+              <span class="process-situation-copy"><b>담당자</b><em>통합 업무</em><small>배송 지연 · VOC<br>긴급건</small></span><span class="process-situation-chevron">›</span>
             </button>
           </div>
         </section>
@@ -1463,7 +1467,7 @@ body.view-nonhome .app{padding-top:0;}
     <header class="ai-assistant-head">
       <button id="aiAssistantClose" class="ai-assistant-head-btn" type="button" aria-label="코스트코 전용 AI 업무 도우미 닫기">‹</button>
       <div class="ai-assistant-head-copy">
-        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.18</em></div>
+        <div class="ai-assistant-head-line"><span id="aiAssistantTitle">코스트코 전용 AI 업무 도우미</span><em>v2.1.19</em></div>
         <small><i></i> 코스트코 HUB 등록 자료에서 답변</small>
       </div>
       <button id="aiAssistantReset" class="ai-assistant-head-btn reset" type="button" aria-label="대화 내용 초기화">↻</button>
@@ -1501,7 +1505,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.1.18 Stable",
+  APP_VERSION: "v2.1.19 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1519,7 +1523,7 @@ const CONFIG = {
   SPEC_IMAGE_GITHUB_API: "https://api.github.com/repos/kimyoungun90-beep/samsung-item-hub/contents/images?ref=main",
   SPEC_IMAGE_MAX_COUNT: 10,
   SPEC_IMAGE_EXTENSIONS: ["png","jpg","jpeg","webp"],
-  SPEC_IMAGE_CACHE_BUST: "v2.1.18"
+  SPEC_IMAGE_CACHE_BUST: "v2.1.19"
 };
 
 const DETAIL_TABS = [
@@ -8123,7 +8127,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.18 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.19 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8258,7 +8262,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.18 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.19 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -9579,8 +9583,8 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 </script>
 
 
-<style id="v218-process-upgrade-style">
-/* v2.1.18 프로세스 프리미엄 화면 + 점포별 연락처 */
+<style id="v219-process-upgrade-style">
+/* v2.1.19 프로세스 모바일 카드 정돈 + 상황별 아이콘 개선 */
 #pageProcess .process-shell{gap:16px}
 #pageProcess #processPageHeading small{color:#64748b;font-weight:800}
 #pageProcess .process-search-box{border:1px solid #cfdbea;border-radius:20px;min-height:58px;box-shadow:0 10px 28px rgba(15,45,90,.06)}
@@ -9588,19 +9592,83 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
 #pageProcess .process-search-box:after{content:'띄어쓰기·단어 순서·비슷한 표현도 검색됩니다.';position:absolute;left:5px;top:calc(100% + 7px);font-size:10px;font-weight:850;color:#8494aa;white-space:nowrap}
 #pageProcess .process-search-wrap{margin-bottom:18px}
 .process-situation-section[hidden],.process-contact-section[hidden]{display:none!important}
-.process-situation-section,.process-contact-section{display:block;border:1px solid #e1e9f3;border-radius:24px;background:linear-gradient(180deg,#fff,#fbfdff);padding:16px;box-shadow:0 14px 34px rgba(15,45,90,.06)}
-.process-v117-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px}.process-v117-head>div{display:grid;gap:4px;min-width:0}.process-v117-head strong{font-size:17px;font-weight:1000;color:#081a35;letter-spacing:-.35px}.process-v117-head span{font-size:11px;font-weight:800;color:#718096;line-height:1.45;word-break:keep-all}
-.process-situation-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.process-situation-card{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr) 16px;align-items:center;gap:10px;min-height:118px;padding:13px;border:1px solid #dce6f2;border-radius:20px;background:#fff;text-align:left;color:#0f172a;box-shadow:0 8px 20px rgba(15,45,90,.05);transition:.18s ease}.process-situation-card:active{transform:scale(.985)}.process-situation-card.selected{border-color:#1f67d2;box-shadow:0 0 0 3px rgba(31,103,210,.08),0 12px 28px rgba(31,103,210,.11)}.process-situation-card.manager{background:linear-gradient(145deg,#fff,#f7faff)}
-.process-situation-icon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#eaf3ff,#f7faff);color:#155ec7;font-size:20px;font-weight:1000}.process-situation-card.manager .process-situation-icon{background:linear-gradient(145deg,#0d2f67,#165fc7);color:#fff}
-.process-situation-copy{display:grid;min-width:0;gap:3px}.process-situation-copy b{font-size:15px;font-weight:1000;color:#0a1b35}.process-situation-copy em{font-style:normal;font-size:10px;font-weight:1000;color:#1d62c7}.process-situation-copy small{font-size:11px;font-weight:800;color:#5f6f84;line-height:1.45;word-break:keep-all}.process-situation-chevron{font-size:25px;color:#8697ac;font-weight:500}
-.process-contact-section{padding-bottom:15px}.process-contact-count{flex:0 0 auto;border-radius:999px;background:#eef5ff!important;color:#1764d1!important;padding:6px 9px;font-size:10px!important;font-weight:1000!important}.process-store-select-wrap{display:grid;gap:6px}.process-store-select-wrap label{font-size:10px;font-weight:1000;color:#64748b;margin-left:3px}.process-store-select-wrap select{width:100%;min-height:52px;border:1px solid #cedbea;border-radius:17px;background:#fff;color:#0f172a;padding:0 14px;font-size:14px;font-weight:950;outline:none}.process-store-select-wrap select:focus{border-color:#1f67d2;box-shadow:0 0 0 3px rgba(31,103,210,.08)}
-.process-contact-result{margin-top:11px}.process-contact-empty{border:1px dashed #cfdae7;border-radius:18px;background:#f8fbff;padding:18px 12px;text-align:center;color:#7b8ba0;font-size:12px;font-weight:850;line-height:1.5}.process-contact-store{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:2px 1px 10px;font-size:15px;font-weight:1000;color:#0b1d38}.process-contact-store:before{content:'●';font-size:9px;color:#1d67d1}.process-contact-guide{flex:1 1 230px;font-size:9px;font-weight:800;color:#77879a;line-height:1.4;letter-spacing:-.15px}.process-contact-card .logistics-name{display:inline-flex;align-items:center;width:max-content;max-width:100%;padding:3px 7px;border-radius:999px;background:#edf5ff;color:#155fc7;font-size:10px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.process-contact-card .logistics-name.missing{background:#f5f7fa;color:#98a4b2}.process-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.process-contact-card{display:grid;gap:5px;border:1px solid #dce6f2;border-radius:18px;background:#fff;padding:12px;min-width:0;box-shadow:0 7px 18px rgba(15,45,90,.04)}.process-contact-card.active{border-color:#1f67d2;background:#f7fbff;box-shadow:0 0 0 3px rgba(31,103,210,.07)}.process-contact-card .label{font-size:11px;font-weight:1000;color:#53657a}.process-contact-card .sub{font-size:9px;font-weight:900;color:#8796aa;line-height:1.35}.process-contact-card .name{font-size:11px;font-weight:950;color:#0f172a}.process-contact-card .phone{font-size:15px;font-weight:1000;color:#155fc7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.process-contact-card .phone.missing{color:#9aa8b8;font-size:12px}.process-contact-card a{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border-radius:11px;background:#0f5fc9;color:#fff;font-size:11px;font-weight:1000;text-decoration:none;margin-top:2px}.process-contact-note{margin-top:9px;border-radius:13px;background:#f6f8fb;padding:9px 11px;color:#65758a;font-size:10px;font-weight:800;line-height:1.45}
-#processTypeSection{margin-top:0}.process-type-list{border-radius:22px!important;box-shadow:0 10px 26px rgba(15,45,90,.04)}
-@media(max-width:430px){.process-situation-section,.process-contact-section{padding:14px;border-radius:22px}.process-situation-grid{gap:8px}.process-situation-card{grid-template-columns:40px minmax(0,1fr) 12px;gap:8px;min-height:112px;padding:11px;border-radius:18px}.process-situation-icon{width:40px;height:40px;border-radius:14px}.process-situation-copy b{font-size:14px}.process-situation-copy small{font-size:10px}.process-contact-grid{gap:8px}.process-contact-card{padding:11px}.process-contact-card .phone{font-size:13px}#pageProcess .process-search-box:after{font-size:9px}}
+.process-situation-section,.process-contact-section{display:block;border:1px solid #e1e9f3;border-radius:24px;background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);padding:16px;box-shadow:0 14px 34px rgba(15,45,90,.06)}
+.process-v117-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px}
+.process-v117-head>div{display:grid;gap:4px;min-width:0}
+.process-v117-head strong{font-size:17px;font-weight:1000;color:#081a35;letter-spacing:-.35px}
+.process-v117-head span{font-size:11px;font-weight:800;color:#718096;line-height:1.45;word-break:keep-all}
+
+/* 상황별 문의 카드 */
+.process-situation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.process-situation-card{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) 10px;align-items:center;gap:10px;min-height:104px;padding:12px 11px;border:1px solid #dce6f2;border-radius:19px;background:#fff;text-align:left;color:#0f172a;box-shadow:0 7px 18px rgba(15,45,90,.045);transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.process-situation-card:active{transform:scale(.985)}
+.process-situation-card.selected{border-color:#1f67d2;background:#fafdff;box-shadow:0 0 0 3px rgba(31,103,210,.08),0 12px 26px rgba(31,103,210,.10)}
+.process-situation-icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,#edf5ff,#f8fbff);color:#155ec7;box-shadow:inset 0 0 0 1px rgba(31,103,210,.04)}
+.process-situation-icon svg{width:27px;height:27px;display:block}
+.process-situation-card.logistics .process-situation-icon{background:linear-gradient(145deg,#eaf3ff,#f8fbff);color:#0f62cf}
+.process-situation-card.service .process-situation-icon{background:linear-gradient(145deg,#edf5ff,#fbfdff);color:#1a64c9}
+.process-situation-card.manager{background:linear-gradient(145deg,#fff,#f8fbff)}
+.process-situation-card.manager .process-situation-icon{background:linear-gradient(145deg,#0c326e,#1767cf);color:#fff;box-shadow:0 8px 18px rgba(19,88,184,.18)}
+.process-situation-copy{display:grid;min-width:0;gap:3px;align-content:center}
+.process-situation-copy b{font-size:14.5px;font-weight:1000;color:#0a1b35;line-height:1.12;letter-spacing:-.35px;white-space:nowrap;word-break:keep-all}
+.process-situation-copy em{font-style:normal;font-size:10px;font-weight:1000;color:#1d62c7;line-height:1.3;letter-spacing:-.2px;word-break:keep-all}
+.process-situation-copy small{font-size:10.5px;font-weight:800;color:#66778c;line-height:1.38;letter-spacing:-.25px;word-break:keep-all}
+.process-situation-chevron{font-size:23px;line-height:1;color:#91a1b4;font-weight:500;transform:translateX(-1px)}
+
+/* 점포별 연락처 */
+.process-contact-section{padding-bottom:15px}
+.process-contact-count{flex:0 0 auto;border-radius:999px;background:#eef5ff!important;color:#1764d1!important;padding:6px 9px;font-size:10px!important;font-weight:1000!important}
+.process-store-select-wrap{display:grid;gap:6px}
+.process-store-select-wrap label{font-size:10px;font-weight:1000;color:#64748b;margin-left:3px}
+.process-store-select-wrap select{width:100%;min-height:52px;border:1px solid #cedbea;border-radius:17px;background:#fff;color:#0f172a;padding:0 14px;font-size:14px;font-weight:950;outline:none}
+.process-store-select-wrap select:focus{border-color:#1f67d2;box-shadow:0 0 0 3px rgba(31,103,210,.08)}
+.process-contact-result{margin-top:11px}
+.process-contact-empty{border:1px dashed #cfdae7;border-radius:18px;background:#f8fbff;padding:18px 12px;text-align:center;color:#7b8ba0;font-size:12px;font-weight:850;line-height:1.5}
+.process-contact-store{display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap;margin:2px 1px 10px;font-size:15px;font-weight:1000;color:#0b1d38}
+.process-contact-store:before{content:'●';font-size:9px;color:#1d67d1;margin-top:4px}
+.process-contact-guide{flex:1 1 230px;font-size:9px;font-weight:800;color:#77879a;line-height:1.45;letter-spacing:-.15px}
+.process-contact-card .logistics-name{display:inline-flex;align-items:center;width:max-content;max-width:100%;padding:3px 7px;border-radius:999px;background:#edf5ff;color:#155fc7;font-size:10px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.process-contact-card .logistics-name.missing{background:#f5f7fa;color:#98a4b2}
+.process-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.process-contact-card{display:grid;gap:5px;border:1px solid #dce6f2;border-radius:18px;background:#fff;padding:12px;min-width:0;box-shadow:0 7px 18px rgba(15,45,90,.04)}
+.process-contact-card.active{border-color:#1f67d2;background:#f7fbff;box-shadow:0 0 0 3px rgba(31,103,210,.07)}
+.process-contact-card .label{font-size:11px;font-weight:1000;color:#53657a}
+.process-contact-card .sub{font-size:9px;font-weight:900;color:#8796aa;line-height:1.35}
+.process-contact-card .name{font-size:11px;font-weight:950;color:#0f172a}
+.process-contact-card .phone{font-size:15px;font-weight:1000;color:#155fc7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.process-contact-card .phone.missing{color:#9aa8b8;font-size:12px}
+.process-contact-card a{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border-radius:11px;background:#0f5fc9;color:#fff;font-size:11px;font-weight:1000;text-decoration:none;margin-top:2px}
+.process-contact-note{margin-top:9px;border-radius:13px;background:#f6f8fb;padding:9px 11px;color:#65758a;font-size:10px;font-weight:800;line-height:1.45}
+#processTypeSection{margin-top:0}
+.process-type-list{border-radius:22px!important;box-shadow:0 10px 26px rgba(15,45,90,.04)}
+
+@media(max-width:430px){
+  .process-situation-section,.process-contact-section{padding:13px;border-radius:21px}
+  .process-situation-grid{gap:8px}
+  .process-situation-card{grid-template-columns:44px minmax(0,1fr) 8px;gap:8px;min-height:98px;padding:11px 9px;border-radius:17px}
+  .process-situation-icon{width:44px;height:44px;border-radius:14px}
+  .process-situation-icon svg{width:25px;height:25px}
+  .process-situation-copy b{font-size:13.5px}
+  .process-situation-copy em{font-size:9.5px}
+  .process-situation-copy small{font-size:9.5px;line-height:1.34}
+  .process-situation-chevron{font-size:21px}
+  .process-contact-grid{gap:8px}
+  .process-contact-card{padding:11px}
+  .process-contact-card .phone{font-size:13px}
+  #pageProcess .process-search-box:after{font-size:9px}
+}
+@media(max-width:360px){
+  .process-situation-card{grid-template-columns:40px minmax(0,1fr) 7px;gap:7px;padding:10px 8px;min-height:96px}
+  .process-situation-icon{width:40px;height:40px;border-radius:13px}
+  .process-situation-icon svg{width:23px;height:23px}
+  .process-situation-copy b{font-size:12.8px}
+  .process-situation-copy em{font-size:9px}
+  .process-situation-copy small{font-size:9px}
+}
 </style>
-<script id="v218-process-upgrade-script">
+<script id="v219-process-upgrade-script">
 (() => {
-  const V218_STORES=['고척점','공세점','광명점','김해점','대구점','대전점','부산점','상봉점','세종점','송도점','양재점','양평점','울산점','의정부점','일산점','천안점','청라점','평택점','하남점','혁신점'];
+  const V219_STORES=['고척점','공세점','광명점','김해점','대구점','대전점','부산점','상봉점','세종점','송도점','양재점','양평점','울산점','의정부점','일산점','천안점','청라점','평택점','하남점','혁신점'];
   const SERVICE_DEFAULT='1588-3366';
   let processSelectedContactKind='';
 
@@ -9676,7 +9744,7 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   }
   function renderProcessContactStoreOptions(){
     const select=document.getElementById('processStoreSelect');if(!select)return;const before=select.value;
-    const rows=contactRows();const stores=(rows.length?rows.map(r=>cleanStore(r.store)):V218_STORES).filter(Boolean);const unique=[...new Set(stores)].sort((a,b)=>a.localeCompare(b,'ko'));
+    const rows=contactRows();const stores=(rows.length?rows.map(r=>cleanStore(r.store)):V219_STORES).filter(Boolean);const unique=[...new Set(stores)].sort((a,b)=>a.localeCompare(b,'ko'));
     select.innerHTML='<option value="">점포를 선택하세요</option>'+unique.map(store=>`<option value="${esc(store)}">${esc(store)}</option>`).join('');if(before&&unique.includes(before))select.value=before;
     const count=document.querySelector('.process-contact-count');if(count)count.textContent=`${unique.length}개 점포`;
   }
