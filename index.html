@@ -887,6 +887,25 @@ body.view-nonhome .app{padding-top:0;}
 .pc-model-match{min-height:0;margin-top:7px}.pc-model-match:empty{display:none}.pc-model-match span{display:inline-flex;margin-right:6px;padding:3px 6px;border-radius:999px;background:#e8f2ff;color:#0755c7;font-size:8px;font-weight:1000;vertical-align:middle}.pc-model-match strong{color:#0b1830;font-size:10px;font-weight:1000;vertical-align:middle}.pc-model-hint{display:block;margin-top:7px;color:#718198;font-size:9px;font-weight:800;line-height:1.45;word-break:keep-all}
 @media(max-width:390px){.pc-index-start-copy strong{font-size:15px!important}.pc-index-start-copy small{font-size:8px}.pc-model-suggestions{max-height:260px}}
 </style>
+
+<style id="v221-share-notice-popup-style">
+/* v2.2.1 HUB 공유 + 신규 공지 최초 1회 팝업 */
+.home-utility-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.home-utility-actions .home-refresh{margin-top:0;min-width:0}
+.home-share{width:100%;border:1px solid #cfe0f4;border-radius:999px;min-height:46px;background:#fff;color:#0b63ce;font-size:13px;font-weight:1000;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 6px 16px rgba(15,55,100,.04)}
+.home-share svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hub-notice-popup{position:fixed;inset:0;z-index:1600;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(5,18,40,.62);backdrop-filter:blur(7px)}
+.hub-notice-popup.show{display:flex}
+.hub-notice-popup-panel{width:min(520px,100%);max-height:84vh;overflow:hidden;border:1px solid rgba(203,219,239,.9);border-radius:26px;background:#fff;box-shadow:0 32px 90px rgba(3,20,50,.34)}
+.hub-notice-popup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 18px 14px;background:linear-gradient(135deg,#071d42 0%,#0b4fa9 100%);color:#fff}
+.hub-notice-popup-head-copy{min-width:0}.hub-notice-popup-kicker{display:inline-flex;align-items:center;gap:6px;margin-bottom:7px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.14);font-size:9px;font-weight:1000;letter-spacing:.7px}.hub-notice-popup-title{font-size:20px;font-weight:1000;letter-spacing:-.5px}.hub-notice-popup-sub{margin-top:5px;color:#d8e8ff;font-size:11px;font-weight:850;line-height:1.45}
+.hub-notice-popup-close{display:grid;place-items:center;flex:0 0 auto;width:40px;height:40px;border:1px solid rgba(255,255,255,.24);border-radius:14px;background:rgba(255,255,255,.10);color:#fff;font-size:24px;font-weight:500}
+.hub-notice-popup-list{max-height:55vh;overflow:auto;display:grid;gap:9px;padding:14px 15px}
+.hub-notice-popup-item{padding:13px 14px;border:1px solid #dbe6f4;border-radius:17px;background:#f8fbff}
+.hub-notice-popup-item-title{color:#07152d;font-size:15px;font-weight:1000;line-height:1.38;word-break:keep-all}.hub-notice-popup-item-body{margin-top:7px;color:#334760;font-size:13px;font-weight:800;line-height:1.58;white-space:pre-line;word-break:keep-all}.hub-notice-popup-item-meta{margin-top:8px;color:#7b8da5;font-size:10px;font-weight:900}
+.hub-notice-popup-actions{display:grid;grid-template-columns:.75fr 1.25fr;gap:8px;padding:0 15px 15px}.hub-notice-popup-actions button{min-height:46px;border:0;border-radius:14px;font-size:13px;font-weight:1000}.hub-notice-popup-later{background:#eef3f8;color:#42566f}.hub-notice-popup-open{background:linear-gradient(135deg,#176ee4,#064bb9);color:#fff;box-shadow:0 10px 22px rgba(9,81,184,.18)}
+@media(max-width:390px){.home-utility-actions{grid-template-columns:1fr}.hub-notice-popup{padding:9px}.hub-notice-popup-panel{border-radius:22px}.hub-notice-popup-title{font-size:18px}.hub-notice-popup-actions{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 <main class="app">
@@ -915,7 +934,7 @@ body.view-nonhome .app{padding-top:0;}
               <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
             <span id="homeBellDot" class="home-bell-dot"></span>
-            <span id="homeAppVersion" class="home-app-version">v2.1.20 Stable</span>
+            <span id="homeAppVersion" class="home-app-version">v2.2.1 Stable</span>
           </button>
         </div>
         <div class="home-search">
@@ -988,7 +1007,10 @@ body.view-nonhome .app{padding-top:0;}
       <div class="home-block home-recent-block">
         <div class="home-recent-head"><div class="home-block-title">최근 본 품목</div><button id="homeRecentToggle" class="home-recent-toggle" type="button">전체보기(최근 10개) ›</button></div>
         <div id="homeRecentList" class="home-recent-list"></div>
-        <button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button>
+        <div class="home-utility-actions">
+          <button id="homeShareBtn" class="home-share" type="button" aria-label="HUB 공유하기"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg><span>HUB 공유하기</span></button>
+          <button id="homeRefreshBtn" class="home-refresh" type="button">↻ DB 새로고침</button>
+        </div>
       </div>
     </article>
   </section>
@@ -1429,6 +1451,24 @@ body.view-nonhome .app{padding-top:0;}
   </div>
 </div>
 
+<div id="hubNoticePopup" class="hub-notice-popup" aria-hidden="true">
+  <div class="hub-notice-popup-panel" role="dialog" aria-modal="true" aria-labelledby="hubNoticePopupTitle">
+    <div class="hub-notice-popup-head">
+      <div class="hub-notice-popup-head-copy">
+        <div class="hub-notice-popup-kicker">NEW · NOTICE</div>
+        <div id="hubNoticePopupTitle" class="hub-notice-popup-title">새로운 공지사항</div>
+        <div class="hub-notice-popup-sub">새로 등록된 안내를 확인해 주세요.</div>
+      </div>
+      <button id="hubNoticePopupClose" class="hub-notice-popup-close" type="button" aria-label="공지 팝업 닫기">×</button>
+    </div>
+    <div id="hubNoticePopupList" class="hub-notice-popup-list"></div>
+    <div class="hub-notice-popup-actions">
+      <button id="hubNoticePopupOk" class="hub-notice-popup-later" type="button">확인</button>
+      <button id="hubNoticePopupOpen" class="hub-notice-popup-open" type="button">공지사항 전체 보기</button>
+    </div>
+  </div>
+</div>
+
 <div id="imageModal" class="image-modal" aria-hidden="true">
   <div class="image-modal-inner">
     <button id="imageModalClose" class="image-modal-close" type="button" aria-label="닫기">×</button>
@@ -1515,7 +1555,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.1.20 Stable",
+  APP_VERSION: "v2.2.1 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -8266,7 +8306,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.1.20 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.2.1 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8401,7 +8441,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.1.20 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.2.1 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
@@ -9904,6 +9944,68 @@ body.view-home .home-premium-card{overflow:visible;border:0;border-radius:0;back
   const prevRenderAll=renderAll;
   renderAll=function(){const out=prevRenderAll.apply(this,arguments);if(currentPage==='process'){renderProcessContactStoreOptions();renderProcessContactResult();}return out;};
   renderProcessContactStoreOptions();renderProcessContactResult();
+})();
+</script>
+
+
+<script id="v221-share-notice-popup-script">
+(()=>{
+  const NOTICE_POPUP_SEEN_KEY='costcoHubNoticePopupSeenV1';
+  let popupTimer=0;
+
+  function readSeenNoticeIds(){
+    try{const v=JSON.parse(localStorage.getItem(NOTICE_POPUP_SEEN_KEY)||'[]');return new Set(Array.isArray(v)?v.map(String):[]);}catch(e){return new Set();}
+  }
+  function writeSeenNoticeIds(set){
+    try{localStorage.setItem(NOTICE_POPUP_SEEN_KEY,JSON.stringify([...set].slice(-500)));}catch(e){}
+  }
+  function popupNoticeId(n,index=0){
+    const explicit=String(n?.id||'').trim();
+    if(explicit)return explicit;
+    const raw=[n?.date,n?.type,n?.title,n?.body,index].filter(Boolean).join('|');
+    let h=2166136261;for(let i=0;i<raw.length;i++){h^=raw.charCodeAt(i);h=Math.imul(h,16777619);}return 'LEGACY-'+(h>>>0).toString(36);
+  }
+  function isPopupEnabled(v){return v===true||['TRUE','Y','YES','1','ON','사용','노출'].includes(String(v||'').trim().toUpperCase());}
+  function closeHubNoticePopup(){
+    const modal=document.getElementById('hubNoticePopup');if(!modal)return;modal.classList.remove('show');modal.setAttribute('aria-hidden','true');
+  }
+  function maybeShowNoticePopup(){
+    clearTimeout(popupTimer);
+    popupTimer=setTimeout(()=>{
+      const modal=document.getElementById('hubNoticePopup'),list=document.getElementById('hubNoticePopupList');
+      if(!modal||!list||modal.classList.contains('show')||typeof publicNotices!=='function')return;
+      const seen=readSeenNoticeIds();
+      const pending=publicNotices().map((n,i)=>({n,id:popupNoticeId(n,i)})).filter(x=>isPopupEnabled(x.n?.popup)&&!seen.has(x.id));
+      if(!pending.length)return;
+      // '한번 팝업이 뜬 공지는 다시 뜨지 않게' 팝업을 띄우는 순간 확인기록을 저장합니다.
+      pending.forEach(x=>seen.add(x.id));writeSeenNoticeIds(seen);
+      list.innerHTML=pending.map(x=>`<article class="hub-notice-popup-item"><div class="hub-notice-popup-item-title">${esc(safe(x.n?.title,'공지사항'))}</div><div class="hub-notice-popup-item-body">${esc(safe(x.n?.body,'내용을 확인해 주세요.'))}</div><div class="hub-notice-popup-item-meta">${esc([safe(x.n?.type,''),safe(x.n?.date,'')].filter(Boolean).join(' · '))}</div></article>`).join('');
+      modal.classList.add('show');modal.setAttribute('aria-hidden','false');
+    },320);
+  }
+  async function shareHub(){
+    const url=location.origin+location.pathname;
+    const title='코스트코 삼성전자 업무지원 HUB';
+    const text='코스트코 삼성전자 업무지원 HUB\n제품·배송·설치·프로세스 등 현장 업무 정보를 확인할 수 있습니다.';
+    try{
+      if(navigator.share){await navigator.share({title,text,url});return;}
+      if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text+'\n'+url);if(typeof showStatus==='function'){showStatus('HUB 주소를 복사했습니다. 카카오톡이나 문자에 붙여넣어 주세요.','ok');setTimeout(hideStatus,1800);}return;}
+      const ta=document.createElement('textarea');ta.value=text+'\n'+url;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();
+      if(typeof showStatus==='function'){showStatus('HUB 주소를 복사했습니다.','ok');setTimeout(hideStatus,1800);}else alert('HUB 주소를 복사했습니다.');
+    }catch(e){if(e?.name!=='AbortError')console.warn('share failed',e);}
+  }
+
+  document.getElementById('homeShareBtn')?.addEventListener('click',shareHub);
+  document.getElementById('hubNoticePopupClose')?.addEventListener('click',closeHubNoticePopup);
+  document.getElementById('hubNoticePopupOk')?.addEventListener('click',closeHubNoticePopup);
+  document.getElementById('hubNoticePopupOpen')?.addEventListener('click',()=>{closeHubNoticePopup();if(typeof openNoticePage==='function')openNoticePage();});
+  document.getElementById('hubNoticePopup')?.addEventListener('click',e=>{if(e.target?.id==='hubNoticePopup')closeHubNoticePopup();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('hubNoticePopup')?.classList.contains('show'))closeHubNoticePopup();});
+
+  const previousRenderAll=renderAll;
+  renderAll=function(){const out=previousRenderAll.apply(this,arguments);maybeShowNoticePopup();return out;};
+  // 캐시 DB가 이미 화면에 그려진 상태에서 스크립트가 로드된 경우도 한 번 확인합니다.
+  maybeShowNoticePopup();
 })();
 </script>
 

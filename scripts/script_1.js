@@ -1,5 +1,5 @@
 const CONFIG = {
-  APP_VERSION: "v2.1.17 Stable",
+  APP_VERSION: "v2.2.1 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
