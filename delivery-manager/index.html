@@ -1,1 +1,171 @@
 
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0b56d7" />
+<title>Item HUB 배송관리</title>
+<style>
+:root{
+  --blue:#0b5ee8; --blue2:#1d74ff; --deep:#0a2c69; --navy:#0f2347;
+  --sky:#edf5ff; --bg:#f5f8fc; --line:#dde6f2; --muted:#71809a;
+  --green:#24b56b; --orange:#ff9f1c; --red:#ef4e4e; --white:#fff;
+  --shadow:0 18px 45px rgba(15,35,71,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#eaf1fb;font-family:Arial,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;color:var(--navy)}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:100%;max-width:430px;min-height:100dvh;margin:0 auto;background:var(--bg);position:relative;overflow:hidden}
+.view{display:none;min-height:100dvh}.view.active{display:block}
+
+/* ---------- LOGIN ---------- */
+.login-hero{height:54dvh;min-height:430px;background:
+  radial-gradient(circle at 80% 15%,rgba(99,176,255,.45),transparent 27%),
+  linear-gradient(160deg,#0a3caa 0%,#0b5ee8 55%,#72b8ff 145%);
+  color:white;position:relative;overflow:hidden;padding:calc(env(safe-area-inset-top,0px) + 30px) 28px 24px}
+.login-hero:before{content:"";position:absolute;right:-70px;top:85px;width:270px;height:270px;border:1px solid rgba(255,255,255,.14);border-radius:50%}
+.login-hero:after{content:"";position:absolute;left:-90px;bottom:-110px;width:330px;height:330px;border:1px solid rgba(255,255,255,.11);border-radius:50%}
+.login-brand{position:relative;z-index:2;margin-top:34px}
+.login-brand .eyebrow{font-size:15px;font-weight:700;letter-spacing:.3px;opacity:.95}
+.login-brand h1{font-size:42px;line-height:1.02;margin:8px 0 16px;font-weight:900;letter-spacing:-2px}
+.login-brand p{font-size:18px;line-height:1.55;margin:0;color:rgba(255,255,255,.95)}
+.login-graphic{position:absolute;right:18px;bottom:32px;width:175px;height:120px;opacity:.97}
+.warehouse{position:absolute;left:0;right:0;bottom:0;height:118px;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(4,35,96,.34));clip-path:polygon(0 58%,55% 10%,100% 36%,100% 100%,0 100%)}
+.warehouse:before{content:"COSTCO";position:absolute;right:55px;top:25px;font-size:24px;font-weight:900;color:rgba(255,255,255,.62);transform:skewY(-3deg)}
+.truck{position:absolute;right:17px;bottom:19px;width:118px;height:55px;background:rgba(255,255,255,.90);border-radius:5px 6px 7px 4px;box-shadow:0 12px 28px rgba(0,0,0,.12)}
+.truck:before{content:"";position:absolute;left:-35px;bottom:0;width:42px;height:42px;background:rgba(255,255,255,.94);clip-path:polygon(20% 0,100% 0,100% 100%,0 100%,0 42%)}
+.truck:after{content:"SAMSUNG";position:absolute;left:25px;top:18px;font-size:12px;font-weight:900;color:#0c49a7}
+.wheel,.wheel2{position:absolute;bottom:-8px;width:18px;height:18px;border-radius:50%;background:#18345f;border:4px solid #c7d7ed}.wheel{right:82px}.wheel2{right:20px}
+
+.login-card{position:relative;margin:-18px 20px 0;background:white;border-radius:30px;padding:28px 22px 24px;box-shadow:0 22px 48px rgba(15,35,71,.14);z-index:5}
+.login-card h2{margin:0;text-align:center;font-size:30px;font-weight:900;letter-spacing:-1px}
+.login-card .desc{text-align:center;color:#61728d;font-size:14px;line-height:1.5;margin:10px 12px 24px}
+.field{margin:12px 0}.inputbox{height:62px;border:1.5px solid #d7e0ec;border-radius:18px;background:#fff;display:flex;align-items:center;padding:0 16px;gap:12px;transition:.2s}
+.inputbox:focus-within{border-color:#88b6ff;box-shadow:0 0 0 4px rgba(11,94,232,.08)}
+.inputbox svg{width:24px;height:24px;stroke:#71809a;flex:0 0 auto}
+.inputbox input{border:0;outline:0;flex:1;font-size:17px;color:#18304f;min-width:0}.inputbox input::placeholder{color:#9ba9bd}
+.eye{border:0;background:transparent;color:#71809a;padding:6px}
+.loginbtn{width:100%;height:62px;border:0;border-radius:17px;margin-top:16px;background:linear-gradient(135deg,#2c7df8,#0755d7);color:white;font-size:22px;font-weight:900;box-shadow:0 12px 28px rgba(11,94,232,.25)}
+.login-subrow{display:flex;align-items:center;justify-content:space-between;margin-top:14px;color:#60718d;font-size:13px}
+.check{display:flex;align-items:center;gap:7px}.check input{accent-color:var(--blue);width:17px;height:17px}
+.demo{margin:18px 20px 32px;padding:13px 15px;background:#f9fbff;border:1px dashed #bfd3f2;border-radius:16px;color:#667791;font-size:12px;line-height:1.6}
+
+/* ---------- DASH ---------- */
+.dashboard{padding:calc(env(safe-area-inset-top,0px) + 16px) 16px 92px;background:linear-gradient(180deg,#f9fbff 0%,#f4f8fd 100%)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.wordmark{font-size:25px;font-weight:900;letter-spacing:-1px;color:#1e4fb7}.wordmark span{color:#101f3b;font-size:18px;margin-left:4px}
+.top-actions{display:flex;align-items:center;gap:8px}.iconbtn{width:40px;height:40px;border-radius:13px;border:1px solid var(--line);background:white;display:grid;place-items:center;position:relative}.dot-notice{position:absolute;right:6px;top:5px;width:9px;height:9px;border-radius:50%;background:#ef4444;border:2px solid white}
+.profile{height:40px;border-radius:13px;background:#eef3fa;border:1px solid #e2e9f2;display:flex;align-items:center;gap:8px;padding:0 10px;font-size:13px;font-weight:800}.avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#d5deeb,#9aacc6);display:grid;place-items:center;color:#fff;font-size:14px}
+
+.greet{background:linear-gradient(135deg,#0b5ee8 0%,#20a4ff 100%);border-radius:24px;color:white;padding:20px 18px;box-shadow:0 18px 34px rgba(11,94,232,.20);position:relative;overflow:hidden}
+.greet:after{content:"";position:absolute;right:-40px;bottom:-55px;width:170px;height:170px;border-radius:50%;border:1px solid rgba(255,255,255,.20)}
+.greet-top{display:flex;justify-content:space-between;gap:12px;position:relative;z-index:2}.hello{font-size:14px;opacity:.96;margin-bottom:4px}.manager{font-size:30px;font-weight:900;letter-spacing:-1px}.greet p{margin:6px 0 0;font-size:14px;opacity:.94}.date-pill{align-self:flex-start;padding:9px 11px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);font-size:12px;white-space:nowrap}.store-mini{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:2}.store-mini span{padding:8px 12px;background:white;color:#0b5ee8;border-radius:999px;font-size:12px;font-weight:900}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}.stat{background:white;border:1px solid #e3ebf5;border-radius:18px;padding:12px 8px;box-shadow:0 9px 22px rgba(15,35,71,.06)}.stat-ico{width:36px;height:36px;border-radius:13px;display:grid;place-items:center;margin-bottom:8px;font-size:17px}.i-blue{background:#e8f2ff}.i-orange{background:#fff2dd}.i-red{background:#ffe9ea}.i-green{background:#e7f8ee}.stat-label{font-size:12px;color:#5f6e87;font-weight:800}.stat-num{font-size:31px;font-weight:900;margin-top:3px;letter-spacing:-1px}.stat-num small{font-size:12px;margin-left:2px;color:#73819a}
+
+.section{margin-top:22px}.section-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.section-title{font-size:21px;font-weight:900;letter-spacing:-.6px}.link{font-size:13px;color:#6b7b93;font-weight:800}
+.store-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.store-tab{border:1px solid #dce7f4;background:#edf4fb;color:#33445f;border-radius:16px;padding:13px 4px;font-size:13px;font-weight:900}.store-tab.active{background:linear-gradient(135deg,#2c7df8,#0755d7);color:#fff;border-color:transparent;box-shadow:0 9px 20px rgba(11,94,232,.18)}.store-tab b{display:block;font-size:20px;margin-top:5px}
+
+.request-list{display:flex;flex-direction:column;gap:10px}.req{background:white;border:1px solid #e3eaf4;border-radius:20px;padding:14px;box-shadow:0 8px 20px rgba(15,35,71,.05)}.req-head{display:flex;align-items:flex-start;gap:10px}.type{min-width:62px;text-align:center;padding:8px 9px;border-radius:999px;font-size:12px;font-weight:900}.t-red{background:#ffe8ea;color:#e33c45}.t-orange{background:#fff1dc;color:#e38405}.t-blue{background:#e8f2ff;color:#1768d7}.req-main{flex:1;min-width:0}.req-title{font-size:17px;font-weight:900;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.req-sub{font-size:12px;color:#7a889d;margin-top:4px}.req-side{text-align:right;min-width:82px}.req-time{font-size:11px;color:#8794a8;margin-bottom:6px}.status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:900}.s-prog{background:#e8f2ff;color:#0f5bd8}.s-new{background:#eef1f5;color:#4e5e77}.s-done{background:#e8f8ee;color:#20995b}
+
+.bottomnav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);height:78px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid #dde5ef;display:grid;grid-template-columns:repeat(5,1fr);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));z-index:20}.nav{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#71809a;font-size:11px;font-weight:800}.nav .nicon{font-size:20px}.nav.active{color:#0b5ee8}.fab{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2c7df8,#0755d7);color:#fff;display:grid;place-items:center;font-size:30px;box-shadow:0 8px 22px rgba(11,94,232,.28);margin-top:-20px}
+
+@media(min-width:431px){body{padding:18px}.app{border-radius:34px;box-shadow:0 30px 70px rgba(20,43,80,.16)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section id="loginView" class="view active">
+    <div class="login-hero">
+      <div class="login-brand">
+        <div class="eyebrow">Item HUB</div>
+        <h1>배송관리</h1>
+        <p>빠른 확인, 정확한 처리<br>함께 만드는 더 나은 현장 운영</p>
+      </div>
+      <div class="warehouse"></div>
+      <div class="truck"><span class="wheel"></span><span class="wheel2"></span></div>
+    </div>
+    <div class="login-card">
+      <h2>매니저 로그인</h2>
+      <div class="desc">담당하시는 점포의 배송 요청을<br>확인하고 처리할 수 있습니다.</div>
+      <div class="field"><div class="inputbox">
+        <svg fill="none" viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="uid" placeholder="아이디를 입력하세요" autocomplete="username" />
+      </div></div>
+      <div class="field"><div class="inputbox">
+        <svg fill="none" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2Z" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="upw" type="password" placeholder="비밀번호를 입력하세요" autocomplete="current-password" />
+        <button class="eye" id="eyeBtn" type="button">👁</button>
+      </div></div>
+      <button class="loginbtn" id="loginBtn">로그인</button>
+      <div class="login-subrow"><label class="check"><input type="checkbox" checked> 아이디 저장</label><span>비밀번호 찾기</span></div>
+    </div>
+    <div class="demo"><b>데모 로그인</b><br>ykdaegu / 1234 · 대구점/혁신점/대전점/세종점<br>yangjae / 1234 · 양재점/광명점/공세점/평택점</div>
+  </section>
+
+  <section id="dashView" class="view">
+    <div class="dashboard">
+      <div class="topbar">
+        <div class="wordmark">Item HUB <span>배송관리</span></div>
+        <div class="top-actions"><button class="iconbtn">🔔<i class="dot-notice"></i></button><button class="profile" id="logoutBtn"><span class="avatar">👤</span><span id="profileName">김영언 매니저님</span>⌄</button></div>
+      </div>
+
+      <div class="greet">
+        <div class="greet-top"><div><div class="hello">안녕하세요!</div><div class="manager" id="managerName">김영언 매니저님</div><p>오늘도 수고하십니다.</p></div><div class="date-pill">📅 9월 22일 (월)</div></div>
+        <div class="store-mini" id="miniStores"></div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="section">
+        <div class="section-title-row"><div class="section-title">점포별 요청 현황</div><div class="link">전체보기 ›</div></div>
+        <div class="store-tabs" id="storeTabs"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title-row"><div class="section-title">최근 요청 내역</div><div class="link">⌕ 필터 ›</div></div>
+        <div class="request-list" id="requests"></div>
+      </div>
+    </div>
+    <nav class="bottomnav">
+      <div class="nav active"><div class="nicon">⌂</div><div>홈</div></div>
+      <div class="nav"><div class="nicon">▤</div><div>요청 내역</div></div>
+      <div class="nav"><div class="fab">＋</div><div>요청 등록</div></div>
+      <div class="nav"><div class="nicon">▥</div><div>통계</div></div>
+      <div class="nav"><div class="nicon">♙</div><div>MY</div></div>
+    </nav>
+  </section>
+</div>
+<script>
+const users={
+ ykdaegu:{pw:'1234',name:'김영언',stores:['대구점','혁신점','대전점','세종점'],requests:[
+  {type:'긴급',title:'지정일 변경 요청',store:'대구점',no:'202609220018',time:'9월 22일 14:30',status:'처리중'},
+  {type:'합배송',title:'합배송 요청',store:'혁신점',no:'202609220017',time:'9월 22일 11:20',status:'접수'},
+  {type:'일반',title:'빠른배송 요청',store:'대전점',no:'202609220016',time:'9월 21일 16:45',status:'완료'},
+  {type:'지정일',title:'지정일 변경 요청',store:'세종점',no:'202609220015',time:'9월 21일 13:10',status:'완료'},
+  {type:'일반',title:'배송 상태 확인',store:'대구점',no:'202609220014',time:'9월 21일 10:35',status:'완료'},
+  {type:'긴급',title:'설치기사 확인 요청',store:'혁신점',no:'202609220013',time:'9월 20일 17:10',status:'처리중'}]},
+ yangjae:{pw:'1234',name:'우예빈',stores:['양재점','광명점','공세점','평택점'],requests:[
+  {type:'긴급',title:'빠른배송 요청',store:'양재점',no:'202609220101',time:'9월 22일 13:20',status:'처리중'},
+  {type:'합배송',title:'합배송 요청',store:'공세점',no:'202609220102',time:'9월 22일 11:40',status:'접수'},
+  {type:'일반',title:'배송일 확인',store:'광명점',no:'202609220103',time:'9월 21일 15:10',status:'완료'},
+  {type:'지정일',title:'지정일 변경 요청',store:'평택점',no:'202609220104',time:'9월 21일 12:15',status:'완료'}]}
+};
+let current=null,active='전체';
+const $=s=>document.querySelector(s);
+function typeClass(t){return t==='긴급'?'t-red':t==='합배송'||t==='지정일'?'t-orange':'t-blue'}
+function statusClass(s){return s==='처리중'?'s-prog':s==='완료'?'s-done':'s-new'}
+function render(){const u=users[current];$('#managerName').textContent=u.name+' 매니저님';$('#profileName').textContent=u.name+' 매니저님';$('#miniStores').innerHTML=u.stores.map(x=>`<span>${x}</span>`).join('');
+ const total=u.requests.length,prog=u.requests.filter(x=>x.status==='처리중').length,urgent=u.requests.filter(x=>x.type==='긴급').length,done=u.requests.filter(x=>x.status==='완료').length;
+ $('#stats').innerHTML=[['전체 요청',total,'📄','i-blue'],['처리중',prog,'◷','i-orange'],['긴급',urgent,'!','i-red'],['완료',done,'✓','i-green']].map(x=>`<div class="stat"><div class="stat-ico ${x[3]}">${x[2]}</div><div class="stat-label">${x[0]}</div><div class="stat-num">${x[1]}<small>건</small></div></div>`).join('');
+ const tabs=['전체',...u.stores];$('#storeTabs').innerHTML=tabs.map(x=>{const c=x==='전체'?u.requests.length:u.requests.filter(r=>r.store===x).length;return `<button class="store-tab ${x===active?'active':''}" data-store="${x}">${x}<b>${c}</b></button>`}).join('');
+ $('#storeTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{active=b.dataset.store;render()});
+ const rs=active==='전체'?u.requests:u.requests.filter(r=>r.store===active);$('#requests').innerHTML=rs.map(r=>`<div class="req"><div class="req-head"><div class="type ${typeClass(r.type)}">${r.type}</div><div class="req-main"><div class="req-title">${r.title}</div><div class="req-sub">${r.store} &nbsp;|&nbsp; ${r.no}</div></div><div class="req-side"><div class="req-time">${r.time}</div><span class="status ${statusClass(r.status)}">${r.status}</span></div></div></div>`).join('');
+}
+function login(){const id=$('#uid').value.trim(),pw=$('#upw').value.trim();if(!users[id]||users[id].pw!==pw){alert('아이디 또는 비밀번호를 확인해 주세요.');return}current=id;active='전체';$('#loginView').classList.remove('active');$('#dashView').classList.add('active');render()}
+$('#loginBtn').onclick=login;$('#upw').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('#eyeBtn').onclick=()=>{$('#upw').type=$('#upw').type==='password'?'text':'password'};$('#logoutBtn').onclick=()=>{current=null;$('#dashView').classList.remove('active');$('#loginView').classList.add('active');$('#upw').value=''};
+</script>
+</body>
+</html>
