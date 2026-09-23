@@ -889,7 +889,7 @@ body.view-nonhome .app{padding-top:0;}
 </style>
 
 <style id="v222-share-notice-popup-style">
-/* v2.2.2 HUB 공유 위치 개선 + 신규 공지 최초 1회 팝업 보강 */
+/* v2.2.3 기능 사진 첫 화면 즉시 표시 + 백그라운드 추가 탐색 */
 .home-utility-actions{display:flex;justify-content:flex-end;margin-top:12px}
 .home-utility-actions .home-refresh{margin-top:0;min-width:156px}
 .home-guidance-stack{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:8px;min-height:180px}
@@ -940,7 +940,7 @@ body.view-nonhome .app{padding-top:0;}
                 <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               <span id="homeBellDot" class="home-bell-dot"></span>
-              <span id="homeAppVersion" class="home-app-version">v2.2.2 Stable</span>
+              <span id="homeAppVersion" class="home-app-version">v2.2.3 Stable</span>
             </button>
             <button id="homeShareBtn" class="home-header-share" type="button" aria-label="HUB 공유하기">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg>
@@ -1566,7 +1566,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.2.2 Stable",
+  APP_VERSION: "v2.2.3 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1724,6 +1724,7 @@ let displayCheckItemsLoadedAt = 0;
 let currentSpecCategoryKey = "";
 let specCategoryUrlCache = new Map();
 let featureImageUrlCache = new Map();
+let featureViewerLoadSeq = 0;
 let specPrefetchStarted = false;
 const PRODUCT_COMPARE_CACHE_KEY = "costco_hub_product_compare_stable_v1";
 const PRODUCT_COMPARE_LEGACY_CACHE_KEYS = ["costco_hub_product_compare_v2111","costco_hub_product_compare_v2110","costco_hub_product_compare_v219","costco_hub_product_compare_v218"];
@@ -5480,9 +5481,45 @@ function loadFeatureImageWithoutShortTimeout(sources){
   });
 }
 
-async function resolveFeatureImageUrls(item){
+function featureFastFirstCandidates(item){
+  const itemNo = getSpecItemNo(item);
+  const urls = [];
+
+  // 시트에 직접 등록한 기능 사진이 있다면 가장 먼저 사용합니다.
+  const fromSheet = getFeatureImageUrlsFromSheet(item);
+  if(fromSheet.length) urls.push(fromSheet[0]);
+
+  if(itemNo){
+    // 현 운영 표준 파일명(feature_1.png)을 최우선으로 확인합니다.
+    const local = localSpecImageUrl(`${itemNo}_feature_1.png`);
+    const raw = rawSpecImageUrl(`${itemNo}_feature_1.png`);
+    if(local) urls.push(local);
+    if(raw) urls.push(raw);
+  }
+  return uniqueArray(urls);
+}
+
+async function resolveFirstFeatureImageFast(item){
   const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
-  if(cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
+  if(cacheKey && featureImageUrlCache.has(cacheKey)){
+    const cached = featureImageUrlCache.get(cacheKey) || [];
+    if(cached.length) return cached[0];
+  }
+
+  const candidates = featureFastFirstCandidates(item);
+  if(!candidates.length) return "";
+
+  // 첫 화면은 최대 1.15초만 확인합니다. 전체 1~10장 탐색은 뒤에서 계속 진행합니다.
+  for(const url of candidates){
+    const ok = await imageExistsWithTimeout(url, 1150);
+    if(ok) return url;
+  }
+  return "";
+}
+
+async function resolveFeatureImageUrls(item, force=false){
+  const cacheKey = getSpecItemNo(item) || safe(item?.modelName, "");
+  if(!force && cacheKey && featureImageUrlCache.has(cacheKey)) return featureImageUrlCache.get(cacheKey);
 
   const fromSheet = getFeatureImageUrlsFromSheet(item);
   const itemNo = getSpecItemNo(item);
@@ -5515,6 +5552,7 @@ async function openFeatureViewer(item){
   specViewerUrls = [];
   specViewerIndex = 0;
   const itemNo = safe(item?.itemNo,"아이템번호");
+  const loadSeq = ++featureViewerLoadSeq;
   specViewerCaption = safe(item?.modelName,"기능 사진");
   els.specViewer.querySelector(".spec-head-title").textContent = "상세 기능 사진";
   els.specViewerTitle.textContent = `${safe(item?.modelName,"모델명 미등록")} · ${safe(item?.itemNo,"")}`;
@@ -5523,8 +5561,8 @@ async function openFeatureViewer(item){
     <div class="spec-slide">
       <div class="spec-slide-inner">
         <div class="spec-status-card">
-          <div class="spec-status-title">기능 사진을 빠르게 확인하는 중입니다.</div>
-          <div class="spec-status-sub">GitHub <b>images</b> 폴더에서<br/><b>${esc(itemNo)}_feature_1.png</b> 형식으로 확인하고 있습니다.</div>
+          <div class="spec-status-title">기능 사진을 불러오는 중입니다.</div>
+          <div class="spec-status-sub"><b>${esc(itemNo)}_feature_1.png</b>를 먼저 불러오고 있습니다.</div>
         </div>
         ${renderFeatureReferenceCard(item, 0, 1)}
       </div>
@@ -5537,9 +5575,22 @@ async function openFeatureViewer(item){
   document.body.style.overflow = "hidden";
   pushSpecHistory();
 
-  const urls = await resolveFeatureImageUrls(item);
-  if(!els.specViewer.classList.contains("show")) return;
+  // 전체 1~10장 탐색은 즉시 백그라운드에서 시작합니다.
+  const fullResolvePromise = resolveFeatureImageUrls(item, true).catch(()=>[]);
+
+  // 사용자가 가장 먼저 보게 될 1번 사진은 별도로 빠르게 확인해 즉시 표시합니다.
+  const firstUrl = await resolveFirstFeatureImageFast(item);
+  if(loadSeq !== featureViewerLoadSeq || !els.specViewer.classList.contains("show")) return;
+
+  if(firstUrl){
+    renderSpecViewerImages([firstUrl], "상세 기능", ()=>renderFeatureReferenceCard(item, 0, 1));
+  }
+
+  const urls = await fullResolvePromise;
+  if(loadSeq !== featureViewerLoadSeq || !els.specViewer.classList.contains("show")) return;
+
   if(!urls.length){
+    if(firstUrl) return;
     specViewerUrls = [];
     specViewerIndex = 0;
     els.specViewerCount.textContent = "내용";
@@ -5556,7 +5607,12 @@ async function openFeatureViewer(item){
     els.specDots.innerHTML = "";
     return;
   }
-  renderSpecViewerImages(urls, "상세 기능", (i)=>renderFeatureReferenceCard(item, i, urls.length));
+
+  // 첫 사진만 먼저 보여준 상태였다면 나머지 사진 탐색 완료 후 전체 목록으로 자연스럽게 확장합니다.
+  const sameAsCurrent = specViewerUrls.length === urls.length && specViewerUrls.every((url,i)=>url===urls[i]);
+  if(!sameAsCurrent){
+    renderSpecViewerImages(urls, "상세 기능", (i)=>renderFeatureReferenceCard(item, i, urls.length));
+  }
 }
 
 async function openSpecViewer(item){
@@ -5779,20 +5835,24 @@ function preloadImage(url){
 function prefetchFeatureImages(item){
   if(!item) return;
   const fromSheet = getFeatureImageUrlsFromSheet(item);
-  if(fromSheet.length){
-    setTimeout(()=>fromSheet.slice(0,4).forEach(preloadImage), 120);
-    return;
-  }
   const itemNo = getSpecItemNo(item);
-  if(!itemNo) return;
+
+  // 상세화면에 들어오자마자 첫 기능 사진을 가장 먼저 브라우저 캐시에 올립니다.
   setTimeout(()=>{
-    const exts = getSpecImageExtensions();
-    for(let i=1;i<=3;i++){
-      exts.forEach(ext=>{
-        preloadImage(localSpecImageUrl(`${itemNo}_feature_${i}.${ext}`));
-      });
+    if(fromSheet.length){
+      preloadImage(fromSheet[0]);
+      return;
     }
-  }, 120);
+    if(itemNo) preloadImage(localSpecImageUrl(`${itemNo}_feature_1.png`));
+  }, 20);
+
+  // 2~3번 이미지는 화면 렌더링을 방해하지 않도록 조금 늦게 선로딩합니다.
+  if(itemNo){
+    setTimeout(()=>{
+      preloadImage(localSpecImageUrl(`${itemNo}_feature_2.png`));
+      preloadImage(localSpecImageUrl(`${itemNo}_feature_3.png`));
+    }, 650);
+  }
 }
 
 function prefetchSpecCategoryFirstImages(){
@@ -8317,7 +8377,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.2.2 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.2.3 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8452,7 +8512,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.2.2 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.2.3 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
