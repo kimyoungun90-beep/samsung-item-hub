@@ -927,6 +927,18 @@ body.view-nonhome .app{padding-top:0;}
 @media(max-width:640px){.home-logistics-shortcut{grid-template-columns:50px minmax(0,1fr) 14px;padding:14px 13px;border-radius:20px}.home-logistics-shortcut-icon{width:50px;height:50px;border-radius:16px}.home-logistics-shortcut-copy strong{font-size:15px}.home-logistics-shortcut-copy small{font-size:10px}}
 </style>
 
+<style id="v236-logistics-warning-style">
+.logistics-reference-warning{display:flex;align-items:flex-start;gap:11px;margin:12px 16px 0;padding:13px 14px;border:1px solid #f3c969;border-radius:17px;background:linear-gradient(135deg,#fff8df 0%,#fffdf5 100%);box-shadow:0 7px 18px rgba(155,102,0,.07);color:#704b00}
+.logistics-reference-warning-icon{display:grid;place-items:center;flex:0 0 auto;width:30px;height:30px;border-radius:10px;background:#f59e0b;color:#fff;font-size:18px;font-weight:1000;box-shadow:0 5px 12px rgba(217,119,6,.20)}
+.logistics-reference-warning-copy{min-width:0}.logistics-reference-warning-copy strong{display:block;color:#6a4300;font-size:13px;font-weight:1000;line-height:1.4}.logistics-reference-warning-copy p{margin:5px 0 0;color:#79591d;font-size:11px;font-weight:850;line-height:1.55;word-break:keep-all}.logistics-reference-warning-copy small{display:block;margin-top:7px;padding-top:7px;border-top:1px dashed rgba(179,123,20,.28);color:#886522;font-size:10px;font-weight:850;line-height:1.5;word-break:keep-all}
+.logistics-guide-warning-modal{position:fixed;inset:0;z-index:1900;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(6,18,38,.68);backdrop-filter:blur(7px)}
+.logistics-guide-warning-modal.show{display:flex}.logistics-guide-warning-panel{width:min(500px,100%);max-height:88vh;overflow:auto;border:1px solid #f2d28a;border-radius:25px;background:#fff;box-shadow:0 30px 85px rgba(4,18,43,.34);padding:19px}
+.logistics-guide-warning-head{display:flex;align-items:flex-start;gap:12px;padding-bottom:14px;border-bottom:1px solid #f1e4c7}.logistics-guide-warning-symbol{display:grid;place-items:center;flex:0 0 auto;width:45px;height:45px;border-radius:15px;background:linear-gradient(135deg,#f59e0b,#ea7a09);color:#fff;font-size:27px;font-weight:1000;box-shadow:0 8px 18px rgba(217,119,6,.22)}
+.logistics-guide-warning-kicker{color:#a56500;font-size:10px;font-weight:1000;letter-spacing:.8px}.logistics-guide-warning-title{margin-top:4px;color:#162033;font-size:20px;font-weight:1000;line-height:1.3;letter-spacing:-.35px}.logistics-guide-warning-body{padding:15px 1px 13px;color:#3e4b5d;font-size:13px;font-weight:800;line-height:1.62;word-break:keep-all}.logistics-guide-warning-body p{margin:0}.logistics-guide-warning-body strong{color:#b45f00}
+.logistics-guide-warning-alert{margin-top:11px;padding:12px 13px;border:1px solid #f5d38b;border-radius:14px;background:#fff7e2;color:#774800;font-size:12px;line-height:1.55}.logistics-guide-warning-example{margin-top:11px;padding:12px 13px;border:1px solid #d9e5f2;border-radius:14px;background:#f8fbff}.logistics-guide-warning-example>span{display:inline-flex;margin-bottom:7px;padding:3px 7px;border-radius:999px;background:#e6f0fc;color:#245e9b;font-size:9px;font-weight:1000}.logistics-guide-warning-example p{color:#465a72;font-size:12px;line-height:1.6}.logistics-guide-warning-example b{color:#163e6d}.logistics-guide-warning-note{margin-top:11px!important;color:#7a8798!important;font-size:11px!important;line-height:1.55!important}.logistics-guide-warning-confirm{width:100%;min-height:49px;border:0;border-radius:15px;background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff;font-size:14px;font-weight:1000;box-shadow:0 10px 20px rgba(217,119,6,.20)}.logistics-guide-warning-confirm:active{transform:scale(.995)}.logistics-guide-warning-confirm:focus-visible{outline:3px solid rgba(245,158,11,.28);outline-offset:2px}
+@media(max-width:390px){.logistics-guide-warning-modal{padding:10px}.logistics-guide-warning-panel{padding:16px;border-radius:22px}.logistics-guide-warning-title{font-size:18px}.logistics-reference-warning{margin-left:12px;margin-right:12px;padding:12px}}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -956,7 +968,7 @@ body.view-nonhome .app{padding-top:0;}
                 <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               <span id="homeBellDot" class="home-bell-dot"></span>
-              <span id="homeAppVersion" class="home-app-version">v2.3.5 Stable</span>
+              <span id="homeAppVersion" class="home-app-version">v2.3.6 Stable</span>
             </button>
             <button id="homeShareBtn" class="home-header-share" type="button" aria-label="HUB 공유하기">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg>
@@ -1136,12 +1148,20 @@ body.view-nonhome .app{padding-top:0;}
         <div class="logistics-sub">현재 가용재고와 향후 입고계획을 한눈에 확인합니다.</div>
         <div id="logisticsUpdated" class="logistics-updated">최근 업데이트 확인 중</div>
       </div>
+      <div class="logistics-reference-warning" role="note" aria-label="물동 가이드 이용 주의">
+        <span class="logistics-reference-warning-icon" aria-hidden="true">!</span>
+        <div class="logistics-reference-warning-copy">
+          <strong>물동 정보는 반드시 참고용으로만 사용해 주세요.</strong>
+          <p>입고 일정 및 <b>가용재고 30대 미만 품목</b>은 판매·출고 상황에 따라 수량과 일정이 변동될 수 있습니다. 확정 재고·확정 배송일로 안내하거나 이를 기준으로 선판매하지 마세요.</p>
+          <small>예) A제품 0대 / B제품 30대 → B제품이 상대적으로 재고 여유가 있어 빠른 배송이 가능할 수 있다는 정도로만 참고</small>
+        </div>
+      </div>
       <div class="logistics-search-wrap"><label class="logistics-search"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.9"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg><input id="logisticsSearch" type="search" placeholder="모델명 또는 아이템번호 검색" autocomplete="off"></label></div>
       <div id="logisticsTabs" class="logistics-tabs"></div>
       <div id="logisticsTvNote" class="logistics-tv-note">※ TV 벽걸이 구매 시 <b>벽걸이 자재 물동을 필히 함께 확인</b>해 주세요.</div>
       <div class="logistics-list-head"><strong id="logisticsListTitle">전체 제품</strong><span id="logisticsCount">0개 모델</span></div>
       <div id="logisticsList" class="logistics-list"></div>
-      <div class="logistics-footnote">※ KSP 기준 참고용입니다. 현재 가용재고와 생산·입고 예정 수량을 표시하며 판매·출고·주문 변동은 실시간 반영되지 않을 수 있습니다. 표시 수량을 실제 미래 잔여재고 또는 판매량으로 해석하지 마세요.</div>
+      <div class="logistics-footnote">※ KSP 기준 참고용입니다. 입고 일정 및 가용재고 30대 미만 품목은 판매·출고 상황에 따라 변동될 수 있습니다. 표시 수량과 일정을 확정 재고·확정 배송일 또는 선판매 기준으로 사용하지 마세요.</div>
     </article>
   </section>
 
@@ -1503,6 +1523,28 @@ body.view-nonhome .app{padding-top:0;}
   </div>
 </div>
 
+<div id="logisticsGuideWarningModal" class="logistics-guide-warning-modal" aria-hidden="true">
+  <div class="logistics-guide-warning-panel" role="dialog" aria-modal="true" aria-labelledby="logisticsGuideWarningTitle" aria-describedby="logisticsGuideWarningBody">
+    <div class="logistics-guide-warning-head">
+      <span class="logistics-guide-warning-symbol" aria-hidden="true">!</span>
+      <div>
+        <div class="logistics-guide-warning-kicker">물동 가이드 이용 안내</div>
+        <div id="logisticsGuideWarningTitle" class="logistics-guide-warning-title">참고용 정보임을 확인해 주세요.</div>
+      </div>
+    </div>
+    <div id="logisticsGuideWarningBody" class="logistics-guide-warning-body">
+      <p>입고 예정 일정 및 <strong>가용재고 30대 미만 품목</strong>은 판매·출고 상황에 따라 수량과 일정이 변동될 수 있습니다.</p>
+      <div class="logistics-guide-warning-alert"><b>확정 재고 또는 확정 배송일로 안내하지 말고, 반드시 참고용으로만 사용해 주세요.</b></div>
+      <div class="logistics-guide-warning-example">
+        <span>참고 예시</span>
+        <p><b>A제품 가용재고 0대</b> / <b>B제품 가용재고 30대</b>인 경우, B제품이 상대적으로 재고 여유가 있어 <b>빠른 배송이 가능할 수 있다는 정도로만 참고</b>해 주세요.</p>
+      </div>
+      <p class="logistics-guide-warning-note">실제 판매 및 배송 가능 여부는 주문 시점의 전국 판매·출고 상황에 따라 달라질 수 있습니다.</p>
+    </div>
+    <button id="logisticsGuideWarningConfirm" class="logistics-guide-warning-confirm" type="button">확인 후 조회</button>
+  </div>
+</div>
+
 <div id="hubNoticePopup" class="hub-notice-popup" aria-hidden="true">
   <div class="hub-notice-popup-panel" role="dialog" aria-modal="true" aria-labelledby="hubNoticePopupTitle">
     <div class="hub-notice-popup-head">
@@ -1607,7 +1649,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.3.5 Stable",
+  APP_VERSION: "v2.3.6 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1891,6 +1933,33 @@ function init(){
   initializePublishedDb(cachedLoaded).finally(startUpdateSignalWatcher);
 }
 
+let logisticsGuideWarningPreviousFocus = null;
+function openLogisticsGuideWarning(){
+  const modal=document.getElementById("logisticsGuideWarningModal");
+  const confirm=document.getElementById("logisticsGuideWarningConfirm");
+  if(!modal){ enterLogisticsGuideAfterWarning(); return; }
+  logisticsGuideWarningPreviousFocus=document.activeElement;
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  window.setTimeout(()=>confirm?.focus(),0);
+}
+
+async function enterLogisticsGuideAfterWarning(){
+  const modal=document.getElementById("logisticsGuideWarningModal");
+  if(modal){
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden","true");
+  }
+  document.body.style.overflow="";
+  showPage("logistics");
+  renderLogisticsGuide();
+  if(navigator.onLine){
+    await syncPublishedDbIfNeeded({ silent:true, auto:true });
+    if(currentPage === "logistics") renderLogisticsGuide();
+  }
+}
+
 function bindEvents(){
   // v127: 진열 점검 상수 초기화 전에 실행되던 바인딩을 현재 스크립트 완료 후로 지연합니다.
   window.setTimeout(bindDisplayCheckEvents,0);
@@ -1926,14 +1995,12 @@ function bindEvents(){
   const homeDisplayCheckShortcut = document.querySelector(".home-display-check-shortcut");
   if(homeDisplayCheckShortcut) homeDisplayCheckShortcut.addEventListener("click",()=>showPage("displayCheck"));
   const homeLogisticsShortcut = document.getElementById("homeLogisticsShortcut");
-  if(homeLogisticsShortcut) homeLogisticsShortcut.addEventListener("click",async()=>{
+  if(homeLogisticsShortcut) homeLogisticsShortcut.addEventListener("click",()=>{
     queueViewLog("물동 가이드","재고·입고 현황","");
-    showPage("logistics");
-    if(navigator.onLine){
-      await syncPublishedDbIfNeeded({ silent:true, auto:true });
-      if(currentPage === "logistics") renderLogisticsGuide();
-    }
+    openLogisticsGuideWarning();
   });
+  const logisticsGuideWarningConfirm = document.getElementById("logisticsGuideWarningConfirm");
+  if(logisticsGuideWarningConfirm) logisticsGuideWarningConfirm.addEventListener("click",enterLogisticsGuideAfterWarning);
   if(els.logisticsSearch) els.logisticsSearch.addEventListener("input",()=>renderLogisticsGuideList());
   if(els.logisticsTabs) els.logisticsTabs.addEventListener("click",e=>{const btn=e.target.closest("[data-logistics-category]");if(!btn)return;logisticsCategory=btn.dataset.logisticsCategory||"전체";renderLogisticsGuide();});
   if(els.logisticsList){
@@ -8523,7 +8590,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.3.5 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.3.6 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8658,7 +8725,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.3.5 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.3.6 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
