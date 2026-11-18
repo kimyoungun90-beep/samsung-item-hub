@@ -971,7 +971,7 @@ body.view-nonhome .app{padding-top:0;}
                 <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               <span id="homeBellDot" class="home-bell-dot"></span>
-              <span id="homeAppVersion" class="home-app-version">v2.3.8 Stable</span>
+              <span id="homeAppVersion" class="home-app-version">v2.3.9 Stable</span>
             </button>
             <button id="homeShareBtn" class="home-header-share" type="button" aria-label="HUB 공유하기">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg>
@@ -1652,7 +1652,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.3.8 Stable",
+  APP_VERSION: "v2.3.9 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -1737,6 +1737,8 @@ const AIRCON_SPEC_SNAPSHOT_KEY = "costco_item_hub_aircon_spec_snapshot_v1";
 const APP_RESUME_HOME_MS = 1000 * 60;
 const UPDATE_SEEN_KEY = "costco_item_hub_update_seen_v113";
 const DB_UPDATE_VERSION_KEY = "costco_item_hub_db_update_version";
+const DAILY_FORCE_DB_REFRESH_KEY = "costco_item_hub_daily_force_db_refresh_v239";
+const DAILY_FORCE_DB_REFRESH_HOUR = 6;
 const VIEW_LOG_DEDUPE_MS = 1500;
 let updateSignalTimer = 0;
 let bootstrapLoading = false;
@@ -1748,6 +1750,8 @@ let lastPublishedDbErrorCode = "";
 let selectedNotice = null;
 let appHiddenAt = 0;
 let lastVersionCheckAt = 0;
+let lastDailyForceDbRefreshAttemptAt = 0;
+const DAILY_FORCE_DB_REFRESH_RETRY_MS = 1000 * 60 * 5;
 const recentViewLogTimes = new Map();
 let currentPage = "home";
 let appBackStack = [];
@@ -2601,7 +2605,10 @@ async function initializePublishedDb(cachedLoaded){
 
   let ok = false;
   if(cachedLoaded){
-    ok = await syncPublishedDbIfNeeded({ silent:true, auto:true });
+    // v2.3.9: 매일 오전 6시 이후 첫 실행은 버전 비교를 건너뛰고 최신 배포 DB를 하루 1회 강제 다운로드합니다.
+    // 평소에는 기존 publishedVersion 비교 방식으로 가볍게 확인합니다.
+    const dailyRefresh = await forceDailyPublishedDbRefreshIfNeeded({ silent:true, auto:true, forceAttempt:true });
+    ok = dailyRefresh.attempted ? dailyRefresh.ok : await syncPublishedDbIfNeeded({ silent:true, auto:true });
   }else{
     ok = await loadPublishedDb({ silent:false, initial:true });
   }
@@ -2704,6 +2711,7 @@ async function loadPublishedDb(options={}){
     if(selectedItemNoBefore) selectedItem = itemMap.get(normalize(selectedItemNoBefore)) || selectedItem;
     saveDbCacheSafely(DB, Date.now());
     rememberDbUpdateVersion(DB.updateVersion);
+    markDailyForceDbRefreshDone();
     renderAll();
     if(currentPage === "item" && selectedItem) renderProduct(selectedItem);
     if(currentPage === "itemDetail" && selectedItem) renderItemTextDetail();
@@ -3036,6 +3044,48 @@ function getRememberedDbUpdateVersion(){
   catch(e){ return safe(DB.updateVersion || DB.homeSettings?.updateVersion, ""); }
 }
 
+function getSeoulDateHour(){
+  try{
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone:"Asia/Seoul", year:"numeric", month:"2-digit", day:"2-digit",
+      hour:"2-digit", hourCycle:"h23"
+    }).formatToParts(new Date());
+    const pick = type => parts.find(part=>part.type===type)?.value || "";
+    return { dateKey:`${pick("year")}-${pick("month")}-${pick("day")}`, hour:Number(pick("hour") || 0) };
+  }catch(e){
+    const now = new Date();
+    const pad = value=>String(value).padStart(2,"0");
+    return { dateKey:`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`, hour:now.getHours() };
+  }
+}
+
+function getDailyForceDbRefreshKey(){
+  const seoul = getSeoulDateHour();
+  return seoul.hour >= DAILY_FORCE_DB_REFRESH_HOUR ? seoul.dateKey : "";
+}
+
+function isDailyForceDbRefreshDone(){
+  const key = getDailyForceDbRefreshKey();
+  if(!key) return true;
+  try{ return localStorage.getItem(DAILY_FORCE_DB_REFRESH_KEY) === key; }catch(e){ return false; }
+}
+
+function markDailyForceDbRefreshDone(){
+  const key = getDailyForceDbRefreshKey();
+  if(!key) return;
+  try{ localStorage.setItem(DAILY_FORCE_DB_REFRESH_KEY, key); }catch(e){}
+}
+
+async function forceDailyPublishedDbRefreshIfNeeded(options={}){
+  if(document.hidden || bootstrapLoading || !navigator.onLine || isDailyForceDbRefreshDone()) return { attempted:false, ok:false };
+  const now = Date.now();
+  const forceAttempt = options.forceAttempt === true;
+  if(!forceAttempt && now - lastDailyForceDbRefreshAttemptAt < DAILY_FORCE_DB_REFRESH_RETRY_MS) return { attempted:false, ok:false };
+  lastDailyForceDbRefreshAttemptAt = now;
+  const ok = await loadPublishedDb({ silent:options.silent !== false, auto:options.auto !== false });
+  return { attempted:true, ok:!!ok };
+}
+
 function startUpdateSignalWatcher(){
   if(updateSignalTimer) clearInterval(updateSignalTimer);
   updateSignalTimer = setInterval(()=>checkUpdateSignal(false), Number(CONFIG.UPDATE_CHECK_MS || 60000));
@@ -3046,6 +3096,11 @@ async function checkUpdateSignal(forceCheck=false){
   const now = Date.now();
   if(!forceCheck && now - lastVersionCheckAt < Math.max(15000, Number(CONFIG.UPDATE_CHECK_MS || 60000) - 1000)) return;
   lastVersionCheckAt = now;
+
+  // v2.3.9: 오전 6시가 지난 뒤 아직 오늘 강제 동기화를 하지 않았다면
+  // 앱 실행 중이거나 백그라운드에서 복귀한 경우에도 하루 1회 최신 DB를 직접 내려받습니다.
+  const dailyRefresh = await forceDailyPublishedDbRefreshIfNeeded({ silent:true, auto:true, forceAttempt:forceCheck });
+  if(dailyRefresh.attempted && dailyRefresh.ok) return;
   await syncPublishedDbIfNeeded({ silent:true, auto:true });
 }
 
@@ -8642,7 +8697,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.3.8 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.3.9 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8777,7 +8832,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.3.8 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.3.9 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
