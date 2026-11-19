@@ -964,6 +964,7 @@ body.view-nonhome .app{padding-top:0;}
 .logistics-guide-warning-footer{flex:0 0 auto;padding:0 19px 19px;background:#fff}
 @media(max-width:390px){.logistics-guide-warning-panel{padding:0}.logistics-guide-warning-scroll{padding:16px 16px 0}.logistics-guide-warning-footer{padding:0 16px 16px}.logistics-guide-warning-topline{gap:5px}.logistics-guide-live-notice{padding:13px 12px}.logistics-guide-live-notice-body{font-size:14px}}
 
+.logistics-guide-warning-confirm:disabled{opacity:.7;cursor:wait;box-shadow:none;background:#b58c4d}
 </style>
 </head>
 <body>
@@ -994,7 +995,7 @@ body.view-nonhome .app{padding-top:0;}
                 <svg viewBox="0 0 80 80" fill="none"><path d="M22 20h36a6 6 0 0 1 6 6v38H16V26a6 6 0 0 1 6-6Z" fill="#EFF6FF" stroke="#8CB7FF" stroke-width="2"/><path d="M25 14v13M55 14v13M16 34h48" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/><circle cx="48" cy="51" r="13" fill="#1765E8"/><path d="m42.5 51 4 4 7.5-9" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               <span id="homeBellDot" class="home-bell-dot"></span>
-              <span id="homeAppVersion" class="home-app-version">v2.3.10 Stable</span>
+              <span id="homeAppVersion" class="home-app-version">v2.3.11 Stable</span>
             </button>
             <button id="homeShareBtn" class="home-header-share" type="button" aria-label="HUB 공유하기">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg>
@@ -1575,7 +1576,7 @@ body.view-nonhome .app{padding-top:0;}
       <p class="logistics-guide-warning-note">실제 판매 및 배송 가능 여부는 주문 시점의 전국 판매·출고 상황에 따라 달라질 수 있습니다.</p>
     </div>
     </div>
-    <div class="logistics-guide-warning-footer"><button id="logisticsGuideWarningConfirm" class="logistics-guide-warning-confirm" type="button">확인 후 조회</button></div>
+    <div class="logistics-guide-warning-footer"><button id="logisticsGuideWarningConfirm" class="logistics-guide-warning-confirm" type="button" disabled>운영 안내 확인 중…</button></div>
   </div>
 </div>
 
@@ -1683,7 +1684,7 @@ body.view-nonhome .app{padding-top:0;}
 
 <script>
 const CONFIG = {
-  APP_VERSION: "v2.3.10 Stable",
+  APP_VERSION: "v2.3.11 Stable",
   UPDATE_CHECK_MS: 1000 * 60,
   // 기존 앱에서 사용하던 Apps Script 배포 URL을 기본으로 넣어둠.
   // 같은 Apps Script 프로젝트에 Code.gs를 교체하고 '배포 관리 > 새 버전'만 하면 이 URL 그대로 사용 가능.
@@ -2021,12 +2022,18 @@ function init(){
 }
 
 
-// v2.3.10: 안내만 별도로 조회합니다. 전체 직원 앱 DB를 재생성하지 않습니다.
+// v2.3.11: 앱 시작 시 미리 조회하며, 팝업도 진행 중인 같은 요청을 재사용합니다.
 const LOGISTICS_NOTICE_CACHE_KEY = "costco_item_hub_logistics_notice_v239";
 let logisticsNoticeCache = null;
 let logisticsNoticeTimer = null;
 let logisticsNoticeController = null;
 let logisticsNoticeGeneration = 0;
+let logisticsNoticeRequest = null;
+let logisticsNoticeRenderRequest = null;
+let logisticsNoticeCheckedAt = 0;
+let logisticsNoticeCanContinue = false;
+let logisticsNoticeReadTimer = null;
+let logisticsNoticeDisplaySignature = null;
 function logisticsNoticeTimestamp(value){
   const text=String(value||"").trim();
   const match=text.match(/^(\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})[T\s]+(\d{1,2}):(\d{2})/);
@@ -2040,6 +2047,41 @@ function readLogisticsNoticeCache(){
   }catch(e){}
   return logisticsNoticeCache;
 }
+function updateLogisticsNoticeConfirm(data,mode){
+  const button=document.getElementById("logisticsGuideWarningConfirm");
+  if(!button)return;
+  const message=String(data?.notice?.body||"").trim();
+  const signature=JSON.stringify([data?.notice?.title||"",message,data?.notice?.updatedAt||""]);
+  const label=mode==="unavailable"?(message?"저장된 안내 확인 후 조회":"안내 확인 불가 · 조회"):"확인 후 조회";
+  if(mode==="loading"){
+    if(logisticsNoticeReadTimer)clearTimeout(logisticsNoticeReadTimer);
+    logisticsNoticeReadTimer=null;
+    logisticsNoticeCanContinue=false;
+    button.disabled=true;
+    button.textContent="운영 안내 확인 중…";
+    return;
+  }
+  if(logisticsNoticeDisplaySignature===signature&&(logisticsNoticeCanContinue||logisticsNoticeReadTimer)){
+    if(logisticsNoticeCanContinue)button.textContent=label;
+    return;
+  }
+  if(logisticsNoticeReadTimer)clearTimeout(logisticsNoticeReadTimer);
+  logisticsNoticeDisplaySignature=signature;
+  logisticsNoticeCanContinue=false;
+  button.disabled=true;
+  button.textContent=message?"운영 안내를 확인해 주세요":"운영 안내 확인 중…";
+  const generation=logisticsNoticeGeneration;
+  const enable=()=>{
+    logisticsNoticeReadTimer=null;
+    if(generation!==logisticsNoticeGeneration)return;
+    logisticsNoticeCanContinue=true;
+    button.disabled=false;
+    button.textContent=label;
+  };
+  // 실제 안내가 표시된 뒤 짧게 확인할 시간을 줍니다. 빈 안내는 기다리지 않습니다.
+  if(message)logisticsNoticeReadTimer=setTimeout(enable,1000);
+  else enable();
+}
 function renderLogisticsNotice(data,mode){
   const panel=document.getElementById("logisticsGuideLiveNotice");
   const title=document.getElementById("logisticsGuideLiveNoticeTitle");
@@ -2050,7 +2092,6 @@ function renderLogisticsNotice(data,mode){
   if(!panel||!title||!body||!state||!updated||!noticeUpdated)return;
   const notice=data&&data.notice?data.notice:{};
   const message=String(notice.body||"").trim();
-  // 상단은 물동 DB 배포 일시, 강조 카드 안은 운영 안내 자체의 수정 일시입니다.
   const stockDate=logisticsNoticeTimestamp(mode==="live"?data.logisticsUpdatedAt:(data?.logisticsUpdatedAt||logisticsData().updatedAt||DB?.homeSettings?.updateTime||""));
   updated.textContent=stockDate?"최신 업데이트 "+stockDate:"최신 업데이트 일시 미등록";
   updated.title="물동 데이터 업데이트 일시";
@@ -2068,57 +2109,89 @@ function renderLogisticsNotice(data,mode){
   const noticeDate=logisticsNoticeTimestamp(notice.updatedAt);
   noticeUpdated.hidden=!message||!noticeDate;
   noticeUpdated.textContent=noticeDate?"안내 수정 "+noticeDate:"";
-  // 실패·오프라인 상태에서는 저장 일시를 최신 실시간 값으로 오해하지 않게 표시합니다.
   if(mode!=="live")updated.textContent=stockDate?"저장된 업데이트 "+stockDate:"최신 업데이트 확인 중";
   if(mode==="unavailable"&&!stockDate)updated.textContent="최신 업데이트 확인 불가";
+  updateLogisticsNoticeConfirm(data,mode);
+}
+function hasFreshLogisticsNotice(){
+  return !!(logisticsNoticeCache&&logisticsNoticeCheckedAt&&Date.now()-logisticsNoticeCheckedAt<30000);
+}
+function requestLogisticsNotice(){
+  if(logisticsNoticeRequest)return logisticsNoticeRequest;
+  if(hasFreshLogisticsNotice())return Promise.resolve(logisticsNoticeCache);
+  const controller=new AbortController();
+  logisticsNoticeController=controller;
+  const timeout=setTimeout(()=>controller.abort(),6000);
+  const request=(async()=>{
+    try{
+      const data=await apiGet({action:"logisticsNotice",_:String(Date.now())},{signal:controller.signal});
+      if(data?.ok!==true||!data.notice||typeof data.notice.body!=="string")throw new Error("물동 안내 응답 오류");
+      logisticsNoticeCache=data;
+      logisticsNoticeCheckedAt=Date.now();
+      try{localStorage.setItem(LOGISTICS_NOTICE_CACHE_KEY,JSON.stringify(data));}catch(e){}
+      return data;
+    }finally{
+      clearTimeout(timeout);
+      if(logisticsNoticeController===controller)logisticsNoticeController=null;
+    }
+  })();
+  logisticsNoticeRequest=request;
+  const clearRequest=()=>{if(logisticsNoticeRequest===request)logisticsNoticeRequest=null;};
+  request.then(clearRequest,clearRequest);
+  return request;
+}
+function prefetchLogisticsNotice(){
+  if(document.hidden||!navigator.onLine)return;
+  requestLogisticsNotice().catch(()=>{});
 }
 async function refreshLogisticsNotice(){
   const modal=document.getElementById("logisticsGuideWarningModal");
-  if(!modal?.classList.contains("show")||document.hidden||logisticsNoticeController)return;
+  if(!modal?.classList.contains("show")||document.hidden||logisticsNoticeRenderRequest)return;
   if(!navigator.onLine){renderLogisticsNotice(readLogisticsNoticeCache(),"unavailable");return;}
-  const generation=logisticsNoticeGeneration;
-  const controller=new AbortController();
-  logisticsNoticeController=controller;
-  const timeout=setTimeout(()=>controller.abort(),10000);
+  const token={generation:logisticsNoticeGeneration};
+  logisticsNoticeRenderRequest=token;
   try{
-    const data=await apiGet({action:"logisticsNotice",_:String(Date.now())},{signal:controller.signal});
-    if(generation!==logisticsNoticeGeneration)return;
-    if(data?.ok!==true||!data.notice||typeof data.notice.body!=="string")throw new Error("물동 안내 응답 오류");
-    logisticsNoticeCache=data;
-    try{localStorage.setItem(LOGISTICS_NOTICE_CACHE_KEY,JSON.stringify(data));}catch(e){}
-    renderLogisticsNotice(data,"live");
+    const data=await requestLogisticsNotice();
+    if(token.generation===logisticsNoticeGeneration)renderLogisticsNotice(data,"live");
   }catch(e){
-    if(generation===logisticsNoticeGeneration)renderLogisticsNotice(readLogisticsNoticeCache(),"unavailable");
+    if(token.generation===logisticsNoticeGeneration)renderLogisticsNotice(readLogisticsNoticeCache(),"unavailable");
   }finally{
-    clearTimeout(timeout);
-    if(logisticsNoticeController===controller)logisticsNoticeController=null;
+    if(logisticsNoticeRenderRequest===token)logisticsNoticeRenderRequest=null;
   }
 }
 function stopLogisticsNoticeRefresh(){
   logisticsNoticeGeneration++;
   if(logisticsNoticeTimer)clearInterval(logisticsNoticeTimer);
+  if(logisticsNoticeReadTimer)clearTimeout(logisticsNoticeReadTimer);
   logisticsNoticeTimer=null;
-  if(logisticsNoticeController)logisticsNoticeController.abort();
-  logisticsNoticeController=null;
+  logisticsNoticeReadTimer=null;
+  logisticsNoticeRenderRequest=null;
+  logisticsNoticeCanContinue=false;
+  logisticsNoticeDisplaySignature=null;
+  // 닫은 뒤 도착한 응답도 다음 진입에 쓸 수 있도록 캐시에만 저장합니다.
   window.removeEventListener("online",refreshLogisticsNotice);
   window.removeEventListener("offline",markLogisticsNoticeOffline);
   document.removeEventListener("visibilitychange",refreshLogisticsNotice);
 }
 function markLogisticsNoticeOffline(){
   logisticsNoticeGeneration++;
-  if(logisticsNoticeController)logisticsNoticeController.abort();
-  logisticsNoticeController=null;
+  logisticsNoticeRenderRequest=null;
+  logisticsNoticeDisplaySignature=null;
   renderLogisticsNotice(readLogisticsNoticeCache(),"unavailable");
 }
 function startLogisticsNoticeRefresh(){
   stopLogisticsNoticeRefresh();
-  renderLogisticsNotice(readLogisticsNoticeCache(),navigator.onLine?"loading":"unavailable");
+  const mode=navigator.onLine?(hasFreshLogisticsNotice()?"live":"loading"):"unavailable";
+  renderLogisticsNotice(readLogisticsNoticeCache(),mode);
   refreshLogisticsNotice();
-  logisticsNoticeTimer=setInterval(refreshLogisticsNotice,15000);
+  logisticsNoticeTimer=setInterval(()=>{logisticsNoticeCheckedAt=0;refreshLogisticsNotice();},15000);
   window.addEventListener("online",refreshLogisticsNotice);
   window.addEventListener("offline",markLogisticsNoticeOffline);
   document.addEventListener("visibilitychange",refreshLogisticsNotice);
 }
+// init()보다 뒤에 선언된 안내 상태가 준비된 직후, 사용자의 메뉴 클릭 전에 조회합니다.
+window.setTimeout(prefetchLogisticsNotice,0);
+window.addEventListener("online",prefetchLogisticsNotice);
 
 let logisticsGuideWarningPreviousFocus = null;
 function openLogisticsGuideWarning(){
@@ -2131,10 +2204,12 @@ function openLogisticsGuideWarning(){
   modal.setAttribute("aria-hidden","false");
   document.body.style.overflow="hidden";
   startLogisticsNoticeRefresh();
-  window.setTimeout(()=>confirm?.focus({preventScroll:true}),0);
+  window.setTimeout(()=>{const panel=modal.querySelector(".logistics-guide-warning-panel");if(panel){panel.tabIndex=-1;panel.focus({preventScroll:true});}},0);
 }
 
 async function enterLogisticsGuideAfterWarning(){
+  const warning=document.getElementById("logisticsGuideWarningModal");
+  if(warning?.classList.contains("show")&&!logisticsNoticeCanContinue)return;
   stopLogisticsNoticeRefresh();
   const modal=document.getElementById("logisticsGuideWarningModal");
   if(modal){
@@ -3227,6 +3302,7 @@ function startUpdateSignalWatcher(){
 
 async function checkUpdateSignal(forceCheck=false){
   if(document.hidden || bootstrapLoading || !navigator.onLine) return;
+  prefetchLogisticsNotice();
   const now = Date.now();
   if(!forceCheck && now - lastVersionCheckAt < Math.max(15000, Number(CONFIG.UPDATE_CHECK_MS || 60000) - 1000)) return;
   lastVersionCheckAt = now;
@@ -8831,7 +8907,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
   };
 
   // 이미 열린 화면도 즉시 갱신
-  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.3.10 Stable';
+  if(els.homeAppVersion)els.homeAppVersion.textContent='v2.3.11 Stable';
   renderProcessTypes();renderProcessRecommendations();
   if(deptFilter==='지도 보기')renderMapPanel();
 })();
@@ -8966,7 +9042,7 @@ function renderMapCoverageList(){if(els.mapCoverageList)els.mapCoverageList.inne
     renderSingleLogisticsTc(targetTc, matchedRow, md);
   };
 
-  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.3.10 Stable';
+  if(els.homeAppVersion) els.homeAppVersion.textContent = 'v2.3.11 Stable';
   if(deptFilter === '물류') renderDepartments();
 })();
 </script>
